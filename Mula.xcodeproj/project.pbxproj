@@ -14,6 +14,7 @@
 		DE813CF42B6D0FA900B4B189 /* ExpenseRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE813CF32B6D0FA900B4B189 /* ExpenseRepository.swift */; };
 		DE9AF9312B7851F700D1F4DC /* UploadFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9AF9302B7851F700D1F4DC /* UploadFormView.swift */; };
 		DE9AF9B52BA2C4AF00D1F4DC /* PieChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */; };
+		DE9AF9B72BA7995800D1F4DC /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9AF9B62BA7995800D1F4DC /* BudgetView.swift */; };
 		DEF3CAE62B61BB9300C926ED /* MulaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF3CAE52B61BB9300C926ED /* MulaApp.swift */; };
 		DEF3CAE82B61BB9300C926ED /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF3CAE72B61BB9300C926ED /* ContentView.swift */; };
 		DEF3CAEA2B61BB9500C926ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEF3CAE92B61BB9500C926ED /* Assets.xcassets */; };
@@ -33,6 +34,7 @@
 		DE813CF32B6D0FA900B4B189 /* ExpenseRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseRepository.swift; sourceTree = "<group>"; };
 		DE9AF9302B7851F700D1F4DC /* UploadFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFormView.swift; sourceTree = "<group>"; };
 		DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChartView.swift; sourceTree = "<group>"; };
+		DE9AF9B62BA7995800D1F4DC /* BudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
 		DEF3CAE22B61BB9300C926ED /* Mula.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mula.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEF3CAE52B61BB9300C926ED /* MulaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MulaApp.swift; sourceTree = "<group>"; };
 		DEF3CAE72B61BB9300C926ED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 			isa = PBXGroup;
 			children = (
 				DEF3CAE72B61BB9300C926ED /* ContentView.swift */,
+				DE9AF9B62BA7995800D1F4DC /* BudgetView.swift */,
 				DEF8FE1D2B6B995500D10468 /* ExpenseView.swift */,
 				DEF8FE182B6B976E00D10468 /* ExpenseFormView.swift */,
 				DEF8FE212B6B9E1000D10468 /* SummaryView.swift */,
@@ -211,6 +214,7 @@
 				DE813CEB2B6D099F00B4B189 /* DataModel.xcdatamodeld in Sources */,
 				DE9AF9312B7851F700D1F4DC /* UploadFormView.swift in Sources */,
 				DEF8FE192B6B976E00D10468 /* ExpenseFormView.swift in Sources */,
+				DE9AF9B72BA7995800D1F4DC /* BudgetView.swift in Sources */,
 				DEF8FE172B6AE51D00D10468 /* Category.swift in Sources */,
 				DEF3CAE82B61BB9300C926ED /* ContentView.swift in Sources */,
 				DE813CF22B6D0C1000B4B189 /* CoreDataStack.swift in Sources */,

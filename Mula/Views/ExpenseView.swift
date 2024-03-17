@@ -68,7 +68,6 @@ struct ExpenseView: View {
         .sheet(isPresented: $showingEditExpenseForm) {
             ExpenseFormView(showingExpenseForm: $showingEditExpenseForm, expense: expense)
         }
-        .background(.blue)
     }
 
     private var expenseColor: Color {

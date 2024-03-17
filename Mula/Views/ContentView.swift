@@ -12,6 +12,9 @@ import SwiftUI
 // TODO: home page with charts that compares spending / trends in different months, checklist of which categories to view over the year
 // TODO: click on categories to toggle them on/off
 // TODO: add warning for uploading duplicate expenses ? (popup with list of duplicated expenses and option to accept all, reject all, or click ones to accept)
+// TODO: min window width
+// TODO: settings page
+// TODO: income category
 
 struct ContentView: View {
     @FetchRequest(
@@ -33,6 +36,17 @@ struct ContentView: View {
                 ForEach(months, id: \.self) { month in
                     Text(month)
                 }
+
+                Spacer()
+
+                HStack {
+                    Text("Settings")
+
+                    Spacer()
+
+                    Image(systemName: "gear")
+                }
+                .tag("Settings")
             }
             .listStyle(.sidebar)
             .toolbar {
@@ -45,14 +59,29 @@ struct ContentView: View {
                 }
             }
 
-            HStack {
-                SummaryView(totalMoneyIn: totalMoneyIn, totalMoneyOut: totalMoneyOut, totalsByCategory: totalsByCategory)
+            HStack(spacing: 0) {
+                TabView {
+                    SummaryView(totalMoneyIn: totalMoneyIn, totalMoneyOut: totalMoneyOut, totalsByCategory: totalsByCategory)
+                        .tabItem {
+                            Text("Summary")
+                        }
+
+                    BudgetView(totalsByCategory: totalsByCategory)
+                        .tabItem {
+                            Text("Budget")
+                        }
+                }
+                .padding()
 
                 List(filteredExpenses.filter {
                     searchText.isEmpty || $0.title?.localizedStandardContains(searchText) == true
                 }) { expense in
                     ExpenseView(expense: expense, swipeActionsEnabled: true)
-                        .background(.red)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            selectedExpense = expense
+                        }
+                        .background(selectedExpense == expense ? .gray.opacity(0.2) : .clear)
                 }
                 .searchable(text: $searchText)
             }
@@ -70,6 +99,14 @@ struct ContentView: View {
                         showingNewExpenseForm.toggle()
                     } label: {
                         Image(systemName: "plus")
+                    }
+                }
+
+                ToolbarItem {
+                    Button {
+                        showingNewExpenseForm.toggle()
+                    } label: {
+                        Image(systemName: "gear")
                     }
                 }
             }
