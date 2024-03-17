@@ -1,0 +1,439 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DE813CEB2B6D099F00B4B189 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DE813CE92B6D099F00B4B189 /* DataModel.xcdatamodeld */; };
+		DE813CEE2B6D0B1400B4B189 /* Expense+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE813CEC2B6D0B1400B4B189 /* Expense+CoreDataClass.swift */; };
+		DE813CEF2B6D0B1400B4B189 /* Expense+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE813CED2B6D0B1400B4B189 /* Expense+CoreDataProperties.swift */; };
+		DE813CF22B6D0C1000B4B189 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE813CF12B6D0C1000B4B189 /* CoreDataStack.swift */; };
+		DE813CF42B6D0FA900B4B189 /* ExpenseRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE813CF32B6D0FA900B4B189 /* ExpenseRepository.swift */; };
+		DE9AF9312B7851F700D1F4DC /* UploadFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9AF9302B7851F700D1F4DC /* UploadFormView.swift */; };
+		DE9AF9B52BA2C4AF00D1F4DC /* PieChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */; };
+		DEF3CAE62B61BB9300C926ED /* MulaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF3CAE52B61BB9300C926ED /* MulaApp.swift */; };
+		DEF3CAE82B61BB9300C926ED /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF3CAE72B61BB9300C926ED /* ContentView.swift */; };
+		DEF3CAEA2B61BB9500C926ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEF3CAE92B61BB9500C926ED /* Assets.xcassets */; };
+		DEF3CAED2B61BB9500C926ED /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEF3CAEC2B61BB9500C926ED /* Preview Assets.xcassets */; };
+		DEF8FE172B6AE51D00D10468 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE162B6AE51D00D10468 /* Category.swift */; };
+		DEF8FE192B6B976E00D10468 /* ExpenseFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE182B6B976E00D10468 /* ExpenseFormView.swift */; };
+		DEF8FE1C2B6B989A00D10468 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE1B2B6B989A00D10468 /* Extensions.swift */; };
+		DEF8FE1E2B6B995500D10468 /* ExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE1D2B6B995500D10468 /* ExpenseView.swift */; };
+		DEF8FE222B6B9E1000D10468 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE212B6B9E1000D10468 /* SummaryView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		DE813CEA2B6D099F00B4B189 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		DE813CEC2B6D0B1400B4B189 /* Expense+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense+CoreDataClass.swift"; sourceTree = "<group>"; };
+		DE813CED2B6D0B1400B4B189 /* Expense+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		DE813CF12B6D0C1000B4B189 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		DE813CF32B6D0FA900B4B189 /* ExpenseRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseRepository.swift; sourceTree = "<group>"; };
+		DE9AF9302B7851F700D1F4DC /* UploadFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFormView.swift; sourceTree = "<group>"; };
+		DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChartView.swift; sourceTree = "<group>"; };
+		DEF3CAE22B61BB9300C926ED /* Mula.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mula.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DEF3CAE52B61BB9300C926ED /* MulaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MulaApp.swift; sourceTree = "<group>"; };
+		DEF3CAE72B61BB9300C926ED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		DEF3CAE92B61BB9500C926ED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DEF3CAEC2B61BB9500C926ED /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		DEF3CAEE2B61BB9500C926ED /* Mula.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mula.entitlements; sourceTree = "<group>"; };
+		DEF8FE162B6AE51D00D10468 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		DEF8FE182B6B976E00D10468 /* ExpenseFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseFormView.swift; sourceTree = "<group>"; };
+		DEF8FE1B2B6B989A00D10468 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		DEF8FE1D2B6B995500D10468 /* ExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseView.swift; sourceTree = "<group>"; };
+		DEF8FE212B6B9E1000D10468 /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DEF3CADF2B61BB9200C926ED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DE813CF02B6D0B1D00B4B189 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				DE813CE92B6D099F00B4B189 /* DataModel.xcdatamodeld */,
+				DE813CEC2B6D0B1400B4B189 /* Expense+CoreDataClass.swift */,
+				DE813CED2B6D0B1400B4B189 /* Expense+CoreDataProperties.swift */,
+				DE813CF12B6D0C1000B4B189 /* CoreDataStack.swift */,
+				DE813CF32B6D0FA900B4B189 /* ExpenseRepository.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
+		DEF3CAD92B61BB9200C926ED = {
+			isa = PBXGroup;
+			children = (
+				DE813CF02B6D0B1D00B4B189 /* CoreData */,
+				DEF3CAE42B61BB9300C926ED /* Mula */,
+				DEF3CAE32B61BB9300C926ED /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DEF3CAE32B61BB9300C926ED /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DEF3CAE22B61BB9300C926ED /* Mula.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DEF3CAE42B61BB9300C926ED /* Mula */ = {
+			isa = PBXGroup;
+			children = (
+				DEF3CAE52B61BB9300C926ED /* MulaApp.swift */,
+				DEF3CAFA2B61BD2000C926ED /* Model */,
+				DEF3CB032B61BFD800C926ED /* Views */,
+				DEF8FE1A2B6B988C00D10468 /* Utilities */,
+				DEF3CAE92B61BB9500C926ED /* Assets.xcassets */,
+				DEF3CAEE2B61BB9500C926ED /* Mula.entitlements */,
+				DEF3CAEB2B61BB9500C926ED /* Preview Content */,
+			);
+			path = Mula;
+			sourceTree = "<group>";
+		};
+		DEF3CAEB2B61BB9500C926ED /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				DEF3CAEC2B61BB9500C926ED /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		DEF3CAFA2B61BD2000C926ED /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				DEF8FE162B6AE51D00D10468 /* Category.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		DEF3CB032B61BFD800C926ED /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				DEF3CAE72B61BB9300C926ED /* ContentView.swift */,
+				DEF8FE1D2B6B995500D10468 /* ExpenseView.swift */,
+				DEF8FE182B6B976E00D10468 /* ExpenseFormView.swift */,
+				DEF8FE212B6B9E1000D10468 /* SummaryView.swift */,
+				DE9AF9302B7851F700D1F4DC /* UploadFormView.swift */,
+				DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		DEF8FE1A2B6B988C00D10468 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				DEF8FE1B2B6B989A00D10468 /* Extensions.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DEF3CAE12B61BB9200C926ED /* Mula */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DEF3CAF12B61BB9500C926ED /* Build configuration list for PBXNativeTarget "Mula" */;
+			buildPhases = (
+				DEF3CADE2B61BB9200C926ED /* Sources */,
+				DEF3CADF2B61BB9200C926ED /* Frameworks */,
+				DEF3CAE02B61BB9200C926ED /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Mula;
+			productName = Mula;
+			productReference = DEF3CAE22B61BB9300C926ED /* Mula.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DEF3CADA2B61BB9200C926ED /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1520;
+				LastUpgradeCheck = 1520;
+				TargetAttributes = {
+					DEF3CAE12B61BB9200C926ED = {
+						CreatedOnToolsVersion = 15.2;
+					};
+				};
+			};
+			buildConfigurationList = DEF3CADD2B61BB9200C926ED /* Build configuration list for PBXProject "Mula" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = DEF3CAD92B61BB9200C926ED;
+			productRefGroup = DEF3CAE32B61BB9300C926ED /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DEF3CAE12B61BB9200C926ED /* Mula */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DEF3CAE02B61BB9200C926ED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DEF3CAED2B61BB9500C926ED /* Preview Assets.xcassets in Resources */,
+				DEF3CAEA2B61BB9500C926ED /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DEF3CADE2B61BB9200C926ED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE9AF9B52BA2C4AF00D1F4DC /* PieChartView.swift in Sources */,
+				DE813CEB2B6D099F00B4B189 /* DataModel.xcdatamodeld in Sources */,
+				DE9AF9312B7851F700D1F4DC /* UploadFormView.swift in Sources */,
+				DEF8FE192B6B976E00D10468 /* ExpenseFormView.swift in Sources */,
+				DEF8FE172B6AE51D00D10468 /* Category.swift in Sources */,
+				DEF3CAE82B61BB9300C926ED /* ContentView.swift in Sources */,
+				DE813CF22B6D0C1000B4B189 /* CoreDataStack.swift in Sources */,
+				DEF3CAE62B61BB9300C926ED /* MulaApp.swift in Sources */,
+				DEF8FE222B6B9E1000D10468 /* SummaryView.swift in Sources */,
+				DEF8FE1C2B6B989A00D10468 /* Extensions.swift in Sources */,
+				DE813CEE2B6D0B1400B4B189 /* Expense+CoreDataClass.swift in Sources */,
+				DE813CEF2B6D0B1400B4B189 /* Expense+CoreDataProperties.swift in Sources */,
+				DE813CF42B6D0FA900B4B189 /* ExpenseRepository.swift in Sources */,
+				DEF8FE1E2B6B995500D10468 /* ExpenseView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		DEF3CAEF2B61BB9500C926ED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		DEF3CAF02B61BB9500C926ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		DEF3CAF22B61BB9500C926ED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Mula/Mula.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Mula/Preview Content\"";
+				DEVELOPMENT_TEAM = S85ULMGGX9;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kayapps.Mula;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		DEF3CAF32B61BB9500C926ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Mula/Mula.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Mula/Preview Content\"";
+				DEVELOPMENT_TEAM = S85ULMGGX9;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kayapps.Mula;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DEF3CADD2B61BB9200C926ED /* Build configuration list for PBXProject "Mula" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DEF3CAEF2B61BB9500C926ED /* Debug */,
+				DEF3CAF02B61BB9500C926ED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DEF3CAF12B61BB9500C926ED /* Build configuration list for PBXNativeTarget "Mula" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DEF3CAF22B61BB9500C926ED /* Debug */,
+				DEF3CAF32B61BB9500C926ED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		DE813CE92B6D099F00B4B189 /* DataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				DE813CEA2B6D099F00B4B189 /* DataModel.xcdatamodel */,
+			);
+			currentVersion = DE813CEA2B6D099F00B4B189 /* DataModel.xcdatamodel */;
+			path = DataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = DEF3CADA2B61BB9200C926ED /* Project object */;
+}
