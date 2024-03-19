@@ -14,6 +14,8 @@ import SwiftUI
 // TODO: charts/trends page showing total money spent with stacked bar chart breaking down categories
 // could either have checkboxes for choosing what to include on this chart and/or ability to swipe between to pages already broken down by category
 // TODO: add sub-category to break up food -> eating out vs groceries
+// TODO: change category totals to an array so it can be sorted by value to allow for consistency
+// TODO: might move away from some computed values to prevent redrawing unless an expense is added/edited
 
 struct ContentView: View {
     @FetchRequest(
@@ -26,6 +28,7 @@ struct ContentView: View {
     @State private var fileContent: String?
     @State private var newExpenses: [Expense] = []
     @State private var selectedExpense: Expense? = nil
+    @State private var selectedCategory: Category? = nil
 
     let months: [String] = DateFormatter().monthSymbols
 
@@ -60,7 +63,7 @@ struct ContentView: View {
 
             HStack(spacing: 0) {
                 TabView {
-                    SummaryView(totalMoneyIn: totalMoneyIn, totalMoneyOut: totalMoneyOut, totalsByCategory: totalsByCategory)
+                    SummaryView(selectedCategory: $selectedCategory, totalMoneyIn: totalMoneyIn, totalMoneyOut: totalMoneyOut, totalsByCategory: totalsByCategory)
                         .tabItem {
                             Text("Summary")
                         }
@@ -72,7 +75,7 @@ struct ContentView: View {
                 }
                 .padding()
 
-                List(filteredExpenses.filter {
+                List(filteredExpensesByCategory.filter {
                     searchText.isEmpty || $0.title?.localizedStandardContains(searchText) == true
                 }) { expense in
                     ExpenseView(expense: expense, swipeActionsEnabled: true)
@@ -119,20 +122,20 @@ struct ContentView: View {
     }
 
     private var totalMoneyIn: Double {
-        return filteredExpenses.reduce(0, { result, expense in
+        return expensesForMonth.reduce(0, { result, expense in
             return expense.amount > 0 ? result + expense.amount : result
         })
     }
 
     private var totalMoneyOut: Double {
-        return filteredExpenses.reduce(0, { result, expense in
+        return expensesForMonth.reduce(0, { result, expense in
             return expense.amount < 0 ? result + expense.amount : result
         })
     }
 
     private var totalsByCategory: [Category: Double] {
         var totals: [Category: Double] = [:]
-        filteredExpenses.forEach { expense in
+        expensesForMonth.forEach { expense in
             if (expense.amount < 0) {
                 totals[expense.category] = abs(expense.amount) + (totals[expense.category] ?? 0)
             }
@@ -140,8 +143,12 @@ struct ContentView: View {
         return totals
     }
 
-    private var filteredExpenses: [Expense] {
+    private var expensesForMonth: [Expense] {
         return expenses.filter { ($0.date ?? Date()).month == selectedMonth }
+    }
+
+    private var filteredExpensesByCategory: [Expense] {
+        return expensesForMonth.filter { selectedCategory != nil ? $0.category == selectedCategory : true }
     }
 
     private func importCSV() {

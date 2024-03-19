@@ -10,6 +10,7 @@ import SwiftUI
 // TODO: on tap gesture of pie slice or category, it should filter to only that category
 
 struct PieChartView: View {
+    @Binding var selectedCategory: Category?
     let totals: [Double]
     let categories: [Category]
 
@@ -19,6 +20,9 @@ struct PieChartView: View {
             ForEach(0..<totals.count, id: \.self) { index in
                 PieChartSlice(angles: angles(for: index))
                     .fill(categories[index].tintColor)
+                    .onTapGesture {
+                        selectedCategory = categories[index] == selectedCategory ? nil : categories[index]
+                    }
             }
 
             Circle()
