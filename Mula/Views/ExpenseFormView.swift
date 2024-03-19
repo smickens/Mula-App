@@ -16,7 +16,6 @@ struct ExpenseFormView: View {
     @State private var date: Date = Date()
     @State private var amount: Double = 0.0
     @State private var category: Category = .misc
-    @State private var isIncome: Bool = false
     var isEdit: Bool
 
     init(showingExpenseForm: Binding<Bool>, expense: Expense? = nil) {
@@ -27,7 +26,6 @@ struct ExpenseFormView: View {
             _date = State(initialValue: expense.date ?? Date())
             _amount = State(initialValue: abs(expense.amount))
             _category = State(initialValue: expense.category)
-            _isIncome = State(initialValue: expense.amount > 0)
         }
         isEdit = expense != nil
     }
@@ -43,12 +41,7 @@ struct ExpenseFormView: View {
             Form {
                 TextField("Title", text: $title, prompt: Text("Groceries"))
 
-                HStack {
-                    TextField("Amount", value: $amount, format: .currency(code: "USD"))
-
-                    Toggle("Is Income?", isOn: $isIncome)
-                        .toggleStyle(.checkbox)
-                }
+                TextField("Amount", value: $amount, format: .currency(code: "USD"))
 
                 Picker("Category", selection: $category) {
                     ForEach(Category.allCases, id: \.self) { category in
@@ -92,10 +85,11 @@ struct ExpenseFormView: View {
 
     private func saveExpense() {
         // Handle saving the new expense, for example, you could add it to an array or store it in a database.
+        let expenseAmount = category == .income ? amount : -amount
         if isEdit {
-            ExpenseRepository.shared.updateExpense(id: id, newTitle: title, newDate: date, newAmount: isIncome ? amount : -amount, newCategory: category)
+            ExpenseRepository.shared.updateExpense(id: id, newTitle: title, newDate: date, newAmount: expenseAmount, newCategory: category)
         } else {
-            ExpenseRepository.shared.saveNewExpense(id: id, title: title, date: date, amount: isIncome ? amount : -amount, category: category)
+            ExpenseRepository.shared.saveNewExpense(id: id, title: title, date: date, amount: expenseAmount, category: category)
         }
 
         // Reset the form after saving the expense

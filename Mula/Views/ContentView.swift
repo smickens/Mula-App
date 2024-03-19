@@ -13,7 +13,6 @@ import SwiftUI
 // TODO: click on categories to toggle them on/off
 // TODO: add warning for uploading duplicate expenses ? (popup with list of duplicated expenses and option to accept all, reject all, or click ones to accept)
 // TODO: settings page
-// TODO: income category
 
 struct ContentView: View {
     @FetchRequest(

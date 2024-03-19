@@ -25,6 +25,7 @@ enum Category: String, CaseIterable, Identifiable {
     case transportation = "Transportation" // gas, uber
     case entertainment = "Entertainment"
     case misc = "Misc"
+    case income = "Income"
 
     var id: String { rawValue }
 
@@ -35,9 +36,10 @@ enum Category: String, CaseIterable, Identifiable {
         case .housing: return Image(systemName: "house.fill")
         case .food: return Image(systemName: "flame.fill")
         case .shopping: return Image(systemName: "bag.fill")
-        case .misc: return Image(systemName: "staroflife.fill")
         case .transportation: return Image(systemName: "car.fill")
         case .entertainment: return Image(systemName: "smiley.fill")
+        case .misc: return Image(systemName: "staroflife.fill")
+        case .income: return Image(systemName: "dollarsign")
         }
     }
 
@@ -46,9 +48,10 @@ enum Category: String, CaseIterable, Identifiable {
         case .housing: return .blue
         case .food: return .green
         case .shopping: return .pink
-        case .misc: return .purple
         case .transportation: return .orange
         case .entertainment: return .yellow
+        case .misc: return .purple
+        case .income: return .indigo
         }
     }
 
