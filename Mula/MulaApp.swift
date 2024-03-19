@@ -14,6 +14,7 @@ struct MulaApp: App {
             ContentView()
                 .environment(\.managedObjectContext, CoreDataStack.shared.context)
                 .fontDesign(.monospaced)
+                .frame(minWidth: 850, idealWidth: 850, minHeight: 500, idealHeight: 500)
         }
         .commands {
             SidebarCommands()

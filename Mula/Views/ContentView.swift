@@ -12,7 +12,6 @@ import SwiftUI
 // TODO: home page with charts that compares spending / trends in different months, checklist of which categories to view over the year
 // TODO: click on categories to toggle them on/off
 // TODO: add warning for uploading duplicate expenses ? (popup with list of duplicated expenses and option to accept all, reject all, or click ones to accept)
-// TODO: min window width
 // TODO: settings page
 // TODO: income category
 

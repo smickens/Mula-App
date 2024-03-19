@@ -13,55 +13,48 @@ struct SummaryView: View {
     let totalsByCategory: [Category: Double]
 
     var body: some View {
-        VStack {
+        VStack(alignment: .center) {
             Spacer()
 
-            Text("Spending Overview")
-                .font(.title3)
-                .fontWeight(.semibold)
-                .padding(.bottom)
+//            Text("Spending Overview")
+//                .font(.title2)
+//                .fontWeight(.semibold)
+//                .padding(.bottom)
 
-            HStack {
-                Spacer()
+            Grid(horizontalSpacing: 10, verticalSpacing: 5) {
+                GridRow {
+                    Image(systemName: "arrow.up.circle.fill")
+                        .font(.system(size: 30, weight: .semibold))
 
-                Grid(horizontalSpacing: 10, verticalSpacing: 5) {
-                    GridRow {
-                        Image(systemName: "arrow.up.circle.fill")
-                            .font(.system(size: 30, weight: .semibold))
+                    Text("+")
 
-                        Text("+")
+                    Image(systemName: "arrow.down.circle.fill")
+                        .font(.system(size: 30, weight: .semibold))
 
-                        Image(systemName: "arrow.down.circle.fill")
-                            .font(.system(size: 30, weight: .semibold))
+                    Text("=")
 
-                        Text("=")
-
-                        Image(systemName: "dollarsign.circle.fill")
-                            .font(.system(size: 30, weight: .semibold))
-                    }
-                    GridRow {
-                        Text(totalMoneyIn, format: .currency(code: "USD"))
-
-                        Text("+")
-
-                        Text(totalMoneyOut, format: .currency(code: "USD"))
-
-                        Text("=")
-
-                        Text(totalMoneyIn + totalMoneyOut, format: .currency(code: "USD"))
-                    }
+                    Image(systemName: "dollarsign.circle.fill")
+                        .font(.system(size: 30, weight: .semibold))
                 }
-                .foregroundStyle(.gray)
+                GridRow {
+                    Text(totalMoneyIn, format: .currency(code: "USD"))
 
-                Spacer()
+                    Text("+")
+
+                    Text(totalMoneyOut, format: .currency(code: "USD"))
+
+                    Text("=")
+
+                    Text(totalMoneyIn + totalMoneyOut, format: .currency(code: "USD"))
+                }
             }
-            .padding(.bottom)
+            .foregroundStyle(.gray)
 
             Spacer()
 
-            Text("Category Totals")
-                .font(.title3)
-                .fontWeight(.semibold)
+//            Text("Category Totals")
+//                .font(.title2)
+//                .fontWeight(.semibold)
 
             PieChartView(totals: totalsByCategory.map { $0.value }, categories: totalsByCategory.map { $0.key })
                 .frame(width: 160, height: 160)
