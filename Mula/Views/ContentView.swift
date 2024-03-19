@@ -8,11 +8,12 @@
 import SwiftUI
 
 // TODO: move list of months to maybe be a picker ?? or checkbox filter
-// TODO: budgeting mech
-// TODO: home page with charts that compares spending / trends in different months, checklist of which categories to view over the year
 // TODO: click on categories to toggle them on/off
 // TODO: add warning for uploading duplicate expenses ? (popup with list of duplicated expenses and option to accept all, reject all, or click ones to accept)
-// TODO: settings page
+// TODO: settings page, ability to change budget numbers
+// TODO: charts/trends page showing total money spent with stacked bar chart breaking down categories
+// could either have checkboxes for choosing what to include on this chart and/or ability to swipe between to pages already broken down by category
+// TODO: add sub-category to break up food -> eating out vs groceries
 
 struct ContentView: View {
     @FetchRequest(

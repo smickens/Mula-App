@@ -21,7 +21,7 @@ struct SummaryView: View {
 //                .fontWeight(.semibold)
 //                .padding(.bottom)
 
-            Grid(horizontalSpacing: 10, verticalSpacing: 5) {
+            Grid(horizontalSpacing: 0, verticalSpacing: 5) {
                 GridRow {
                     Image(systemName: "arrow.up.circle.fill")
                         .font(.system(size: 30, weight: .semibold))
@@ -38,14 +38,17 @@ struct SummaryView: View {
                 }
                 GridRow {
                     Text(totalMoneyIn, format: .currency(code: "USD"))
+                        .frame(maxWidth: .infinity)
 
                     Text("+")
 
                     Text(totalMoneyOut, format: .currency(code: "USD"))
+                        .frame(maxWidth: .infinity)
 
                     Text("=")
 
                     Text(totalMoneyIn + totalMoneyOut, format: .currency(code: "USD"))
+                        .frame(maxWidth: .infinity)
                 }
             }
             .foregroundStyle(.gray)
