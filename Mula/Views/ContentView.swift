@@ -8,7 +8,6 @@
 import SwiftUI
 
 // TODO: move list of months to maybe be a picker ?? or checkbox filter
-// TODO: click on categories to toggle them on/off
 // TODO: add warning for uploading duplicate expenses ? (popup with list of duplicated expenses and option to accept all, reject all, or click ones to accept)
 // TODO: settings page, ability to change budget numbers
 // TODO: charts/trends page showing total money spent with stacked bar chart breaking down categories

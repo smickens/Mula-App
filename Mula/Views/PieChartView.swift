@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-// TODO: on tap gesture of pie slice or category, it should filter to only that category
-
 struct PieChartView: View {
     @Binding var selectedCategory: Category?
     let totals: [Double]
