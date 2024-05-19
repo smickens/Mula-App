@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct ExpenseView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
+    
     @State var showingEditExpenseForm = false
-    @ObservedObject var expense: Expense
+    let expense: Expense
     let swipeActionsEnabled: Bool
 
     var body: some View {
@@ -24,7 +27,7 @@ struct ExpenseView: View {
             }
 
             VStack(alignment: .leading) {
-                Text(expense.title ?? "Default Title")
+                Text(expense.title)
                     .font(.headline)
                     .lineLimit(1)
 
@@ -58,15 +61,14 @@ struct ExpenseView: View {
         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
             if swipeActionsEnabled {
                 Button(role: .destructive) {
-                    ExpenseRepository.shared.deleteExpense(expense: expense)
-                    ExpenseRepository.shared.saveContext()
+                    modelContext.delete(expense)
                 } label: {
                     Label("Delete", systemImage: "trash.fill")
                 }
             }
         }
         .sheet(isPresented: $showingEditExpenseForm) {
-            ExpenseFormView(showingExpenseForm: $showingEditExpenseForm, expense: expense)
+            EditExpenseFormView(showingEditExpenseForm: $showingEditExpenseForm, expense: expense)
         }
     }
 

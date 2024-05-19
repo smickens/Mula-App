@@ -9,26 +9,65 @@ import SwiftUI
 
 // TODO: have date start at 1st of month selected or current date if in the selected month
 
-struct ExpenseFormView: View {
-    @Binding public var showingExpenseForm: Bool
-    @State private var id: UUID = UUID()
+struct NewExpenseFormView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
+    
     @State private var title: String = ""
     @State private var date: Date = Date()
     @State private var amount: Double = 0.0
     @State private var category: Category = .misc
-    var isEdit: Bool
 
-    init(showingExpenseForm: Binding<Bool>, expense: Expense? = nil) {
-        _showingExpenseForm = showingExpenseForm
-        if let expense {
-            _id = State(initialValue: expense.id ?? UUID())
-            _title = State(initialValue: expense.title ?? "")
-            _date = State(initialValue: expense.date ?? Date())
-            _amount = State(initialValue: abs(expense.amount))
-            _category = State(initialValue: expense.category)
-        }
-        isEdit = expense != nil
+    var body: some View {
+        ExpenseFormView(title: $title, date: $date, amount: $amount, category: $category)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button{
+                        saveExpense()
+                    } label: {
+                        Text("Save Expense")
+                    }
+                    .disabled(!isFormValid)
+                }
+            }
     }
+
+    private var isFormValid: Bool {
+        return title.trimmingCharacters(in: .whitespaces).count > 0 && amount > 0
+    }
+
+    private func saveExpense() {
+        // Handle saving the new expense, for example, you could add it to an array or store it in a database.
+        let expenseAmount = category == .income ? amount : -amount
+        
+        let newExpense = Expense(title: title, date: date, amount: expenseAmount, category: category)
+        modelContext.insert(newExpense)
+
+        // Reset the form after saving the expense
+        title = ""
+        date = Date()
+        amount = 0.0
+        category = .misc
+
+        dismiss()
+    }
+}
+
+struct EditExpenseFormView: View {
+    @Binding public var showingEditExpenseForm: Bool
+    @Bindable var expense: Expense
+    
+    var body: some View {
+        ExpenseFormView(title: $expense.title, date: $expense.date, amount: $expense.amount, category: $expense.category)
+    }
+}
+
+struct ExpenseFormView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Binding var title: String
+    @Binding var date: Date
+    @Binding var amount: Double
+    @Binding var category: Category
 
     var body: some View {
         VStack {
@@ -61,44 +100,17 @@ struct ExpenseFormView: View {
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button{
-                    showingExpenseForm.toggle()
+                    dismiss()
                 } label: {
                     Text("Cancel")
                 }
                 .foregroundColor(.red)
-            }
-
-            ToolbarItem(placement: .confirmationAction) {
-                Button{
-                    saveExpense()
-                } label: {
-                    Text("Save Expense")
-                }
-                .disabled(!isFormValid)
             }
         }
     }
 
     private var isFormValid: Bool {
         return title.trimmingCharacters(in: .whitespaces).count > 0 && amount > 0
-    }
-
-    private func saveExpense() {
-        // Handle saving the new expense, for example, you could add it to an array or store it in a database.
-        let expenseAmount = category == .income ? amount : -amount
-        if isEdit {
-            ExpenseRepository.shared.updateExpense(id: id, newTitle: title, newDate: date, newAmount: expenseAmount, newCategory: category)
-        } else {
-            ExpenseRepository.shared.saveNewExpense(id: id, title: title, date: date, amount: expenseAmount, category: category)
-        }
-
-        // Reset the form after saving the expense
-        title = ""
-        date = Date()
-        amount = 0.0
-        category = .misc
-
-        showingExpenseForm = false
     }
 }
 

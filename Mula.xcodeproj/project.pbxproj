@@ -7,11 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DE813CEB2B6D099F00B4B189 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DE813CE92B6D099F00B4B189 /* DataModel.xcdatamodeld */; };
-		DE813CEE2B6D0B1400B4B189 /* Expense+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE813CEC2B6D0B1400B4B189 /* Expense+CoreDataClass.swift */; };
-		DE813CEF2B6D0B1400B4B189 /* Expense+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE813CED2B6D0B1400B4B189 /* Expense+CoreDataProperties.swift */; };
-		DE813CF22B6D0C1000B4B189 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE813CF12B6D0C1000B4B189 /* CoreDataStack.swift */; };
-		DE813CF42B6D0FA900B4B189 /* ExpenseRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE813CF32B6D0FA900B4B189 /* ExpenseRepository.swift */; };
 		DE9AF9312B7851F700D1F4DC /* UploadFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9AF9302B7851F700D1F4DC /* UploadFormView.swift */; };
 		DE9AF9B52BA2C4AF00D1F4DC /* PieChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */; };
 		DE9AF9B72BA7995800D1F4DC /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9AF9B62BA7995800D1F4DC /* BudgetView.swift */; };
@@ -24,14 +19,10 @@
 		DEF8FE1C2B6B989A00D10468 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE1B2B6B989A00D10468 /* Extensions.swift */; };
 		DEF8FE1E2B6B995500D10468 /* ExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE1D2B6B995500D10468 /* ExpenseView.swift */; };
 		DEF8FE222B6B9E1000D10468 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE212B6B9E1000D10468 /* SummaryView.swift */; };
+		E27223DE2BF9C2FE0065089A /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223DD2BF9C2FE0065089A /* Expense.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		DE813CEA2B6D099F00B4B189 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
-		DE813CEC2B6D0B1400B4B189 /* Expense+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense+CoreDataClass.swift"; sourceTree = "<group>"; };
-		DE813CED2B6D0B1400B4B189 /* Expense+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Expense+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		DE813CF12B6D0C1000B4B189 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
-		DE813CF32B6D0FA900B4B189 /* ExpenseRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseRepository.swift; sourceTree = "<group>"; };
 		DE9AF9302B7851F700D1F4DC /* UploadFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFormView.swift; sourceTree = "<group>"; };
 		DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChartView.swift; sourceTree = "<group>"; };
 		DE9AF9B62BA7995800D1F4DC /* BudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
@@ -46,6 +37,7 @@
 		DEF8FE1B2B6B989A00D10468 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		DEF8FE1D2B6B995500D10468 /* ExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseView.swift; sourceTree = "<group>"; };
 		DEF8FE212B6B9E1000D10468 /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
+		E27223DD2BF9C2FE0065089A /* Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,22 +51,9 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		DE813CF02B6D0B1D00B4B189 /* CoreData */ = {
-			isa = PBXGroup;
-			children = (
-				DE813CE92B6D099F00B4B189 /* DataModel.xcdatamodeld */,
-				DE813CEC2B6D0B1400B4B189 /* Expense+CoreDataClass.swift */,
-				DE813CED2B6D0B1400B4B189 /* Expense+CoreDataProperties.swift */,
-				DE813CF12B6D0C1000B4B189 /* CoreDataStack.swift */,
-				DE813CF32B6D0FA900B4B189 /* ExpenseRepository.swift */,
-			);
-			path = CoreData;
-			sourceTree = "<group>";
-		};
 		DEF3CAD92B61BB9200C926ED = {
 			isa = PBXGroup;
 			children = (
-				DE813CF02B6D0B1D00B4B189 /* CoreData */,
 				DEF3CAE42B61BB9300C926ED /* Mula */,
 				DEF3CAE32B61BB9300C926ED /* Products */,
 			);
@@ -114,6 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				DEF8FE162B6AE51D00D10468 /* Category.swift */,
+				E27223DD2BF9C2FE0065089A /* Expense.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -210,20 +190,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E27223DE2BF9C2FE0065089A /* Expense.swift in Sources */,
 				DE9AF9B52BA2C4AF00D1F4DC /* PieChartView.swift in Sources */,
-				DE813CEB2B6D099F00B4B189 /* DataModel.xcdatamodeld in Sources */,
 				DE9AF9312B7851F700D1F4DC /* UploadFormView.swift in Sources */,
 				DEF8FE192B6B976E00D10468 /* ExpenseFormView.swift in Sources */,
 				DE9AF9B72BA7995800D1F4DC /* BudgetView.swift in Sources */,
 				DEF8FE172B6AE51D00D10468 /* Category.swift in Sources */,
 				DEF3CAE82B61BB9300C926ED /* ContentView.swift in Sources */,
-				DE813CF22B6D0C1000B4B189 /* CoreDataStack.swift in Sources */,
 				DEF3CAE62B61BB9300C926ED /* MulaApp.swift in Sources */,
 				DEF8FE222B6B9E1000D10468 /* SummaryView.swift in Sources */,
 				DEF8FE1C2B6B989A00D10468 /* Extensions.swift in Sources */,
-				DE813CEE2B6D0B1400B4B189 /* Expense+CoreDataClass.swift in Sources */,
-				DE813CEF2B6D0B1400B4B189 /* Expense+CoreDataProperties.swift in Sources */,
-				DE813CF42B6D0FA900B4B189 /* ExpenseRepository.swift in Sources */,
 				DEF8FE1E2B6B995500D10468 /* ExpenseView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -368,6 +344,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kayapps.Mula;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -395,6 +372,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kayapps.Mula;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -425,19 +403,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		DE813CE92B6D099F00B4B189 /* DataModel.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				DE813CEA2B6D099F00B4B189 /* DataModel.xcdatamodel */,
-			);
-			currentVersion = DE813CEA2B6D099F00B4B189 /* DataModel.xcdatamodel */;
-			path = DataModel.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = DEF3CADA2B61BB9200C926ED /* Project object */;
 }

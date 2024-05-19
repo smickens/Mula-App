@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct UploadFormView: View {
+    @Environment(\.modelContext) private var modelContext
+    
     @Binding var showingUploadExpensesForm: Bool
     @Binding var newExpenses: [Expense]
     @State private var selectedExpense: Expense?
@@ -29,7 +31,7 @@ struct UploadFormView: View {
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             Button(role: .destructive) {
                                 newExpenses.removeAll { $0.id == expense.id }
-                                ExpenseRepository.shared.deleteExpense(expense: expense)
+                                modelContext.delete(expense)
                             } label: {
                                 Label("Delete", systemImage: "trash.fill")
                             }
@@ -48,34 +50,7 @@ struct UploadFormView: View {
                 }
                 .frame(width: 340)
 
-                VStack {
-                    Form {
-                        TextField("Title", text: $editedTitle, prompt: Text("Groceries"))
-                            .onChange(of: editedTitle) { _, newValue in
-                                selectedExpense?.title = editedTitle
-                            }
-
-                        TextField("Amount", value: $editedAmount, format: .currency(code: "USD"))
-                            .onChange(of: editedAmount) { _, newValue in
-                                selectedExpense?.amount = editedAmount
-                            }
-
-                        Picker("Category", selection: $editedCategory) {
-                            ForEach(Category.allCases, id: \.self) { category in
-                                Text(category.name)
-                            }
-                        }
-                        .onChange(of: editedCategory) { _, newValue in
-                            selectedExpense?.category = editedCategory
-                        }
-
-                        DatePicker("Date", selection: $editedDate, in: ...Date(), displayedComponents: .date)
-                            .onChange(of: editedDate) { _, newValue in
-                                selectedExpense?.date = editedDate
-                            }
-                    }
-                    .textFieldStyle(.roundedBorder)
-                }
+                editFields
             }
         }
         .frame(width: 600, height: 340)
@@ -104,22 +79,61 @@ struct UploadFormView: View {
         }
         .onChange(of: selectedExpense) { _, newValue in
             guard let newValue else { return }
-            editedTitle = newValue.title ?? ""
+            editedTitle = newValue.title
             editedAmount = newValue.amount
             editedCategory = newValue.category
-            editedDate = newValue.date ?? Date()
+            editedDate = newValue.date
+        }
+    }
+    
+    private var editFields: some View {
+        VStack {
+            Form {
+                TextField("Title", text: $editedTitle, prompt: Text("Groceries"))
+                    .onChange(of: editedTitle) { _, newValue in
+                        selectedExpense?.title = editedTitle
+                    }
+
+                TextField("Amount", value: $editedAmount, format: .currency(code: "USD"))
+                    .onChange(of: editedAmount) { _, newValue in
+                        selectedExpense?.amount = editedAmount
+                    }
+
+                Picker("Category", selection: $editedCategory) {
+                    ForEach(Category.allCases, id: \.self) { category in
+                        Text(category.name)
+                    }
+                }
+                .onChange(of: editedCategory) { _, newValue in
+                    selectedExpense?.category = editedCategory
+                }
+
+                DatePicker("Date", selection: $editedDate, in: ...Date(), displayedComponents: .date)
+                    .onChange(of: editedDate) { _, newValue in
+                        selectedExpense?.date = editedDate
+                    }
+            }
+            .textFieldStyle(.roundedBorder)
         }
     }
 
     private func saveNewExpenses() {
-        ExpenseRepository.shared.saveContext()
+        do {
+            try modelContext.transaction {
+                for expense in newExpenses {
+                    modelContext.insert(expense)
+                }
+            }
+        } catch {
+            // Handle error
+        }
 
         showingUploadExpensesForm = false
     }
 
     private func clearAllNewExpenses() {
         for expense in newExpenses {
-            ExpenseRepository.shared.deleteExpense(expense: expense)
+            modelContext.delete(expense)
         }
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 // TODO: move list of months to maybe be a picker ?? or checkbox filter
 // TODO: add warning for uploading duplicate expenses ? (popup with list of duplicated expenses and option to accept all, reject all, or click ones to accept)
@@ -17,9 +18,8 @@ import SwiftUI
 // TODO: might move away from some computed values to prevent redrawing unless an expense is added/edited
 
 struct ContentView: View {
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Expense.date, ascending: true)]
-    ) var expenses: FetchedResults<Expense>
+    @Query(sort: \Expense.date, order: .forward) var expenses: [Expense]
+    
     @State private var selectedMonth: String? = Date().month
     @State private var showingNewExpenseForm: Bool = false
     @State private var showingUploadExpensesForm: Bool = false
@@ -75,7 +75,7 @@ struct ContentView: View {
                 .padding()
 
                 List(filteredExpensesByCategory.filter {
-                    searchText.isEmpty || $0.title?.localizedStandardContains(searchText) == true
+                    searchText.isEmpty || $0.title.localizedStandardContains(searchText) == true
                 }) { expense in
                     ExpenseView(expense: expense, swipeActionsEnabled: true)
                         .contentShape(Rectangle())
@@ -113,7 +113,7 @@ struct ContentView: View {
             }
         }
         .sheet(isPresented: $showingNewExpenseForm) {
-            ExpenseFormView(showingExpenseForm: $showingNewExpenseForm)
+            NewExpenseFormView()
         }
         .sheet(isPresented: $showingUploadExpensesForm) {
             UploadFormView(showingUploadExpensesForm: $showingUploadExpensesForm, newExpenses: $newExpenses)
@@ -143,7 +143,7 @@ struct ContentView: View {
     }
 
     private var expensesForMonth: [Expense] {
-        return expenses.filter { ($0.date ?? Date()).month == selectedMonth }
+        return expenses.filter { $0.date.month == selectedMonth }
     }
 
     private var filteredExpensesByCategory: [Expense] {
@@ -183,7 +183,7 @@ struct ContentView: View {
             let expenseAmount = Double(columns[6].replacingOccurrences(of: "\"", with: "")) ?? 0.0
 
             if let expenseCategory = getCategory(fromString: columns[4].replacingOccurrences(of: "\"", with: "")) {
-                processedExpenses.append(ExpenseRepository.shared.createExpense(id: UUID(), title: expenseTitle, date: expenseDate, amount: -expenseAmount, category: expenseCategory))
+                processedExpenses.append(Expense(title: expenseTitle, date: expenseDate, amount: -expenseAmount, category: expenseCategory))
             }
         }
 

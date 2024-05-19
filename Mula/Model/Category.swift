@@ -18,7 +18,7 @@ struct SubCategory: Identifiable {
     var parentCategory: Category
 }
 
-enum Category: String, CaseIterable, Identifiable {
+enum Category: String, CaseIterable, Identifiable, Codable {
     case housing = "Housing"
     case food = "Food" // eating out, ordering, groceries
     case shopping = "Shopping"
