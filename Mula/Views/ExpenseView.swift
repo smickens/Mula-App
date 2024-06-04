@@ -68,7 +68,7 @@ struct ExpenseView: View {
             }
         }
         .sheet(isPresented: $showingEditExpenseForm) {
-            EditExpenseFormView(showingEditExpenseForm: $showingEditExpenseForm, expense: expense)
+            EditExpenseFormView(expense: expense)
         }
     }
 

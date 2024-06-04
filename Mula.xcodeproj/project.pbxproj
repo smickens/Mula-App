@@ -20,6 +20,8 @@
 		DEF8FE1E2B6B995500D10468 /* ExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE1D2B6B995500D10468 /* ExpenseView.swift */; };
 		DEF8FE222B6B9E1000D10468 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE212B6B9E1000D10468 /* SummaryView.swift */; };
 		E27223DE2BF9C2FE0065089A /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223DD2BF9C2FE0065089A /* Expense.swift */; };
+		E27223E02C0EB5A10065089A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223DF2C0EB5A10065089A /* SettingsView.swift */; };
+		E27223E52C0EB9240065089A /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223E42C0EB9240065089A /* Budget.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +40,8 @@
 		DEF8FE1D2B6B995500D10468 /* ExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseView.swift; sourceTree = "<group>"; };
 		DEF8FE212B6B9E1000D10468 /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
 		E27223DD2BF9C2FE0065089A /* Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
+		E27223DF2C0EB5A10065089A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		E27223E42C0EB9240065089A /* Budget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Budget.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +98,7 @@
 			children = (
 				DEF8FE162B6AE51D00D10468 /* Category.swift */,
 				E27223DD2BF9C2FE0065089A /* Expense.swift */,
+				E27223E42C0EB9240065089A /* Budget.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -108,6 +113,7 @@
 				DEF8FE212B6B9E1000D10468 /* SummaryView.swift */,
 				DE9AF9302B7851F700D1F4DC /* UploadFormView.swift */,
 				DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */,
+				E27223DF2C0EB5A10065089A /* SettingsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -199,7 +205,9 @@
 				DEF3CAE82B61BB9300C926ED /* ContentView.swift in Sources */,
 				DEF3CAE62B61BB9300C926ED /* MulaApp.swift in Sources */,
 				DEF8FE222B6B9E1000D10468 /* SummaryView.swift in Sources */,
+				E27223E02C0EB5A10065089A /* SettingsView.swift in Sources */,
 				DEF8FE1C2B6B989A00D10468 /* Extensions.swift in Sources */,
+				E27223E52C0EB9240065089A /* Budget.swift in Sources */,
 				DEF8FE1E2B6B995500D10468 /* ExpenseView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -6,22 +6,11 @@
 //
 
 import SwiftUI
-
-struct Budget {
-    let category: Category
-    let target: Double
-}
+import SwiftData
 
 struct BudgetView: View {
+    @Query(sort: \Budget.categoryTitle, order: .forward) var budgets: [Budget]
     let totalsByCategory: [Category: Double]
-    let budgets: [Budget] = [
-        .init(category: .housing, target: 3100.00),
-        .init(category: .food, target: 250.00),
-        .init(category: .shopping, target: 200.00),
-        .init(category: .transportation, target: 100.00),
-        .init(category: .entertainment, target: 100.00),
-        .init(category: .misc, target: 50.00),
-    ]
 
     var body: some View {
         VStack {
@@ -40,15 +29,15 @@ struct BudgetView: View {
 
                     Spacer()
 
-                    let usedBudgetPercentage = (totalsByCategory[budget.category] ?? 0.0) / budget.target
+                    let percentage = usedBudgetPercentage(for: budget)
 
                     // TODO: custom progress view to highlight over-budget portion
                     VStack(alignment: .leading, spacing: 0) {
-                        ProgressView(value: min(usedBudgetPercentage, 1.0))
+                        ProgressView(value: min(percentage, 1.0))
                             .progressViewStyle(.linear)
                             .frame(height: 20)
                         
-                        Text("\(Int(usedBudgetPercentage * 100))%")
+                        Text("\(Int(percentage * 100))%")
                             .padding(.top, 8)
                     }
 
@@ -59,12 +48,15 @@ struct BudgetView: View {
             }
         }
     }
+    
+    private func usedBudgetPercentage(for budget: Budget) -> Double {
+        if budget.target != 0.0 {
+            return (totalsByCategory[budget.category] ?? 0.0) / budget.target
+        }
+        return (totalsByCategory[budget.category] ?? 0.0) > 0 ? 1.0 : 0.0
+    }
 
     private var totalBudget: Double {
         return budgets.reduce(0) { $0 + $1.target }
     }
 }
-
-//#Preview {
-//    BudgetView()
-//}

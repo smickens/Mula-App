@@ -54,7 +54,6 @@ struct NewExpenseFormView: View {
 }
 
 struct EditExpenseFormView: View {
-    @Binding public var showingEditExpenseForm: Bool
     @Bindable var expense: Expense
     
     var body: some View {

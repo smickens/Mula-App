@@ -8,14 +8,9 @@
 import Foundation
 import SwiftUI
 
-// TODO: category protocol ??
-
-struct SubCategory: Identifiable {
-    var id = UUID()
-    var name: String
-    var icon: Image
-    var tintColor: Color
-    var parentCategory: Category
+struct SubCategory {
+    var category: Category
+    var parent: Category
 }
 
 enum Category: String, CaseIterable, Identifiable, Codable {

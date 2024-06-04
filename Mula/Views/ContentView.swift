@@ -21,13 +21,16 @@ struct ContentView: View {
     @Query(sort: \Expense.date, order: .forward) var expenses: [Expense]
     
     @State private var selectedMonth: String? = Date().month
-    @State private var showingNewExpenseForm: Bool = false
-    @State private var showingUploadExpensesForm: Bool = false
+    @State private var selectedExpense: Expense? = nil
+    @State private var selectedCategory: Category? = nil
+    
     @State private var searchText: String = ""
     @State private var fileContent: String?
     @State private var newExpenses: [Expense] = []
-    @State private var selectedExpense: Expense? = nil
-    @State private var selectedCategory: Category? = nil
+    
+    @State private var showingNewExpenseForm: Bool = false
+    @State private var showingUploadExpensesForm: Bool = false
+    @State private var showingSettings: Bool = false
 
     let months: [String] = DateFormatter().monthSymbols
 
@@ -37,17 +40,6 @@ struct ContentView: View {
                 ForEach(months, id: \.self) { month in
                     Text(month)
                 }
-
-                Spacer()
-
-                HStack {
-                    Text("Settings")
-
-                    Spacer()
-
-                    Image(systemName: "gear")
-                }
-                .tag("Settings")
             }
             .listStyle(.sidebar)
             .toolbar {
@@ -105,7 +97,7 @@ struct ContentView: View {
 
                 ToolbarItem {
                     Button {
-                        showingNewExpenseForm.toggle()
+                        showingSettings.toggle()
                     } label: {
                         Image(systemName: "gear")
                     }
@@ -116,7 +108,10 @@ struct ContentView: View {
             NewExpenseFormView()
         }
         .sheet(isPresented: $showingUploadExpensesForm) {
-            UploadFormView(showingUploadExpensesForm: $showingUploadExpensesForm, newExpenses: $newExpenses)
+            UploadFormView(newExpenses: $newExpenses)
+        }
+        .sheet(isPresented: $showingSettings) {
+            SettingsView()
         }
     }
 

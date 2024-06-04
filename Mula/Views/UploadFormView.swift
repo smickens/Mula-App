@@ -9,8 +9,8 @@ import SwiftUI
 
 struct UploadFormView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
     
-    @Binding var showingUploadExpensesForm: Bool
     @Binding var newExpenses: [Expense]
     @State private var selectedExpense: Expense?
 
@@ -59,7 +59,7 @@ struct UploadFormView: View {
             ToolbarItem(placement: .cancellationAction) {
                 Button{
                     clearAllNewExpenses()
-                    showingUploadExpensesForm.toggle()
+                    dismiss()
                 } label: {
                     Text("Cancel")
                 }
@@ -128,7 +128,7 @@ struct UploadFormView: View {
             // Handle error
         }
 
-        showingUploadExpensesForm = false
+        dismiss()
     }
 
     private func clearAllNewExpenses() {

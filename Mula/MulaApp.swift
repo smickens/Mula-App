@@ -19,6 +19,6 @@ struct MulaApp: App {
         .commands {
             SidebarCommands()
         }
-        .modelContainer(for: [Expense.self])
+        .modelContainer(for: [Expense.self, Budget.self])
     }
 }
