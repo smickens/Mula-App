@@ -22,21 +22,24 @@ struct SettingsView: View {
             
             ForEach(Category.allCases, id: \.self) { category in
                 HStack {
-                    let budget = budget(for: category)
-                    
-                    ZStack {
-                        Circle()
-                            .fill(budget.category.tintColor)
-                            .frame(width: 28, height: 28)
+                    if category != .income {
+                        let budget = budget(for: category)
+                        
+                        ZStack {
+                            Circle()
+                                .fill(budget.category.tintColor)
+                                .frame(width: 28, height: 28)
 
-                        budget.category.icon
-                            .foregroundColor(.white)
+                            budget.category.icon
+                                .foregroundColor(.white)
+                        }
+                        
+                        Text("\(budget.category.name):")
+                        
+                        TextField("", value: Bindable(budget).target, format: .currency(code: "USD"))
                     }
-                    
-                    Text("\(budget.category.name):")
-                    
-                    TextField("", value: Bindable(budget).target, format: .currency(code: "USD"))
                 }
+                .padding(.horizontal)
             }
         }
         .frame(width: 400, height: 320)

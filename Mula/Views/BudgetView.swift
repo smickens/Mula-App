@@ -45,6 +45,7 @@ struct BudgetView: View {
 
                     Text("$\(String(format: "%.2f", budget.target))")
                 }
+                .padding(.horizontal)
             }
         }
     }
