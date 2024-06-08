@@ -11,9 +11,10 @@ struct UploadFormView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
-    @Binding var newExpenses: [Expense]
+    @Binding var fileContent: String
+    @State private var newExpenses: [Expense] = []
     @State private var selectedExpense: Expense?
-
+    
     @State private var editedTitle: String = ""
     @State private var editedAmount: Double = 0.0
     @State private var editedCategory: Category = .misc
@@ -26,29 +27,7 @@ struct UploadFormView: View {
                 .fontWeight(.bold)
 
             HStack {
-                List(newExpenses, selection: $selectedExpense) { expense in
-                    ExpenseView(expense: expense, swipeActionsEnabled: false)
-                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                            Button(role: .destructive) {
-                                newExpenses.removeAll { $0.id == expense.id }
-                                modelContext.delete(expense)
-                            } label: {
-                                Label("Delete", systemImage: "trash.fill")
-                            }
-                        }
-                        .padding(6)
-                        .background(
-                            RoundedRectangle(cornerRadius: 5)
-                                .fill(selectedExpense == expense ? Color.gray.opacity(0.2) : Color.clear)
-                        )
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            withAnimation {
-                                selectedExpense = expense
-                            }
-                        }
-                }
-                .frame(width: 340)
+                newExpensesList
 
                 editFields
             }
@@ -75,6 +54,7 @@ struct UploadFormView: View {
             }
         }
         .onAppear {
+            newExpenses = processCSV(fileContent)
             selectedExpense = newExpenses.first
         }
         .onChange(of: selectedExpense) { _, newValue in
@@ -84,6 +64,32 @@ struct UploadFormView: View {
             editedCategory = newValue.category
             editedDate = newValue.date
         }
+    }
+    
+    private var newExpensesList: some View {
+        List(newExpenses, selection: $selectedExpense) { expense in
+            ExpenseView(expense: expense, swipeActionsEnabled: false)
+                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                    Button(role: .destructive) {
+                        newExpenses.removeAll { $0.id == expense.id }
+                        modelContext.delete(expense)
+                    } label: {
+                        Label("Delete", systemImage: "trash.fill")
+                    }
+                }
+                .padding(6)
+                .background(
+                    RoundedRectangle(cornerRadius: 5)
+                        .fill(selectedExpense == expense ? Color.gray.opacity(0.2) : Color.clear)
+                )
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    withAnimation {
+                        selectedExpense = expense
+                    }
+                }
+        }
+        .frame(width: 340)
     }
     
     private var editFields: some View {
@@ -136,8 +142,128 @@ struct UploadFormView: View {
             modelContext.delete(expense)
         }
     }
-}
 
-//#Preview {
-//    UploadFormView()
-//}
+// MARK: Transaction CSV Processing
+    
+    private func processCSV(_ content: String) -> [Expense] {
+        var expenses: [Expense] = []
+        let rows = content.components(separatedBy: "\n")
+        
+        let numColumns = rows.first?.components(separatedBy: ",").count ?? 0
+        let bank: Bank = numColumns == 8 ? .apple : (numColumns == 5 ? .usBank : .bilt)
+        
+        var processedExpenses = [Expense]()
+        for row in rows.dropFirst() {
+            guard !row.isEmpty else { continue }
+            
+            func processRowByBank() -> Expense? {
+                switch bank {
+                case .apple:
+                    return processAppleTransaction(row)
+                case .usBank:
+                    return processUSBankTransaction(row)
+                case .bilt:
+                    return processBiltTransaction(row)
+                }
+            }
+            
+            if let expense = processRowByBank() {
+                // Rename common transactions
+                let mappedExpenseTitles = [
+                    "ELECTRONIC DEPOSIT APPLE INC.": "Apple Job",
+                    "WEB AUTHORIZED PMT VENMO": "Venmo (out)",
+                    "ELECTRONIC DEPOSIT VENMO": "Venmo (in)",
+                ]
+                if let mappedTitle = mappedExpenseTitles[expense.title] {
+                    expense.title = mappedTitle
+                }
+                if expense.title.range(of: "Uber Eats", options: .caseInsensitive) != nil {
+                    expense.title = "Uber Eats"
+                    expense.category = .food
+                } else if expense.title.range(of: "Uber", options: .caseInsensitive) != nil {
+                    expense.title = "Uber"
+                    expense.category = .transportation
+                } else if expense.title == "ELECTRONIC WITHDRAWAL ATT" {
+                    expense.title = "Internet Bill"
+                    expense.category = .housing
+                }
+                
+                expenses.append(expense)
+            }
+        }
+        
+        return expenses
+    }
+
+    private func processAppleTransaction(_ row: String) -> Expense? {
+        // ["Transaction Date", "Clearing Date", "Description", "Merchant", "Category", "Type", "Amount (USD)", "Purchased By"]
+        let columns = row.components(separatedBy: ",")
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yyyy"
+            
+        let expenseDate = dateFormatter.date(from: columns[0]) ?? Date()
+        let expenseTitle = columns[3].replacingOccurrences(of: "\"", with: "")
+        let expenseAmount = Double(columns[6].replacingOccurrences(of: "\"", with: "")) ?? 0.0
+        let expenseCategory = getCategory(fromString: columns[4].replacingOccurrences(of: "\"", with: ""))
+        
+        // Filter out credit card payment transactions
+        let ignoredCatgories = ["Payment"]
+        guard !ignoredCatgories.contains(columns[4].replacingOccurrences(of: "\"", with: "")) else {
+            return nil
+        }
+        
+        return nil
+    }
+    
+    private func processUSBankTransaction(_ row: String) -> Expense? {
+        // ["Date", "Transaction", "Name", "Memo", "Amount"]
+        let columns = row.components(separatedBy: ",")
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        let expenseDate = dateFormatter.date(from: columns[0].replacingOccurrences(of: "\"", with: "")) ?? Date()
+        let expenseTitle = columns[2].replacingOccurrences(of: "\"", with: "")
+        let expenseAmount = (Double(columns[4].replacingOccurrences(of: "\"", with: "")) ?? 0.0) * -1
+        let expenseCategory = expenseAmount < 0 ? Category.income : Category.misc
+        
+        // Filter out the folloiwng: credit card payment transactions, moving money to/from Apple Savings, and waived monthly maintenance fees
+        let ignoredPayments = ["WEB AUTHORIZED PMT APPLECARD GSBANK", "WEB AUTHORIZED PMT WELLS FARGO CARD", "MOBILE BANKING PAYMENT TO CREDIT CARD 5895", "MOBILE BANKING PAYMENT TO CREDIT CARD 9996", "WEB AUTHORIZED PMT APPLE GS SAVINGS", "ELECTRONIC DEPOSIT APPLE GS SAVINGS", "MONTHLY MAINTENANCE FEE", "MONTHLY MAINTENANCE FEE WAIVED"]
+        guard !ignoredPayments.contains(expenseTitle) else {
+            return nil
+        }
+            
+        return Expense(title: expenseTitle, date: expenseDate, amount: -expenseAmount, category: expenseCategory)
+    }
+    
+    private func processBiltTransaction(_ row: String) -> Expense? {
+        return nil
+    }
+
+    private func getCategory(fromString category: String) -> Category? {
+        let ignoreCatgories = ["Payment"]
+        guard !ignoreCatgories.contains(category) else { return nil }
+
+        let housingCategories = ["Hotels"]
+        let foodCategories = ["Restaurants", "Grocery"]
+        let shoppingCategories = ["Shopping"]
+//        let miscCategories = []
+        let transportationCategories = ["Airlines", "Transportation"]
+        let entertainmentCategories = ["Entertainment"]
+
+        if (housingCategories.contains(category)) {
+            return .housing
+        } else if (foodCategories.contains(category)) {
+            return .food
+        } else if (shoppingCategories.contains(category)) {
+            return .shopping
+        } else if (transportationCategories.contains(category)) {
+            return .transportation
+        } else if (entertainmentCategories.contains(category)) {
+            return .entertainment
+        }
+
+        return .misc
+    }
+}

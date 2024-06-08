@@ -41,6 +41,10 @@ struct SettingsView: View {
                 }
                 .padding(.horizontal)
             }
+            
+            Spacer()
+            
+            Text("Total: $\(String(format: "%.2f", totalBudget))")
         }
         .frame(width: 400, height: 320)
         .padding()
@@ -63,5 +67,9 @@ struct SettingsView: View {
         let newBudget = Budget(category: category, target: 0)
         modelContext.insert(newBudget)
         return newBudget
+    }
+    
+    private var totalBudget: Double {
+        return budgets.reduce(0) { $0 + $1.target }
     }
 }

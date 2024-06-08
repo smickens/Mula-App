@@ -112,7 +112,3 @@ struct ExpenseFormView: View {
         return title.trimmingCharacters(in: .whitespaces).count > 0 && amount > 0
     }
 }
-
-//#Preview {
-//    ExpenseFormView(showingExpenseForm: .constant(true), expense: <#Expense#>)
-//}
