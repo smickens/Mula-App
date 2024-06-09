@@ -43,8 +43,6 @@ struct PieChartView: View {
     private func angles(for index: Int) -> (Angle, Angle) {
         let startAngle = index == 0 ? .zero : angles(for: index - 1).1
         let angle = 2.0 * .pi * totals[index] / totalSpent
-        print(totals)
-        print(totalSpent)
         return (startAngle, startAngle + Angle(radians: angle))
     }
 }

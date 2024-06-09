@@ -67,8 +67,8 @@ struct UploadFormView: View {
     }
     
     private var newExpensesList: some View {
-        List(newExpenses, selection: $selectedExpense) { expense in
-            ExpenseView(expense: expense, swipeActionsEnabled: false)
+        List(newExpenses) { expense in
+            ExpenseView(selectedExpense: $selectedExpense, expense: expense, swipeActionsEnabled: false)
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                     Button(role: .destructive) {
                         newExpenses.removeAll { $0.id == expense.id }
@@ -152,7 +152,6 @@ struct UploadFormView: View {
         let numColumns = rows.first?.components(separatedBy: ",").count ?? 0
         let bank: Bank = numColumns == 8 ? .apple : (numColumns == 5 ? .usBank : .bilt)
         
-        var processedExpenses = [Expense]()
         for row in rows.dropFirst() {
             guard !row.isEmpty else { continue }
             
@@ -220,7 +219,7 @@ struct UploadFormView: View {
         let expenseDate = dateFormatter.date(from: columns[0]) ?? Date()
         let expenseTitle = columns[3].replacingOccurrences(of: "\"", with: "")
         let expenseAmount = Double(columns[6].replacingOccurrences(of: "\"", with: "")) ?? 0.0
-        let expenseCategory = getCategory(fromString: columns[4].replacingOccurrences(of: "\"", with: ""))
+        let expenseCategory = getCategory(fromString: columns[4].replacingOccurrences(of: "\"", with: "")) ?? .misc
         
         // Filter out credit card payment transactions
         let ignoredCatgories = ["Payment"]
@@ -228,7 +227,7 @@ struct UploadFormView: View {
             return nil
         }
         
-        return nil
+        return Expense(title: expenseTitle, date: expenseDate, amount: -expenseAmount, category: expenseCategory)
     }
     
     private func processUSBankTransaction(_ row: String) -> Expense? {

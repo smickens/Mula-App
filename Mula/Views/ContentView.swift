@@ -66,15 +66,8 @@ struct ContentView: View {
                 }
                 .padding()
 
-                List(filteredExpensesByCategory.filter {
-                    searchText.isEmpty || $0.title.localizedStandardContains(searchText) == true
-                }) { expense in
-                    ExpenseView(expense: expense, swipeActionsEnabled: true)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            selectedExpense = expense
-                        }
-                        .background(selectedExpense == expense ? .gray.opacity(0.2) : .clear)
+                List(filteredExpenses) { expense in
+                    ExpenseView(selectedExpense: $selectedExpense, expense: expense, swipeActionsEnabled: true)
                 }
                 .searchable(text: $searchText)
             }
@@ -119,8 +112,10 @@ struct ContentView: View {
         return expenses.filter { $0.date.month == selectedMonth }
     }
 
-    private var filteredExpensesByCategory: [Expense] {
-        return expensesForMonth.filter { selectedCategory != nil ? $0.category == selectedCategory : true }
+    private var filteredExpenses: [Expense] {
+        let filteredByCategory = expensesForMonth.filter { selectedCategory != nil ? $0.category == selectedCategory : true }
+        let filteredBySearch = filteredByCategory.filter { searchText.isEmpty || $0.title.localizedStandardContains(searchText) == true }
+        return filteredBySearch
     }
     
     private var totalsByCategory: [Category: Double] {

@@ -103,7 +103,7 @@ struct SummaryView: View {
 
             Spacer()
 
-            Text("$\(String(format: "%.2f", totalsByCategory[category] ?? 0.0))")
+            Text(totalsByCategory[category] ?? 0.0, format: .currency(code: "USD"))
         }
         .padding(.horizontal)
         .border(Color.blue, width: selectedCategory == category ? 1 : 0)

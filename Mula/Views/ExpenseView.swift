@@ -11,7 +11,8 @@ struct ExpenseView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
-    @State var showingEditExpenseForm = false
+    @Binding var selectedExpense: Expense?
+    @State private var showingEditExpenseForm = false
     let expense: Expense
     let swipeActionsEnabled: Bool
 
@@ -34,23 +35,31 @@ struct ExpenseView: View {
                 Text(formatDate(expense.date))
                     .font(.caption)
             }
-
+//
             Spacer()
 
             Text(expense.amount, format: .currency(code: "USD"))
-                .font(.title3)
+                .font(.headline)
                 .foregroundStyle(expenseColor)
                 .fontWeight(.medium)
-                .padding(.horizontal, 4)
+                .padding(.horizontal, 5)
                 .padding(.vertical, 2)
                 .background(
                     RoundedRectangle(cornerRadius: 5)
                         .fill(expenseColor.opacity(0.2))
                 )
         }
+        .padding(5)
+        .contentShape(Rectangle())
+        .gesture(tapGesture)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(selectedExpense == expense ? .gray.opacity(0.2) : .clear)
+        )
         .swipeActions(edge: .leading, allowsFullSwipe: false) {
             if swipeActionsEnabled {
                 Button {
+                    selectedExpense = expense
                     showingEditExpenseForm.toggle()
                 } label: {
                     Label("Edit", systemImage: "pencil")
@@ -70,9 +79,20 @@ struct ExpenseView: View {
         .sheet(isPresented: $showingEditExpenseForm) {
             EditExpenseFormView(expense: expense)
         }
-        .onTapGesture(count: 2) {
-            showingEditExpenseForm.toggle()
-        }
+    }
+    
+    private var tapGesture: some Gesture {
+        TapGesture(count: 1)
+            .onEnded {
+                // first tap
+                selectedExpense = expense
+            }
+            .simultaneously(with: TapGesture(count: 2)
+                .onEnded {
+                    // double tap
+                    showingEditExpenseForm.toggle()
+                }
+            )
     }
 
     private var expenseColor: Color {
