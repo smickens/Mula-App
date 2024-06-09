@@ -169,13 +169,16 @@ struct UploadFormView: View {
             
             if let expense = processRowByBank() {
                 // Rename common transactions
-                let mappedExpenseTitles = [
-                    "ELECTRONIC DEPOSIT APPLE INC.": "Apple Job",
-                    "WEB AUTHORIZED PMT VENMO": "Venmo (out)",
-                    "ELECTRONIC DEPOSIT VENMO": "Venmo (in)",
+                let mappedExpenseTitles: [String: (String, Category?)] = [
+                    "ELECTRONIC DEPOSIT APPLE INC.": ("Apple Job", nil),
+                    "WEB AUTHORIZED PMT VENMO": ("Venmo (out)", nil),
+                    "ELECTRONIC DEPOSIT VENMO": ("Venmo (in)", nil),
+                    "ELECTRONIC WITHDRAWAL ATT": ("Internet Bill", .housing),
+                    "BPS*BILT REWARDS B NEW YORK NY": ("Rent", Category.housing)
                 ]
                 if let mappedTitle = mappedExpenseTitles[expense.title] {
-                    expense.title = mappedTitle
+                    expense.title = mappedTitle.0
+                    expense.category = mappedTitle.1 ?? expense.category
                 }
                 if expense.title.range(of: "Uber Eats", options: .caseInsensitive) != nil {
                     expense.title = "Uber Eats"
@@ -183,9 +186,21 @@ struct UploadFormView: View {
                 } else if expense.title.range(of: "Uber", options: .caseInsensitive) != nil {
                     expense.title = "Uber"
                     expense.category = .transportation
-                } else if expense.title == "ELECTRONIC WITHDRAWAL ATT" {
-                    expense.title = "Internet Bill"
-                    expense.category = .housing
+                } else if expense.title.range(of: "Lyft", options: .caseInsensitive) != nil {
+                    expense.title = "Lyft"
+                    expense.category = .transportation
+                } else if expense.title.range(of: "APPLE CAFFE", options: .caseInsensitive) != nil {
+                    expense.title = "Apple Caffe"
+                    expense.category = .food
+                } else if expense.title.range(of: "SAFEWAY", options: .caseInsensitive) != nil {
+                    expense.title = "Safeway"
+                    expense.category = .food
+                } else if expense.title.range(of: "TARGET", options: .caseInsensitive) != nil {
+                    expense.title = "Target"
+                    expense.category = .shopping
+                } else if expense.title.range(of: "DUNKIN", options: .caseInsensitive) != nil {
+                    expense.title = "Dunkin"
+                    expense.category = .food
                 }
                 
                 expenses.append(expense)
@@ -228,7 +243,7 @@ struct UploadFormView: View {
         let expenseAmount = (Double(columns[4].replacingOccurrences(of: "\"", with: "")) ?? 0.0) * -1
         let expenseCategory = expenseAmount < 0 ? Category.income : Category.misc
         
-        // Filter out the folloiwng: credit card payment transactions, moving money to/from Apple Savings, and waived monthly maintenance fees
+        // Filter out the following: credit card payment transactions, moving money to/from Apple Savings, and waived monthly maintenance fees
         let ignoredPayments = ["WEB AUTHORIZED PMT APPLECARD GSBANK", "WEB AUTHORIZED PMT WELLS FARGO CARD", "MOBILE BANKING PAYMENT TO CREDIT CARD 5895", "MOBILE BANKING PAYMENT TO CREDIT CARD 9996", "WEB AUTHORIZED PMT APPLE GS SAVINGS", "ELECTRONIC DEPOSIT APPLE GS SAVINGS", "MONTHLY MAINTENANCE FEE", "MONTHLY MAINTENANCE FEE WAIVED"]
         guard !ignoredPayments.contains(expenseTitle) else {
             return nil
@@ -238,7 +253,24 @@ struct UploadFormView: View {
     }
     
     private func processBiltTransaction(_ row: String) -> Expense? {
-        return nil
+        // ["Date", "Amount", "*", "Name"]
+        let columns = row.components(separatedBy: ",")
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yyyy"
+        
+        let expenseDate = dateFormatter.date(from: columns[0].replacingOccurrences(of: "\"", with: "")) ?? Date()
+        let expenseTitle = columns[3].replacingOccurrences(of: "\"", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
+        let expenseAmount = (Double(columns[1].replacingOccurrences(of: "\"", with: "")) ?? 0.0) * -1
+        let expenseCategory = expenseAmount < 0 ? Category.income : Category.misc
+        
+        // Filter out credit card payment transactions
+        let ignoredPayments = ["ONLINE ACH PAYMENT THANK YOU"]
+        guard !ignoredPayments.contains(expenseTitle) else {
+            return nil
+        }
+            
+        return Expense(title: expenseTitle, date: expenseDate, amount: -expenseAmount, category: expenseCategory)
     }
 
     private func getCategory(fromString category: String) -> Category? {

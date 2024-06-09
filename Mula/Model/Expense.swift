@@ -16,7 +16,7 @@ class Expense {
     var category: Category
     
     init(title: String, date: Date, amount: Double, category: Category) {
-        self.title = title
+        self.title = title.trimmingCharacters(in: .whitespacesAndNewlines)
         self.date = date
         self.amount = amount
         self.category = category
