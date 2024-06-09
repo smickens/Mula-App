@@ -8,10 +8,7 @@
 import SwiftUI
 import SwiftData
 
-// TODO: fix summary pie chart
-// TODO: add filtering out credit card payments to usbank
-// TODO: add menu to pick which place csv is being imported from
-// TODO: setup import method from bank transactions
+// TODO: fix spending overview section numbers
 // TODO: add sub-category to break up food -> eating out vs groceries
 // TODO: move list of months to maybe be a picker ?? or checkbox filter
 // TODO: add warning for uploading duplicate expenses ? (popup with list of duplicated expenses and option to accept all, reject all, or click ones to accept)
@@ -117,15 +114,11 @@ struct ContentView: View {
     }
 
     private var totalMoneyIn: Double {
-        return expensesForMonth.reduce(0, { result, expense in
-            return expense.amount > 0 ? result + expense.amount : result
-        })
+        return expensesForMonth.filter { $0.category == .income }.reduce(0) { $0 + $1.amount }
     }
 
     private var totalMoneyOut: Double {
-        return expensesForMonth.reduce(0, { result, expense in
-            return expense.amount < 0 ? result + expense.amount : result
-        })
+        return expensesForMonth.filter { $0.amount < 0 }.reduce(0) { $0 + $1.amount }
     }
 
     private var totalsByCategory: [Category: Double] {

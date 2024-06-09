@@ -9,8 +9,17 @@ import SwiftUI
 
 struct PieChartView: View {
     @Binding var selectedCategory: Category?
-    let totals: [Double]
-    let categories: [Category]
+    var totals: [Double] = []
+    var categories: [Category] = []
+    
+    init(selectedCategory: Binding<Category?>, totalsByCategory: [Category: Double]) {
+        _selectedCategory = selectedCategory
+        totalsByCategory.sorted(by: { $0.value < $1.value }).forEach { category, total in
+            guard total > 0 else { return }
+            totals.append(total)
+            categories.append(category)
+        }
+    }
 
     var body: some View {
         ZStack {
@@ -18,9 +27,6 @@ struct PieChartView: View {
             ForEach(0..<totals.count, id: \.self) { index in
                 PieChartSlice(angles: angles(for: index))
                     .fill(categories[index].tintColor)
-                    .onTapGesture {
-                        selectedCategory = categories[index] == selectedCategory ? nil : categories[index]
-                    }
             }
 
             Circle()
@@ -32,6 +38,10 @@ struct PieChartView: View {
 //                .fontWeight(.medium)
         }
         .padding()
+        .onAppear {
+            print(self.totals)
+            print(self.categories)
+        }
     }
 
     private var totalSpent: Double {
@@ -41,6 +51,8 @@ struct PieChartView: View {
     private func angles(for index: Int) -> (Angle, Angle) {
         let startAngle = index == 0 ? .zero : angles(for: index - 1).1
         let angle = 2.0 * .pi * totals[index] / totalSpent
+        print(totals)
+        print(totalSpent)
         return (startAngle, startAngle + Angle(radians: angle))
     }
 }

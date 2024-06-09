@@ -15,18 +15,21 @@ struct SummaryView: View {
 
     var body: some View {
         VStack(alignment: .center) {
-//            Text("Spending Overview")
-//                .font(.title2)
-//                .fontWeight(.semibold)
-//                .padding(.bottom)
+            Text("Spending Overview")
+                .font(.title2)
+                .fontWeight(.semibold)
+                .padding(.bottom)
 
             spendingOverview
 
-//            Text("Category Totals")
-//                .font(.title2)
-//                .fontWeight(.semibold)
+            Text("Category Totals")
+                .font(.title2)
+                .fontWeight(.semibold)
 
-            PieChartView(selectedCategory: $selectedCategory, totals: totalsByCategory.map { $0.value }, categories: totalsByCategory.map { $0.key })
+            PieChartView(
+                selectedCategory: $selectedCategory,
+                totalsByCategory: totalsByCategory
+            )
                 .frame(width: 160, height: 160)
 
             categoryBreakdown
