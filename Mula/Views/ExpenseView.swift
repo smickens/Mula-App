@@ -70,6 +70,9 @@ struct ExpenseView: View {
         .sheet(isPresented: $showingEditExpenseForm) {
             EditExpenseFormView(expense: expense)
         }
+        .onTapGesture(count: 2) {
+            showingEditExpenseForm.toggle()
+        }
     }
 
     private var expenseColor: Color {
