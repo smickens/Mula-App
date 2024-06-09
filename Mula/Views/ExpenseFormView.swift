@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-// TODO: have date start at 1st of month selected or current date if in the selected month
-
 struct NewExpenseFormView: View {
     @Environment(\.modelContext) private var modelContext
+    
+    let selectedMonth: String
     
     @State private var title: String = ""
     @State private var date: Date = Date()
@@ -19,6 +19,9 @@ struct NewExpenseFormView: View {
 
     var body: some View {
         ExpenseFormView(title: $title, date: $date, amount: $amount, category: $category, save: save)
+            .onAppear {
+                date = firstDayOfMonth(month: selectedMonth)
+            }
     }
 
     private func save() {
@@ -26,6 +29,24 @@ struct NewExpenseFormView: View {
         let expenseAmount = category == .income ? amount : -amount
         let newExpense = Expense(title: title, date: date, amount: expenseAmount, category: category)
         modelContext.insert(newExpense)
+    }
+    
+    private func firstDayOfMonth(month: String) -> Date {
+        // If the selected month is the current month, then use the current date
+        guard Date().month != selectedMonth else { return Date() }
+        
+        let calendar = Calendar.current
+        var components = DateComponents()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM"
+        
+        if let monthDate = dateFormatter.date(from: month) {
+            components.year = calendar.component(.year, from: Date())
+            components.month = calendar.component(.month, from: monthDate)
+            components.day = 1
+        }
+        
+        return calendar.date(from: components) ?? Date()
     }
 }
 

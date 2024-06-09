@@ -21,7 +21,7 @@ import SwiftData
 struct ContentView: View {
     @Query(sort: \Expense.date, order: .forward) var expenses: [Expense]
     
-    @State private var selectedMonth: String? = Date().month
+    @State private var selectedMonth: String = Date().month
     @State private var selectedExpense: Expense? = nil
     @State private var selectedCategory: Category? = nil
     
@@ -98,7 +98,7 @@ struct ContentView: View {
             }
         }
         .sheet(isPresented: $showingNewExpenseForm) {
-            NewExpenseFormView()
+            NewExpenseFormView(selectedMonth: selectedMonth)
         }
         .sheet(isPresented: $showingUploadExpensesForm) {
             UploadFormView(fileContent: $fileContent)
