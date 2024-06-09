@@ -9,8 +9,7 @@ import SwiftUI
 
 struct SummaryView: View {
     @Binding var selectedCategory: Category?
-    let totalMoneyIn: Double
-    let totalMoneyOut: Double
+    let expensesForMonth: [Expense]
     let totalsByCategory: [Category: Double]
 
     var body: some View {
@@ -68,6 +67,14 @@ struct SummaryView: View {
             }
         }
         .foregroundStyle(.gray)
+    }
+    
+    private var totalMoneyIn: Double {
+        return expensesForMonth.filter { $0.category == .income }.reduce(0) { $0 + $1.amount }
+    }
+
+    private var totalMoneyOut: Double {
+        return expensesForMonth.filter { $0.amount < 0 }.reduce(0) { $0 + $1.amount }
     }
 
     private var categoryBreakdown: some View {

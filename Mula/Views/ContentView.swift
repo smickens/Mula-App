@@ -52,7 +52,7 @@ struct ContentView: View {
 
             HStack(spacing: 0) {
                 TabView {
-                    SummaryView(selectedCategory: $selectedCategory, totalMoneyIn: totalMoneyIn, totalMoneyOut: totalMoneyOut, totalsByCategory: totalsByCategory)
+                    SummaryView(selectedCategory: $selectedCategory, expensesForMonth: expensesForMonth, totalsByCategory: totalsByCategory)
                         .tabItem {
                             Text("Summary")
                         }
@@ -112,15 +112,15 @@ struct ContentView: View {
             SettingsView()
         }
     }
-
-    private var totalMoneyIn: Double {
-        return expensesForMonth.filter { $0.category == .income }.reduce(0) { $0 + $1.amount }
+    
+    private var expensesForMonth: [Expense] {
+        return expenses.filter { $0.date.month == selectedMonth }
     }
 
-    private var totalMoneyOut: Double {
-        return expensesForMonth.filter { $0.amount < 0 }.reduce(0) { $0 + $1.amount }
+    private var filteredExpensesByCategory: [Expense] {
+        return expensesForMonth.filter { selectedCategory != nil ? $0.category == selectedCategory : true }
     }
-
+    
     private var totalsByCategory: [Category: Double] {
         var totals: [Category: Double] = [:]
         expensesForMonth.forEach { expense in
@@ -128,14 +128,6 @@ struct ContentView: View {
             totals[expense.category] = (expense.amount * -1) + (totals[expense.category] ?? 0)
         }
         return totals
-    }
-
-    private var expensesForMonth: [Expense] {
-        return expenses.filter { $0.date.month == selectedMonth }
-    }
-
-    private var filteredExpensesByCategory: [Expense] {
-        return expensesForMonth.filter { selectedCategory != nil ? $0.category == selectedCategory : true }
     }
     
     private func importCSV() {

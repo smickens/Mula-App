@@ -32,16 +32,8 @@ struct PieChartView: View {
             Circle()
                 .foregroundStyle(.windowBackground)
                 .frame(width: 88, height: 88)
-
-//            Text(totalSpent, format: .currency(code: "USD"))
-//                .font(.title2)
-//                .fontWeight(.medium)
         }
         .padding()
-        .onAppear {
-            print(self.totals)
-            print(self.categories)
-        }
     }
 
     private var totalSpent: Double {
@@ -72,7 +64,3 @@ struct PieChartSlice: Shape {
         return path
     }
 }
-
-//#Preview {
-//    SummaryView(expenses: ExpenseViewModel().expenses)
-//}
