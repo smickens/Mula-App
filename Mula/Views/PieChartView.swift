@@ -25,8 +25,9 @@ struct PieChartView: View {
         ZStack {
             // Pie chart slices
             ForEach(0..<totals.count, id: \.self) { index in
+                let category = categories[index]
                 PieChartSlice(angles: angles(for: index))
-                    .fill(categories[index].tintColor)
+                    .fill(selectedCategory == nil || selectedCategory == category ? category.tintColor : category.tintColor.opacity(0.5))
             }
 
             Circle()

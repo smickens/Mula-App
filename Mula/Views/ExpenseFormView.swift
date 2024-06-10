@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// TODO: pressing enter, should trigger a save
+
 struct NewExpenseFormView: View {
     @Environment(\.modelContext) private var modelContext
     
@@ -18,7 +20,7 @@ struct NewExpenseFormView: View {
     @State private var category: Category = .misc
 
     var body: some View {
-        ExpenseFormView(title: $title, date: $date, amount: $amount, category: $category, save: save)
+        ExpenseFormView(title: $title, date: $date, amount: $amount, category: $category, formTitle: "New Expense", save: save)
             .onAppear {
                 date = firstDayOfMonth(month: selectedMonth)
             }
@@ -67,7 +69,7 @@ struct EditExpenseFormView: View {
     }
     
     var body: some View {
-        ExpenseFormView(title: $title, date: $date, amount: $amount, category: $category, save: save)
+        ExpenseFormView(title: $title, date: $date, amount: $amount, category: $category, formTitle: "Edit Expense", save: save)
     }
     
     func save() {
@@ -85,11 +87,12 @@ struct ExpenseFormView: View {
     @Binding var amount: Double
     @Binding var category: Category
     
+    let formTitle: String
     let save: (() -> Void)
 
     var body: some View {
         VStack {
-            Text("Details")
+            Text(formTitle)
                 .font(.title)
                 .fontWeight(.bold)
 
@@ -113,7 +116,7 @@ struct ExpenseFormView: View {
 
             Spacer()
         }
-        .frame(width: 320, height: 220)
+        .frame(width: 310, height: 180)
         .padding()
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {

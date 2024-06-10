@@ -20,33 +20,43 @@ struct SettingsView: View {
                 .font(.title)
                 .fontWeight(.bold)
             
-            ForEach(Category.allCases, id: \.self) { category in
-                HStack {
-                    if category != .income {
-                        let budget = budget(for: category)
-                        
-                        ZStack {
-                            Circle()
-                                .fill(budget.category.tintColor)
-                                .frame(width: 28, height: 28)
+            Spacer()
+            
+            Text("Montly Budget")
+                .font(.callout)
+                .fontWeight(.bold)
+            
+            LazyVGrid(columns: [GridItem(), GridItem()]) {
+                ForEach(Category.allCases, id: \.self) { category in
+                    HStack {
+                        if category != .income {
+                            let budget = budget(for: category)
+                            
+                            ZStack {
+                                Circle()
+                                    .fill(budget.category.tintColor)
+                                    .frame(width: 28, height: 28)
 
-                            budget.category.icon
-                                .foregroundColor(.white)
+                                budget.category.icon
+                                    .foregroundColor(.white)
+                            }
+                            
+//                            Text("\(budget.category.name):")
+                            
+                            TextField("", value: Bindable(budget).target, format: .currency(code: "USD"))
                         }
-                        
-                        Text("\(budget.category.name):")
-                        
-                        TextField("", value: Bindable(budget).target, format: .currency(code: "USD"))
                     }
+                    .padding(.horizontal)
                 }
-                .padding(.horizontal)
             }
             
             Spacer()
+                
+            Text("Total: ") + Text(totalBudget, format: .currency(code: "USD"))
             
-            Text("Total: $\(String(format: "%.2f", totalBudget))")
+            Spacer()
         }
-        .frame(width: 400, height: 320)
+        .frame(width: 360, height: 280)
         .padding()
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {

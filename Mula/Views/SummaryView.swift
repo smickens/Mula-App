@@ -13,17 +13,19 @@ struct SummaryView: View {
     let totalsByCategory: [Category: Double]
 
     var body: some View {
-        VStack(alignment: .center) {
+        VStack(spacing: 0) {
+            Spacer()
+            
             Text("Spending Overview")
-                .font(.title2)
-                .fontWeight(.semibold)
+                .font(.headline)
                 .padding(.bottom)
 
             spendingOverview
-
-            Text("Category Totals")
-                .font(.title2)
-                .fontWeight(.semibold)
+            
+            Spacer()
+            
+            Text("Category Breakdown")
+                .font(.headline)
 
             PieChartView(
                 selectedCategory: $selectedCategory,
@@ -32,6 +34,8 @@ struct SummaryView: View {
                 .frame(width: 160, height: 160)
 
             categoryBreakdown
+            
+            Spacer()
         }
     }
 
@@ -86,7 +90,7 @@ struct SummaryView: View {
                     }
                 }
             }
-            .padding()
+            .padding(.horizontal)
         }
     }
 

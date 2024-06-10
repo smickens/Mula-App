@@ -14,8 +14,8 @@ struct BudgetView: View {
 
     var body: some View {
         VStack(spacing: 10) {
-            ForEach(budgets, id: \.category) { budget in
-                if (budget.category != .income) {
+            ForEach(Category.allCases, id: \.self) { category in
+                if let budget = getBudget(for: category) {
                     HStack {
                         ZStack {
                             Circle()
@@ -42,16 +42,21 @@ struct BudgetView: View {
 
                         Spacer()
 
-                        Text("$\(String(format: "%.2f", budget.target))")
+                        Text(budget.target, format: .currency(code: "USD"))
                     }
                     .padding(.horizontal)
                 }
             }
             
-            Text("Total Spent: $\(String(format: "%.2f", totalSpent))")
+            Text("Total Spent: ") + Text(totalSpent, format: .currency(code: "USD"))
             
-            Text("Total Budget: $\(String(format: "%.2f", totalBudget))")
+            Text("Total Budget: ") + Text(totalBudget, format: .currency(code: "USD"))
         }
+    }
+    
+    private func getBudget(for category: Category) -> Budget? {
+        guard category != .income else { return nil }
+        return budgets.first(where: { $0.category == category })
     }
     
     private func usedBudgetPercentage(for budget: Budget) -> Double {
@@ -62,7 +67,7 @@ struct BudgetView: View {
     }
     
     private var totalSpent: Double {
-        return totalsByCategory.reduce(0.0) { $0 + $1.value }
+        return totalsByCategory.filter({ $0.key != .income } ).reduce(0.0) { $0 + $1.value }
     }
 
     private var totalBudget: Double {
