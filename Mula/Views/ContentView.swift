@@ -8,11 +8,10 @@
 import SwiftUI
 import SwiftData
 
-// TODO: upload form view list of expenses has double background
-// TODO: upload form view list shouldn't allow for double tap gesture
-
+// TODO: revamp BudgetView
 // TODO: fix spending overview section numbers
 // TODO: fix budget page numbers
+
 // TODO: add a popup for "file picking error", include reminder that file type must be .csv
 // TODO: add sub-category to break up food -> eating out vs groceries
 // TODO: move list of months to maybe be a picker ?? or checkbox filter

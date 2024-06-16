@@ -35,7 +35,7 @@ struct ExpenseView: View {
                 Text(formatDate(expense.date))
                     .font(.caption)
             }
-//
+
             Spacer()
 
             Text(expense.amount, format: .currency(code: "USD"))
@@ -90,7 +90,9 @@ struct ExpenseView: View {
             .simultaneously(with: TapGesture(count: 2)
                 .onEnded {
                     // double tap
-                    showingEditExpenseForm.toggle()
+                    if swipeActionsEnabled {
+                        showingEditExpenseForm.toggle()
+                    }
                 }
             )
     }
@@ -105,7 +107,3 @@ struct ExpenseView: View {
         return dateFormatter.string(from: date ?? Date())
     }
 }
-
-//#Preview {
-//    ExpenseView(expense: Expense(name: "Rent", date: Date(), amount: 57.81, category: .housing))
-//}

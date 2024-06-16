@@ -77,11 +77,6 @@ struct UploadFormView: View {
                         Label("Delete", systemImage: "trash.fill")
                     }
                 }
-                .padding(6)
-                .background(
-                    RoundedRectangle(cornerRadius: 5)
-                        .fill(selectedExpense == expense ? Color.gray.opacity(0.2) : Color.clear)
-                )
                 .contentShape(Rectangle())
                 .onTapGesture {
                     withAnimation {
