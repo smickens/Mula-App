@@ -8,7 +8,6 @@
 import SwiftUI
 import SwiftData
 
-// TODO: revamp BudgetView
 // TODO: fix spending overview section numbers
 // TODO: fix budget page numbers
 

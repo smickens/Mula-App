@@ -13,7 +13,7 @@ struct BudgetView: View {
     let totalsByCategory: [Category: Double]
 
     var body: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: 20) {
             ForEach(Category.allCases, id: \.self) { category in
                 if let budget = getBudget(for: category) {
                     HStack {
@@ -26,44 +26,34 @@ struct BudgetView: View {
                                 .foregroundColor(.white)
                         }
 
-                        Spacer()
-
-                        let percentage = usedBudgetPercentage(for: budget)
-
-                        // TODO: custom progress view to highlight over-budget portion
-                        VStack(alignment: .leading, spacing: 0) {
-                            ProgressView(value: min(percentage, 1.0))
-                                .progressViewStyle(.linear)
-                                .frame(height: 20)
-                            
-                            Text("\(Int(percentage * 100))%")
-                                .padding(.top, 8)
-                        }
-
-                        Spacer()
-
-                        Text(budget.target, format: .currency(code: "USD"))
+                        ProgressBar(target: budget.target, totalSpent: totalsByCategory[budget.category] ?? 0.0, barColor: budget.category.tintColor)
                     }
-                    .padding(.horizontal)
                 }
             }
             
-            Text("Total Spent: ") + Text(totalSpent, format: .currency(code: "USD"))
+//            Text("Spent: ") + Text(totalSpent, format: .currency(code: "USD"))
             
-            Text("Total Budget: ") + Text(totalBudget, format: .currency(code: "USD"))
+            Text("Budget: ") + Text(totalBudget, format: .currency(code: "USD"))
+            
+            HStack {
+                ZStack {
+                    Circle()
+                        .fill(.secondary)
+                        .frame(width: 28, height: 28)
+
+                    Image(systemName: "equal")
+                        .foregroundColor(.white)
+                }
+
+                ProgressBar(target: totalBudget, totalSpent: totalSpent, barColor: .secondary)
+            }
         }
+        .padding(.horizontal)
     }
     
     private func getBudget(for category: Category) -> Budget? {
         guard category != .income else { return nil }
         return budgets.first(where: { $0.category == category })
-    }
-    
-    private func usedBudgetPercentage(for budget: Budget) -> Double {
-        if budget.target != 0.0 {
-            return (totalsByCategory[budget.category] ?? 0.0) / budget.target
-        }
-        return (totalsByCategory[budget.category] ?? 0.0) > 0 ? 1.0 : 0.0
     }
     
     private var totalSpent: Double {
