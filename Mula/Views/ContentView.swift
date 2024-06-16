@@ -12,7 +12,6 @@ import SwiftData
 // TODO: fix spending overview section numbers
 // TODO: fix budget page numbers
 
-// TODO: add a popup for "file picking error", include reminder that file type must be .csv
 // TODO: add sub-category to break up food -> eating out vs groceries
 // TODO: move list of months to maybe be a picker ?? or checkbox filter
 // TODO: add warning for uploading duplicate expenses ? (popup with list of duplicated expenses and option to accept all, reject all, or click ones to accept)
@@ -131,7 +130,7 @@ struct ContentView: View {
     
     private func importCSV() {
         let openPanel = NSOpenPanel()
-        openPanel.allowedContentTypes = [.data]
+        openPanel.allowedContentTypes = [.commaSeparatedText]
         openPanel.canChooseFiles = true
         openPanel.canChooseDirectories = false
 

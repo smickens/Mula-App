@@ -28,6 +28,7 @@ struct PieChartView: View {
                 let category = categories[index]
                 PieChartSlice(angles: angles(for: index))
                     .fill(selectedCategory == nil || selectedCategory == category ? category.tintColor : category.tintColor.opacity(0.5))
+                    .animation(.easeInOut(duration: 0.5), value: selectedCategory)
             }
 
             Circle()
