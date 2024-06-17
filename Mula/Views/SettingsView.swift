@@ -57,16 +57,6 @@ struct SettingsView: View {
             Spacer()
         }
         .frame(width: 360, height: 280)
-        .padding()
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button{
-                    dismiss()
-                } label: {
-                    Text("Done")
-                }
-            }
-        }
     }
     
     private func budget(for category: Category) -> Budget {
