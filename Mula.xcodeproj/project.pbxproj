@@ -26,6 +26,17 @@
 		E27223ED2C1EB5CC0065089A /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223EC2C1EB5CC0065089A /* ProgressBar.swift */; };
 		E27223EF2C1FF14E0065089A /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223EE2C1FF14E0065089A /* Tab.swift */; };
 		E27223F12C1FF2300065089A /* ExpensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223F02C1FF2300065089A /* ExpensesView.swift */; };
+		E288FB012C275D2D00B6D57A /* Mula_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E288FB002C275D2D00B6D57A /* Mula_iOSApp.swift */; };
+		E288FB032C275D2D00B6D57A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E288FB022C275D2D00B6D57A /* ContentView.swift */; };
+		E288FB052C275D2D00B6D57A /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = E288FB042C275D2D00B6D57A /* Item.swift */; };
+		E288FB072C275D2E00B6D57A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E288FB062C275D2E00B6D57A /* Assets.xcassets */; };
+		E288FB0A2C275D2E00B6D57A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E288FB092C275D2E00B6D57A /* Preview Assets.xcassets */; };
+		E288FB122C275FBA00B6D57A /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE162B6AE51D00D10468 /* Category.swift */; };
+		E288FB132C275FBA00B6D57A /* Bank.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223EA2C15136E0065089A /* Bank.swift */; };
+		E288FB142C275FBA00B6D57A /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223E42C0EB9240065089A /* Budget.swift */; };
+		E288FB152C275FBA00B6D57A /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223DD2BF9C2FE0065089A /* Expense.swift */; };
+		E288FB162C275FBA00B6D57A /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223EE2C1FF14E0065089A /* Tab.swift */; };
+		E288FB172C275FCB00B6D57A /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223EC2C1EB5CC0065089A /* ProgressBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,10 +61,23 @@
 		E27223EC2C1EB5CC0065089A /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
 		E27223EE2C1FF14E0065089A /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		E27223F02C1FF2300065089A /* ExpensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesView.swift; sourceTree = "<group>"; };
+		E288FAFE2C275D2D00B6D57A /* Mula iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mula iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E288FB002C275D2D00B6D57A /* Mula_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mula_iOSApp.swift; sourceTree = "<group>"; };
+		E288FB022C275D2D00B6D57A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		E288FB042C275D2D00B6D57A /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		E288FB062C275D2E00B6D57A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E288FB092C275D2E00B6D57A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		DEF3CADF2B61BB9200C926ED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E288FAFB2C275D2D00B6D57A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -67,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				DEF3CAE42B61BB9300C926ED /* Mula */,
+				E288FAFF2C275D2D00B6D57A /* Mula iOS */,
 				DEF3CAE32B61BB9300C926ED /* Products */,
 			);
 			sourceTree = "<group>";
@@ -75,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				DEF3CAE22B61BB9300C926ED /* Mula.app */,
+				E288FAFE2C275D2D00B6D57A /* Mula iOS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -83,9 +109,9 @@
 			isa = PBXGroup;
 			children = (
 				DEF3CAE52B61BB9300C926ED /* MulaApp.swift */,
-				DEF3CAFA2B61BD2000C926ED /* Model */,
-				DEF3CB032B61BFD800C926ED /* Views */,
-				DEF8FE1A2B6B988C00D10468 /* Utilities */,
+				E288FB0E2C275D7D00B6D57A /* Shared */,
+				E288FB0F2C275E1800B6D57A /* iOS */,
+				E288FB102C275E2400B6D57A /* macOS */,
 				DEF3CAE92B61BB9500C926ED /* Assets.xcassets */,
 				DEF3CAEE2B61BB9500C926ED /* Mula.entitlements */,
 				DEF3CAEB2B61BB9500C926ED /* Preview Content */,
@@ -116,8 +142,8 @@
 		DEF3CB032B61BFD800C926ED /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				DEF3CAE72B61BB9300C926ED /* ContentView.swift */,
 				E27223F02C1FF2300065089A /* ExpensesView.swift */,
+				DEF3CAE72B61BB9300C926ED /* ContentView.swift */,
 				DE9AF9B62BA7995800D1F4DC /* BudgetView.swift */,
 				DEF8FE1D2B6B995500D10468 /* ExpenseView.swift */,
 				DEF8FE182B6B976E00D10468 /* ExpenseFormView.swift */,
@@ -125,7 +151,6 @@
 				DE9AF9302B7851F700D1F4DC /* UploadFormView.swift */,
 				DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */,
 				E27223DF2C0EB5A10065089A /* SettingsView.swift */,
-				E27223EC2C1EB5CC0065089A /* ProgressBar.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -136,6 +161,59 @@
 				DEF8FE1B2B6B989A00D10468 /* Extensions.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		E288FAFF2C275D2D00B6D57A /* Mula iOS */ = {
+			isa = PBXGroup;
+			children = (
+				E288FB002C275D2D00B6D57A /* Mula_iOSApp.swift */,
+				E288FB022C275D2D00B6D57A /* ContentView.swift */,
+				E288FB042C275D2D00B6D57A /* Item.swift */,
+				E288FB062C275D2E00B6D57A /* Assets.xcassets */,
+				E288FB082C275D2E00B6D57A /* Preview Content */,
+			);
+			path = "Mula iOS";
+			sourceTree = "<group>";
+		};
+		E288FB082C275D2E00B6D57A /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				E288FB092C275D2E00B6D57A /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		E288FB0E2C275D7D00B6D57A /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				DEF3CAFA2B61BD2000C926ED /* Model */,
+				DEF8FE1A2B6B988C00D10468 /* Utilities */,
+				E288FB112C275E3400B6D57A /* Views */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		E288FB0F2C275E1800B6D57A /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
+		E288FB102C275E2400B6D57A /* macOS */ = {
+			isa = PBXGroup;
+			children = (
+				DEF3CB032B61BFD800C926ED /* Views */,
+			);
+			path = macOS;
+			sourceTree = "<group>";
+		};
+		E288FB112C275E3400B6D57A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E27223EC2C1EB5CC0065089A /* ProgressBar.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -158,6 +236,23 @@
 			productReference = DEF3CAE22B61BB9300C926ED /* Mula.app */;
 			productType = "com.apple.product-type.application";
 		};
+		E288FAFD2C275D2D00B6D57A /* Mula iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E288FB0D2C275D2E00B6D57A /* Build configuration list for PBXNativeTarget "Mula iOS" */;
+			buildPhases = (
+				E288FAFA2C275D2D00B6D57A /* Sources */,
+				E288FAFB2C275D2D00B6D57A /* Frameworks */,
+				E288FAFC2C275D2D00B6D57A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Mula iOS";
+			productName = "Mula iOS";
+			productReference = E288FAFE2C275D2D00B6D57A /* Mula iOS.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -169,6 +264,9 @@
 				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					DEF3CAE12B61BB9200C926ED = {
+						CreatedOnToolsVersion = 15.2;
+					};
+					E288FAFD2C275D2D00B6D57A = {
 						CreatedOnToolsVersion = 15.2;
 					};
 				};
@@ -187,6 +285,7 @@
 			projectRoot = "";
 			targets = (
 				DEF3CAE12B61BB9200C926ED /* Mula */,
+				E288FAFD2C275D2D00B6D57A /* Mula iOS */,
 			);
 		};
 /* End PBXProject section */
@@ -198,6 +297,15 @@
 			files = (
 				DEF3CAED2B61BB9500C926ED /* Preview Assets.xcassets in Resources */,
 				DEF3CAEA2B61BB9500C926ED /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E288FAFC2C275D2D00B6D57A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E288FB0A2C275D2E00B6D57A /* Preview Assets.xcassets in Resources */,
+				E288FB072C275D2E00B6D57A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,6 +333,22 @@
 				DEF8FE1E2B6B995500D10468 /* ExpenseView.swift in Sources */,
 				E27223ED2C1EB5CC0065089A /* ProgressBar.swift in Sources */,
 				E27223EB2C15136E0065089A /* Bank.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E288FAFA2C275D2D00B6D57A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E288FB152C275FBA00B6D57A /* Expense.swift in Sources */,
+				E288FB032C275D2D00B6D57A /* ContentView.swift in Sources */,
+				E288FB052C275D2D00B6D57A /* Item.swift in Sources */,
+				E288FB162C275FBA00B6D57A /* Tab.swift in Sources */,
+				E288FB172C275FCB00B6D57A /* ProgressBar.swift in Sources */,
+				E288FB142C275FBA00B6D57A /* Budget.swift in Sources */,
+				E288FB132C275FBA00B6D57A /* Bank.swift in Sources */,
+				E288FB012C275D2D00B6D57A /* Mula_iOSApp.swift in Sources */,
+				E288FB122C275FBA00B6D57A /* Category.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,6 +496,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kayapps.Mula;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
@@ -400,8 +527,74 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kayapps.Mula;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		E288FB0B2C275D2E00B6D57A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Mula iOS/Preview Content\"";
+				DEVELOPMENT_TEAM = S85ULMGGX9;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.kayapps.Mula-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E288FB0C2C275D2E00B6D57A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Mula iOS/Preview Content\"";
+				DEVELOPMENT_TEAM = S85ULMGGX9;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.kayapps.Mula-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -422,6 +615,15 @@
 			buildConfigurations = (
 				DEF3CAF22B61BB9500C926ED /* Debug */,
 				DEF3CAF32B61BB9500C926ED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E288FB0D2C275D2E00B6D57A /* Build configuration list for PBXNativeTarget "Mula iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E288FB0B2C275D2E00B6D57A /* Debug */,
+				E288FB0C2C275D2E00B6D57A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
