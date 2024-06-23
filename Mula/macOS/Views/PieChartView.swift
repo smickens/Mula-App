@@ -6,61 +6,57 @@
 //
 
 import SwiftUI
+import Charts
+
+struct CategoryCount {
+    var category: Category
+    var total: Double
+}
 
 struct PieChartView: View {
     @Binding var selectedCategory: Category?
-    var totals: [Double] = []
-    var categories: [Category] = []
-    
+    let data: [CategoryCount]
+    // TODO: take in this value
+    let totalSpent: Double
+
     init(selectedCategory: Binding<Category?>, totalsByCategory: [Category: Double]) {
         _selectedCategory = selectedCategory
+        var counts: [CategoryCount] = []
+        var t = 0.0
         totalsByCategory.sorted(by: { $0.value < $1.value }).forEach { category, total in
             guard total > 0 else { return }
-            totals.append(total)
-            categories.append(category)
+            counts.append(CategoryCount(category: category, total: total))
+            t += total
         }
+        data = counts
+        totalSpent = t
+        print(data)
     }
 
     var body: some View {
-        ZStack {
-            // Pie chart slices
-            ForEach(0..<totals.count, id: \.self) { index in
-                let category = categories[index]
-                PieChartSlice(angles: angles(for: index))
-                    .fill(selectedCategory == nil || selectedCategory == category ? category.tintColor : category.tintColor.opacity(0.5))
-                    .animation(.easeInOut(duration: 0.5), value: selectedCategory)
-            }
-
-            Circle()
-                .foregroundStyle(.windowBackground)
-                .frame(width: 88, height: 88)
+        Chart(data, id: \.category) { item in
+            SectorMark(
+                angle: .value("Total", item.total),
+                innerRadius: .ratio(0.6)
+//                angularInset: 2
+            )
+//            .cornerRadius(5)
+            .foregroundStyle(item.category.tintColor)
+            .opacity(selectedCategory == nil || selectedCategory == item.category ? 1 : 0.5)
         }
+        .chartLegend(.hidden)
+//        .chartAngleSelection(value: $selectedAngle)
+        .scaledToFit()
+        .chartBackground { chartProxy in
+            GeometryReader { geometry in
+                if let anchor = chartProxy.plotFrame {
+                    let frame = geometry[anchor]
+                    Text("\(totalSpent)")
+                        .position(x: frame.midX, y: frame.midY)
+                }
+            }
+        }
+
         .padding()
-    }
-
-    private var totalSpent: Double {
-        return totals.reduce(0.0, +)
-    }
-
-    private func angles(for index: Int) -> (Angle, Angle) {
-        let startAngle = index == 0 ? .zero : angles(for: index - 1).1
-        let angle = 2.0 * .pi * totals[index] / totalSpent
-        return (startAngle, startAngle + Angle(radians: angle))
-    }
-}
-
-struct PieChartSlice: Shape {
-    var angles: (Angle, Angle)
-
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        let center = CGPoint(x: rect.width / 2, y: rect.height / 2)
-        let radius = min(rect.width, rect.height) / 2
-
-        path.move(to: center)
-        path.addArc(center: center, radius: radius, startAngle: angles.0, endAngle: angles.1, clockwise: false)
-        path.closeSubpath()
-
-        return path
     }
 }
