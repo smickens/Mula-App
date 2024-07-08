@@ -8,15 +8,6 @@
 import SwiftUI
 import SwiftData
 
-// TODO: fix spending overview section numbers
-// TODO: fix budget page numbers
-
-// TODO: add money tiles view
-// TODO: add sub-category to break up food -> eating out vs groceries
-// TODO: add warning for uploading duplicate expenses ? (popup with list of duplicated expenses and option to accept all, reject all, or click ones to accept)
-// TODO: charts/trends page showing total money spent with stacked bar chart breaking down categories
-// could either have checkboxes for choosing what to include on this chart and/or ability to swipe between to pages already broken down by category
-
 struct ContentView: View {
     @Query(sort: \Expense.date, order: .forward) var expenses: [Expense]
     
@@ -28,7 +19,6 @@ struct ContentView: View {
                 ForEach(Tab.allCases, id: \.self) { tab in
                     Text(tab.rawValue)
                     
-                    // TODO: add a gear icon next to the settings page
 //                    Image(systemName: "gear")
                 }
             }
@@ -45,7 +35,7 @@ struct ContentView: View {
 
             switch selectedTab {
             case .home:
-                Text("Home")
+                HomeView(expenses: expenses)
             case .expenses:
                 ExpensesView(expenses: expenses)
             case .trends:
@@ -54,6 +44,10 @@ struct ContentView: View {
                 SettingsView()
             }
         }
+    }
+
+    var nonIncomeExpenses: [Expense] {
+        return expenses.filter { !$0.isIncome }
     }
 
     private func toggleSidebar() {

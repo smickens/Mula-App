@@ -18,53 +18,6 @@
             endingLineNumber = "60"
             landmarkName = "totalSpent"
             landmarkType = "24">
-            <Locations>
-               <Location
-                  uuid = "55D85150-7130-48CE-8EF0-4BA967AE864F - eb5a407381a67814"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Mula.BudgetView.totalSpent.getter : Swift.Double"
-                  moduleName = "Mula"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/shantimickens/Library/Mobile%20Documents/com~apple~CloudDocs/Mula/Mula/Views/BudgetView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "70"
-                  endingLineNumber = "70"
-                  offsetFromSymbolStart = "48">
-               </Location>
-               <Location
-                  uuid = "55D85150-7130-48CE-8EF0-4BA967AE864F - b55cd8b0902bf59d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 ((key: Mula.Category, value: Swift.Double)) -&gt; Swift.Bool in Mula.BudgetView.totalSpent.getter : Swift.Double"
-                  moduleName = "Mula"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/shantimickens/Library/Mobile%20Documents/com~apple~CloudDocs/Mula/Mula/Views/BudgetView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "70"
-                  endingLineNumber = "70"
-                  offsetFromSymbolStart = "32">
-               </Location>
-               <Location
-                  uuid = "55D85150-7130-48CE-8EF0-4BA967AE864F - eb1d678b7e968775"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Swift.Double, (key: Mula.Category, value: Swift.Double)) -&gt; Swift.Double in Mula.BudgetView.totalSpent.getter : Swift.Double"
-                  moduleName = "Mula"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/shantimickens/Library/Mobile%20Documents/com~apple~CloudDocs/Mula/Mula/Views/BudgetView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "70"
-                  endingLineNumber = "70"
-                  offsetFromSymbolStart = "40">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -16,7 +16,6 @@ struct CategoryCount {
 struct PieChartView: View {
     @Binding var selectedCategory: Category?
     let data: [CategoryCount]
-    // TODO: take in this value
     let totalSpent: Double
 
     init(selectedCategory: Binding<Category?>, totalsByCategory: [Category: Double]) {
@@ -56,7 +55,5 @@ struct PieChartView: View {
                 }
             }
         }
-
-        .padding()
     }
 }

@@ -6,13 +6,19 @@
 //
 
 import SwiftUI
+import FinanceKit
+import FinanceKitUI
 
 struct TransactionSelector: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
+  @State private var selectedItems: [FinanceKit.Transaction] = []
 
-#Preview {
-    TransactionSelector()
+    var body: some View {
+        if FinanceStore.isDataAvailable(.financialData) {
+            TransactionPicker(selection: $selectedItems) {
+                Text("Show Transaction Picker")
+            }
+        } else {
+            Text("Financial Data is unavailable")
+        }
+    }
 }

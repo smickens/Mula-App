@@ -26,6 +26,9 @@
 		E27223ED2C1EB5CC0065089A /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223EC2C1EB5CC0065089A /* ProgressBar.swift */; };
 		E27223EF2C1FF14E0065089A /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223EE2C1FF14E0065089A /* Tab.swift */; };
 		E27223F12C1FF2300065089A /* ExpensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223F02C1FF2300065089A /* ExpensesView.swift */; };
+		E284D49D2C27647200F72684 /* FinancialDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D49C2C27647200F72684 /* FinancialDataViewModel.swift */; };
+		E284D49F2C28CA8900F72684 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D49E2C28CA8900F72684 /* ChartView.swift */; };
+		E284D4A12C28CBCE00F72684 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4A02C28CBCE00F72684 /* HomeView.swift */; };
 		E288FB012C275D2D00B6D57A /* Mula_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E288FB002C275D2D00B6D57A /* Mula_iOSApp.swift */; };
 		E288FB032C275D2D00B6D57A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E288FB022C275D2D00B6D57A /* ContentView.swift */; };
 		E288FB052C275D2D00B6D57A /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = E288FB042C275D2D00B6D57A /* Item.swift */; };
@@ -37,6 +40,7 @@
 		E288FB152C275FBA00B6D57A /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223DD2BF9C2FE0065089A /* Expense.swift */; };
 		E288FB162C275FBA00B6D57A /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223EE2C1FF14E0065089A /* Tab.swift */; };
 		E288FB172C275FCB00B6D57A /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223EC2C1EB5CC0065089A /* ProgressBar.swift */; };
+		E288FB192C27612900B6D57A /* TransactionSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E288FB182C27612900B6D57A /* TransactionSelector.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,12 +65,16 @@
 		E27223EC2C1EB5CC0065089A /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
 		E27223EE2C1FF14E0065089A /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		E27223F02C1FF2300065089A /* ExpensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesView.swift; sourceTree = "<group>"; };
+		E284D49C2C27647200F72684 /* FinancialDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancialDataViewModel.swift; sourceTree = "<group>"; };
+		E284D49E2C28CA8900F72684 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
+		E284D4A02C28CBCE00F72684 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		E288FAFE2C275D2D00B6D57A /* Mula iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mula iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E288FB002C275D2D00B6D57A /* Mula_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mula_iOSApp.swift; sourceTree = "<group>"; };
 		E288FB022C275D2D00B6D57A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E288FB042C275D2D00B6D57A /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		E288FB062C275D2E00B6D57A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E288FB092C275D2E00B6D57A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		E288FB182C27612900B6D57A /* TransactionSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionSelector.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +159,8 @@
 				DE9AF9302B7851F700D1F4DC /* UploadFormView.swift */,
 				DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */,
 				E27223DF2C0EB5A10065089A /* SettingsView.swift */,
+				E284D49E2C28CA8900F72684 /* ChartView.swift */,
+				E284D4A02C28CBCE00F72684 /* HomeView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -168,9 +178,11 @@
 			children = (
 				E288FB002C275D2D00B6D57A /* Mula_iOSApp.swift */,
 				E288FB022C275D2D00B6D57A /* ContentView.swift */,
+				E288FB182C27612900B6D57A /* TransactionSelector.swift */,
 				E288FB042C275D2D00B6D57A /* Item.swift */,
 				E288FB062C275D2E00B6D57A /* Assets.xcassets */,
 				E288FB082C275D2E00B6D57A /* Preview Content */,
+				E284D49C2C27647200F72684 /* FinancialDataViewModel.swift */,
 			);
 			path = "Mula iOS";
 			sourceTree = "<group>";
@@ -321,6 +333,7 @@
 				DE9AF9312B7851F700D1F4DC /* UploadFormView.swift in Sources */,
 				DEF8FE192B6B976E00D10468 /* ExpenseFormView.swift in Sources */,
 				DE9AF9B72BA7995800D1F4DC /* BudgetView.swift in Sources */,
+				E284D49F2C28CA8900F72684 /* ChartView.swift in Sources */,
 				DEF8FE172B6AE51D00D10468 /* Category.swift in Sources */,
 				DEF3CAE82B61BB9300C926ED /* ContentView.swift in Sources */,
 				E27223F12C1FF2300065089A /* ExpensesView.swift in Sources */,
@@ -333,6 +346,7 @@
 				DEF8FE1E2B6B995500D10468 /* ExpenseView.swift in Sources */,
 				E27223ED2C1EB5CC0065089A /* ProgressBar.swift in Sources */,
 				E27223EB2C15136E0065089A /* Bank.swift in Sources */,
+				E284D4A12C28CBCE00F72684 /* HomeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,8 +355,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				E288FB152C275FBA00B6D57A /* Expense.swift in Sources */,
+				E284D49D2C27647200F72684 /* FinancialDataViewModel.swift in Sources */,
 				E288FB032C275D2D00B6D57A /* ContentView.swift in Sources */,
 				E288FB052C275D2D00B6D57A /* Item.swift in Sources */,
+				E288FB192C27612900B6D57A /* TransactionSelector.swift in Sources */,
 				E288FB162C275FBA00B6D57A /* Tab.swift in Sources */,
 				E288FB172C275FCB00B6D57A /* ProgressBar.swift in Sources */,
 				E288FB142C275FBA00B6D57A /* Budget.swift in Sources */,
@@ -551,7 +567,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -582,7 +598,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

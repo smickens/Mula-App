@@ -15,17 +15,34 @@ struct SummaryView: View {
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
-            
-            Text("Spending Overview")
-                .font(.headline)
-                .padding(.bottom)
 
-            spendingOverview
-            
-            Spacer()
-            
+            HStack(alignment: .bottom) {
+//                Text("Spending in \(expensesForMonth.first?.date.month ?? "xxx")")
+//                    .font(.headline)
+
+                Text(totalMoneyIn + totalMoneyOut, format: .currency(code: "USD"))
+                    .font(.title)
+                    .fontWeight(.medium)
+
+                Text("in \(expensesForMonth.first?.date.month ?? "xxx")")
+                    .font(.headline)
+                    .foregroundStyle(.secondary)
+
+                Spacer()
+            }
+            .padding(.bottom)
+
+            ChartView(expenses: expensesForMonth)
+
+//            Text("Spending Overview")
+//                .font(.headline)
+//                .padding(.bottom)
+//
+//            spendingOverview
+
             Text("Category Breakdown")
                 .font(.headline)
+                .padding(.vertical)
 
             PieChartView(
                 selectedCategory: $selectedCategory,
@@ -37,6 +54,7 @@ struct SummaryView: View {
             
             Spacer()
         }
+        .padding()
     }
 
     private var spendingOverview: some View {

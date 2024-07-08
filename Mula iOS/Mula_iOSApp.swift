@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import FinanceKit
 
 @main
 struct Mula_iOSApp: App {

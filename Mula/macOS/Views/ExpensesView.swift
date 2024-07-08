@@ -40,6 +40,11 @@ struct ExpensesView: View {
                         .tabItem {
                             Text("Budget")
                         }
+
+                    HomeView(expenses: expenses)
+                        .tabItem {
+                            Text("Trends")
+                        }
                 }
             }
             .padding()

@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-// TODO: pressing enter, should trigger a save
-
 struct NewExpenseFormView: View {
     @Environment(\.modelContext) private var modelContext
     
