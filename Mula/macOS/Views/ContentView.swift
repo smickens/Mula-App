@@ -11,12 +11,12 @@ import SwiftData
 struct ContentView: View {
     @Query(sort: \Expense.date, order: .forward) var expenses: [Expense]
     
-    @State private var selectedTab: Tab = .home
+    @State private var selectedTab: TabName = .home
 
     var body: some View {
         NavigationView {            
             List(selection: $selectedTab) {
-                ForEach(Tab.allCases, id: \.self) { tab in
+                ForEach(TabName.allCases, id: \.self) { tab in
                     Text(tab.rawValue)
                     
 //                    Image(systemName: "gear")

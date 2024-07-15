@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Tab: String, CaseIterable {
+enum TabName: String, CaseIterable {
     case home = "Home"
     case expenses = "Expenses"
     case trends = "Trends"

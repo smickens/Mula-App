@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct ContentView: View {
+struct ContentView2: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
     @StateObject var viewModel = FinancialDataViewModel()
