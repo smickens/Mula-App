@@ -16,8 +16,7 @@ final class DataManager {
 
     static let shared = DataManager()
 
-    // Create shared database reference
-    lazy var dbReference: DatabaseReference = {
+    private lazy var dbReference: DatabaseReference = {
         return Database.database().reference()
     }()
 
@@ -33,19 +32,35 @@ final class DataManager {
         return dbReference.child("income")
     }()
 
-    var expenses: [Expense]? = nil
+    var expenses: [Expense] = []
 //    private(set) var expenses: [Expense]? {
 //        didSet {
 //            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "firebaseDataDidUpdateNotification"), object: nil)
 //        }
 //    }
 
-    private func category(from: String) -> Category {
+    private func category(from categoryString: String) -> Category {
 
 //        fixed costs, savings, investments, guilt-free spending, and income
 //
 //        Sub-Categories (ignored for income category): transportation, housing, groceries, eating out, shopping, entertainment, misc
         return .misc
+    }
+
+    private func bucket(from bucketString: String) -> Bucket {
+        if bucketString == "fixed" {
+            return .fixed
+        } else if bucketString == "saving" {
+            return .saving
+        } else if bucketString == "investment" {
+            return .investment
+        } else if bucketString == "spending" {
+            return .spending
+        }
+//        else if bucketString == "income" {
+//            return .income
+//        }
+        return .fixed
     }
 
     private func loadExpenses() {
@@ -60,6 +75,7 @@ final class DataManager {
                 return
             }
 
+
             if let data = value as? [String: [String: Any]] {
                 for (expenseId, expenseData) in data {
                     guard let expenseDate = expenseData["date"] as? TimeInterval else {
@@ -68,16 +84,31 @@ final class DataManager {
                     }
 
                     let expense = Expense(
+                        id: expenseId,
                         title: expenseData["title"] as! String,
                         date: Date(timeIntervalSince1970: expenseDate),
                         amount: expenseData["amount"] as! Double,
+                        bucket: self.bucket(from: expenseData["bucket"] as! String),
                         category: self.category(from: expenseData["category"] as! String)
                     )
 
                     print("Expense: \(expense)")
+                    self.expenses.append(expense)
                 }
             }
         }
+    }
+
+    func expenses(for month: String) -> [Expense] {
+        return expenses.filter { $0.date.month == month }
+    }
+
+    func expenses(for bucket: Bucket) -> [Expense] {
+        return expenses.filter { $0.bucket == bucket }
+    }
+
+    func total(for expenses: [Expense]) -> Double {
+        return expenses.reduce(0.0) { $0 + $1.amount }
     }
 
     func addFakeExpense() {
@@ -120,79 +151,79 @@ final class DataManager {
         }
     }
 
-    func uploadExpenses(expenses: [Expense]) {
-        for expense in expenses {
-            if expense.isIncome {
-                uploadIncome(income: expense)
-                continue
-            }
+//    func uploadExpenses(expenses: [Expense]) {
+//        for expense in expenses {
+//            if expense.isIncome {
+//                uploadIncome(income: expense)
+//                continue
+//            }
+//
+//            let formatter = NumberFormatter()
+//            formatter.numberStyle = .decimal
+//            formatter.maximumFractionDigits = 2
+//            let amountString = formatter.string(from: expense.amount as NSNumber)!
+//
+//            var newExpense = [
+//                "title": expense.title,
+//                "date": expense.date.timeIntervalSince1970,
+//                "amount": abs(Double(amountString) ?? 0.0)
+//            ] as [String : Any]
+//
+//            let category: String
+//            let subCategory: String
+//            switch expense.category {
+//            case .housing:
+//                category = "fixed"
+//                subCategory = "housing"
+//            case .food:
+//                category = "spending"
+//                subCategory = "eating out"
+//            case .shopping:
+//                category = "spending"
+//                subCategory = "shopping"
+//            case .transportation:
+//                category = "fixed"
+//                subCategory = "transportation"
+//            case .entertainment:
+//                category = "spending"
+//                subCategory = "entertainment"
+//            case .misc:
+//                category = "spending"
+//                subCategory = "misc"
+//            case .income:
+//                category = "ERROR"
+//                subCategory = "ERROR"
+//            }
+//
+//            newExpense["bucket"] = category
+//            newExpense["category"] = subCategory
+//
+//            expenseRef.childByAutoId().setValue(newExpense) { (error, ref) in
+//                if let error = error {
+//                    print("Error adding new expense: \(error.localizedDescription)")
+//                }
+//            }
+//        }
+//    }
 
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .decimal
-            formatter.maximumFractionDigits = 2
-            let amountString = formatter.string(from: expense.amount as NSNumber)!
-
-            var newExpense = [
-                "title": expense.title,
-                "date": expense.date.timeIntervalSince1970,
-                "amount": abs(Double(amountString) ?? 0.0)
-            ] as [String : Any]
-
-            let category: String
-            let subCategory: String
-            switch expense.category {
-            case .housing:
-                category = "fixed"
-                subCategory = "housing"
-            case .food:
-                category = "spending"
-                subCategory = "eating out"
-            case .shopping:
-                category = "spending"
-                subCategory = "shopping"
-            case .transportation:
-                category = "fixed"
-                subCategory = "transportation"
-            case .entertainment:
-                category = "spending"
-                subCategory = "entertainment"
-            case .misc:
-                category = "spending"
-                subCategory = "misc"
-            case .income:
-                category = "ERROR"
-                subCategory = "ERROR"
-            }
-
-            newExpense["category"] = category
-            newExpense["subCategory"] = subCategory
-
-            expenseRef.childByAutoId().setValue(newExpense) { (error, ref) in
-                if let error = error {
-                    print("Error adding new expense: \(error.localizedDescription)")
-                }
-            }
-        }
-    }
-
-    func uploadIncome(income: Expense) {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 2
-        let amountString = formatter.string(from: income.amount as NSNumber)!
-
-        let newIncome = [
-            "title": income.title,
-            "date": income.date.timeIntervalSince1970,
-            "amount": Double(amountString) ?? 0.0,
-        ] as [String : Any]
-
-        incomeRef.childByAutoId().setValue(newIncome) { (error, ref) in
-            if let error = error {
-                print("Error adding new expense: \(error.localizedDescription)")
-            }
-        }
-    }
+//    func uploadIncome(income: Expense) {
+//        let formatter = NumberFormatter()
+//        formatter.numberStyle = .decimal
+//        formatter.maximumFractionDigits = 2
+//        let amountString = formatter.string(from: income.amount as NSNumber)!
+//
+//        let newIncome = [
+//            "title": income.title,
+//            "date": income.date.timeIntervalSince1970,
+//            "amount": Double(amountString) ?? 0.0,
+//        ] as [String : Any]
+//
+//        incomeRef.childByAutoId().setValue(newIncome) { (error, ref) in
+//            if let error = error {
+//                print("Error adding new expense: \(error.localizedDescription)")
+//            }
+//        }
+//    }
 
     // Firebase listener handle
 //    var observer: AuthStateDidChangeListenerHandle?

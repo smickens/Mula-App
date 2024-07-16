@@ -11,7 +11,8 @@ import Firebase
 import FirebaseAuth
 
 struct ContentView: View {
-    @Query(sort: \Expense.date, order: .forward) var expenses: [Expense]
+//    @Query(sort: \Expense.date, order: .forward) var expenses: [Expense]
+    var expenses: [Expense] = []
 
     @State private var selectedTab: TabName = .home
 

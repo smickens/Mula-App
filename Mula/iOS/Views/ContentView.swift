@@ -18,9 +18,7 @@ struct ContentView: View {
             }
 
             NavigationStack {
-//                ExpensesView()
-                Text("expenses")
-                    .navigationTitle("Expenses")
+                ExpensesListView()
             }
             .tabItem {
                 Label("Expenses", systemImage: "tag")

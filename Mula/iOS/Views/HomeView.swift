@@ -10,35 +10,38 @@ import SwiftUI
 struct HomeView: View {
     @State private var selectedMonth: String = Date().month
 
-    let months: [String] = DateFormatter().monthSymbols
-    
+    @State private var fixed: Double
+    @State private var spending: Double
+    @State private var saving: Double
+    @State private var investment: Double
+
+    init() {
+        let fixedCosts = DataManager.shared.expenses(for: .fixed)
+        let spendingCosts = DataManager.shared.expenses(for: .spending)
+        let savingCosts = DataManager.shared.expenses(for: .saving)
+        let investmentCosts = DataManager.shared.expenses(for: .investment)
+
+        self.fixed = DataManager.shared.total(for: fixedCosts)
+        self.spending = DataManager.shared.total(for: spendingCosts)
+        self.saving = DataManager.shared.total(for: savingCosts)
+        self.investment = DataManager.shared.total(for: investmentCosts)
+    }
+
     var body: some View {
         ScrollView {
-            HStack {
-                Text("Mula")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-
-                Spacer()
-
-                Picker("Month", selection: $selectedMonth) {
-                    ForEach(months, id: \.self) { month in
-                        Text(month)
-                    }
-                }
-            }
+            HeaderView(title: "Mula", selectedMonth: $selectedMonth)
 
             Grid {
                 GridRow {
-                    TileView(title: "Fixed", icon: "grid", tint: .cyan)
+                    TileView(title: "Fixed", icon: "grid", tint: .cyan, amount: $fixed)
 
-                    TileView(title: "Spending", icon: "tag.fill", tint: .pink)
+                    TileView(title: "Spending", icon: "tag.fill", tint: .pink, amount: $spending)
                 }
 
                 GridRow {
-                    TileView(title: "Savings", icon: "bolt.fill", tint: .green)
+                    TileView(title: "Savings", icon: "bolt.fill", tint: .green, amount: $saving)
 
-                    TileView(title: "Investments", icon: "hourglass", tint: .indigo)
+                    TileView(title: "Investments", icon: "hourglass", tint: .indigo, amount: $investment)
                 }
 
                 GridRow {
@@ -60,7 +63,20 @@ struct HomeView: View {
         .navigationBarHidden(true)
 //                .navigationBarTitleDisplayMode(.inline)
         .scrollIndicators(.hidden)
+        .onChange(of: selectedMonth) { _, newValue in
+            let fixedCosts = DataManager.shared.expenses(for: .fixed)
+            let spendingCosts = DataManager.shared.expenses(for: .spending)
+            let savingCosts = DataManager.shared.expenses(for: .saving)
+            let investmentCosts = DataManager.shared.expenses(for: .investment)
+
+            self.fixed = DataManager.shared.total(for: fixedCosts)
+            self.spending = DataManager.shared.total(for: spendingCosts)
+            self.saving = DataManager.shared.total(for: savingCosts)
+            self.investment = DataManager.shared.total(for: investmentCosts)
+        }
     }
+
+    
 }
 
 #Preview {

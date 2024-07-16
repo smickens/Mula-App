@@ -8,11 +8,27 @@
 import SwiftUI
 
 struct HeaderView: View {
+    let title: String
+    @Binding var selectedMonth: String
+    let months: [String] = DateFormatter().monthSymbols
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack {
+            Text(title)
+                .font(.largeTitle)
+                .fontWeight(.bold)
+
+            Spacer()
+
+            Picker("Month", selection: $selectedMonth) {
+                ForEach(months, id: \.self) { month in
+                    Text(month)
+                }
+            }
+        }
     }
 }
 
 #Preview {
-    HeaderView()
+    HeaderView(title: "Mula", selectedMonth: .constant("March"))
 }
