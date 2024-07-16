@@ -7,21 +7,24 @@
 
 import SwiftUI
 import SwiftData
+import Firebase
+import FirebaseAuth
 
 struct ContentView: View {
     @Query(sort: \Expense.date, order: .forward) var expenses: [Expense]
-    
+
     @State private var selectedTab: TabName = .home
 
     var body: some View {
-        NavigationView {            
+        NavigationView {
             List(selection: $selectedTab) {
                 ForEach(TabName.allCases, id: \.self) { tab in
                     Text(tab.rawValue)
-                    
+
 //                    Image(systemName: "gear")
                 }
             }
+            
             .listStyle(.sidebar)
             .toolbar {
                 ToolbarItem {
@@ -40,6 +43,31 @@ struct ContentView: View {
                 ExpensesView(expenses: expenses)
             case .trends:
                 Text("Trends")
+                    .toolbar {
+                        ToolbarItem {
+                            Button {
+                                DataManager.shared.addFakeExpense()
+                            } label: {
+                                Image(systemName: "plus")
+                            }
+                        }
+
+                        ToolbarItem {
+                            Button {
+                                DataManager.shared.readFakeExpenses()
+                            } label: {
+                                Image(systemName: "star")
+                            }
+                        }
+
+//                        ToolbarItem {
+//                            Button {
+//                                DataManager.shared.uploadExpenses(expenses: expenses)
+//                            } label: {
+//                                Image(systemName: "minus")
+//                            }
+//                        }
+                    }
             case .settings:
                 SettingsView()
             }
