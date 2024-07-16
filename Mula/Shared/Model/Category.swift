@@ -8,19 +8,14 @@
 import Foundation
 import SwiftUI
 
-struct SubCategory {
-    var category: Category
-    var parent: Category
-}
-
 enum Category: String, CaseIterable, Identifiable, Codable {
     case housing = "Housing"
-    case food = "Food" // eating out, ordering, groceries
+    case eatingOut = "Eating Out"
+    case groceries = "Groceries"
     case shopping = "Shopping"
     case transportation = "Transportation" // gas, uber
     case entertainment = "Entertainment"
     case misc = "Misc"
-    case income = "Income"
 
     var id: String { rawValue }
 
@@ -29,24 +24,24 @@ enum Category: String, CaseIterable, Identifiable, Codable {
     var icon: Image {
         switch self {
         case .housing: return Image(systemName: "house.fill")
-        case .food: return Image(systemName: "flame.fill")
+        case .eatingOut: return Image(systemName: "flame.fill")
+        case .groceries: return Image(systemName: "flame")
         case .shopping: return Image(systemName: "bag.fill")
         case .transportation: return Image(systemName: "car.fill")
         case .entertainment: return Image(systemName: "smiley.fill")
         case .misc: return Image(systemName: "staroflife.fill")
-        case .income: return Image(systemName: "dollarsign")
         }
     }
 
     private var tint: Color {
         switch self {
         case .housing: return .blue
-        case .food: return .green
+        case .eatingOut: return .green
+        case .groceries: return .red
         case .shopping: return .pink
         case .transportation: return .orange
         case .entertainment: return .yellow
         case .misc: return .purple
-        case .income: return .indigo
         }
     }
 

@@ -10,7 +10,7 @@ import SwiftUI
 enum Bucket: String, CaseIterable, Identifiable, Codable {
     case fixed = "Fixed"
     case spending = "Spending"
-    case savings = "Savings"
+    case saving = "Savings"
     case investment = "Investments"
     case income = "Income"
 
@@ -22,7 +22,7 @@ enum Bucket: String, CaseIterable, Identifiable, Codable {
         switch self {
         case .fixed: return "grid"
         case .spending: return "tag.fill"
-        case .savings: return "bolt.fill"
+        case .saving: return "bolt.fill"
         case .investment: return "hourglass"
         case .income: return "hourglass"
         }
@@ -32,7 +32,7 @@ enum Bucket: String, CaseIterable, Identifiable, Codable {
         switch self {
         case .fixed: return .cyan
         case .spending: return .pink
-        case .savings: return .green
+        case .saving: return .green
         case .investment: return .indigo
         case .income: return .blue
         }
