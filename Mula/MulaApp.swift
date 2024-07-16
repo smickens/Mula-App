@@ -56,8 +56,8 @@ struct MulaApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .fontDesign(.monospaced)
 #if os(macOS)
+                .fontDesign(.monospaced)
                 .frame(minWidth: 850, idealWidth: 850, minHeight: 500, idealHeight: 500)
 #endif
         }

@@ -16,15 +16,10 @@ struct HomeView: View {
     @State private var investment: Double
 
     init() {
-        let fixedCosts = DataManager.shared.expenses(for: .fixed)
-        let spendingCosts = DataManager.shared.expenses(for: .spending)
-        let savingCosts = DataManager.shared.expenses(for: .saving)
-        let investmentCosts = DataManager.shared.expenses(for: .investment)
-
-        self.fixed = DataManager.shared.total(for: fixedCosts)
-        self.spending = DataManager.shared.total(for: spendingCosts)
-        self.saving = DataManager.shared.total(for: savingCosts)
-        self.investment = DataManager.shared.total(for: investmentCosts)
+        fixed = DataManager.shared.total(for: Date().month, in: .fixed)
+        spending = DataManager.shared.total(for: Date().month, in: .spending)
+        saving = DataManager.shared.total(for: Date().month, in: .saving)
+        investment = DataManager.shared.total(for: Date().month, in: .investment)
     }
 
     var body: some View {
@@ -64,15 +59,10 @@ struct HomeView: View {
 //                .navigationBarTitleDisplayMode(.inline)
         .scrollIndicators(.hidden)
         .onChange(of: selectedMonth) { _, newValue in
-            let fixedCosts = DataManager.shared.expenses(for: .fixed)
-            let spendingCosts = DataManager.shared.expenses(for: .spending)
-            let savingCosts = DataManager.shared.expenses(for: .saving)
-            let investmentCosts = DataManager.shared.expenses(for: .investment)
-
-            self.fixed = DataManager.shared.total(for: fixedCosts)
-            self.spending = DataManager.shared.total(for: spendingCosts)
-            self.saving = DataManager.shared.total(for: savingCosts)
-            self.investment = DataManager.shared.total(for: investmentCosts)
+            fixed = DataManager.shared.total(for: selectedMonth, in: .fixed)
+            spending = DataManager.shared.total(for: selectedMonth, in: .spending)
+            saving = DataManager.shared.total(for: selectedMonth, in: .saving)
+            investment = DataManager.shared.total(for: selectedMonth, in: .investment)
         }
     }
 

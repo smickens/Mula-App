@@ -107,8 +107,14 @@ final class DataManager {
         return expenses.filter { $0.bucket == bucket }
     }
 
-    func total(for expenses: [Expense]) -> Double {
-        return expenses.reduce(0.0) { $0 + $1.amount }
+    func expenses(for month: String, in bucket: Bucket) -> [Expense] {
+        let e = expenses(for: month)
+        return e.filter { $0.bucket == bucket }
+    }
+
+    func total(for month: String, in bucket: Bucket) -> Double {
+        let e = expenses(for: month, in: bucket)
+        return e.reduce(0.0) { $0 + $1.amount }
     }
 
     func addFakeExpense() {
