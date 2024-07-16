@@ -6,10 +6,8 @@
 //
 
 import SwiftUI
-import SwiftData
 import FirebaseCore
 import FirebaseAuth
-import AppKit
 
 struct Platform {
 #if os(iOS)
@@ -24,10 +22,14 @@ struct Platform {
 }
 
 class AppDelegate: NSObject, Platform.delegate {
+#if os(iOS)
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        FirebaseApp.configure()
+        return true
+    }
+#elseif os(macOS)
     func applicationDidFinishLaunching(_ notification: Notification) {
         FirebaseApp.configure()
-
-        let _ = DataManager.shared
 
 //        Auth.auth().signInAnonymously { (authResult, error) in
 //            if let error = error {
@@ -38,6 +40,7 @@ class AppDelegate: NSObject, Platform.delegate {
 //            }
 //        }
     }
+#endif
 }
 
 
@@ -54,11 +57,14 @@ struct MulaApp: App {
         WindowGroup {
             ContentView()
                 .fontDesign(.monospaced)
+#if os(macOS)
                 .frame(minWidth: 850, idealWidth: 850, minHeight: 500, idealHeight: 500)
+#endif
         }
+#if os(macOS)
         .commands {
             SidebarCommands()
         }
-        .modelContainer(for: [Expense.self, Budget.self])
+#endif
     }
 }
