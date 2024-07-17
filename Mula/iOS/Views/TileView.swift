@@ -13,6 +13,7 @@ struct TileView: View {
     let icon: String
     let tint: Color
     @Binding var amount: Double
+    @Binding var budget: Double
 
     var body: some View {
         ZStack {
@@ -29,13 +30,13 @@ struct TileView: View {
                 ZStack {
                     Chart {
                         SectorMark(
-                            angle: .value("Total", 1.0),
+                            angle: .value("Background", amount < budget ? (1 - amount / budget) : 0.0),
                             innerRadius: .ratio(0.85)
                         )
                         .foregroundStyle(.gray).opacity(0.4)
 
                         SectorMark(
-                            angle: .value("Total", 0.5),
+                            angle: .value("Amount", amount / budget),
                             innerRadius: .ratio(0.85)
                         )
                         .foregroundStyle(tint)
@@ -49,7 +50,7 @@ struct TileView: View {
                 }
                 .padding(10)
 
-                Text("$\(Int(amount))").font(.subheadline).fontWeight(.semibold) + Text(" / ").foregroundStyle(.secondary) + Text("$1250").font(.subheadline).foregroundStyle(.secondary)
+                Text("$\(Int(amount))").font(.subheadline).fontWeight(.semibold) + Text(" / ").foregroundStyle(.secondary) + Text("$\(Int(budget))").font(.subheadline).foregroundStyle(.secondary)
             }
             .padding()
         }
