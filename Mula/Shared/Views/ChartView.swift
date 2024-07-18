@@ -22,7 +22,7 @@ struct ChartView: View {
         var aggregatedExpenses: [ChartData] = []
         var currentValue = 0.0
         var prevDate: Date? = nil
-        expenses.forEach { expense in
+        expenses.sorted(by: { $0.date < $1.date }).forEach { expense in
             currentValue += expense.amount
             if prevDate == nil || prevDate != expense.date {
                 aggregatedExpenses.append(ChartData(
