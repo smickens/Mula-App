@@ -12,6 +12,7 @@ final class DataManager {
     // Prevent clients from creating another instance
     private init() {
         loadExpenses()
+        loadIncomes()
     }
 
     static let shared = DataManager()
@@ -33,6 +34,7 @@ final class DataManager {
     }()
 
     var expenses: [Expense] = []
+    var incomes: [Income] = []
 //    private(set) var expenses: [Expense]? {
 //        didSet {
 //            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "firebaseDataDidUpdateNotification"), object: nil)
@@ -40,10 +42,19 @@ final class DataManager {
 //    }
 
     private func category(from categoryString: String) -> Category {
-
-//        fixed costs, savings, investments, guilt-free spending, and income
-//
-//        Sub-Categories (ignored for income category): transportation, housing, groceries, eating out, shopping, entertainment, misc
+        if categoryString == "transportation" {
+            return .transportation
+        } else if categoryString == "housing" {
+            return .housing
+        } else if categoryString == "groceries" {
+            return .groceries
+        } else if categoryString == "eating out" {
+            return .eatingOut
+        } else if categoryString == "shopping" {
+            return .shopping
+        } else if categoryString == "entertainment" {
+            return .entertainment
+        }
         return .misc
     }
 
@@ -57,9 +68,6 @@ final class DataManager {
         } else if bucketString == "spending" {
             return .spending
         }
-//        else if bucketString == "income" {
-//            return .income
-//        }
         return .fixed
     }
 
@@ -103,6 +111,10 @@ final class DataManager {
         return expenses.filter { $0.date.month == month }
     }
 
+    func incomes(for month: String) -> [Income] {
+        return incomes.filter { $0.date.month == month }
+    }
+
     func expenses(for bucket: Bucket) -> [Expense] {
         return expenses.filter { $0.bucket == bucket }
     }
@@ -115,6 +127,11 @@ final class DataManager {
     func total(for month: String, in bucket: Bucket) -> Double {
         let e = expenses(for: month, in: bucket)
         return e.reduce(0.0) { $0 + $1.amount }
+    }
+
+    func totalIncome(for month: String) -> Double {
+        let i = incomes(for: month)
+        return i.reduce(0.0) { $0 + $1.amount }
     }
 
     func addFakeExpense() {
@@ -153,6 +170,40 @@ final class DataManager {
                 }
             } else {
                 print("No data available")
+            }
+        }
+    }
+
+    private func loadIncomes() {
+        incomeRef.getData { error, snapshot in
+            if let error = error {
+                print("Error getting income data: \(error.localizedDescription)")
+                return
+            }
+
+            guard let value = snapshot?.value else {
+                print("No income data available")
+                return
+            }
+
+
+            if let data = value as? [String: [String: Any]] {
+                for (incomeId, incomeData) in data {
+                    guard let incomeDate = incomeData["date"] as? TimeInterval else {
+                        print("ERROR: failed to get income's date")
+                        continue
+                    }
+
+                    let income = Income(
+                        id: incomeId,
+                        title: incomeData["title"] as! String,
+                        date: Date(timeIntervalSince1970: incomeDate),
+                        amount: incomeData["amount"] as! Double
+                    )
+
+                    print("Income: \(income)")
+                    self.incomes.append(income)
+                }
             }
         }
     }
