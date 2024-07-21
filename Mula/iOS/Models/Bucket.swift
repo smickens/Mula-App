@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum Bucket: String, CaseIterable, Identifiable, Codable {
+enum Bucket: String, CaseIterable, Identifiable, Codable, Hashable {
     case fixed = "Fixed"
     case spending = "Spending"
     case saving = "Savings"
