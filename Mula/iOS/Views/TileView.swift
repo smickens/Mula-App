@@ -16,45 +16,42 @@ struct TileView: View {
     @Binding var budget: Double
 
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 20.0)
-                .fill(.secondary).opacity(0.1)
+        VStack {
+            Text(title)
+                .font(.headline)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
-            VStack {
-                Text(title)
-                    .font(.headline)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+            Spacer()
 
-                Spacer()
+            ZStack {
+                Chart {
+                    SectorMark(
+                        angle: .value("Background", amount < budget ? (1 - amount / budget) : 0.0),
+                        innerRadius: .ratio(0.85)
+                    )
+                    .foregroundStyle(.gray).opacity(0.4)
 
-                ZStack {
-                    Chart {
-                        SectorMark(
-                            angle: .value("Background", amount < budget ? (1 - amount / budget) : 0.0),
-                            innerRadius: .ratio(0.85)
-                        )
-                        .foregroundStyle(.gray).opacity(0.4)
-
-                        SectorMark(
-                            angle: .value("Amount", amount / budget),
-                            innerRadius: .ratio(0.85)
-                        )
-                        .foregroundStyle(tint)
-                    }
-                    .chartLegend(.hidden)
-
-
-                    Image(systemName: icon)
-                        .font(.title2)
-                        .foregroundStyle(tint)
+                    SectorMark(
+                        angle: .value("Amount", amount / budget),
+                        innerRadius: .ratio(0.85)
+                    )
+                    .foregroundStyle(tint)
                 }
-                .padding(10)
+                .chartLegend(.hidden)
 
-                Text("$\(Int(amount))").font(.subheadline).fontWeight(.semibold) + Text(" / ").foregroundStyle(.secondary) + Text("$\(Int(budget))").font(.subheadline).foregroundStyle(.secondary)
+
+                Image(systemName: icon)
+                    .font(.title2)
+                    .foregroundStyle(tint)
             }
-            .padding()
+            .padding(10)
+
+            Text("$\(Int(amount))").font(.subheadline).fontWeight(.semibold).foregroundStyle(amount > budget ? .red : .primary) + Text(" / ").foregroundStyle(.secondary) + Text("$\(Int(budget))").font(.subheadline).foregroundStyle(.secondary)
         }
+        .padding()
         .aspectRatio(1, contentMode: .fit)
+        .background(Color(.systemGray6))
+        .cornerRadius(backgroundCornerRadius)
     }
 }
 
