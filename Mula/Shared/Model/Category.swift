@@ -21,15 +21,15 @@ enum Category: String, CaseIterable, Identifiable, Codable {
 
     var name: String { rawValue }
 
-    var icon: Image {
+    var iconName: String {
         switch self {
-        case .housing: return Image(systemName: "house.fill")
-        case .eatingOut: return Image(systemName: "flame.fill")
-        case .groceries: return Image(systemName: "flame")
-        case .shopping: return Image(systemName: "bag.fill")
-        case .transportation: return Image(systemName: "car.fill")
-        case .entertainment: return Image(systemName: "smiley.fill")
-        case .misc: return Image(systemName: "staroflife.fill")
+        case .housing: return "house.fill"
+        case .eatingOut: return "flame.fill"
+        case .groceries: return "flame"
+        case .shopping: return "bag.fill"
+        case .transportation: return "car.fill"
+        case .entertainment: return "smiley.fill"
+        case .misc: return "staroflife.fill"
         }
     }
 
