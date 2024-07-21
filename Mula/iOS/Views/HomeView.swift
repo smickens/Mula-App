@@ -8,27 +8,25 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var selectedMonth: String = Date().month
+    @Binding var selectedMonth: String
 
-    @State private var expensesForMonth: [Expense]
-    @State private var fixed: Double
-    @State private var spending: Double
-    @State private var saving: Double
-    @State private var investment: Double
+    @State private var expensesForMonth: [Expense] = []
+    @State private var incomesForMonth: [Income] = []
 
-    init() {
-        expensesForMonth = DataManager.shared.expenses
-        fixed = DataManager.shared.total(for: Date().month, in: .fixed)
-        spending = DataManager.shared.total(for: Date().month, in: .spending)
-        saving = DataManager.shared.total(for: Date().month, in: .saving)
-        investment = DataManager.shared.total(for: Date().month, in: .investment)
-    }
+    @State private var fixed: Double = 0.0
+    @State private var spending: Double = 0.0
+    @State private var saving: Double = 0.0
+    @State private var investment: Double = 0.0
+    @State private var income: Double = 0.0
 
     var body: some View {
         ScrollView {
-            HeaderView(title: "Mula", selectedMonth: $selectedMonth)
+            Grid(alignment: .top) {
+                GridRow {
+                    HeaderView(title: "Mula", selectedMonth: $selectedMonth)
+                }
+                .gridCellColumns(2)
 
-            Grid {
                 GridRow {
                     TileView(title: "Fixed", icon: "grid", tint: .cyan, amount: $fixed, budget: .constant(3150))
 
@@ -42,41 +40,57 @@ struct HomeView: View {
                 }
 
                 GridRow {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10.0)
-                            .frame(height: 170.0)
-                            .foregroundStyle(.secondary.opacity(0.1))
+                    VStack {
+                        Text("Overview")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity, alignment: .leading)
 
-                        VStack {
-                            Text("Overview")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-
-                            ChartView(expenses: expensesForMonth)
-                        }
-                        .padding()
+                        ChartView(transactions: expensesForMonth + incomesForMonth)
                     }
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(backgroundCornerRadius)
                     .gridCellColumns(2)
+                }
+
+                GridRow {
+                    RowView(iconName: "arrow.up", title: "Income:", color: .green, value: income)
+                        .gridCellColumns(2)
+                }
+
+                ForEach(Category.allCases) { category in
+                    GridRow {
+                        RowView(iconName: category.iconName, title: category.name, color: category.tintColor, value: 15.00)
+                            .gridCellColumns(2)
+                    }
                 }
             }
         }
         .padding()
-//                .navigationTitle("Mula")
+//        .navigationTitle("Mula")
+//        .navigationBarTitleDisplayMode(.inline)
         .navigationBarHidden(true)
-//                .navigationBarTitleDisplayMode(.inline)
         .scrollIndicators(.hidden)
+        .onAppear {
+            refreshData(for: selectedMonth)
+        }
         .onChange(of: selectedMonth) { _, newValue in
-            expensesForMonth = DataManager.shared.expenses(for: selectedMonth)
-            fixed = DataManager.shared.total(for: selectedMonth, in: .fixed)
-            spending = DataManager.shared.total(for: selectedMonth, in: .spending)
-            saving = DataManager.shared.total(for: selectedMonth, in: .saving)
-            investment = DataManager.shared.total(for: selectedMonth, in: .investment)
+            refreshData(for: newValue)
         }
     }
 
-    
+    func refreshData(for month: String = Date().month) {
+        expensesForMonth = DataManager.shared.expenses(for: month)
+        incomesForMonth = DataManager.shared.incomes(for: month)
+        fixed = DataManager.shared.total(for: month, in: .fixed)
+        spending = DataManager.shared.total(for: month, in: .spending)
+        saving = DataManager.shared.total(for: month, in: .saving)
+        investment = DataManager.shared.total(for: month, in: .investment)
+        income = DataManager.shared.totalIncome(for: month)
+    }
+
 }
 
 #Preview {
-    HomeView()
+    HomeView(selectedMonth: .constant("May"))
 }
