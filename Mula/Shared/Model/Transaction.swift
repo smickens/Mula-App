@@ -8,6 +8,7 @@
 import Foundation
 
 protocol Transaction {
+    var id: String { get }
     var title: String { get set }
     var date: Date { get set }
     var amount: Double { get set }

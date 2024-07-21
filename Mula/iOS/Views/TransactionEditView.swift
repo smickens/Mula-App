@@ -12,14 +12,31 @@ struct TransactionEditView: View {
 
     var body: some View {
         VStack {
-            RowView(iconName: "doc.text", title: "Title:", color: .purple, text: transaction.title)
+            Text("Details")
+                .font(.title2)
+                .fontWeight(.bold)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
-            RowView(iconName: "dollarsign.circle", title: "Amount:", color: .green, value: transaction.amount)
+            RowView(iconName: "doc.text", title: "Title:", color: .purple) {
+                Text(transaction.title)
+                    .font(.body)
+            }
 
-            RowView(iconName: "calendar", title: "Date:", color: .blue, text: transaction.date.description)
+            RowView(iconName: "dollarsign.circle", title: "Amount:", color: .green) {
+                Text(transaction.amount, format: .currency(code: "USD"))
+                    .font(.body)
+            }
+
+            RowView(iconName: "calendar", title: "Date:", color: .blue) {
+                Text(transaction.date.description)
+                    .font(.body)
+            }
 
             if let expense = transaction as? Expense {
-                RowView(iconName: "tag", title: "Category:", color: .orange, text: expense.category.name)
+                RowView(iconName: "tag", title: "Category:", color: .orange) {
+                    Text(expense.category.name)
+                        .font(.body)
+                }
             }
 
             Spacer()

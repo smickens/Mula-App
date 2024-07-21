@@ -8,46 +8,62 @@
 import SwiftUI
 
 struct TransactionView: View {
-    let expense: Expense
+    let transaction: Transaction
+    let tint: Color
+    let iconName: String
+
+    init(transaction: Transaction) {
+        self.transaction = transaction
+
+        var tint = Bucket.income.tint
+        var iconName = Bucket.income.icon
+        if let expense = transaction as? Expense {
+            tint = expense.category.tintColor
+            iconName = expense.category.iconName
+        }
+
+        self.tint = tint
+        self.iconName = iconName
+    }
 
     var body: some View {
         HStack {
             ZStack {
                 Circle()
-                    .fill(expense.bucket.tint)
+                    .fill(tint)
                     .frame(width: 35, height: 35)
 
-                Image(systemName: expense.category.iconName)
+                Image(systemName: iconName)
                     .foregroundColor(.white)
             }
 
             VStack(alignment: .leading) {
-                Text(expense.title)
+                Text(transaction.title)
                     .font(.headline)
                     .lineLimit(1)
 
-                Text(formatDate(expense.date))
+                Text(formatDate(transaction.date))
                     .font(.caption)
             }
 
             Spacer()
 
-            Text(expense.amount, format: .currency(code: "USD"))
+            Text(transaction.amount, format: .currency(code: "USD"))
                 .font(.headline)
-                .foregroundStyle(expenseColor)
+                .foregroundStyle(amountBackgroundColor)
                 .fontWeight(.medium)
                 .padding(.horizontal, 5)
                 .padding(.vertical, 2)
                 .background(
                     RoundedRectangle(cornerRadius: 5)
-                        .fill(expenseColor.opacity(0.2))
+                        .fill(amountBackgroundColor.opacity(0.2))
                 )
         }
         .padding(5)
     }
 
-    private var expenseColor: Color {
-        return expense.amount < 0 ? .green : .red
+    private var amountBackgroundColor: Color {
+        return transaction.amount < 0 ? .green : .red
     }
 
     private func formatDate(_ date: Date?) -> String {

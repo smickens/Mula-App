@@ -54,14 +54,20 @@ struct HomeView: View {
                 }
 
                 GridRow {
-                    RowView(iconName: "arrow.up", title: "Income:", color: .green, value: income)
-                        .gridCellColumns(2)
+                    RowView(iconName: "arrow.up", title: "Income:", color: .green) {
+                        Text(income, format: .currency(code: "USD"))
+                            .font(.body)
+                    }
+                    .gridCellColumns(2)
                 }
 
                 ForEach(Category.allCases) { category in
                     GridRow {
-                        RowView(iconName: category.iconName, title: category.name, color: category.tintColor, value: 15.00)
-                            .gridCellColumns(2)
+                        RowView(iconName: category.iconName, title: category.name, color: category.tintColor) {
+                            Text(15.00, format: .currency(code: "USD"))
+                                .font(.body)
+                        }
+                        .gridCellColumns(2)
                     }
                 }
             }
