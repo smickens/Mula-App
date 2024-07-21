@@ -8,28 +8,30 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var selectedMonth = Date().month
+    @State private var path = NavigationPath()
+
     var body: some View {
-        TabView {
-            NavigationStack {
-                HomeView()
-            }
-            .tabItem{
-                Label("Home", systemImage: "house")
-            }
+        NavigationStack(path: $path) {
+            TabView {
+                HomeView(selectedMonth: $selectedMonth)
+                    .tabItem{
+                        Label("Home", systemImage: "house")
+                    }
 
-            NavigationStack {
-                ExpensesListView()
-            }
-            .tabItem {
-                Label("Expenses", systemImage: "tag")
-            }
+                ExpensesListView(navigationPath: $path, selectedMonth: $selectedMonth)
+                    .tabItem {
+                        Label("Expenses", systemImage: "tag")
+                    }
 
-            NavigationStack {
                 Text("settings")
                     .navigationTitle("Settings")
+                    .tabItem {
+                        Label("Settings", systemImage: "gear")
+                    }
             }
-            .tabItem {
-                Label("Settings", systemImage: "gear")
+            .navigationDestination(for: Expense.self) { expense in
+                TransactionEditView(transaction: expense)
             }
         }
     }
