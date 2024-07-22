@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ExpensesListView: View {
+    @EnvironmentObject var dataManger: DataManager
     @Binding var navigationPath: NavigationPath
     @Binding var selectedMonth: String
 
@@ -21,7 +22,7 @@ struct ExpensesListView: View {
             HeaderView(title: "Expenses", selectedMonth: $selectedMonth)
                 .padding()
 
-            List(transactions, id: \.id) { transaction in
+            List(dataManger.transactionsForSelectedMonth, id: \.id) { transaction in
                 TransactionView(transaction: transaction)
                     .swipeActions(edge: .leading, allowsFullSwipe: false) {
                         Button {
@@ -50,13 +51,6 @@ struct ExpensesListView: View {
                         .presentationDetents([.height(500)]) // Half-sheet height
                 }
             }
-        }
-        // TODO: might move up to the contentview layer
-        .onAppear {
-            transactions = DataManager.shared.expenses(for: selectedMonth) + DataManager.shared.incomes(for: selectedMonth)
-        }
-        .onChange(of: selectedMonth) { _, newValue in
-            transactions = DataManager.shared.expenses(for: newValue) + DataManager.shared.incomes(for: newValue)
         }
     }
 }

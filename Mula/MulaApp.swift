@@ -8,6 +8,7 @@
 import SwiftUI
 import FirebaseCore
 import FirebaseAuth
+import FirebaseDatabase
 
 struct Platform {
 #if os(iOS)
@@ -25,6 +26,7 @@ class AppDelegate: NSObject, Platform.delegate {
 #if os(iOS)
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         FirebaseApp.configure()
+        Database.database().isPersistenceEnabled = true
         return true
     }
 #elseif os(macOS)
@@ -61,6 +63,7 @@ struct MulaApp: App {
                 .frame(minWidth: 850, idealWidth: 850, minHeight: 500, idealHeight: 500)
 #endif
         }
+        .environmentObject(DataManager.shared)
 #if os(macOS)
         .commands {
             SidebarCommands()

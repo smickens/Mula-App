@@ -8,16 +8,8 @@
 import SwiftUI
 
 struct HomeView: View {
+    @EnvironmentObject var dataManger: DataManager
     @Binding var selectedMonth: String
-
-    @State private var expensesForMonth: [Expense] = []
-    @State private var incomesForMonth: [Income] = []
-
-    @State private var fixed: Double = 0.0
-    @State private var spending: Double = 0.0
-    @State private var saving: Double = 0.0
-    @State private var investment: Double = 0.0
-    @State private var income: Double = 0.0
 
     var body: some View {
         ScrollView {
@@ -45,7 +37,7 @@ struct HomeView: View {
                             .font(.headline)
                             .frame(maxWidth: .infinity, alignment: .leading)
 
-                        ChartView(transactions: expensesForMonth + incomesForMonth)
+                        ChartView(transactions: dataManger.transactionsForSelectedMonth)
                     }
                     .padding()
                     .background(Color(.systemGray6))
@@ -55,7 +47,7 @@ struct HomeView: View {
 
                 GridRow {
                     RowView(iconName: "arrow.up", title: "Income:", color: .green) {
-                        Text(income, format: .currency(code: "USD"))
+                        Text(incomeTotal, format: .currency(code: "USD"))
                             .font(.body)
                     }
                     .gridCellColumns(2)
@@ -64,7 +56,7 @@ struct HomeView: View {
                 ForEach(Category.allCases) { category in
                     GridRow {
                         RowView(iconName: category.iconName, title: category.name, color: category.tintColor) {
-                            Text(15.00, format: .currency(code: "USD"))
+                            Text(dataManger.categoryTotalsForSelectedMonth[category] ?? 0.0, format: .currency(code: "USD"))
                                 .font(.body)
                         }
                         .gridCellColumns(2)
@@ -77,24 +69,11 @@ struct HomeView: View {
 //        .navigationBarTitleDisplayMode(.inline)
         .navigationBarHidden(true)
         .scrollIndicators(.hidden)
-        .onAppear {
-            refreshData(for: selectedMonth)
-        }
-        .onChange(of: selectedMonth) { _, newValue in
-            refreshData(for: newValue)
-        }
     }
 
-    func refreshData(for month: String = Date().month) {
-        expensesForMonth = DataManager.shared.expenses(for: month)
-        incomesForMonth = DataManager.shared.incomes(for: month)
-        fixed = DataManager.shared.total(for: month, in: .fixed)
-        spending = DataManager.shared.total(for: month, in: .spending)
-        saving = DataManager.shared.total(for: month, in: .saving)
-        investment = DataManager.shared.total(for: month, in: .investment)
-        income = DataManager.shared.totalIncome(for: month)
+    public var incomeTotal: Double {
+        return dataManger.bucketTotalsForSelectedMonth[.income] ?? 0.0
     }
-
 }
 
 #Preview {

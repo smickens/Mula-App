@@ -7,12 +7,15 @@
 
 import Firebase
 
-final class DataManager {
+final class DataManager: ObservableObject {
 
     // Prevent clients from creating another instance
     private init() {
         loadExpenses()
         loadIncomes()
+
+        print("Number of Expenses Loaded: \(allExpenses.count)")
+        print("Number of Incomes Loaded: \(allIncomes.count)")
     }
 
     static let shared = DataManager()
@@ -33,46 +36,101 @@ final class DataManager {
         return dbReference.child("income")
     }()
 
-    var expenses: [Expense] = []
-    var incomes: [Income] = []
-//    private(set) var expenses: [Expense]? {
-//        didSet {
-//            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "firebaseDataDidUpdateNotification"), object: nil)
-//        }
-//    }
+    private var allExpenses: [Expense] = []
+    private var allIncomes: [Income] = []
 
-    private func category(from categoryString: String) -> Category {
-        if categoryString == "transportation" {
-            return .transportation
-        } else if categoryString == "housing" {
-            return .housing
-        } else if categoryString == "groceries" {
-            return .groceries
-        } else if categoryString == "eating out" {
-            return .eatingOut
-        } else if categoryString == "shopping" {
-            return .shopping
-        } else if categoryString == "entertainment" {
-            return .entertainment
+    private var hasLoadedExpenses: Bool = false {
+        didSet {
+            if hasLoadedExpenses && hasLoadedIncomes {
+                refreshData(for: Date().month)
+            }
         }
-        return .misc
+    }
+    private var hasLoadedIncomes: Bool = false {
+        didSet {
+            if hasLoadedExpenses && hasLoadedIncomes {
+                refreshData(for: Date().month)
+            }
+        }
     }
 
-    private func bucket(from bucketString: String) -> Bucket {
-        if bucketString == "fixed" {
-            return .fixed
-        } else if bucketString == "saving" {
-            return .saving
-        } else if bucketString == "investment" {
-            return .investment
-        } else if bucketString == "spending" {
-            return .spending
-        }
-        return .fixed
+    @Published var expensesForSelectedMonth: [Expense] = []
+    @Published var incomesForSelectedMonth: [Income] = []
+    @Published var bucketTotalsForSelectedMonth: [Bucket: Double] = [:]
+    @Published var categoryTotalsForSelectedMonth: [Category: Double] = [:]
+
+   public var transactionsForSelectedMonth: [Transaction] {
+        return (expensesForSelectedMonth + incomesForSelectedMonth).sorted(by: { $0.date < $1.date })
     }
+
+    public func refreshData(for selectedMonth: String) {
+        print("Refreshing data...")
+        expensesForSelectedMonth = DataManager.shared.expenses(for: selectedMonth)
+        incomesForSelectedMonth = DataManager.shared.incomes(for: selectedMonth)
+        print("\(expensesForSelectedMonth.count) expenses in selected month")
+        print("\(incomesForSelectedMonth.count) incomes in selected month")
+
+        for bucket in Bucket.allCases {
+            if bucket == .income {
+                bucketTotalsForSelectedMonth[bucket] = totalIncome(for: selectedMonth)
+            } else {
+                bucketTotalsForSelectedMonth[bucket] = totalExpense(for: selectedMonth, in: bucket)
+            }
+            print("Bucket \(bucket.name): $\(bucketTotalsForSelectedMonth[bucket] ?? 0.0)")
+        }
+
+        for category in Category.allCases {
+            categoryTotalsForSelectedMonth[category] = totalExpense(for: selectedMonth, in: category)
+            print("Category \(category.name): $\(categoryTotalsForSelectedMonth[category] ?? 0.0)")
+        }
+    }
+
+// MARK: Helper functions
+
+    func expenses(for month: String) -> [Expense] {
+        return allExpenses.filter { $0.date.month == month }
+    }
+
+    func incomes(for month: String) -> [Income] {
+        return allIncomes.filter { $0.date.month == month }
+    }
+
+    func expenses(for bucket: Bucket) -> [Expense] {
+        return allExpenses.filter { $0.bucket == bucket }
+    }
+
+    func expenses(for month: String, in bucket: Bucket) -> [Expense] {
+        let e = expenses(for: month)
+        return e.filter { $0.bucket == bucket }
+    }
+
+    func expenses(for month: String, in category: Category) -> [Expense] {
+        let e = expenses(for: month)
+        return e.filter { $0.category == category }
+    }
+
+    func totalExpense(for month: String, in bucket: Bucket) -> Double {
+        let e = expenses(for: month, in: bucket)
+        return e.reduce(0.0) { $0 + $1.amount }
+    }
+
+    func totalExpense(for month: String, in category: Category) -> Double {
+        let e = expenses(for: month, in: category)
+        return e.reduce(0.0) { $0 + $1.amount }
+    }
+
+    func totalIncome(for month: String) -> Double {
+        let i = incomes(for: month)
+        return i.reduce(0.0) { $0 + $1.amount }
+    }
+
+// MARK: Loading data from Firebase
 
     private func loadExpenses() {
-        expenseRef.getData { error, snapshot in
+        var expenses = [Expense]()
+        expenseRef.getData { [weak self] error, snapshot in
+            guard let self = self else { return }
+
             if let error = error {
                 print("Error getting expense data: \(error.localizedDescription)")
                 return
@@ -100,82 +158,21 @@ final class DataManager {
                         category: Category.get(from: expenseData["category"] as! String)
                     )
 
-                    print("Expense: \(expense)")
-                    self.expenses.append(expense)
+//                    print("Expense: \(expense)")
+                    expenses.append(expense)
                 }
             }
-        }
-    }
 
-    func expenses(for month: String) -> [Expense] {
-        return expenses.filter { $0.date.month == month }
-    }
-
-    func incomes(for month: String) -> [Income] {
-        return incomes.filter { $0.date.month == month }
-    }
-
-    func expenses(for bucket: Bucket) -> [Expense] {
-        return expenses.filter { $0.bucket == bucket }
-    }
-
-    func expenses(for month: String, in bucket: Bucket) -> [Expense] {
-        let e = expenses(for: month)
-        return e.filter { $0.bucket == bucket }
-    }
-
-    func total(for month: String, in bucket: Bucket) -> Double {
-        let e = expenses(for: month, in: bucket)
-        return e.reduce(0.0) { $0 + $1.amount }
-    }
-
-    func totalIncome(for month: String) -> Double {
-        let i = incomes(for: month)
-        return i.reduce(0.0) { $0 + $1.amount }
-    }
-
-    func addFakeExpense() {
-        let newExpense = ["name": "expense #\(Int.random(in: 1...20))",
-                          "amount": "$\(Double.random(in: 10...100))"]
-
-        fakeExpensesReference.childByAutoId().setValue(newExpense) { (error, ref) in
-            if let error = error {
-                print("Error adding new expense: \(error.localizedDescription)")
-            } else {
-                print("New expense added successfully!")
-            }
-        }
-    }
-
-    func readFakeExpenses() {
-        fakeExpensesReference.getData { error, snapshot in
-            if let error = error {
-                print("Error getting data: \(error.localizedDescription)")
-                return
-            }
-
-            guard let snapshot else {
-                print("No data available")
-                return
-            }
-
-            if let value = snapshot.value {
-                print("Snapshot value: \(value)")
-
-                // If the data is a dictionary
-                if let users = value as? [String: Any] {
-                    for (userId, userData) in users {
-                        print("User ID: \(userId), Data: \(userData)")
-                    }
-                }
-            } else {
-                print("No data available")
-            }
+            self.allExpenses = expenses
+            self.hasLoadedExpenses = true
         }
     }
 
     private func loadIncomes() {
-        incomeRef.getData { error, snapshot in
+        var incomes = [Income]()
+        incomeRef.getData { [weak self] error, snapshot in
+            guard let self = self else { return }
+
             if let error = error {
                 print("Error getting income data: \(error.localizedDescription)")
                 return
@@ -201,12 +198,55 @@ final class DataManager {
                         amount: incomeData["amount"] as! Double
                     )
 
-                    print("Income: \(income)")
-                    self.incomes.append(income)
+//                    print("Income: \(income)")
+                    incomes.append(income)
                 }
             }
+
+            self.allIncomes = incomes
+            self.hasLoadedIncomes = true
         }
     }
+
+//    func addFakeExpense() {
+//        let newExpense = ["name": "expense #\(Int.random(in: 1...20))",
+//                          "amount": "$\(Double.random(in: 10...100))"]
+//
+//        fakeExpensesReference.childByAutoId().setValue(newExpense) { (error, ref) in
+//            if let error = error {
+//                print("Error adding new expense: \(error.localizedDescription)")
+//            } else {
+//                print("New expense added successfully!")
+//            }
+//        }
+//    }
+//
+//    func readFakeExpenses() {
+//        fakeExpensesReference.getData { error, snapshot in
+//            if let error = error {
+//                print("Error getting data: \(error.localizedDescription)")
+//                return
+//            }
+//
+//            guard let snapshot else {
+//                print("No data available")
+//                return
+//            }
+//
+//            if let value = snapshot.value {
+//                print("Snapshot value: \(value)")
+//
+//                // If the data is a dictionary
+//                if let users = value as? [String: Any] {
+//                    for (userId, userData) in users {
+//                        print("User ID: \(userId), Data: \(userData)")
+//                    }
+//                }
+//            } else {
+//                print("No data available")
+//            }
+//        }
+//    }
 
 //    func uploadExpenses(expenses: [Expense]) {
 //        for expense in expenses {

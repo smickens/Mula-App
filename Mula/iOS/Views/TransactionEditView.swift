@@ -71,7 +71,7 @@ struct TransactionEditView: View {
                     .labelsVisibility(.hidden)
             }
 
-            if let editedBucket {
+            if editedBucket != nil {
                 RowView(iconName: "tray", title: "Bucket:", color: .gray) {
                     Picker("", selection: $editedBucket) {
                         ForEach(Bucket.allCases) { bucket in
@@ -82,7 +82,7 @@ struct TransactionEditView: View {
                 }
             }
 
-            if let editedCategory {
+            if editedCategory != nil {
                 RowView(iconName: "tag", title: "Category:", color: .orange) {
                     Picker("", selection: $editedCategory) {
                         ForEach(Category.allCases) { category in

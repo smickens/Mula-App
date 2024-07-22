@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var dataManger: DataManager
     @State private var selectedMonth = Date().month
     @State private var path = NavigationPath()
 
@@ -33,6 +34,9 @@ struct ContentView: View {
             .navigationDestination(for: Expense.self) { expense in
                 TransactionEditView(transaction: expense)
             }
+        }
+        .onChange(of: selectedMonth) { _, newValue in
+            dataManger.refreshData(for: newValue)
         }
     }
 }
