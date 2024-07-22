@@ -48,4 +48,21 @@ enum Category: String, CaseIterable, Identifiable, Codable {
     var tintColor: Color {
         return tint.opacity(0.7)
     }
+
+    static func get(from categoryString: String) -> Category {
+        if categoryString == "transportation" {
+            return .transportation
+        } else if categoryString == "housing" {
+            return .housing
+        } else if categoryString == "groceries" {
+            return .groceries
+        } else if categoryString == "eating out" {
+            return .eatingOut
+        } else if categoryString == "shopping" {
+            return .shopping
+        } else if categoryString == "entertainment" {
+            return .entertainment
+        }
+        return .misc
+    }
 }

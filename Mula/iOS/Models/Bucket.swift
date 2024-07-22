@@ -37,4 +37,17 @@ enum Bucket: String, CaseIterable, Identifiable, Codable, Hashable {
         case .income: return .blue
         }
     }
+
+    static func get(from bucketString: String) -> Bucket {
+        if bucketString == "fixed" {
+            return .fixed
+        } else if bucketString == "saving" {
+            return .saving
+        } else if bucketString == "investment" {
+            return .investment
+        } else if bucketString == "spending" {
+            return .spending
+        }
+        return .fixed
+    }
 }

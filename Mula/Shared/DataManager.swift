@@ -96,8 +96,8 @@ final class DataManager {
                         title: expenseData["title"] as! String,
                         date: Date(timeIntervalSince1970: expenseDate),
                         amount: expenseData["amount"] as! Double,
-                        bucket: self.bucket(from: expenseData["bucket"] as! String),
-                        category: self.category(from: expenseData["category"] as! String)
+                        bucket: Bucket.get(from: expenseData["bucket"] as! String),
+                        category: Category.get(from: expenseData["category"] as! String)
                     )
 
                     print("Expense: \(expense)")
