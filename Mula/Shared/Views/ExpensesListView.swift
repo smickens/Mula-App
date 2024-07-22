@@ -47,7 +47,7 @@ struct ExpensesListView: View {
             .sheet(isPresented: $showingTransactionDetailView) {
                 if let selected {
                     TransactionEditView(transaction: selected)
-                        .presentationDetents([.height(400)]) // Half-sheet height
+                        .presentationDetents([.height(500)]) // Half-sheet height
                 }
             }
         }
