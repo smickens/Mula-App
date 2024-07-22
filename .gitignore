@@ -1,0 +1,11 @@
+# Ignore the Firebase configuration file
+GoogleService-Info.plist
+
+# Ignore Xcode files
+xcuserdata/
+*.xcworkspace
+*.xcuserstate
+
+# Ignore build artifacts
+build/
+DerivedData/
