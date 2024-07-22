@@ -9,15 +9,12 @@ import SwiftUI
 import Charts
 
 struct TileView: View {
-    let title: String
-    let icon: String
-    let tint: Color
-    @Binding var amount: Double
-    @Binding var budget: Double
+    @EnvironmentObject var dataManger: DataManager
+    let bucket: Bucket
 
     var body: some View {
         VStack {
-            Text(title)
+            Text(bucket.name)
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -35,14 +32,14 @@ struct TileView: View {
                         angle: .value("Amount", amount / budget),
                         innerRadius: .ratio(0.85)
                     )
-                    .foregroundStyle(tint)
+                    .foregroundStyle(bucket.tint)
                 }
                 .chartLegend(.hidden)
 
 
-                Image(systemName: icon)
+                Image(systemName: bucket.icon)
                     .font(.title2)
-                    .foregroundStyle(tint)
+                    .foregroundStyle(bucket.tint)
             }
             .padding(10)
 
@@ -52,6 +49,14 @@ struct TileView: View {
         .aspectRatio(1, contentMode: .fit)
         .background(Color(.systemGray6))
         .cornerRadius(backgroundCornerRadius)
+    }
+
+    private var amount: Double {
+        return dataManger.bucketTotalsForSelectedMonth[bucket] ?? 0.0
+    }
+
+    private var budget: Double {
+        return 1500.0
     }
 }
 

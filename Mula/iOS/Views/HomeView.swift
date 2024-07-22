@@ -28,15 +28,15 @@ struct HomeView: View {
                 .gridCellColumns(2)
 
                 GridRow {
-                    TileView(title: "Fixed", icon: "grid", tint: .cyan, amount: $fixed, budget: .constant(3150))
+                    TileView(bucket: .fixed)
 
-                    TileView(title: "Spending", icon: "tag.fill", tint: .pink, amount: $spending, budget: .constant(500))
+                    TileView(bucket: .spending)
                 }
 
                 GridRow {
-                    TileView(title: "Savings", icon: "bolt.fill", tint: .green, amount: $saving, budget: .constant(500))
+                    TileView(bucket: .saving)
 
-                    TileView(title: "Investments", icon: "hourglass", tint: .indigo, amount: $investment, budget: .constant(500))
+                    TileView(bucket: .investment)
                 }
 
                 GridRow {
