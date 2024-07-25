@@ -13,12 +13,25 @@ struct ExpensesListView: View {
 
     @State private var selectedExpense: Expense? = nil
     @State private var selectedIncome: Income? = nil
+    @State private var addingNewTransaction: Bool = false
+    @State private var newExpense = Expense(id: "", title: "", date: Date(), amount: 0.0, bucket: .spending, category: .eatingOut)
 //    @State private var searchText: String = ""
 
     var body: some View {
         VStack {
-            HeaderView(title: "Expenses", selectedMonth: $selectedMonth)
-                .padding()
+            HStack {
+                HeaderView(title: "Expenses", selectedMonth: $selectedMonth)
+                    .padding()
+
+                Spacer(minLength: 0)
+
+                Button {
+                    addingNewTransaction.toggle()
+                } label: {
+                    Label("Add", image: "plus")
+                }
+                .padding(.trailing)
+            }
 
             List(dataManger.transactionsForSelectedMonth, id: \.id) { transaction in
                 if let expense = transaction as? Expense {
@@ -43,6 +56,10 @@ struct ExpensesListView: View {
             .listStyle(.plain)
             .listItemTint(Color(.systemGray6))
         }
+        .sheet(isPresented: $addingNewTransaction) {
+            TransactionAddView(expense: newExpense)
+                .presentationDetents([.height(500)])
+        }
         .sheet(item: $selectedExpense) { expense in
             ExpenseEditView(expense: expense)
                 .presentationDetents([.height(500)])
@@ -55,7 +72,3 @@ struct ExpensesListView: View {
 
     
 }
-
-//#Preview {
-//    ExpensesListView(selectedMonth: .constant("May"))
-//}

@@ -111,6 +111,50 @@ import FirebaseDatabase
 
 // MARK: Creating data
 
+    public func addExpense(expense: Expense) {
+        guard let amountString = numberFormatter.string(from: expense.amount as NSNumber) else {
+            print("Error converting expense's amount (\(expense.amount)) to a String")
+            return
+        }
+
+        let newExpense = [
+            "title": expense.title,
+            "date": expense.date.timeIntervalSince1970,
+            "amount": Double(amountString) ?? 0.0,
+            "bucket": expense.bucket.rawValue,
+            "category": expense.category.rawValue,
+        ] as [String : Any]
+
+        expenseRef.childByAutoId().setValue(newExpense) { (error, ref) in
+            if let error = error {
+                print("Error adding new expense: \(error.localizedDescription)")
+            } else {
+                self.allExpenses.append(expense)
+            }
+        }
+    }
+
+    public func addIncome(income: Income) {
+        guard let amountString = numberFormatter.string(from: income.amount as NSNumber) else {
+            print("Error converting income's amount (\(income.amount)) to a String")
+            return
+        }
+
+        let newIncome = [
+            "title": income.title,
+            "date": income.date.timeIntervalSince1970,
+            "amount": Double(amountString) ?? 0.0,
+        ] as [String : Any]
+
+        incomeRef.childByAutoId().setValue(newIncome) { (error, ref) in
+            if let error = error {
+                print("Error adding new income: \(error.localizedDescription)")
+            } else {
+                self.allIncomes.append(income)
+            }
+        }
+    }
+
 // MARK: Reading data
 
     private func loadExpenses() {
@@ -214,48 +258,42 @@ import FirebaseDatabase
 
 // MARK: Updating data
 
-    public func updateExpense(id: String, title: String, date: Date, amount: Double, bucket: Bucket, category: Category) {
-        guard let amountString = numberFormatter.string(from: amount as NSNumber) else {
-            print("Error converting expense's amount (\(amount)) to a String")
+    public func updateExpense(expense: Expense) {
+        guard let amountString = numberFormatter.string(from: expense.amount as NSNumber) else {
+            print("Error converting expense's amount (\(expense.amount)) to a String")
             return
         }
 
         let updatedExpense = [
-            "title": title,
-            "date": date.timeIntervalSince1970,
+            "title": expense.title,
+            "date": expense.date.timeIntervalSince1970,
             "amount": Double(amountString) ?? 0.0,
-            "bucket": bucket.name,
-            "category": category.name,
+            "bucket": expense.bucket.name,
+            "category": expense.category.name,
         ] as [String : Any]
 
-        print("updated expense")
-        print(updatedExpense)
-
-        expenseRef.child(id).updateChildValues(updatedExpense) { error, _ in
+        expenseRef.child(expense.id).updateChildValues(updatedExpense) { error, _ in
             if let error = error {
-                print("Error updating expense w/ id \(id): \(error.localizedDescription)")
+                print("Error updating expense w/ id \(expense.id): \(error.localizedDescription)")
             }
         }
     }
 
-    public func updateIncome(id: String, title: String, date: Date, amount: Double) {
-        guard let amountString = numberFormatter.string(from: amount as NSNumber) else {
-            print("Error converting income's amount (\(amount)) to a String")
+    public func updateIncome(income: Income) {
+        guard let amountString = numberFormatter.string(from: income.amount as NSNumber) else {
+            print("Error converting income's amount (\(income.amount)) to a String")
             return
         }
 
         let updatedIncome = [
-            "title": title,
-            "date": date.timeIntervalSince1970,
+            "title": income.title,
+            "date": income.date.timeIntervalSince1970,
             "amount": Double(amountString) ?? 0.0,
         ] as [String : Any]
 
-        print("updated income")
-        print(updatedIncome)
-
-        incomeRef.child(id).updateChildValues(updatedIncome) { error, _ in
+        incomeRef.child(income.id).updateChildValues(updatedIncome) { error, _ in
             if let error = error {
-                print("Error updating income w/ id \(id): \(error.localizedDescription)")
+                print("Error updating income w/ id \(income.id): \(error.localizedDescription)")
             }
         }
     }
@@ -277,94 +315,6 @@ import FirebaseDatabase
             }
         }
     }
-
-
-//    func addFakeExpense() {
-//        let newExpense = ["name": "expense #\(Int.random(in: 1...20))",
-//                          "amount": "$\(Double.random(in: 10...100))"]
-//
-//        fakeExpensesReference.childByAutoId().setValue(newExpense) { (error, ref) in
-//            if let error = error {
-//                print("Error adding new expense: \(error.localizedDescription)")
-//            } else {
-//                print("New expense added successfully!")
-//            }
-//        }
-//    }
-
-//    func uploadExpenses(expenses: [Expense]) {
-//        for expense in expenses {
-//            if expense.isIncome {
-//                uploadIncome(income: expense)
-//                continue
-//            }
-//
-//            let formatter = NumberFormatter()
-//            formatter.numberStyle = .decimal
-//            formatter.maximumFractionDigits = 2
-//            let amountString = formatter.string(from: expense.amount as NSNumber)!
-//
-//            var newExpense = [
-//                "title": expense.title,
-//                "date": expense.date.timeIntervalSince1970,
-//                "amount": abs(Double(amountString) ?? 0.0)
-//            ] as [String : Any]
-//
-//            let category: String
-//            let subCategory: String
-//            switch expense.category {
-//            case .housing:
-//                category = "fixed"
-//                subCategory = "housing"
-//            case .food:
-//                category = "spending"
-//                subCategory = "eating out"
-//            case .shopping:
-//                category = "spending"
-//                subCategory = "shopping"
-//            case .transportation:
-//                category = "fixed"
-//                subCategory = "transportation"
-//            case .entertainment:
-//                category = "spending"
-//                subCategory = "entertainment"
-//            case .misc:
-//                category = "spending"
-//                subCategory = "misc"
-//            case .income:
-//                category = "ERROR"
-//                subCategory = "ERROR"
-//            }
-//
-//            newExpense["bucket"] = category
-//            newExpense["category"] = subCategory
-//
-//            expenseRef.childByAutoId().setValue(newExpense) { (error, ref) in
-//                if let error = error {
-//                    print("Error adding new expense: \(error.localizedDescription)")
-//                }
-//            }
-//        }
-//    }
-
-//    func uploadIncome(income: Expense) {
-//        let formatter = NumberFormatter()
-//        formatter.numberStyle = .decimal
-//        formatter.maximumFractionDigits = 2
-//        let amountString = formatter.string(from: income.amount as NSNumber)!
-//
-//        let newIncome = [
-//            "title": income.title,
-//            "date": income.date.timeIntervalSince1970,
-//            "amount": Double(amountString) ?? 0.0,
-//        ] as [String : Any]
-//
-//        incomeRef.childByAutoId().setValue(newIncome) { (error, ref) in
-//            if let error = error {
-//                print("Error adding new expense: \(error.localizedDescription)")
-//            }
-//        }
-//    }
 
     // Firebase listener handle
 //    var observer: AuthStateDidChangeListenerHandle?

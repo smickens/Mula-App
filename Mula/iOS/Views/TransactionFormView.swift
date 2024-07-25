@@ -8,23 +8,24 @@
 import SwiftUI
 
 struct TransactionFormView: View {
-    @Environment(DataManager.self) private var dataManger
     @Environment(\.dismiss) private var dismiss
 
-    let transactionID: String
+    let transactionID: String?
     @Binding private var title: String
     @Binding private var amount: Double
     @Binding private var date: Date
     @Binding private var bucket: Bucket
     @Binding private var category: Category
+    let saveAction: () -> Void
 
-    init(id: String, title: Binding<String>, amount: Binding<Double>, date: Binding<Date>, bucket: Binding<Bucket>, category: Binding<Category>) {
+    init(id: String?, title: Binding<String>, amount: Binding<Double>, date: Binding<Date>, bucket: Binding<Bucket>, category: Binding<Category>, saveAction: @escaping () -> Void) {
         self.transactionID = id
         self._title = title
         self._amount = amount
         self._date = date
         self._bucket = bucket
         self._category = category
+        self.saveAction = saveAction
     }
 
     var body: some View {
@@ -70,7 +71,7 @@ struct TransactionFormView: View {
                     .labelsVisibility(.hidden)
             }
 
-            if bucket != .income {
+            if bucket != .income || transactionID == nil {
                 RowView(iconName: "tray", title: "Bucket:", color: .gray) {
                     Picker("", selection: $bucket) {
                         ForEach(Bucket.allCases) { bucket in
@@ -87,6 +88,7 @@ struct TransactionFormView: View {
                                 .tag(category)
                         }
                     }
+                    .disabled(bucket == .income)
                 }
             }
 
@@ -103,24 +105,7 @@ struct TransactionFormView: View {
                 .cornerRadius(backgroundCornerRadius)
 
                 Button {
-                    if bucket != .income {
-                        dataManger.updateExpense(
-                            id: transactionID,
-                            title: title,
-                            date: date,
-                            amount: amount,
-                            bucket: bucket,
-                            category: category
-                        )
-                    } else {
-                        dataManger.updateIncome(
-                            id: transactionID,
-                            title: title,
-                            date: date,
-                            amount: amount
-                        )
-                    }
-
+                    saveAction()
                     dismiss()
                 } label: {
                     Text("Save")
