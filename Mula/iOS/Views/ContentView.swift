@@ -8,19 +8,18 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var dataManger: DataManager
+    @State private var dataManager = DataManager.shared
     @State private var selectedMonth = Date().month
-    @State private var path = NavigationPath()
 
     var body: some View {
-        NavigationStack(path: $path) {
+        NavigationStack {
             TabView {
                 HomeView(selectedMonth: $selectedMonth)
                     .tabItem{
                         Label("Home", systemImage: "house")
                     }
 
-                ExpensesListView(navigationPath: $path, selectedMonth: $selectedMonth)
+                ExpensesListView(selectedMonth: $selectedMonth)
                     .tabItem {
                         Label("Expenses", systemImage: "tag")
                     }
@@ -31,13 +30,11 @@ struct ContentView: View {
                         Label("Settings", systemImage: "gear")
                     }
             }
-            .navigationDestination(for: Expense.self) { expense in
-                TransactionEditView(transaction: expense)
-            }
         }
         .onChange(of: selectedMonth) { _, newValue in
-            dataManger.refreshData(for: newValue)
+            dataManager.refreshData(for: newValue)
         }
+        .environment(dataManager)
     }
 }
 
