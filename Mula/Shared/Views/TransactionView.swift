@@ -7,24 +7,40 @@
 
 import SwiftUI
 
+struct ExpenseView: View {
+    @Bindable var expense: Expense
+
+    var body: some View {
+        TransactionView(
+            title: expense.title,
+            date: expense.date,
+            amount: -expense.amount,
+            tint: expense.category.tintColor,
+            iconName: expense.category.iconName
+        )
+    }
+}
+
+struct IncomeView: View {
+    @Bindable var income: Income
+
+    var body: some View {
+        TransactionView(
+            title: income.title,
+            date: income.date,
+            amount: income.amount,
+            tint: Bucket.income.tint,
+            iconName: Bucket.income.icon
+        )
+    }
+}
+
 struct TransactionView: View {
-    let transaction: Transaction
+    let title: String
+    let date: Date
+    let amount: Double
     let tint: Color
     let iconName: String
-
-    init(transaction: Transaction) {
-        self.transaction = transaction
-
-        var tint = Bucket.income.tint
-        var iconName = Bucket.income.icon
-        if let expense = transaction as? Expense {
-            tint = expense.category.tintColor
-            iconName = expense.category.iconName
-        }
-
-        self.tint = tint
-        self.iconName = iconName
-    }
 
     var body: some View {
         HStack {
@@ -38,17 +54,17 @@ struct TransactionView: View {
             }
 
             VStack(alignment: .leading) {
-                Text(transaction.title)
+                Text(title)
                     .font(.headline)
                     .lineLimit(1)
 
-                Text(formatDate(transaction.date))
+                Text(formatDate(date))
                     .font(.caption)
             }
 
             Spacer()
 
-            Text(transaction.amount, format: .currency(code: "USD"))
+            Text(amount, format: .currency(code: "USD"))
                 .font(.headline)
                 .foregroundStyle(amountBackgroundColor)
                 .fontWeight(.medium)
@@ -63,7 +79,7 @@ struct TransactionView: View {
     }
 
     private var amountBackgroundColor: Color {
-        return transaction.amount < 0 ? .green : .red
+        return amount > 0 ? .green : .red
     }
 
     private func formatDate(_ date: Date?) -> String {

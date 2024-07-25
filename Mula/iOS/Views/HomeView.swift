@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @EnvironmentObject var dataManger: DataManager
+    @Environment(DataManager.self) private var dataManger
     @Binding var selectedMonth: String
 
     var body: some View {

@@ -9,7 +9,7 @@ import SwiftUI
 import Charts
 
 struct TileView: View {
-    @EnvironmentObject var dataManger: DataManager
+    @Environment(DataManager.self) private var dataManger
     let bucket: Bucket
 
     var body: some View {

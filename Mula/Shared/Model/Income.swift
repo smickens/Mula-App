@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Income: Identifiable, CustomStringConvertible, Transaction {
+@Observable class Income: Identifiable, CustomStringConvertible, Transaction {
     let id: String
     var title: String
     var date: Date
@@ -22,5 +22,9 @@ struct Income: Identifiable, CustomStringConvertible, Transaction {
 
     var description: String {
         return "<\(type(of: self))>: title = \(title), date = \(date), amount = \(amount)"
+    }
+
+    static func == (lhs: Income, rhs: Income) -> Bool {
+        return lhs.id == rhs.id
     }
 }

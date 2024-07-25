@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Expense: Identifiable, CustomStringConvertible, Transaction, Hashable, Equatable {
+@Observable class Expense: Identifiable, CustomStringConvertible, Transaction, Equatable {
     let id: String
     var title: String
     var date: Date

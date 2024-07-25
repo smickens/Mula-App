@@ -8,14 +8,12 @@
 import SwiftUI
 
 struct ExpensesListView: View {
-    @EnvironmentObject var dataManger: DataManager
-    @Binding var navigationPath: NavigationPath
+    @Environment(DataManager.self) private var dataManger
     @Binding var selectedMonth: String
 
-    @State private var selected: Transaction? = nil
-    @State private var showingTransactionDetailView: Bool = false
-    @State private var searchText: String = ""
-    @State private var transactions: [Transaction] = []
+    @State private var selectedExpense: Expense? = nil
+    @State private var selectedIncome: Income? = nil
+//    @State private var searchText: String = ""
 
     var body: some View {
         VStack {
@@ -23,36 +21,39 @@ struct ExpensesListView: View {
                 .padding()
 
             List(dataManger.transactionsForSelectedMonth, id: \.id) { transaction in
-                TransactionView(transaction: transaction)
-                    .swipeActions(edge: .leading, allowsFullSwipe: false) {
-                        Button {
-                            selected = transaction
-                            showingTransactionDetailView.toggle()
-//                            navigationPath.append(expense)
-                        } label: {
-                            Label("Edit", systemImage: "pencil")
+                if let expense = transaction as? Expense {
+                    ExpenseView(expense: expense)
+                        .transactionSwipeActions {
+                            selectedExpense = expense
+                        } onDelete: {
+                            dataManger.deleteExpense(id: expense.id)
                         }
-                        .tint(.yellow)
-                    }
-                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                        Button(role: .destructive) {
-                            print("delete item: \(transaction.id) w/ title \(transaction.title)")
-                            // TODO: DataManager.delete(expense.id)
-                        } label: {
-                            Label("Delete", systemImage: "trash.fill")
+                } else if let income = transaction as? Income {
+                    IncomeView(income: income)
+                        .transactionSwipeActions {
+                            selectedIncome = income
+                        } onDelete: {
+                            dataManger.deleteIncome(id: income.id)
                         }
-                    }
+
+                } else {
+                    Text("Error displaying transaction id \(transaction.id)")
+                }
             }
             .listStyle(.plain)
             .listItemTint(Color(.systemGray6))
-            .sheet(isPresented: $showingTransactionDetailView) {
-                if let selected {
-                    TransactionEditView(transaction: selected)
-                        .presentationDetents([.height(500)]) // Half-sheet height
-                }
-            }
+        }
+        .sheet(item: $selectedExpense) { expense in
+            ExpenseEditView(expense: expense)
+                .presentationDetents([.height(500)])
+        }
+        .sheet(item: $selectedIncome) { income in
+            IncomeEditView(income: income)
+                .presentationDetents([.height(500)])
         }
     }
+
+    
 }
 
 //#Preview {

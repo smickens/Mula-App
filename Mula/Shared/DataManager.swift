@@ -6,11 +6,17 @@
 //
 
 import Firebase
+import FirebaseDatabase
 
-final class DataManager: ObservableObject {
+@Observable final class DataManager {
 
-    // Prevent clients from creating another instance
+    static let shared = DataManager()
+
     private init() {
+        let dbRef = Database.database().reference()
+        expenseRef = dbRef.child("expense")
+        incomeRef = dbRef.child("income")
+
         loadExpenses()
         loadIncomes()
 
@@ -18,23 +24,8 @@ final class DataManager: ObservableObject {
         print("Number of Incomes Loaded: \(allIncomes.count)")
     }
 
-    static let shared = DataManager()
-
-    private lazy var dbReference: DatabaseReference = {
-        return Database.database().reference()
-    }()
-
-    lazy var fakeExpensesReference: DatabaseReference = {
-        return dbReference.child("fakeExpenses")
-    }()
-
-    lazy var expenseRef: DatabaseReference = {
-        return dbReference.child("expense")
-    }()
-
-    lazy var incomeRef: DatabaseReference = {
-        return dbReference.child("income")
-    }()
+    private var expenseRef: DatabaseReference
+    private var incomeRef: DatabaseReference
 
     private var allExpenses: [Expense] = []
     private var allIncomes: [Income] = []
@@ -124,7 +115,16 @@ final class DataManager: ObservableObject {
         return i.reduce(0.0) { $0 + $1.amount }
     }
 
-// MARK: Loading data from Firebase
+    private var numberFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
+        return formatter
+    }()
+
+// MARK: Creating data
+
+// MARK: Reading data
 
     private func loadExpenses() {
         var expenses = [Expense]()

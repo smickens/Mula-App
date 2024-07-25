@@ -7,25 +7,54 @@
 
 import SwiftUI
 
+struct ExpenseEditView: View {
+    @Bindable var expense: Expense
+
+    var body: some View {
+        TransactionEditView(
+            id: expense.id,
+            title: $expense.title,
+            amount: $expense.amount,
+            date: $expense.date,
+            bucket: $expense.bucket,
+            category: $expense.category
+        )
+    }
+}
+
+struct IncomeEditView: View {
+    @Bindable var income: Income
+
+    var body: some View {
+        TransactionEditView(
+            id: income.id,
+            title: $income.title,
+            amount: $income.amount,
+            date: $income.date,
+            bucket: .constant(Bucket.income),
+            category: .constant(Category.misc)
+        )
+    }
+}
+
 struct TransactionEditView: View {
+    @Environment(DataManager.self) private var dataManger
     @Environment(\.dismiss) private var dismiss
-    var transaction: Transaction
 
-    @State private var editedTitle: String
-    @State private var editedAmount: Double
-    @State private var editedDate: Date
-    @State private var editedBucket: Bucket? = nil
-    @State private var editedCategory: Category? = nil
+    let transactionID: String
+    @Binding private var title: String
+    @Binding private var amount: Double
+    @Binding private var date: Date
+    @Binding private var bucket: Bucket
+    @Binding private var category: Category
 
-    init(transaction: Transaction) {
-        self.transaction = transaction
-        self.editedTitle = transaction.title
-        self.editedAmount = transaction.amount
-        self.editedDate = transaction.date
-        if let expense = transaction as? Expense {
-            self._editedBucket = State(initialValue: expense.bucket)
-            self._editedCategory = State(initialValue: expense.category)
-        }
+    init(id: String, title: Binding<String>, amount: Binding<Double>, date: Binding<Date>, bucket: Binding<Bucket>, category: Binding<Category>) {
+        self.transactionID = id
+        self._title = title
+        self._amount = amount
+        self._date = date
+        self._bucket = bucket
+        self._category = category
     }
 
     var body: some View {
@@ -34,7 +63,7 @@ struct TransactionEditView: View {
                 Text("Details")
                     .font(.title2)
                     .fontWeight(.bold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+//                    .frame(maxWidth: .infinity, alignment: .leading)
 
                 Spacer()
 
@@ -55,36 +84,34 @@ struct TransactionEditView: View {
             .padding(.top)
 
             RowView(iconName: "doc.text", title: "Title:", color: .purple) {
-                TextField("Enter title", text: $editedTitle)
+                TextField("Enter title", text: $title)
                     .multilineTextAlignment(.trailing)
             }
 
             RowView(iconName: "dollarsign.circle", title: "Amount:", color: .green) {
-                TextField("Enter amount", value: $editedAmount, format: .currency(code: "USD"))
+                TextField("Enter amount", value: $amount, format: .currency(code: "USD"))
                     .multilineTextAlignment(.trailing)
                     .keyboardType(.decimalPad)
             }
 
             RowView(iconName: "calendar", title: "Date:", color: .blue) {
-                DatePicker("Select Date", selection: $editedDate, displayedComponents: .date)
+                DatePicker("Select Date", selection: $date, displayedComponents: .date)
                     .datePickerStyle(.compact)
                     .labelsVisibility(.hidden)
             }
 
-            if editedBucket != nil {
+            if bucket != .income {
                 RowView(iconName: "tray", title: "Bucket:", color: .gray) {
-                    Picker("", selection: $editedBucket) {
+                    Picker("", selection: $bucket) {
                         ForEach(Bucket.allCases) { bucket in
                             Text(bucket.name)
                                 .tag(bucket)
                         }
                     }
                 }
-            }
 
-            if editedCategory != nil {
                 RowView(iconName: "tag", title: "Category:", color: .orange) {
-                    Picker("", selection: $editedCategory) {
+                    Picker("", selection: $category) {
                         ForEach(Category.allCases) { category in
                             Text(category.name)
                                 .tag(category)
@@ -100,7 +127,7 @@ struct TransactionEditView: View {
                     Text("Cancel")
                         .foregroundColor(.red)
                 }
-                .frame(height: 60)
+                .frame(height: 50)
                 .frame(maxWidth: .infinity)
                 .background(.red.opacity(0.2))
                 .cornerRadius(backgroundCornerRadius)
