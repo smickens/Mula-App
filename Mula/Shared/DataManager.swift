@@ -19,9 +19,6 @@ import FirebaseDatabase
 
         loadExpenses()
         loadIncomes()
-
-        print("Number of Expenses Loaded: \(allExpenses.count)")
-        print("Number of Incomes Loaded: \(allIncomes.count)")
     }
 
     private var expenseRef: DatabaseReference
@@ -30,36 +27,26 @@ import FirebaseDatabase
     private var allExpenses: [Expense] = []
     private var allIncomes: [Income] = []
 
-    private var hasLoadedExpenses: Bool = false {
-        didSet {
-            if hasLoadedExpenses && hasLoadedIncomes {
-                refreshData(for: Date().month)
-            }
-        }
-    }
-    private var hasLoadedIncomes: Bool = false {
-        didSet {
-            if hasLoadedExpenses && hasLoadedIncomes {
-                refreshData(for: Date().month)
-            }
-        }
-    }
+    var transactionsForSelectedMonth: [any Transaction] = []
+    var expensesForSelectedMonth: [Expense] = []
+    var incomesForSelectedMonth: [Income] = []
+    var bucketTotalsForSelectedMonth: [Bucket: Double] = [:]
+    var categoryTotalsForSelectedMonth: [Category: Double] = [:]
 
-    @Published var expensesForSelectedMonth: [Expense] = []
-    @Published var incomesForSelectedMonth: [Income] = []
-    @Published var bucketTotalsForSelectedMonth: [Bucket: Double] = [:]
-    @Published var categoryTotalsForSelectedMonth: [Category: Double] = [:]
-
-   public var transactionsForSelectedMonth: [Transaction] {
-        return (expensesForSelectedMonth + incomesForSelectedMonth).sorted(by: { $0.date < $1.date })
-    }
+    // could put this on the expense list view ?
+//    public var transactionsForSelectedMonth: [Transaction] {
+//        return (expensesForSelectedMonth + incomesForSelectedMonth).sorted(by: { $0.date < $1.date })
+//    }
 
     public func refreshData(for selectedMonth: String) {
         print("Refreshing data...")
         expensesForSelectedMonth = DataManager.shared.expenses(for: selectedMonth)
         incomesForSelectedMonth = DataManager.shared.incomes(for: selectedMonth)
-        print("\(expensesForSelectedMonth.count) expenses in selected month")
-        print("\(incomesForSelectedMonth.count) incomes in selected month")
+        let transactions: [any Transaction] = expensesForSelectedMonth + incomesForSelectedMonth
+        transactionsForSelectedMonth = transactions.sorted(by: { $0.date < $1.date })
+
+//        print("\(expensesForSelectedMonth.count) expenses in selected month")
+//        print("\(incomesForSelectedMonth.count) incomes in selected month")
 
         for bucket in Bucket.allCases {
             if bucket == .income {
@@ -67,12 +54,12 @@ import FirebaseDatabase
             } else {
                 bucketTotalsForSelectedMonth[bucket] = totalExpense(for: selectedMonth, in: bucket)
             }
-            print("Bucket \(bucket.name): $\(bucketTotalsForSelectedMonth[bucket] ?? 0.0)")
+//            print("Bucket \(bucket.name): $\(bucketTotalsForSelectedMonth[bucket] ?? 0.0)")
         }
 
         for category in Category.allCases {
             categoryTotalsForSelectedMonth[category] = totalExpense(for: selectedMonth, in: category)
-            print("Category \(category.name): $\(categoryTotalsForSelectedMonth[category] ?? 0.0)")
+//            print("Category \(category.name): $\(categoryTotalsForSelectedMonth[category] ?? 0.0)")
         }
     }
 
@@ -208,6 +195,90 @@ import FirebaseDatabase
         }
     }
 
+    private var hasLoadedExpenses: Bool = false {
+        didSet {
+            print("Number of Expenses Loaded: \(allExpenses.count)")
+            if hasLoadedExpenses && hasLoadedIncomes {
+                refreshData(for: Date().month)
+            }
+        }
+    }
+    private var hasLoadedIncomes: Bool = false {
+        didSet {
+            print("Number of Incomes Loaded: \(allIncomes.count)")
+            if hasLoadedExpenses && hasLoadedIncomes {
+                refreshData(for: Date().month)
+            }
+        }
+    }
+
+// MARK: Updating data
+
+    public func updateExpense(id: String, title: String, date: Date, amount: Double, bucket: Bucket, category: Category) {
+        guard let amountString = numberFormatter.string(from: amount as NSNumber) else {
+            print("Error converting expense's amount (\(amount)) to a String")
+            return
+        }
+
+        let updatedExpense = [
+            "title": title,
+            "date": date.timeIntervalSince1970,
+            "amount": Double(amountString) ?? 0.0,
+            "bucket": bucket.name,
+            "category": category.name,
+        ] as [String : Any]
+
+        print("updated expense")
+        print(updatedExpense)
+
+        expenseRef.child(id).updateChildValues(updatedExpense) { error, _ in
+            if let error = error {
+                print("Error updating expense w/ id \(id): \(error.localizedDescription)")
+            }
+        }
+    }
+
+    public func updateIncome(id: String, title: String, date: Date, amount: Double) {
+        guard let amountString = numberFormatter.string(from: amount as NSNumber) else {
+            print("Error converting income's amount (\(amount)) to a String")
+            return
+        }
+
+        let updatedIncome = [
+            "title": title,
+            "date": date.timeIntervalSince1970,
+            "amount": Double(amountString) ?? 0.0,
+        ] as [String : Any]
+
+        print("updated income")
+        print(updatedIncome)
+
+        incomeRef.child(id).updateChildValues(updatedIncome) { error, _ in
+            if let error = error {
+                print("Error updating income w/ id \(id): \(error.localizedDescription)")
+            }
+        }
+    }
+
+// MARK: Deleting data
+
+    public func deleteExpense(id: String) {
+        expenseRef.child(id).removeValue() { error, _ in
+            if let error = error {
+                print("Error deleting expense w/ id \(id): \(error.localizedDescription)")
+            }
+        }
+    }
+
+    public func deleteIncome(id: String) {
+        incomeRef.child(id).removeValue() { error, _ in
+            if let error = error {
+                print("Error deleting income w/ id \(id): \(error.localizedDescription)")
+            }
+        }
+    }
+
+
 //    func addFakeExpense() {
 //        let newExpense = ["name": "expense #\(Int.random(in: 1...20))",
 //                          "amount": "$\(Double.random(in: 10...100))"]
@@ -217,33 +288,6 @@ import FirebaseDatabase
 //                print("Error adding new expense: \(error.localizedDescription)")
 //            } else {
 //                print("New expense added successfully!")
-//            }
-//        }
-//    }
-//
-//    func readFakeExpenses() {
-//        fakeExpensesReference.getData { error, snapshot in
-//            if let error = error {
-//                print("Error getting data: \(error.localizedDescription)")
-//                return
-//            }
-//
-//            guard let snapshot else {
-//                print("No data available")
-//                return
-//            }
-//
-//            if let value = snapshot.value {
-//                print("Snapshot value: \(value)")
-//
-//                // If the data is a dictionary
-//                if let users = value as? [String: Any] {
-//                    for (userId, userData) in users {
-//                        print("User ID: \(userId), Data: \(userData)")
-//                    }
-//                }
-//            } else {
-//                print("No data available")
 //            }
 //        }
 //    }

@@ -133,8 +133,27 @@ struct TransactionEditView: View {
                 .cornerRadius(backgroundCornerRadius)
 
                 Button {
-                    print("save changes for transaction id: \(transaction.id)")
-                    print(editedTitle)
+                    if bucket != .income {
+                        dataManger.updateExpense(
+                            id: transactionID,
+                            title: title,
+                            date: date,
+                            amount: amount,
+                            bucket: bucket,
+                            category: category
+                        )
+                    } else {
+                        dataManger.updateIncome(
+                            id: transactionID,
+                            title: title,
+                            date: date,
+                            amount: amount
+                        )
+                    }
+                    else {
+                        print("Error transaction is neither of type Expense or Income")
+                    }
+
                     dismiss()
                 } label: {
                     Text("Save")

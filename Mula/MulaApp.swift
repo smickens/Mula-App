@@ -63,7 +63,6 @@ struct MulaApp: App {
                 .frame(minWidth: 850, idealWidth: 850, minHeight: 500, idealHeight: 500)
 #endif
         }
-        .environmentObject(DataManager.shared)
 #if os(macOS)
         .commands {
             SidebarCommands()
