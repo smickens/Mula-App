@@ -50,18 +50,11 @@ enum Category: String, CaseIterable, Identifiable, Codable {
     }
 
     static func get(from categoryString: String) -> Category {
-        if categoryString == "transportation" {
-            return .transportation
-        } else if categoryString == "housing" {
-            return .housing
-        } else if categoryString == "groceries" {
-            return .groceries
-        } else if categoryString == "eating out" {
-            return .eatingOut
-        } else if categoryString == "shopping" {
-            return .shopping
-        } else if categoryString == "entertainment" {
-            return .entertainment
+        let lowercaseCategoryString = categoryString.lowercased()
+        for category in Category.allCases {
+            if lowercaseCategoryString == category.rawValue.lowercased()  {
+                return category
+            }
         }
         return .misc
     }
