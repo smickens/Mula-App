@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct TransactionAddView: View {
+struct ExpenseAddView: View {
     @Environment(DataManager.self) private var dataManager
     @Bindable var expense: Expense
 
     var body: some View {
-        TransactionFormView(
+        ExpenseFormView(
             id: nil,
             title: $expense.title,
             amount: $expense.amount,
@@ -20,12 +20,7 @@ struct TransactionAddView: View {
             bucket: $expense.bucket,
             category: $expense.category
         ) {
-            if expense.bucket != .income {
-                dataManager.addExpense(expense: expense)
-            } else {
-                let income = Income(id: expense.id, title: expense.title, date: expense.date, amount: expense.amount)
-                dataManager.addIncome(income: income)
-            }
+            dataManager.addExpense(expense: expense)
         }
     }
 }

@@ -18,19 +18,19 @@ struct ChartView: View {
     let data: [ChartData]
     let color: Color = .gray
 
-    init(transactions: [Transaction]) {
+    init(expenses: [Expense]) {
         var aggregated: [ChartData] = []
         var currentValue = 0.0
         var prevDate: Date? = nil
-        transactions.sorted(by: { $0.date < $1.date }).forEach { transaction in
-            let value = transaction is Expense ? -transaction.amount : transaction.amount
+        expenses.sorted(by: { $0.date < $1.date }).forEach { expense in
+            let value = expense.bucket != .income ? -expense.amount : expense.amount
             currentValue += value
-            if prevDate == nil || prevDate != transaction.date {
+            if prevDate == nil || prevDate != expense.date {
                 aggregated.append(ChartData(
                     value: currentValue,
-                    date: transaction.date)
+                    date: expense.date)
                 )
-                prevDate = transaction.date
+                prevDate = expense.date
             }
         }
         self.data = aggregated

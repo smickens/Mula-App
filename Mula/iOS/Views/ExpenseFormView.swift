@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TransactionFormView: View {
+struct ExpenseFormView: View {
     @Environment(\.dismiss) private var dismiss
 
     let transactionID: String?
@@ -71,24 +71,21 @@ struct TransactionFormView: View {
                     .labelsVisibility(.hidden)
             }
 
-            if bucket != .income || transactionID == nil {
-                RowView(iconName: "tray", title: "Bucket:", color: .gray) {
-                    Picker("", selection: $bucket) {
-                        ForEach(Bucket.allCases) { bucket in
-                            Text(bucket.name)
-                                .tag(bucket)
-                        }
+            RowView(iconName: "tray", title: "Bucket:", color: .gray) {
+                Picker("", selection: $bucket) {
+                    ForEach(Bucket.allCases) { bucket in
+                        Text(bucket.name)
+                            .tag(bucket)
                     }
                 }
+            }
 
-                RowView(iconName: "tag", title: "Category:", color: .orange) {
-                    Picker("", selection: $category) {
-                        ForEach(Category.allCases) { category in
-                            Text(category.name)
-                                .tag(category)
-                        }
+            RowView(iconName: "tag", title: "Category:", color: .orange) {
+                Picker("", selection: $category) {
+                    ForEach(Category.allCases) { category in
+                        Text(category.name)
+                            .tag(category)
                     }
-                    .disabled(bucket == .income)
                 }
             }
 

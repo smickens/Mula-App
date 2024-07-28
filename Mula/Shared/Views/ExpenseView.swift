@@ -1,5 +1,5 @@
 //
-//  TransactionView.swift
+//  ExpenseView.swift
 //  Mula
 //
 //  Created by Shanti Mickens on 2/1/24.
@@ -11,60 +11,28 @@ struct ExpenseView: View {
     @Bindable var expense: Expense
 
     var body: some View {
-        TransactionView(
-            title: expense.title,
-            date: expense.date,
-            amount: -expense.amount,
-            tint: expense.category.tintColor,
-            iconName: expense.category.iconName
-        )
-    }
-}
-
-struct IncomeView: View {
-    @Bindable var income: Income
-
-    var body: some View {
-        TransactionView(
-            title: income.title,
-            date: income.date,
-            amount: income.amount,
-            tint: Bucket.income.tint,
-            iconName: Bucket.income.icon
-        )
-    }
-}
-
-struct TransactionView: View {
-    let title: String
-    let date: Date
-    let amount: Double
-    let tint: Color
-    let iconName: String
-
-    var body: some View {
         HStack {
             ZStack {
                 Circle()
-                    .fill(tint)
+                    .fill(expense.category.tintColor)
                     .frame(width: 35, height: 35)
 
-                Image(systemName: iconName)
+                Image(systemName: expense.category.iconName)
                     .foregroundColor(.white)
             }
 
             VStack(alignment: .leading) {
-                Text(title)
+                Text(expense.title)
                     .font(.headline)
                     .lineLimit(1)
 
-                Text(formatDate(date))
+                Text(formatDate(expense.date))
                     .font(.caption)
             }
 
             Spacer()
 
-            Text(amount, format: .currency(code: "USD"))
+            Text(expense.amount, format: .currency(code: "USD"))
                 .font(.headline)
                 .foregroundStyle(amountBackgroundColor)
                 .fontWeight(.medium)
@@ -79,7 +47,7 @@ struct TransactionView: View {
     }
 
     private var amountBackgroundColor: Color {
-        return amount > 0 ? .green : .red
+        return expense.bucket == .income ? .green : .red
     }
 
     private func formatDate(_ date: Date?) -> String {

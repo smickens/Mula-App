@@ -1,5 +1,5 @@
 //
-//  TransactionSwipeActionsModifier.swift
+//  ExpenseSwipeActionsModifier.swift
 //  Mula
 //
 //  Created by Shanti Mickens on 7/24/24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TransactionSwipeActionsModifier: ViewModifier {
+struct ExpenseSwipeActionsModifier: ViewModifier {
     var onEdit: () -> Void
     var onDelete: () -> Void
 
@@ -28,11 +28,11 @@ struct TransactionSwipeActionsModifier: ViewModifier {
 }
 
 extension View {
-    func transactionSwipeActions(
+    func expenseSwipeActions(
         onEdit: @escaping () -> Void,
         onDelete: @escaping () -> Void
     ) -> some View {
-        modifier(TransactionSwipeActionsModifier(onEdit: onEdit, onDelete: onDelete))
+        modifier(ExpenseSwipeActionsModifier(onEdit: onEdit, onDelete: onDelete))
     }
 }
 

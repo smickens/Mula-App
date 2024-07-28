@@ -37,7 +37,7 @@ struct HomeView: View {
                             .font(.headline)
                             .frame(maxWidth: .infinity, alignment: .leading)
 
-                        ChartView(transactions: dataManger.transactionsForSelectedMonth)
+                        ChartView(expenses: dataManger.expensesForSelectedMonth)
                     }
                     .padding()
                     .background(Color(.systemGray6))
