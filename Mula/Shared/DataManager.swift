@@ -191,6 +191,10 @@ import FirebaseDatabase
         expenseRef.child(id).removeValue() { error, _ in
             if let error = error {
                 print("Error deleting expense w/ id \(id): \(error.localizedDescription)")
+            } else if let expenseIndex = self.allExpenses.firstIndex(where: { $0.id == id }) {
+                self.allExpenses.remove(at: expenseIndex)
+            } else {
+                print("Error didn't find expense id \(id) in expenses list to remove")
             }
         }
     }
