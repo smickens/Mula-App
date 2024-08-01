@@ -41,17 +41,12 @@ import FirebaseDatabase
         print("Refreshing data...")
         expensesForSelectedMonth = DataManager.shared.expenses(for: selectedMonth).sorted(by: { $0.date < $1.date })
 
-//        print("\(expensesForSelectedMonth.count) expenses in selected month")
-//        print("\(incomesForSelectedMonth.count) incomes in selected month")
-
         for bucket in Bucket.allCases {
             bucketTotalsForSelectedMonth[bucket] = totalExpense(for: selectedMonth, in: bucket)
-//            print("Bucket \(bucket.name): $\(bucketTotalsForSelectedMonth[bucket] ?? 0.0)")
         }
 
         for category in Category.allCases {
             categoryTotalsForSelectedMonth[category] = totalExpense(for: selectedMonth, in: category)
-//            print("Category \(category.name): $\(categoryTotalsForSelectedMonth[category] ?? 0.0)")
         }
     }
 
@@ -163,8 +158,6 @@ import FirebaseDatabase
             }
 
             self.allExpenses = expenses
-
-            refreshData(for: Date().month)
         }
     }
 
