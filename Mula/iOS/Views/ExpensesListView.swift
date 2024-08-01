@@ -13,7 +13,7 @@ struct ExpensesListView: View {
 
     @State private var selectedExpense: Expense? = nil
     @State private var addingNewTransaction: Bool = false
-    @State private var newExpense = Expense(id: "", title: "", date: Date(), amount: 0.0, bucket: .spending, category: .eatingOut)
+    @State private var newExpense = Expense(id: nil, title: "", date: Date(), amount: 0.0, bucket: .spending, category: .eatingOut)
 //    @State private var searchText: String = ""
 
     var body: some View {
@@ -27,7 +27,7 @@ struct ExpensesListView: View {
                 Button {
                     addingNewTransaction.toggle()
                 } label: {
-                    Label("Add", image: "plus")
+                    Text("Add")
                 }
                 .padding(.trailing)
             }
@@ -37,7 +37,12 @@ struct ExpensesListView: View {
                     .expenseSwipeActions {
                         selectedExpense = expense
                     } onDelete: {
-                        dataManger.deleteExpense(id: expense.id)
+                        guard let expenseID = expense.id else {
+                            print("Error expense does not have a id, cannot complete delete action")
+                            return
+                        }
+
+                        dataManger.deleteExpense(id: expenseID)
                     }
             }
             .listStyle(.plain)

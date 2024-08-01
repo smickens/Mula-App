@@ -20,7 +20,21 @@ struct ExpenseAddView: View {
             bucket: $expense.bucket,
             category: $expense.category
         ) {
-            dataManager.addExpense(expense: expense)
+            if let expenseCopy = expense.copy() as? Expense {
+                dataManager.addExpense(expense: expenseCopy)
+                clearExpenseValues()
+            } else {
+                print("Error copying expense")
+            }
         }
+    }
+
+    private func clearExpenseValues() {
+        expense.id = nil
+        expense.title = ""
+        expense.amount = 0
+        expense.date = Date()
+        expense.bucket = .spending
+        expense.category = .eatingOut
     }
 }

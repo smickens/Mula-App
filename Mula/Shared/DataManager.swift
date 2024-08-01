@@ -100,7 +100,7 @@ import FirebaseDatabase
             return
         }
 
-        let newExpense = [
+        let newExpenseDictionary = [
             "title": expense.title,
             "date": expense.date.timeIntervalSince1970,
             "amount": Double(amountString) ?? 0.0,
@@ -108,10 +108,16 @@ import FirebaseDatabase
             "category": expense.category.rawValue,
         ] as [String : Any]
 
-        expenseRef.childByAutoId().setValue(newExpense) { (error, ref) in
+        guard let autoId = expenseRef.childByAutoId().key else {
+            print("Error getting new auto id for expense")
+            return
+        }
+
+        expenseRef.child("\(autoId)").setValue(newExpenseDictionary) { (error, ref) in
             if let error = error {
                 print("Error adding new expense: \(error.localizedDescription)")
             } else {
+                expense.id = autoId
                 self.allExpenses.append(expense)
             }
         }
@@ -178,9 +184,14 @@ import FirebaseDatabase
             "category": expense.category.name,
         ] as [String : Any]
 
-        expenseRef.child(expense.id).updateChildValues(updatedExpense) { error, _ in
+        guard let expenseID = expense.id else {
+            print("Error expense does not have a id, cannot complete update action")
+            return
+        }
+
+        expenseRef.child(expenseID).updateChildValues(updatedExpense) { error, _ in
             if let error = error {
-                print("Error updating expense w/ id \(expense.id): \(error.localizedDescription)")
+                print("Error updating expense w/ id \(expenseID): \(error.localizedDescription)")
             }
         }
     }
