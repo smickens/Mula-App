@@ -47,7 +47,7 @@ struct ExpenseView: View {
     }
 
     private var amountBackgroundColor: Color {
-        return expense.bucket == .income ? .green : .red
+        return expense.amount > 0 ? .green : .red
     }
 
     private func formatDate(_ date: Date?) -> String {
