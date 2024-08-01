@@ -14,12 +14,12 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             TabView {
-                HomeView(selectedMonth: $selectedMonth)
+                HomeView(selectedMonth: $dataManager.selectedMonth)
                     .tabItem{
                         Label("Home", systemImage: "house")
                     }
 
-                ExpensesListView(selectedMonth: $selectedMonth)
+                ExpensesListView(selectedMonth: $dataManager.selectedMonth)
                     .tabItem {
                         Label("Expenses", systemImage: "tag")
                     }

@@ -21,7 +21,17 @@ import FirebaseDatabase
 
     private var expenseRef: DatabaseReference
 
-    private var allExpenses: [Expense] = []
+    public var selectedMonth = Date().month {
+        didSet {
+            refreshData(for: selectedMonth)
+        }
+    }
+
+    private var allExpenses: [Expense] = [] {
+        didSet {
+            refreshData(for: selectedMonth)
+        }
+    }
 
     var expensesForSelectedMonth: [Expense] = []
     var bucketTotalsForSelectedMonth: [Bucket: Double] = [:]
