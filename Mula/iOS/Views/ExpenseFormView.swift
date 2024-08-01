@@ -10,6 +10,9 @@ import SwiftUI
 struct ExpenseFormView: View {
     @Environment(\.dismiss) private var dismiss
 
+    @State private var amountIsPositive: Bool
+    @State private var amountWithoutSign: Double
+
     let transactionID: String?
     @Binding private var title: String
     @Binding private var amount: Double
@@ -26,6 +29,9 @@ struct ExpenseFormView: View {
         self._bucket = bucket
         self._category = category
         self.saveAction = saveAction
+
+        self._amountIsPositive = State(initialValue: amount.wrappedValue > 0)
+        self._amountWithoutSign = State(initialValue: abs(amount.wrappedValue))
     }
 
     var body: some View {
@@ -60,9 +66,17 @@ struct ExpenseFormView: View {
             }
 
             RowView(iconName: "dollarsign.circle", title: "Amount:", color: .green) {
-                TextField("Enter amount", value: $amount, format: .currency(code: "USD"))
-                    .multilineTextAlignment(.trailing)
-                    .keyboardType(.decimalPad)
+                HStack {
+                    plusMinusToggle
+
+                    TextField("Enter amount", value: $amountWithoutSign, format: .currency(code: "USD"))
+                        .multilineTextAlignment(.trailing)
+                        .keyboardType(.decimalPad)
+                        .padding(.trailing)
+                        .frame(width: 80)
+                }
+                .background(Color(.systemGray5))
+                .cornerRadius(8)
             }
 
             RowView(iconName: "calendar", title: "Date:", color: .blue) {
@@ -102,6 +116,7 @@ struct ExpenseFormView: View {
                 .cornerRadius(backgroundCornerRadius)
 
                 Button {
+                    amount = amountWithoutSign * (amountIsPositive ? 1 : -1)
                     saveAction()
                     dismiss()
                 } label: {
@@ -118,6 +133,43 @@ struct ExpenseFormView: View {
         }
         .padding(.horizontal)
         .navigationTitle("Details")
+    }
+
+    private var plusMinusToggle: some View {
+        HStack {
+            Image(systemName: "plus")
+                .frame(width: 8.0, height: 8.0)
+                .padding(8)
+                .background(
+                    Color(.systemGray4)
+                        .opacity(amountIsPositive ? 1.0 : 0.0)
+                        .animation(.bouncy, value: amountIsPositive)
+                )
+                .cornerRadius(4)
+                .onTapGesture {
+                    withAnimation(.bouncy) {
+                        amountIsPositive.toggle()
+                    }
+                }
+
+            Image(systemName: "minus")
+                .frame(width: 8.0, height: 8.0)
+                .padding(8)
+                .background(
+                    Color(.systemGray4)
+                        .opacity(amountIsPositive ? 0.0 : 1.0)
+                        .animation(.bouncy, value: amountIsPositive)
+                )
+                .cornerRadius(4)
+                .onTapGesture {
+                    withAnimation(.smooth()) {
+                        amountIsPositive.toggle()
+                    }
+                }
+        }
+        .padding(6)
+        .background(Color(.systemGray5))
+        .cornerRadius(5)
     }
 }
 
