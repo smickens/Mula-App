@@ -23,8 +23,7 @@ struct ChartView: View {
         var currentValue = 0.0
         var prevDate: Date? = nil
         expenses.sorted(by: { $0.date < $1.date }).forEach { expense in
-            let value = expense.bucket != .income ? -expense.amount : expense.amount
-            currentValue += value
+            currentValue += expense.amount
             if prevDate == nil || prevDate != expense.date {
                 aggregated.append(ChartData(
                     value: currentValue,
@@ -44,17 +43,13 @@ struct ChartView: View {
                 x: .value("Month", $0.date),
                 y: .value("Amount", $0.value)
             )
-            .interpolationMethod(.catmullRom)
-
-            if $0.value < 0 {
-
-            }
+            .interpolationMethod(.catmullRom(alpha: 1.0))
 
             AreaMark(
                 x: .value("Month", $0.date),
                 y: .value("Amount", $0.value)
             )
-            .interpolationMethod(.catmullRom)
+            .interpolationMethod(.catmullRom(alpha: 1.0))
             .foregroundStyle(areaBackground)
         }
         .chartXAxis {
