@@ -46,9 +46,8 @@ struct HomeView: View {
                 }
 
                 GridRow {
-                    RowView(iconName: "arrow.up", title: "Income:", color: .green) {
-                        Text(incomeTotal, format: .currency(code: "USD"))
-                            .font(.body)
+                    RowView(iconName: "arrow.up", title: "Income", color: .green) {
+                        ExpenseAmountView(amount: incomeTotal)
                     }
                     .gridCellColumns(2)
                 }
@@ -56,8 +55,7 @@ struct HomeView: View {
                 ForEach(Category.allCases) { category in
                     GridRow {
                         RowView(iconName: category.iconName, title: category.name, color: category.tintColor) {
-                            Text(dataManger.categoryTotalsForSelectedMonth[category] ?? 0.0, format: .currency(code: "USD"))
-                                .font(.body)
+                            ExpenseAmountView(amount: dataManger.categoryTotalsForSelectedMonth[category] ?? 0.0)
                         }
                         .gridCellColumns(2)
                     }

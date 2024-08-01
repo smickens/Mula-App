@@ -32,22 +32,9 @@ struct ExpenseView: View {
 
             Spacer()
 
-            Text(expense.amount, format: .currency(code: "USD"))
-                .font(.headline)
-                .foregroundStyle(amountBackgroundColor)
-                .fontWeight(.medium)
-                .padding(.horizontal, 5)
-                .padding(.vertical, 2)
-                .background(
-                    RoundedRectangle(cornerRadius: 5)
-                        .fill(amountBackgroundColor.opacity(0.2))
-                )
+            ExpenseAmountView(amount: expense.amount)
         }
         .padding(5)
-    }
-
-    private var amountBackgroundColor: Color {
-        return expense.amount > 0 ? .green : .red
     }
 
     private func formatDate(_ date: Date?) -> String {

@@ -18,8 +18,12 @@ struct RowView<Content: View>: View {
             Image(systemName: iconName)
                 .foregroundColor(color)
                 .imageScale(.large)
+                .frame(width: 25.0, height: 25.0)
+                .padding(.trailing, 5)
+
             Text(title)
                 .font(.headline)
+
             Spacer()
 
             value()
