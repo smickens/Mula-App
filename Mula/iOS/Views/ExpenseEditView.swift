@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ExpenseEditView: View {
-    @Environment(DataManager.self) private var dataManger
+    @Environment(DataManager.self) private var dataManager
     @Bindable var expense: Expense
 
     var body: some View {
@@ -20,7 +20,7 @@ struct ExpenseEditView: View {
             bucket: $expense.bucket,
             category: $expense.category
         ) {
-            dataManger.updateExpense(expense: expense)
+            dataManager.updateExpense(expense: expense)
         }
     }
 }

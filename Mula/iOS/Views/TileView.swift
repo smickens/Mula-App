@@ -9,7 +9,7 @@ import SwiftUI
 import Charts
 
 struct TileView: View {
-    @Environment(DataManager.self) private var dataManger
+    @Environment(DataManager.self) private var dataManager
     let bucket: Bucket
 
     var body: some View {
@@ -52,7 +52,7 @@ struct TileView: View {
     }
 
     private var amount: Double {
-        return (dataManger.bucketTotalsForSelectedMonth[bucket] ?? 0.0) * -1
+        return (dataManager.bucketTotalsForSelectedMonth[bucket] ?? 0.0) * -1
     }
 
     private var budget: Double {

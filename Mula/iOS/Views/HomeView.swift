@@ -8,14 +8,13 @@
 import SwiftUI
 
 struct HomeView: View {
-    @Environment(DataManager.self) private var dataManger
-    @Binding var selectedMonth: String
+    @Bindable var dataManager: DataManager
 
     var body: some View {
         ScrollView {
             Grid(alignment: .top) {
                 GridRow {
-                    HeaderView(title: "Mula", selectedMonth: $selectedMonth)
+                    HeaderView(title: "Mula", selectedMonth: $dataManager.selectedMonth)
                 }
                 .gridCellColumns(2)
 
@@ -37,7 +36,7 @@ struct HomeView: View {
                             .font(.headline)
                             .frame(maxWidth: .infinity, alignment: .leading)
 
-                        ChartView(expenses: dataManger.expensesForSelectedMonth)
+                        ChartView(expenses: dataManager.expensesForSelectedMonth)
                     }
                     .padding()
                     .background(Color(.systemGray6))
@@ -55,7 +54,7 @@ struct HomeView: View {
                 ForEach(Category.allCases) { category in
                     GridRow {
                         RowView(iconName: category.iconName, title: category.name, color: category.tintColor) {
-                            ExpenseAmountView(amount: dataManger.categoryTotalsForSelectedMonth[category] ?? 0.0)
+                            ExpenseAmountView(amount: dataManager.categoryTotalsForSelectedMonth[category] ?? 0.0)
                         }
                         .gridCellColumns(2)
                     }
@@ -70,10 +69,10 @@ struct HomeView: View {
     }
 
     public var incomeTotal: Double {
-        return dataManger.bucketTotalsForSelectedMonth[.income] ?? 0.0
+        return dataManager.bucketTotalsForSelectedMonth[.income] ?? 0.0
     }
 }
 
 #Preview {
-    HomeView(selectedMonth: .constant("May"))
+    HomeView(dataManager: DataManager.shared)
 }

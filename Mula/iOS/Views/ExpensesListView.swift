@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct ExpensesListView: View {
-    @Environment(DataManager.self) private var dataManger
-    @Binding var selectedMonth: String
-
+    @Bindable var dataManager: DataManager
     @State private var selectedExpense: Expense? = nil
     @State private var addingNewTransaction: Bool = false
     @State private var newExpense = Expense(id: nil, title: "", date: Date(), amount: 0.0, bucket: .spending, category: .eatingOut)
@@ -19,7 +17,7 @@ struct ExpensesListView: View {
     var body: some View {
         VStack {
             HStack {
-                HeaderView(title: "Expenses", selectedMonth: $selectedMonth)
+                HeaderView(title: "Expenses", selectedMonth: $dataManager.selectedMonth)
                     .padding()
 
                 Spacer(minLength: 0)
@@ -32,7 +30,7 @@ struct ExpensesListView: View {
                 .padding(.trailing)
             }
 
-            List(dataManger.expensesForSelectedMonth, id: \.id) { expense in
+            List(dataManager.expensesForSelectedMonth, id: \.id) { expense in
                 ExpenseView(expense: expense)
                     .expenseSwipeActions {
                         selectedExpense = expense
@@ -42,7 +40,7 @@ struct ExpensesListView: View {
                             return
                         }
 
-                        dataManger.deleteExpense(id: expenseID)
+                        dataManager.deleteExpense(id: expenseID)
                     }
             }
             .listStyle(.plain)
