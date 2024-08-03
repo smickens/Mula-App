@@ -21,20 +21,31 @@ struct ExpenseView: View {
                     .foregroundColor(.white)
             }
 
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 5) {
                 Text(expense.title)
                     .font(.headline)
                     .lineLimit(1)
 
-                Text(formatDate(expense.date))
-                    .font(.caption)
+                HStack(spacing: 5) {
+                    Text(expense.bucket.name)
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Color(.systemGray))
+                        .padding(.vertical, 2)
+                        .padding(.horizontal, 4)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(3.0)
+                        .padding(0)
+
+                    Text(formatDate(expense.date))
+                        .font(.caption)
+                }
             }
 
             Spacer()
 
             ExpenseAmountView(amount: expense.amount)
         }
-        .padding(5)
     }
 
     private func formatDate(_ date: Date?) -> String {
