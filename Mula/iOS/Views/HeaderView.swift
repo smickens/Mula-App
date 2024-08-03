@@ -25,6 +25,7 @@ struct HeaderView: View {
                     Text(month)
                 }
             }
+            .padding(.trailing, -8)
         }
     }
 }
