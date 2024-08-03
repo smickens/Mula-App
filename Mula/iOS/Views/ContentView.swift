@@ -23,8 +23,7 @@ struct ContentView: View {
                         Label("Expenses", systemImage: "tag")
                     }
 
-                Text("settings")
-                    .navigationTitle("Settings")
+                SettingsView(dataManager: dataManager)
                     .tabItem {
                         Label("Settings", systemImage: "gear")
                     }

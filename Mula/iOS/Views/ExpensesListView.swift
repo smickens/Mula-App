@@ -30,7 +30,7 @@ struct ExpensesListView: View {
                 } label: {
                     Image(systemName: filterIsActive ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
                         .imageScale(.large)
-                        .tint(.indigo)
+                        .tint(.blue)
                 }
                 .padding(.trailing)
 
@@ -39,7 +39,7 @@ struct ExpensesListView: View {
                 } label: {
                     Image(systemName: "plus.square.fill")
                         .imageScale(.large)
-                        .tint(.indigo)
+                        .tint(.blue)
                 }
                 .padding(.trailing)
             }

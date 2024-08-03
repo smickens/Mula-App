@@ -15,11 +15,14 @@ import FirebaseDatabase
     private init() {
         let dbRef = Database.database().reference()
         expenseRef = dbRef.child("expense")
+        budgetRef = dbRef.child("budget")
 
         loadExpenses()
+        loadBudgets()
     }
 
     private var expenseRef: DatabaseReference
+    private var budgetRef: DatabaseReference
 
     public var selectedMonth = Date().month {
         didSet {
@@ -32,6 +35,8 @@ import FirebaseDatabase
             refreshData(for: selectedMonth)
         }
     }
+
+    public var budget: [Bucket: Double] = [:]
 
     var expensesForSelectedMonth: [Expense] = []
     var bucketTotalsForSelectedMonth: [Bucket: Double] = [:]
@@ -78,6 +83,10 @@ import FirebaseDatabase
     func totalExpense(for month: String, in category: Category) -> Double {
         let e = expenses(for: month, in: category)
         return e.reduce(0.0) { $0 + $1.amount }
+    }
+
+    func budget(for bucket: Bucket) -> Double {
+        return budget[bucket] ?? 0.0
     }
 
     private var numberFormatter: NumberFormatter = {
@@ -161,6 +170,34 @@ import FirebaseDatabase
         }
     }
 
+    private func loadBudgets() {
+        budgetRef.getData { [weak self] error, snapshot in
+            guard let self = self else { return }
+
+            if let error = error {
+                print("Error getting budgets: \(error.localizedDescription)")
+                return
+            }
+
+            guard let value = snapshot?.value else {
+                print("No budget data available")
+                return
+            }
+
+
+            if let data = value as? [String: Any] {
+                for (bucketString, budgetAmount) in data {
+
+                    let bucket = Bucket.get(from: bucketString)
+
+                    budget[bucket] = budgetAmount as? Double ?? 0.0
+
+                    print("Budget for bucket \(bucket.name) is \(String(describing: budget[bucket]))")
+                }
+            }
+        }
+    }
+
 // MARK: Updating data
 
     public func updateExpense(expense: Expense) {
@@ -185,6 +222,23 @@ import FirebaseDatabase
         expenseRef.child(expenseID).updateChildValues(updatedExpense) { error, _ in
             if let error = error {
                 print("Error updating expense w/ id \(expenseID): \(error.localizedDescription)")
+            }
+        }
+    }
+
+    public func updateBudget(for bucket: Bucket, to amount: Double) {
+        guard let amountString = numberFormatter.string(from: amount as NSNumber) else {
+            print("Error converting budget amount (\(amount)) to a String")
+            return
+        }
+
+        let updatedBudget = [
+            "\(bucket.name.lowercased())": amountString,
+        ] as [String : Any]
+
+        budgetRef.updateChildValues(updatedBudget) { error, _ in
+            if let error = error {
+                print("Error updating budget for bucket \(bucket.name): \(error.localizedDescription)")
             }
         }
     }

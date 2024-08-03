@@ -56,7 +56,7 @@ struct TileView: View {
     }
 
     private var budget: Double {
-        return 1500.0
+        return dataManager.budget(for: bucket)
     }
 }
 
