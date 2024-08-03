@@ -184,10 +184,8 @@ import FirebaseDatabase
                 return
             }
 
-
             if let data = value as? [String: Any] {
                 for (bucketString, budgetAmount) in data {
-
                     let bucket = Bucket.get(from: bucketString)
 
                     budget[bucket] = budgetAmount as? Double ?? 0.0
@@ -201,15 +199,10 @@ import FirebaseDatabase
 // MARK: Updating data
 
     public func updateExpense(expense: Expense) {
-        guard let amountString = numberFormatter.string(from: expense.amount as NSNumber) else {
-            print("Error converting expense's amount (\(expense.amount)) to a String")
-            return
-        }
-
         let updatedExpense = [
             "title": expense.title,
             "date": expense.date.timeIntervalSince1970,
-            "amount": Double(amountString) ?? 0.0,
+            "amount": expense.amount,
             "bucket": expense.bucket.name,
             "category": expense.category.name,
         ] as [String : Any]
@@ -227,13 +220,8 @@ import FirebaseDatabase
     }
 
     public func updateBudget(for bucket: Bucket, to amount: Double) {
-        guard let amountString = numberFormatter.string(from: amount as NSNumber) else {
-            print("Error converting budget amount (\(amount)) to a String")
-            return
-        }
-
         let updatedBudget = [
-            "\(bucket.name.lowercased())": amountString,
+            "\(bucket.name.lowercased())": amount,
         ] as [String : Any]
 
         budgetRef.updateChildValues(updatedBudget) { error, _ in
