@@ -40,6 +40,8 @@
 		E253C9082C5DDDEC00739FAD /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9062C5DDDEC00739FAD /* SearchBarView.swift */; };
 		E253C90A2C5ED18600739FAD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9092C5ED18600739FAD /* SettingsView.swift */; };
 		E253C90B2C5ED18600739FAD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9092C5ED18600739FAD /* SettingsView.swift */; };
+		E253C9112C61D5B100739FAD /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9102C61D5AC00739FAD /* SignInView.swift */; };
+		E253C9122C61D5B100739FAD /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9102C61D5AC00739FAD /* SignInView.swift */; };
 		E27223DE2BF9C2FE0065089A /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223DD2BF9C2FE0065089A /* Expense.swift */; };
 		E27223E02C0EB5A10065089A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223DF2C0EB5A10065089A /* SettingsView.swift */; };
 		E27223E52C0EB9240065089A /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223E42C0EB9240065089A /* Budget.swift */; };
@@ -108,6 +110,8 @@
 		E253C9032C5B256700739FAD /* ExpenseAmountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseAmountView.swift; sourceTree = "<group>"; };
 		E253C9062C5DDDEC00739FAD /* SearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarView.swift; sourceTree = "<group>"; };
 		E253C9092C5ED18600739FAD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		E253C90F2C61D48600739FAD /* Mula-iOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Mula-iOS-Info.plist"; sourceTree = SOURCE_ROOT; };
+		E253C9102C61D5AC00739FAD /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		E27223DD2BF9C2FE0065089A /* Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
 		E27223DF2C0EB5A10065089A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		E27223E42C0EB9240065089A /* Budget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Budget.swift; sourceTree = "<group>"; };
@@ -237,6 +241,7 @@
 		E284D4AB2C3CF42800F72684 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E253C9102C61D5AC00739FAD /* SignInView.swift */,
 				E253C9002C5211FD00739FAD /* ExpenseAddView.swift */,
 				E284D4BC2C444AAF00F72684 /* ExpensesListView.swift */,
 				E253C8FD2C51EA6500739FAD /* ExpenseEditView.swift */,
@@ -264,6 +269,7 @@
 		E288FAFF2C275D2D00B6D57A /* Mula iOS */ = {
 			isa = PBXGroup;
 			children = (
+				E253C90F2C61D48600739FAD /* Mula-iOS-Info.plist */,
 				E288FB022C275D2D00B6D57A /* ContentView2.swift */,
 				E288FB182C27612900B6D57A /* TransactionSelector.swift */,
 				E288FB042C275D2D00B6D57A /* Item.swift */,
@@ -448,6 +454,7 @@
 				DE9AF9312B7851F700D1F4DC /* UploadFormView.swift in Sources */,
 				E253C8FE2C51EA6F00739FAD /* ExpenseEditView.swift in Sources */,
 				DEF8FE192B6B976E00D10468 /* ExpenseFormView.swift in Sources */,
+				E253C9112C61D5B100739FAD /* SignInView.swift in Sources */,
 				E253C8F62C4C98EA00739FAD /* Constants.swift in Sources */,
 				DE9AF9B72BA7995800D1F4DC /* BudgetView.swift in Sources */,
 				E253C8ED2C4C6C6100739FAD /* ExpenseFormView.swift in Sources */,
@@ -512,6 +519,7 @@
 				E288FB142C275FBA00B6D57A /* Budget.swift in Sources */,
 				E288FB132C275FBA00B6D57A /* Bank.swift in Sources */,
 				E288FB122C275FBA00B6D57A /* Category.swift in Sources */,
+				E253C9122C61D5B100739FAD /* SignInView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -709,7 +717,7 @@
 				DEVELOPMENT_TEAM = S85ULMGGX9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Mula;
+				INFOPLIST_FILE = "Mula-iOS-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -741,7 +749,7 @@
 				DEVELOPMENT_TEAM = S85ULMGGX9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Mula;
+				INFOPLIST_FILE = "Mula-iOS-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

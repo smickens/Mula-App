@@ -5,10 +5,12 @@
 //  Created by Shanti Mickens on 8/3/24.
 //
 
+import FirebaseAuth
 import SwiftUI
 
 struct SettingsView: View {
     @Bindable var dataManager: DataManager
+    @Environment(AuthViewModel.self) private var authViewModel
 
     var body: some View {
         VStack {
@@ -66,6 +68,16 @@ struct SettingsView: View {
             }
 
             Spacer()
+
+            Button(action: authViewModel.signOut) {
+                Text("Sign Out")
+                    .font(.headline)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .foregroundColor(.white)
+            .background(.blue)
+            .cornerRadius(8.0)
         }
         .padding()
     }
