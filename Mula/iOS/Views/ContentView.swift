@@ -9,6 +9,11 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var dataManager = DataManager.shared
+    let appearance: UITabBarAppearance = UITabBarAppearance()
+
+    init() {
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+    }
 
     var body: some View {
         NavigationStack {

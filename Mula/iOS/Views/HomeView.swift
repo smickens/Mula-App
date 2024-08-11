@@ -54,7 +54,7 @@ struct HomeView: View {
                 }
             }
         }
-        .padding()
+        .padding(.horizontal)
 //        .navigationTitle("Mula")
 //        .navigationBarTitleDisplayMode(.inline)
         .navigationBarHidden(true)
