@@ -44,13 +44,6 @@ struct HomeView: View {
                     .gridCellColumns(2)
                 }
 
-                GridRow {
-                    RowView(iconName: "arrow.up", title: "Income", color: .green) {
-                        ExpenseAmountView(amount: incomeTotal)
-                    }
-                    .gridCellColumns(2)
-                }
-
                 ForEach(Category.allCases) { category in
                     GridRow {
                         RowView(iconName: category.iconName, title: category.name, color: category.tintColor) {
