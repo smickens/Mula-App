@@ -13,7 +13,7 @@ struct SettingsView: View {
     @Environment(AuthViewModel.self) private var authViewModel
 
     var body: some View {
-        VStack {
+        VStack(spacing: 25) {
             HStack {
                 Text("Settings")
                     .font(.largeTitle)
@@ -22,12 +22,7 @@ struct SettingsView: View {
                 Spacer()
             }
 
-            Spacer()
-
-            VStack(alignment: .leading) {
-                Text("Budgets")
-                    .font(.headline)
-
+            SettingsSectionView(title: "Budgets") {
                 ForEach(Bucket.allCases, id: \.id) { bucket in
                     if bucket != .income {
                         RowView(iconName: bucket.icon, title: "\(bucket.name):", color: bucket.tint) {
@@ -48,41 +43,124 @@ struct SettingsView: View {
                 }
             }
 
-            Spacer()
-
-            VStack(alignment: .leading) {
-                Text("Import Data")
-                    .font(.headline)
-                
-                Button {
-                    print("upload expenses")
-                } label: {
+            SettingsSectionView(title: "Import Data") {
+                NavigationLink(destination: ExpensesImportView(dataManager: dataManager)) {
                     Text("Upload Expenses (.csv)")
                         .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                        .foregroundColor(.white)
+                        .background(.blue)
+                        .cornerRadius(8.0)
                 }
-                .frame(maxWidth: .infinity)
-                .frame(height: 50)
-                .foregroundColor(.white)
-                .background(.blue)
-                .cornerRadius(8.0)
+            }
+
+            SettingsSectionView(title: "Account") {
+                createLargeButton(title: "Sign Out", action: authViewModel.signOut)
             }
 
             Spacer()
-
-            Button(action: authViewModel.signOut) {
-                Text("Sign Out")
-                    .font(.headline)
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 50)
-            .foregroundColor(.white)
-            .background(.blue)
-            .cornerRadius(8.0)
         }
         .padding()
     }
+
+    func createLargeButton(title: String, action: (() -> Void)? = nil) -> some View {
+        Button {
+            action?()
+        } label: {
+            Text(title)
+                .font(.headline)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 50)
+        .foregroundColor(.white)
+        .background(.blue)
+        .cornerRadius(8.0)
+    }
 }
 
-//#Preview {
-//    SettingsView(dataManager: DataManager.shared)
-//}
+fileprivate struct SettingsSectionView<Content: View>: View {
+    let title: String
+    let value: (() -> Content)
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(title)
+                .font(.headline)
+
+            value()
+        }
+    }
+}
+
+struct ExpensesImportView: View {
+    @Bindable var dataManager: DataManager
+    @State private var expenses: [Expense] = []
+    @State private var selectedExpense: Expense? = nil
+    @State private var isImportingFile = true
+
+    @State private var expensesSaved = false
+
+    var body: some View {
+        ExpensesListView(expenses: expenses, expenseToEdit: $selectedExpense, deleteAction: deleteExpense)
+
+        createLargeButton(title: "Save Expenses") {
+            print("save expenses \(expenses)")
+            dataManager.addExpenses(expenses)
+
+            expensesSaved = true
+        }
+        .navigationTitle("Import Expenses")
+        .fileImporter(
+            isPresented: $isImportingFile,
+            allowedContentTypes: [.commaSeparatedText],
+            onCompletion: handleImportFile
+        )
+        .sheet(item: $selectedExpense) { expense in
+            ExpenseEditView(expense: expense)
+                .presentationDetents([.height(500)])
+        }
+    }
+
+    func handleImportFile(_ result: Result<URL, any Error>) {
+        switch result {
+        case .success(let fileURL):
+            // Start accessing the security-scoped resource (like iCloud files)
+            guard fileURL.startAccessingSecurityScopedResource() else {
+                print("Failed to access secure files")
+                return
+            }
+
+            // Always stop accessing the resource when done
+            defer {
+                fileURL.stopAccessingSecurityScopedResource()
+            }
+
+            if let data = try? Data(contentsOf: fileURL),
+               let content = String(data: data, encoding: .utf8) {
+                expenses = dataManager.processFileContentIntoExpenses(content)
+                isImportingFile = false
+            }
+        case .failure(let error):
+            print(error.localizedDescription)
+        }
+    }
+
+    func deleteExpense(_ expense: Expense) {
+        guard let expenseIndex = expenses.firstIndex(where: { $0.id == expense.id }) else { return }
+        expenses.remove(at: expenseIndex)
+    }
+
+    func createLargeButton(title: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(title)
+                .font(.headline)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 50)
+        .foregroundColor(.white)
+        .background(.blue)
+        .cornerRadius(8.0)
+        .disabled(expensesSaved)
+    }
+}
