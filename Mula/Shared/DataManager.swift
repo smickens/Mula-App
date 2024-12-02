@@ -55,6 +55,204 @@ import FirebaseDatabase
         }
     }
 
+// MARK: Import expenses from .csv file
+
+    func processFileContentIntoExpenses(_ content: String) -> [Expense] {
+        var expenses: [Expense] = []
+        let rows = content.components(separatedBy: "\n")
+
+        let numColumns = rows.first?.components(separatedBy: ",").count ?? 0
+        let bank: Bank = numColumns == 8 ? .apple : (numColumns == 5 ? .usBank : .bilt)
+
+        for row in rows.dropFirst() {
+            guard !row.isEmpty else { continue }
+
+            func processRowByBank() -> Expense? {
+                switch bank {
+                case .apple:
+                    return processAppleTransaction(row)
+                case .usBank:
+                    return processUSBankTransaction(row)
+                case .bilt:
+                    return processBiltTransaction(row)
+                }
+            }
+
+            if let expense = processRowByBank() {
+                // Rename common transactions
+                let mappedExpenseTitles: [String: (String, Bucket, Category)] = [
+                    "ELECTRONIC DEPOSIT APPLE INC.": ("Apple Job", .income, .job),
+                    "WEB AUTHORIZED PMT VENMO": ("Venmo (out)", .spending, .entertainment),
+                    "ELECTRONIC DEPOSIT VENMO": ("Venmo (in)", .income, .misc),
+                    "ELECTRONIC WITHDRAWAL ATT": ("Internet Bill", .fixed, .housing),
+                    "BPS*BILT REWARDS B NEW YORK NY": ("Rent", .fixed, Category.housing)
+                ]
+                if let mappedTitle = mappedExpenseTitles[expense.title] {
+                    expense.title = mappedTitle.0
+                    expense.bucket = mappedTitle.1
+                    expense.category = mappedTitle.2
+                }
+                if expense.title.range(of: "Uber Eats", options: .caseInsensitive) != nil {
+                    expense.title = "Uber Eats"
+                    expense.bucket = .spending
+                    expense.category = .eatingOut
+                } else if expense.title.range(of: "Uber", options: .caseInsensitive) != nil {
+                    expense.title = "Uber"
+                    expense.bucket = .fixed
+                    expense.category = .transportation
+                } else if expense.title.range(of: "Lyft", options: .caseInsensitive) != nil {
+                    expense.title = "Lyft"
+                    expense.bucket = .fixed
+                    expense.category = .transportation
+                } else if expense.title.range(of: "APPLE CAFFE", options: .caseInsensitive) != nil {
+                    expense.title = "Apple Caffe"
+                    expense.bucket = .spending
+                    expense.category = .eatingOut
+                } else if expense.title.range(of: "SAFEWAY", options: .caseInsensitive) != nil {
+                    expense.title = "Safeway"
+                    expense.bucket = .fixed
+                    expense.category = .groceries
+                } else if expense.title.range(of: "TARGET", options: .caseInsensitive) != nil {
+                    expense.title = "Target"
+                    expense.bucket = .fixed
+                    expense.category = .groceries
+                } else if expense.title.range(of: "DUNKIN", options: .caseInsensitive) != nil {
+                    expense.title = "Dunkin"
+                    expense.bucket = .spending
+                    expense.category = .eatingOut
+                }
+
+                expenses.append(expense)
+            }
+        }
+
+        return expenses
+    }
+
+    private func processAppleTransaction(_ row: String) -> Expense? {
+        // ["Transaction Date", "Clearing Date", "Description", "Merchant", "Category", "Type", "Amount (USD)", "Purchased By"]
+        let columns = row.components(separatedBy: ",")
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yyyy"
+
+        let expenseDate = dateFormatter.date(from: columns[0]) ?? Date()
+        let expenseTitle = columns[3].replacingOccurrences(of: "\"", with: "")
+        let expenseAmount = (Double(columns[6].replacingOccurrences(of: "\"", with: "")) ?? 0.0) * -1
+        let (expenseBucket, expenseCategory) = classifyFromCreditCardCategory(columns[4].replacingOccurrences(of: "\"", with: ""))
+
+        // Filter out credit card payment transactions
+        let ignoredCatgories = ["Payment"]
+        guard !ignoredCatgories.contains(columns[4].replacingOccurrences(of: "\"", with: "")) else {
+            return nil
+        }
+
+        return Expense(id: UUID().uuidString, title: expenseTitle, date: expenseDate, amount: expenseAmount, bucket: expenseBucket, category: expenseCategory)
+    }
+
+    private func processUSBankTransaction(_ row: String) -> Expense? {
+        // ["Date", "Transaction", "Name", "Memo", "Amount"]
+        let columns = row.components(separatedBy: ",")
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        let expenseDate = dateFormatter.date(from: columns[0].replacingOccurrences(of: "\"", with: "")) ?? Date()
+        let expenseTitle = columns[2].replacingOccurrences(of: "\"", with: "")
+        let expenseAmount = Double(columns[4].replacingOccurrences(of: "\"", with: "")) ?? 0.0
+        let expenseBucket = expenseAmount < 0 ? Bucket.income : Bucket.spending
+        let expenseCategory = Category.misc
+
+        // Filter out the following: credit card payment transactions, moving money to/from Apple Savings, and waived monthly maintenance fees
+        let ignoredPayments = ["WEB AUTHORIZED PMT APPLECARD GSBANK", "WEB AUTHORIZED PMT WELLS FARGO CARD", "MOBILE BANKING PAYMENT TO CREDIT CARD 5895", "MOBILE BANKING PAYMENT TO CREDIT CARD 9996", "WEB AUTHORIZED PMT APPLE GS SAVINGS", "ELECTRONIC DEPOSIT APPLE GS SAVINGS", "MONTHLY MAINTENANCE FEE", "MONTHLY MAINTENANCE FEE WAIVED"]
+        guard !ignoredPayments.contains(expenseTitle) else {
+            return nil
+        }
+
+        return Expense(id: UUID().uuidString, title: expenseTitle, date: expenseDate, amount: expenseAmount, bucket: expenseBucket, category: expenseCategory)
+    }
+
+    private func processBiltTransaction(_ row: String) -> Expense? {
+        // ["Date", "Amount", "*", "", "Name"]
+        let columns = row.components(separatedBy: ",")
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yyyy"
+
+        let expenseDate = dateFormatter.date(from: columns[0].replacingOccurrences(of: "\"", with: "")) ?? Date()
+        let expenseTitle = columns[3].replacingOccurrences(of: "\"", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
+        let expenseAmount = Double(columns[1].replacingOccurrences(of: "\"", with: "")) ?? 0.0
+        let expenseBucket = expenseAmount < 0 ? Bucket.income : Bucket.spending
+        let expenseCategory = Category.misc
+
+        // Filter out credit card payment transactions
+        let ignoredPayments = ["ONLINE ACH PAYMENT THANK YOU"]
+        guard !ignoredPayments.contains(expenseTitle) else {
+            return nil
+        }
+
+        return Expense(id: UUID().uuidString, title: expenseTitle, date: expenseDate, amount: expenseAmount, bucket: expenseBucket, category: expenseCategory)
+    }
+
+    private func classifyFromCreditCardCategory(_ categoryString: String) -> (Bucket, Category) {
+        var bucket: Bucket = .spending
+        var category: Category = .misc
+
+        let ignoreCatgories = ["Payment"]
+        if !ignoreCatgories.contains(categoryString) {
+            let housingCategories = ["Hotels"]
+            let foodCategories = ["Restaurants"]
+            let groceriesCategories = ["Grocery"]
+            let shoppingCategories = ["Shopping"]
+            let transportationCategories = ["Airlines", "Transportation"]
+            let entertainmentCategories = ["Entertainment"]
+
+            if (housingCategories.contains(categoryString)) {
+                return (.fixed, .housing)
+            } else if (foodCategories.contains(categoryString)) {
+                return (.spending, .eatingOut)
+            } else if (groceriesCategories.contains(categoryString)) {
+                return (.fixed, .groceries)
+            } else if (shoppingCategories.contains(categoryString)) {
+                return (.spending, .shopping)
+            } else if (transportationCategories.contains(categoryString)) {
+                return (.fixed, .transportation)
+            } else if (entertainmentCategories.contains(categoryString)) {
+                return (.spending, .entertainment)
+            }
+        }
+
+        return (bucket, category)
+    }
+
+    private func getCategoryFromCreditCardCategory(_ category: String) -> Category? {
+        let ignoreCatgories = ["Payment"]
+        guard !ignoreCatgories.contains(category) else { return nil }
+
+        let housingCategories = ["Hotels"]
+        let foodCategories = ["Restaurants"]
+        let groceriesCategories = ["Grocery"]
+        let shoppingCategories = ["Shopping"]
+        let transportationCategories = ["Airlines", "Transportation"]
+        let entertainmentCategories = ["Entertainment"]
+
+        if (housingCategories.contains(category)) {
+            return .housing
+        } else if (foodCategories.contains(category)) {
+            return .eatingOut
+        } else if (groceriesCategories.contains(category)) {
+            return .groceries
+        } else if (shoppingCategories.contains(category)) {
+            return .shopping
+        } else if (transportationCategories.contains(category)) {
+            return .transportation
+        } else if (entertainmentCategories.contains(category)) {
+            return .entertainment
+        }
+
+        return .misc
+    }
+
 // MARK: Helper functions
 
     func expenses(for month: String) -> [Expense] {
@@ -97,6 +295,10 @@ import FirebaseDatabase
     }()
 
 // MARK: Creating data
+
+    public func addExpenses(_ expenses: [Expense]) {
+        expenses.forEach(addExpense)
+    }
 
     public func addExpense(expense: Expense) {
         guard let amountString = numberFormatter.string(from: expense.amount as NSNumber) else {
@@ -244,48 +446,4 @@ import FirebaseDatabase
             }
         }
     }
-
-    // Firebase listener handle
-//    var observer: AuthStateDidChangeListenerHandle?
-//
-//    // Checks whether user is logged in
-//    func checkLoginStatus() {
-//        Auth.auth().addStateDidChangeListener { (auth, user) in
-//            if user == nil {
-//                self.login()
-//            }
-//        }
-//    }
-//
-//    // Log user in
-//    func login() {
-//        let email = ""
-//        let password = ""
-//        Auth.auth().signIn(withEmail: email, password: password) { (authResult, error) in
-//            print(authResult!.description)
-//            print(authResult!.debugDescription)
-//            print(authResult!.additionalUserInfo.debugDescription)
-//        }
-//    }
-//
-//    // Start observing update .childAdded events
-//    func claimObserver() {
-//        self.observer = Auth.auth().addStateDidChangeListener() { (auth, user) in
-//            var entries: [DataSnapshot] = []
-//            self.childReference.observe(.childAdded, with: { snapshot in
-//                if snapshot.hasChildren() {
-//                    entries.append(snapshot)
-//                }
-//                self.logEntries = entries
-//            })
-//        }
-//    }
-//
-//    // Release database observer
-//    func releaseObserver() {
-//        if self.observer != nil {
-//            Auth.auth().removeStateDidChangeListener(self.observer!)
-//            self.observer = nil
-//        }
-//    }
 }

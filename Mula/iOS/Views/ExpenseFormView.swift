@@ -93,6 +93,17 @@ struct ExpenseFormView: View {
                     }
                 }
             }
+            .onChange(of: bucket) {
+                if category == .eatingOut {
+                    if bucket == .saving {
+                        category = .retirement
+                    } else if bucket == .investment {
+                        category = .stocks
+                    } else if bucket == .income {
+                        category = .job
+                    }
+                }
+            }
 
             RowView(iconName: "tag", title: "Category:", color: .orange) {
                 Picker("", selection: $category) {

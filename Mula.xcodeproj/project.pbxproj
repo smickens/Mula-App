@@ -76,6 +76,7 @@
 		E288FB162C275FBA00B6D57A /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223EE2C1FF14E0065089A /* Tab.swift */; };
 		E288FB172C275FCB00B6D57A /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223EC2C1EB5CC0065089A /* ProgressBar.swift */; };
 		E288FB192C27612900B6D57A /* TransactionSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E288FB182C27612900B6D57A /* TransactionSelector.swift */; };
+		E2E1AA3C2C64778200E7B459 /* ExpensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E1AA3B2C64778200E7B459 /* ExpensesView.swift */; };
 		E2F955952C462E2D007D2E8E /* MulaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF3CAE52B61BB9300C926ED /* MulaApp.swift */; };
 		E2F955982C462E60007D2E8E /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E2F955972C462E60007D2E8E /* FirebaseAuth */; };
 		E2F9559A2C462E60007D2E8E /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E2F955992C462E60007D2E8E /* FirebaseDatabaseSwift */; };
@@ -88,6 +89,7 @@
 		DE9AF9302B7851F700D1F4DC /* UploadFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFormView.swift; sourceTree = "<group>"; };
 		DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChartView.swift; sourceTree = "<group>"; };
 		DE9AF9B62BA7995800D1F4DC /* BudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
+		DEED96BF2C799BDA0058955A /* Mula iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Mula iOS.entitlements"; sourceTree = "<group>"; };
 		DEF3CAE22B61BB9300C926ED /* Mula.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mula.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEF3CAE52B61BB9300C926ED /* MulaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MulaApp.swift; sourceTree = "<group>"; };
 		DEF3CAE72B61BB9300C926ED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 		E288FB062C275D2E00B6D57A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E288FB092C275D2E00B6D57A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E288FB182C27612900B6D57A /* TransactionSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionSelector.swift; sourceTree = "<group>"; };
+		E2E1AA3B2C64778200E7B459 /* ExpensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesView.swift; sourceTree = "<group>"; };
 		E2F9559B2C46315E007D2E8E /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -254,6 +257,7 @@
 				E253C8FA2C51E4DA00739FAD /* ExpenseSwipeActionsModifier.swift */,
 				E253C9062C5DDDEC00739FAD /* SearchBarView.swift */,
 				E253C9092C5ED18600739FAD /* SettingsView.swift */,
+				E2E1AA3B2C64778200E7B459 /* ExpensesView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -269,6 +273,7 @@
 		E288FAFF2C275D2D00B6D57A /* Mula iOS */ = {
 			isa = PBXGroup;
 			children = (
+				DEED96BF2C799BDA0058955A /* Mula iOS.entitlements */,
 				E253C90F2C61D48600739FAD /* Mula-iOS-Info.plist */,
 				E288FB022C275D2D00B6D57A /* ContentView2.swift */,
 				E288FB182C27612900B6D57A /* TransactionSelector.swift */,
@@ -508,6 +513,7 @@
 				E284D4B52C44479800F72684 /* ChartView.swift in Sources */,
 				E288FB192C27612900B6D57A /* TransactionSelector.swift in Sources */,
 				E288FB162C275FBA00B6D57A /* Tab.swift in Sources */,
+				E2E1AA3C2C64778200E7B459 /* ExpensesView.swift in Sources */,
 				E253C9082C5DDDEC00739FAD /* SearchBarView.swift in Sources */,
 				E253C8F32C4C949B00739FAD /* RowView.swift in Sources */,
 				E288FB172C275FCB00B6D57A /* ProgressBar.swift in Sources */,
@@ -711,6 +717,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Mula iOS/Mula iOS.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Mula iOS/Preview Content\"";
@@ -731,6 +739,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kayapps.Mula;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -743,6 +752,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Mula iOS/Mula iOS.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Mula iOS/Preview Content\"";
@@ -763,6 +774,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kayapps.Mula;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
