@@ -9,3 +9,7 @@ xcuserdata/
 # Ignore build artifacts
 build/
 DerivedData/
+
+# Ignore macOS system files
+.DS_Store
+
