@@ -5,6 +5,8 @@ GoogleService-Info.plist
 xcuserdata/
 *.xcworkspace
 *.xcuserstate
+*.xcuserdata
+**/*.xcuserstate
 
 # Ignore build artifacts
 build/
