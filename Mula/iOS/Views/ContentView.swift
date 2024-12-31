@@ -7,7 +7,15 @@
 
 import SwiftUI
 
+enum Tabs: Equatable, Hashable {
+    case home
+    case expenses
+    case settings
+//    case search
+}
+
 struct ContentView: View {
+    @State private var selectedTab: Tabs = .home
     @State private var dataManager = DataManager.shared
     let appearance: UITabBarAppearance = UITabBarAppearance()
 
@@ -17,22 +25,20 @@ struct ContentView: View {
 
     var body: some View {
         NavigationStack {
-            TabView {
-                HomeView(dataManager: dataManager)
-                    .tabItem{
-                        Label("Home", systemImage: "house")
-                    }
+            TabView(selection: $selectedTab) {
+                Tab("Home", systemImage: "house", value: .home) {
+                    HomeView(dataManager: dataManager)
+                }
 
-                ExpensesView(dataManager: dataManager)
-                    .tabItem {
-                        Label("Expenses", systemImage: "tag")
-                    }
+                Tab("Expenses", systemImage: "tag", value: .expenses) {
+                    ExpensesView(dataManager: dataManager)
+                }
 
-                SettingsView(dataManager: dataManager)
-                    .tabItem {
-                        Label("Settings", systemImage: "gear")
-                    }
+                Tab("Settings", systemImage: "gear", value: .settings) {
+                    SettingsView(dataManager: dataManager)
+                }
             }
+            .tabViewStyle(.sidebarAdaptable)
         }
         .environment(dataManager)
         // TODO: could put this logic under settings to create these "job" defaults for a certain date that I select
