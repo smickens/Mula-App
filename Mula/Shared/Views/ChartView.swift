@@ -36,28 +36,33 @@ struct ChartView: View {
     }
 
     var body: some View {
-        Chart(data) {
-            // could use multiple line marks to break out by category
+        // TODO: use up the same amount of height when empty
+        if data.count == 0 {
+            Text("No expenses")
+        } else {
+            Chart(data) {
+                // could use multiple line marks to break out by category
 
-            LineMark(
-                x: .value("Month", $0.date),
-                y: .value("Amount", $0.value)
-            )
-            .interpolationMethod(.catmullRom(alpha: 1.0))
+                LineMark(
+                    x: .value("Month", $0.date),
+                    y: .value("Amount", $0.value)
+                )
+                .interpolationMethod(.catmullRom(alpha: 1.0))
 
-            AreaMark(
-                x: .value("Month", $0.date),
-                y: .value("Amount", $0.value)
-            )
-            .interpolationMethod(.catmullRom(alpha: 1.0))
-            .foregroundStyle(areaBackground)
-        }
-        .chartXAxis {
-            AxisMarks(values: .stride(by: .month, count: 1)) { _ in
-                AxisValueLabel(format: .dateTime.month(.abbreviated).year(.twoDigits), centered: true)
+                AreaMark(
+                    x: .value("Month", $0.date),
+                    y: .value("Amount", $0.value)
+                )
+                .interpolationMethod(.catmullRom(alpha: 1.0))
+                .foregroundStyle(areaBackground)
             }
+            .chartXAxis {
+                AxisMarks(values: .stride(by: .month, count: 1)) { _ in
+                    AxisValueLabel(format: .dateTime.month(.abbreviated).year(.twoDigits), centered: true)
+                }
+            }
+            .foregroundStyle(color)
         }
-        .foregroundStyle(color)
     }
 
     private var areaBackground: Gradient {
