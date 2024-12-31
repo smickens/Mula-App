@@ -11,15 +11,18 @@ import SwiftUI
 struct SettingsView: View {
     @Bindable var dataManager: DataManager
     @Environment(AuthViewModel.self) private var authViewModel
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
 
     var body: some View {
         VStack(spacing: 25) {
-            HStack {
-                Text("Settings")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
+            if horizontalSizeClass == .compact {
+                HStack {
+                    Text("Settings")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
 
-                Spacer()
+                    Spacer()
+                }
             }
 
             SettingsSectionView(title: "Budgets") {
@@ -62,6 +65,7 @@ struct SettingsView: View {
             Spacer()
         }
         .padding()
+        .frame(maxWidth: 600)
     }
 
     func createLargeButton(title: String, action: (() -> Void)? = nil) -> some View {
