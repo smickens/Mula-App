@@ -15,32 +15,72 @@ enum Tabs: Equatable, Hashable {
 }
 
 struct ContentView: View {
-    @State private var selectedTab: Tabs = .home
     @State private var dataManager = DataManager.shared
-    let appearance: UITabBarAppearance = UITabBarAppearance()
+    @State private var selectedMonth: Int = Calendar.current.component(.month, from: Date())
+    @State private var selectedYear: Int = Calendar.current.component(.year, from: Date())
+
+    private let appearance: UITabBarAppearance = UITabBarAppearance()
+    private let currentYear: Int = Calendar.current.component(.year, from: Date())
+    private let months: [String] = DateFormatter().monthSymbols
 
     init() {
         UITabBar.appearance().scrollEdgeAppearance = appearance
     }
 
     var body: some View {
-        NavigationStack {
-            TabView(selection: $selectedTab) {
-                Tab("Home", systemImage: "house", value: .home) {
-                    HomeView(dataManager: dataManager)
+        NavigationSplitView {
+            List {
+                Section(header: Text("Views")) {
+                    NavigationLink(destination: HomeView(selectedYear: $selectedYear, selectedMonth: $selectedMonth)) {
+                        Label("Home", systemImage: "house")
+                    }
+
+                    NavigationLink(destination: ExpensesView(selectedYear: $selectedYear, selectedMonth: $selectedMonth)) {
+                        Label("Expenses", systemImage: "tag")
+                    }
                 }
 
-                Tab("Expenses", systemImage: "tag", value: .expenses) {
-                    ExpensesView(dataManager: dataManager)
-                }
+                sidebarDateOptions
 
-                Tab("Settings", systemImage: "gear", value: .settings) {
-                    SettingsView(dataManager: dataManager)
+                Section(header: Text("Settings")) {
+                    NavigationLink(destination: SettingsView()) {
+                        Label("Settings", systemImage: "gear")
+                    }
                 }
             }
-            .tabViewStyle(.sidebarAdaptable)
+            .listStyle(.insetGrouped)
+            .navigationTitle("Mula")
+        } detail: {
+            Text("detail view")
+
+//            TabView {
+//                HomeView(selectedYear: $selectedYear, selectedMonth: $selectedMonth)
+//                    .tabItem {
+//                        Label("Home", systemImage: "house")
+//                    }
+//                ExpensesView(selectedMonth: $selectedMonth)
+//                    .tabItem {
+//                        Label("Expenses", systemImage: "tag")
+//                    }
+//            }
         }
         .environment(dataManager)
+//        .overlay(
+//            // Top-right button
+//            VStack {
+//                HStack {
+//                    Spacer()
+//                    Button(action: {
+//                        print("Top-right button tapped")
+//                    }) {
+//                        Image(systemName: "gear")
+//                            .foregroundColor(.blue)
+//                            .padding()
+//                    }
+//                }
+//                Spacer()
+//            }
+//        )
         // TODO: could put this logic under settings to create these "job" defaults for a certain date that I select
         // TODO: maybe a whole form there to enter paycheck and quickly input these numbers
 //        .onAppear {
@@ -81,6 +121,56 @@ struct ContentView: View {
 //                dataManager.addExpense(expense: expenseESPPStock)
 //            }
 //        }
+    }
+
+//    var sidebarDateOptions: some View {
+//        Section(header: Text("Expenses")) {
+////                    DisclosureGroup {
+//            ForEach(2024...currentYear, id: \.self) { year in
+//                DisclosureGroup {
+//                    ForEach(1...12, id: \.self) { month in
+//                        if (year < currentYear || month <= currentMonth) {
+////                            NavigationLink(destination: EmptyView()) {
+//                                Label("\(months[month-1])", systemImage: "\(month).circle.fill")
+//                                    .onTapGesture {
+//                                        dataManager.refreshData(with: String(year), and: String(month))
+//                                    }
+////                            }
+//                        }
+//                    }
+//                } label: {
+//                    Label(formatYear(year), systemImage: "calendar")
+//                }
+//            }
+//        }
+//    }
+
+    // TODO: add a DateConfiguration/TimeframeConfig struct
+    // TODO: allow for viewing previous by month, last 6 months, YTD
+    var sidebarDateOptions: some View {
+        Section(header: Text("Timeframe")) {
+            Picker("Month", selection: $selectedMonth) {
+                ForEach(1...12, id: \.self) { month in
+                    Text("\(months[month-1])")
+                        .tag(month)
+                }
+            }
+            .pickerStyle(.menu)
+
+            Picker("Year", selection: $selectedYear) {
+                ForEach(2024...currentYear, id: \.self) { year in
+                    Text(String(year))
+                        .tag(year)
+                }
+            }
+            .pickerStyle(.menu)
+        }
+    }
+
+    func formatYear(_ year: Int) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .none // No formatting
+        return formatter.string(from: NSNumber(value: year)) ?? "\(year)"
     }
 
     func createDate(year: Int, month: Int, day: Int) -> Date? {

@@ -8,6 +8,12 @@
 import Foundation
 
 extension Date {
+    var year: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "YYYY"
+        return dateFormatter.string(from: self)
+    }
+
     var month: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMMM"

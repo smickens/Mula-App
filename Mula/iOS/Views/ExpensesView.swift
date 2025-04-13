@@ -8,7 +8,12 @@
 import SwiftUI
 
 struct ExpensesView: View {
-    @Bindable var dataManager: DataManager
+    @Environment(DataManager.self) private var dataManager
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+
+    @Binding var selectedYear: Int
+    @Binding var selectedMonth: Int
+
     @State private var selectedExpense: Expense? = nil
     @State private var expenseToDelete: Expense? = nil
     @State private var addingNewExpense: Bool = false
@@ -20,8 +25,10 @@ struct ExpensesView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            HeaderView(title: "Expenses", selectedMonth: $dataManager.selectedMonth)
-                .padding()
+            if horizontalSizeClass == .compact {
+                HeaderView(title: "Expenses", selectedMonth: $selectedMonth)
+                    .padding()
+            }
 
             HStack(spacing: 0) {
                 SearchBarView(searchText: $searchText)
@@ -71,8 +78,18 @@ struct ExpensesView: View {
         dataManager.deleteExpense(id: expenseID)
     }
 
+    var year: String {
+        return String(selectedYear)
+    }
+
+    private let months: [String] = DateFormatter().monthSymbols
+
+    var month: String {
+        return months[selectedMonth-1]
+    }
+
     var searchResults: [Expense] {
-        let expenses = dataManager.expensesForSelectedMonth
+        let expenses = dataManager.expenses(with: year, and: month)
 
         guard !searchText.isEmpty else {
             return expenses

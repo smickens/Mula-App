@@ -8,6 +8,8 @@
 import Firebase
 import FirebaseDatabase
 
+// TODO: do things default to private or public in this, can remove the other
+
 @Observable final class DataManager {
 
     static let shared = DataManager()
@@ -24,17 +26,20 @@ import FirebaseDatabase
     private var expenseRef: DatabaseReference
     private var budgetRef: DatabaseReference
 
-    public var selectedMonth = Date().month {
-        didSet {
-            refreshData(for: selectedMonth)
-        }
-    }
+    // TODO: might remove this property altogether
+//    public var selectedMonth = Date().month
+//    {
+//        didSet {
+//            refreshData(with: selectedYear, and: selectedMonth)
+//        }
+//    }
 
-    private var allExpenses: [Expense] = [] {
-        didSet {
-            refreshData(for: selectedMonth)
-        }
-    }
+    private var allExpenses: [Expense] = []
+//    {
+//        didSet {
+//            refreshData(with: selectedYear, and: selectedMonth)
+//        }
+//    }
 
     public var budget: [Bucket: Double] = [:]
 
@@ -42,16 +47,16 @@ import FirebaseDatabase
     var bucketTotalsForSelectedMonth: [Bucket: Double] = [:]
     var categoryTotalsForSelectedMonth: [Category: Double] = [:]
 
-    public func refreshData(for selectedMonth: String) {
-        print("Refreshing data...")
-        expensesForSelectedMonth = DataManager.shared.expenses(for: selectedMonth).sorted(by: { $0.date < $1.date })
+    public func refreshData(with selectedYear: String, and selectedMonth: String) {
+        print("Refreshing data for \(selectedMonth) \(selectedYear)...")
+        expensesForSelectedMonth = DataManager.shared.expenses(with: selectedYear, and: selectedMonth).sorted(by: { $0.date < $1.date })
 
         for bucket in Bucket.allCases {
-            bucketTotalsForSelectedMonth[bucket] = totalExpense(for: selectedMonth, in: bucket)
+            bucketTotalsForSelectedMonth[bucket] = totalExpense(with: selectedYear, and: selectedMonth, in: bucket)
         }
 
         for category in Category.allCases {
-            categoryTotalsForSelectedMonth[category] = totalExpense(for: selectedMonth, in: category)
+            categoryTotalsForSelectedMonth[category] = totalExpense(with: selectedYear, and: selectedMonth, in: category)
         }
     }
 
@@ -254,32 +259,33 @@ import FirebaseDatabase
     }
 
 // MARK: Helper functions
+    // TODO: add helpers that have this take in Ints
 
-    func expenses(for month: String) -> [Expense] {
-        return allExpenses.filter { $0.date.month == month }
+    func expenses(with year: String, and month: String) -> [Expense] {
+        return allExpenses.filter { $0.date.year == year && $0.date.month == month }
     }
 
     func expenses(for bucket: Bucket) -> [Expense] {
         return allExpenses.filter { $0.bucket == bucket }
     }
 
-    func expenses(for month: String, in bucket: Bucket) -> [Expense] {
-        let e = expenses(for: month)
+    func expenses(with year: String, and month: String, in bucket: Bucket) -> [Expense] {
+        let e = expenses(with: year, and: month)
         return e.filter { $0.bucket == bucket }
     }
 
-    func expenses(for month: String, in category: Category) -> [Expense] {
-        let e = expenses(for: month)
+    func expenses(with year: String, and month: String, in category: Category) -> [Expense] {
+        let e = expenses(with: year, and: month)
         return e.filter { $0.category == category }
     }
 
-    func totalExpense(for month: String, in bucket: Bucket) -> Double {
-        let e = expenses(for: month, in: bucket)
+    func totalExpense(with year: String, and month: String, in bucket: Bucket) -> Double {
+        let e = expenses(with: year, and: month, in: bucket)
         return e.reduce(0.0) { $0 + $1.amount }
     }
 
-    func totalExpense(for month: String, in category: Category) -> Double {
-        let e = expenses(for: month, in: category)
+    func totalExpense(with year: String, and month: String, in category: Category) -> Double {
+        let e = expenses(with: year, and: month, in: category)
         return e.reduce(0.0) { $0 + $1.amount }
     }
 

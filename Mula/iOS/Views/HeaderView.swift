@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HeaderView: View {
     let title: String
-    @Binding var selectedMonth: String
+    @Binding var selectedMonth: Int
     let months: [String] = DateFormatter().monthSymbols
 
     var body: some View {
@@ -31,5 +31,5 @@ struct HeaderView: View {
 }
 
 #Preview {
-    HeaderView(title: "Mula", selectedMonth: .constant("March"))
+    HeaderView(title: "Mula", selectedMonth: .constant(3))
 }

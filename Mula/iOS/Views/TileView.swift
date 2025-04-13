@@ -9,8 +9,9 @@ import SwiftUI
 import Charts
 
 struct TileView: View {
-    @Environment(DataManager.self) private var dataManager
     let bucket: Bucket
+    let amount: Double
+    let budget: Double
 
     var body: some View {
         VStack {
@@ -46,17 +47,9 @@ struct TileView: View {
             Text("$\(Int(amount))").font(.subheadline).fontWeight(.semibold).foregroundStyle(amount > budget ? .red : .primary) + Text(" / ").foregroundStyle(.secondary) + Text("$\(Int(budget))").font(.subheadline).foregroundStyle(.secondary)
         }
         .padding()
-        .aspectRatio(1, contentMode: .fit)
+//        .aspectRatio(1, contentMode: .fit)
         .background(Color(.systemGray6))
         .cornerRadius(backgroundCornerRadius)
-    }
-
-    private var amount: Double {
-        return (dataManager.bucketTotalsForSelectedMonth[bucket] ?? 0.0) * -1
-    }
-
-    private var budget: Double {
-        return dataManager.budget(for: bucket)
     }
 }
 
