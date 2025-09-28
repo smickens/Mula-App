@@ -43,7 +43,7 @@ struct ContentView: View {
                 sidebarDateOptions
 
                 Section(header: Text("Settings")) {
-                    NavigationLink(destination: SettingsView()) {
+                    NavigationLink(destination: SettingsView_iOS()) {
                         Label("Settings", systemImage: "gear")
                     }
                 }

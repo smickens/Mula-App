@@ -29,7 +29,7 @@ struct RowView<Content: View>: View {
             value()
         }
         .padding()
-        .background(Color(.systemGray6))
+//        .background(Color(.systemGray6))
         .cornerRadius(backgroundCornerRadius)
     }
 }

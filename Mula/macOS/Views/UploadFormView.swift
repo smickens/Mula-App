@@ -68,11 +68,11 @@ struct UploadFormView: View {
     
     private var newExpensesList: some View {
         List(newExpenses) { expense in
-            ExpenseView(selectedExpense: $selectedExpense, expense: expense, swipeActionsEnabled: false)
+            ExpenseView(selectedExpense: $selectedExpense, swipeActionsEnabled: false, expense: expense)
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                     Button(role: .destructive) {
                         newExpenses.removeAll { $0.id == expense.id }
-                        modelContext.delete(expense)
+//                        modelContext.delete(expense)
                     } label: {
                         Label("Delete", systemImage: "trash.fill")
                     }
@@ -122,7 +122,7 @@ struct UploadFormView: View {
         do {
             try modelContext.transaction {
                 for expense in newExpenses {
-                    modelContext.insert(expense)
+//                    modelContext.insert(expense)
                 }
             }
         } catch {
@@ -134,7 +134,7 @@ struct UploadFormView: View {
 
     private func clearAllNewExpenses() {
         for expense in newExpenses {
-            modelContext.delete(expense)
+//            modelContext.delete(expense)
         }
     }
 
@@ -176,7 +176,7 @@ struct UploadFormView: View {
                 }
                 if expense.title.range(of: "Uber Eats", options: .caseInsensitive) != nil {
                     expense.title = "Uber Eats"
-                    expense.category = .food
+                    expense.category = .eatingOut
                 } else if expense.title.range(of: "Uber", options: .caseInsensitive) != nil {
                     expense.title = "Uber"
                     expense.category = .transportation
@@ -185,16 +185,16 @@ struct UploadFormView: View {
                     expense.category = .transportation
                 } else if expense.title.range(of: "APPLE CAFFE", options: .caseInsensitive) != nil {
                     expense.title = "Apple Caffe"
-                    expense.category = .food
+                    expense.category = .eatingOut
                 } else if expense.title.range(of: "SAFEWAY", options: .caseInsensitive) != nil {
                     expense.title = "Safeway"
-                    expense.category = .food
+                    expense.category = .groceries
                 } else if expense.title.range(of: "TARGET", options: .caseInsensitive) != nil {
                     expense.title = "Target"
                     expense.category = .shopping
                 } else if expense.title.range(of: "DUNKIN", options: .caseInsensitive) != nil {
                     expense.title = "Dunkin"
-                    expense.category = .food
+                    expense.category = .eatingOut
                 }
                 
                 expenses.append(expense)
@@ -222,7 +222,7 @@ struct UploadFormView: View {
             return nil
         }
         
-        return Expense(title: expenseTitle, date: expenseDate, amount: -expenseAmount, category: expenseCategory)
+        return Expense(id: UUID().uuidString, title: expenseTitle, date: expenseDate, amount: -expenseAmount, bucket: .spending, category: expenseCategory)
     }
     
     private func processUSBankTransaction(_ row: String) -> Expense? {
@@ -235,15 +235,16 @@ struct UploadFormView: View {
         let expenseDate = dateFormatter.date(from: columns[0].replacingOccurrences(of: "\"", with: "")) ?? Date()
         let expenseTitle = columns[2].replacingOccurrences(of: "\"", with: "")
         let expenseAmount = (Double(columns[4].replacingOccurrences(of: "\"", with: "")) ?? 0.0) * -1
-        let expenseCategory = expenseAmount < 0 ? Category.income : Category.misc
-        
+
+        let expenseCategory = Category.misc //expenseAmount < 0 ? Category.income : Category.misc
+
         // Filter out the following: credit card payment transactions, moving money to/from Apple Savings, and waived monthly maintenance fees
         let ignoredPayments = ["WEB AUTHORIZED PMT APPLECARD GSBANK", "WEB AUTHORIZED PMT WELLS FARGO CARD", "MOBILE BANKING PAYMENT TO CREDIT CARD 5895", "MOBILE BANKING PAYMENT TO CREDIT CARD 9996", "WEB AUTHORIZED PMT APPLE GS SAVINGS", "ELECTRONIC DEPOSIT APPLE GS SAVINGS", "MONTHLY MAINTENANCE FEE", "MONTHLY MAINTENANCE FEE WAIVED"]
         guard !ignoredPayments.contains(expenseTitle) else {
             return nil
         }
             
-        return Expense(title: expenseTitle, date: expenseDate, amount: -expenseAmount, category: expenseCategory)
+        return Expense(id: UUID().uuidString, title: expenseTitle, date: expenseDate, amount: -expenseAmount, bucket: .spending, category: expenseCategory)
     }
     
     private func processBiltTransaction(_ row: String) -> Expense? {
@@ -256,15 +257,15 @@ struct UploadFormView: View {
         let expenseDate = dateFormatter.date(from: columns[0].replacingOccurrences(of: "\"", with: "")) ?? Date()
         let expenseTitle = columns[3].replacingOccurrences(of: "\"", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
         let expenseAmount = (Double(columns[1].replacingOccurrences(of: "\"", with: "")) ?? 0.0) * -1
-        let expenseCategory = expenseAmount < 0 ? Category.income : Category.misc
-        
+        let expenseCategory = Category.misc //expenseAmount < 0 ? Category.income : Category.misc
+
         // Filter out credit card payment transactions
         let ignoredPayments = ["ONLINE ACH PAYMENT THANK YOU"]
         guard !ignoredPayments.contains(expenseTitle) else {
             return nil
         }
             
-        return Expense(title: expenseTitle, date: expenseDate, amount: -expenseAmount, category: expenseCategory)
+        return Expense(id: UUID().uuidString, title: expenseTitle, date: expenseDate, amount: -expenseAmount, bucket: .spending, category: expenseCategory)
     }
 
     private func getCategory(fromString category: String) -> Category? {
@@ -281,7 +282,7 @@ struct UploadFormView: View {
         if (housingCategories.contains(category)) {
             return .housing
         } else if (foodCategories.contains(category)) {
-            return .food
+            return .eatingOut
         } else if (shoppingCategories.contains(category)) {
             return .shopping
         } else if (transportationCategories.contains(category)) {

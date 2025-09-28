@@ -48,7 +48,7 @@ struct TileView: View {
         }
         .padding()
 //        .aspectRatio(1, contentMode: .fit)
-        .background(Color(.systemGray6))
+        .background(Color(.systemGray))
         .cornerRadius(backgroundCornerRadius)
     }
 }

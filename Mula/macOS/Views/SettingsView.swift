@@ -29,7 +29,7 @@ struct SettingsView: View {
             LazyVGrid(columns: [GridItem(), GridItem()]) {
                 ForEach(Category.allCases, id: \.self) { category in
                     HStack {
-                        if category != .income {
+//                        if category != .income {
                             let budget = budget(for: category)
                             
                             ZStack {
@@ -37,14 +37,14 @@ struct SettingsView: View {
                                     .fill(budget.category.tintColor)
                                     .frame(width: 28, height: 28)
 
-                                budget.category.icon
+                                Image(systemName: budget.category.iconName)
                                     .foregroundColor(.white)
                             }
                             
 //                            Text("\(budget.category.name):")
                             
                             TextField("", value: Bindable(budget).target, format: .currency(code: "USD"))
-                        }
+//                        }
                     }
                     .padding(.horizontal)
                 }

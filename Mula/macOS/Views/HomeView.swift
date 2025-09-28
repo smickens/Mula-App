@@ -38,7 +38,7 @@ struct HomeView: View {
                                 .fill(category.tintColor)
                                 .frame(width: 28, height: 28)
 
-                            category.icon
+                            Image(systemName: category.iconName)
                                 .foregroundColor(.white)
                         }
 

@@ -41,7 +41,7 @@ struct SearchBarView: View {
     }
 
     private var grayBackgroundColor: Color {
-        return Color(.systemGray6)
+        return Color(.systemGray)
     }
 
     private var grayAccentColor: Color {

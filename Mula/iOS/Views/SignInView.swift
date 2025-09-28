@@ -24,7 +24,9 @@ struct SignInView: View {
                 TextField("Email", text: $email)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
+#if os(iOS)
                     .keyboardType(.emailAddress)
+#endif
 
                 SecureField("Password", text: $password)
                     .textFieldStyle(RoundedBorderTextFieldStyle())

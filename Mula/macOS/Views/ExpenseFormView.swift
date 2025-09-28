@@ -26,9 +26,11 @@ struct NewExpenseFormView: View {
 
     private func save() {
         // Handle saving the new expense, for example, you could add it to an array or store it in a database.
-        let expenseAmount = category == .income ? amount : -amount
-        let newExpense = Expense(title: title, date: date, amount: expenseAmount, category: category)
-        modelContext.insert(newExpense)
+        let expenseAmount = amount //category == .income ? amount : -amount
+
+        // TODO: save the expense
+//        let newExpense = Expense(title: title, date: date, amount: expenseAmount, category: category)
+//        modelContext.insert(newExpense)
     }
     
     private func firstDayOfMonth(month: String) -> Date {

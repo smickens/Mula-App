@@ -22,7 +22,7 @@ struct BudgetView: View {
                                 .fill(budget.category.tintColor)
                                 .frame(width: 28, height: 28)
 
-                            budget.category.icon
+                            Image(systemName: budget.category.iconName)
                                 .foregroundColor(.white)
                         }
 
@@ -52,12 +52,14 @@ struct BudgetView: View {
     }
     
     private func getBudget(for category: Category) -> Budget? {
-        guard category != .income else { return nil }
+//        guard category != .income else { return nil }
         return budgets.first(where: { $0.category == category })
     }
     
     private var totalSpent: Double {
-        return totalsByCategory.filter({ $0.key != .income } ).reduce(0.0) { $0 + $1.value }
+        return totalsByCategory
+//            .filter({ $0.key != .income } )
+            .reduce(0.0) { $0 + $1.value }
     }
 
     private var totalBudget: Double {

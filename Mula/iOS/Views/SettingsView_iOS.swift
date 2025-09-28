@@ -1,5 +1,5 @@
 //
-//  SettingsView.swift
+//  SettingsView_iOS.swift
 //  Mula
 //
 //  Created by Shanti Mickens on 8/3/24.
@@ -8,8 +8,8 @@
 import FirebaseAuth
 import SwiftUI
 
-struct SettingsView: View {
-    @Bindable var dataManager: DataManager
+struct SettingsView_iOS: View {
+    @Environment(DataManager.self) private var dataManager
     @Environment(AuthViewModel.self) private var authViewModel
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
 
@@ -29,18 +29,20 @@ struct SettingsView: View {
                 ForEach(Bucket.allCases, id: \.id) { bucket in
                     if bucket != .income {
                         RowView(iconName: bucket.icon, title: "\(bucket.name):", color: bucket.tint) {
-                            TextField("Enter amount", value: $dataManager.budget[bucket], format: .currency(code: "USD"))
-                                .multilineTextAlignment(.trailing)
-                                .keyboardType(.decimalPad)
-                                .padding(.vertical, 5)
-                                .padding(.horizontal)
-                                .frame(width: 130)
-                                .background(Color(.systemGray5))
-                                .cornerRadius(8)
-                                .onSubmit {
-                                    guard let amount = dataManager.budget[bucket] else { return }
-                                    dataManager.updateBudget(for: bucket, to: amount)
-                                }
+                            // TODO: fix this after change to use dataManager from environment
+                            Text(dataManager.budget[bucket] ?? 0.0, format: .currency(code: "USD"))
+//                            TextField("Enter amount", value: dataManager.budget[bucket], format: .currency(code: "USD"))
+//                                .multilineTextAlignment(.trailing)
+//                                .keyboardType(.decimalPad)
+//                                .padding(.vertical, 5)
+//                                .padding(.horizontal)
+//                                .frame(width: 130)
+//                                .background(Color(.systemGray5))
+//                                .cornerRadius(8)
+//                                .onSubmit {
+//                                    guard let amount = dataManager.budget[bucket] else { return }
+//                                    dataManager.updateBudget(for: bucket, to: amount)
+//                                }
                         }
                     }
                 }
@@ -110,7 +112,8 @@ struct ExpensesImportView: View {
 
         createLargeButton(title: "Save Expenses") {
             print("save expenses \(expenses)")
-            dataManager.addExpenses(expenses)
+            let expensesFailedToAdd = dataManager.addExpenses(expenses)
+            expenses = expensesFailedToAdd
 
             expensesSaved = true
         }

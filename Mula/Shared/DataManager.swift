@@ -302,14 +302,22 @@ import FirebaseDatabase
 
 // MARK: Creating data
 
-    public func addExpenses(_ expenses: [Expense]) {
-        expenses.forEach(addExpense)
+    public func addExpenses(_ expenses: [Expense]) -> [Expense] {
+        var expensesFailed: [Expense] = []
+        for expense in expenses {
+            let added = addExpense(expense: expense)
+            if !added {
+                print("Error adding expense: \(expense)")
+                expensesFailed.append(expense)
+            }
+        }
+        return expensesFailed
     }
 
-    public func addExpense(expense: Expense) {
+    public func addExpense(expense: Expense) -> Bool {
         guard let amountString = numberFormatter.string(from: expense.amount as NSNumber) else {
             print("Error converting expense's amount (\(expense.amount)) to a String")
-            return
+            return false
         }
 
         let newExpenseDictionary = [
@@ -322,7 +330,7 @@ import FirebaseDatabase
 
         guard let autoId = expenseRef.childByAutoId().key else {
             print("Error getting new auto id for expense")
-            return
+            return false
         }
 
         expenseRef.child("\(autoId)").setValue(newExpenseDictionary) { (error, ref) in
@@ -333,6 +341,9 @@ import FirebaseDatabase
                 self.allExpenses.append(expense)
             }
         }
+
+        // TODO: handle error with async
+        return true
     }
 
 // MARK: Reading data

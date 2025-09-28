@@ -14,7 +14,7 @@ struct ExpenseView: View {
 #if os(macOS)
     @Binding var selectedExpense: Expense?
     @State private var showingEditExpenseForm = false
-    let swipeActionsEnabled: Bool = true
+    let swipeActionsEnabled: Bool
 #endif
     let expense: Expense
 

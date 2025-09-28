@@ -17,9 +17,7 @@
 		DEF8FE172B6AE51D00D10468 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE162B6AE51D00D10468 /* Category.swift */; };
 		DEF8FE192B6B976E00D10468 /* ExpenseFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE182B6B976E00D10468 /* ExpenseFormView.swift */; };
 		DEF8FE1C2B6B989A00D10468 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE1B2B6B989A00D10468 /* Extensions.swift */; };
-		DEF8FE1E2B6B995500D10468 /* ExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE1D2B6B995500D10468 /* ExpenseView.swift */; };
 		DEF8FE222B6B9E1000D10468 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE212B6B9E1000D10468 /* SummaryView.swift */; };
-		E253C8ED2C4C6C6100739FAD /* ExpenseFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8EC2C4C6C6100739FAD /* ExpenseFormView.swift */; };
 		E253C8EE2C4C6C6100739FAD /* ExpenseFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8EC2C4C6C6100739FAD /* ExpenseFormView.swift */; };
 		E253C8F02C4C74D100739FAD /* ExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8EF2C4C74D100739FAD /* ExpenseView.swift */; };
 		E253C8F22C4C949B00739FAD /* RowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8F12C4C949B00739FAD /* RowView.swift */; };
@@ -30,16 +28,13 @@
 		E253C8F92C4DDFB600739FAD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E253C8F72C4DDFB600739FAD /* GoogleService-Info.plist */; };
 		E253C8FB2C51E4DA00739FAD /* ExpenseSwipeActionsModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8FA2C51E4DA00739FAD /* ExpenseSwipeActionsModifier.swift */; };
 		E253C8FC2C51E4DA00739FAD /* ExpenseSwipeActionsModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8FA2C51E4DA00739FAD /* ExpenseSwipeActionsModifier.swift */; };
-		E253C8FE2C51EA6F00739FAD /* ExpenseEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8FD2C51EA6500739FAD /* ExpenseEditView.swift */; };
 		E253C8FF2C51EA6F00739FAD /* ExpenseEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8FD2C51EA6500739FAD /* ExpenseEditView.swift */; };
-		E253C9012C52120100739FAD /* ExpenseAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9002C5211FD00739FAD /* ExpenseAddView.swift */; };
 		E253C9022C52120100739FAD /* ExpenseAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9002C5211FD00739FAD /* ExpenseAddView.swift */; };
 		E253C9042C5B256700739FAD /* ExpenseAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9032C5B256700739FAD /* ExpenseAmountView.swift */; };
 		E253C9052C5B256700739FAD /* ExpenseAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9032C5B256700739FAD /* ExpenseAmountView.swift */; };
 		E253C9072C5DDDEC00739FAD /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9062C5DDDEC00739FAD /* SearchBarView.swift */; };
 		E253C9082C5DDDEC00739FAD /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9062C5DDDEC00739FAD /* SearchBarView.swift */; };
-		E253C90A2C5ED18600739FAD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9092C5ED18600739FAD /* SettingsView.swift */; };
-		E253C90B2C5ED18600739FAD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9092C5ED18600739FAD /* SettingsView.swift */; };
+		E253C90B2C5ED18600739FAD /* SettingsView_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9092C5ED18600739FAD /* SettingsView_iOS.swift */; };
 		E253C9112C61D5B100739FAD /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9102C61D5AC00739FAD /* SignInView.swift */; };
 		E253C9122C61D5B100739FAD /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9102C61D5AC00739FAD /* SignInView.swift */; };
 		E27223DE2BF9C2FE0065089A /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223DD2BF9C2FE0065089A /* Expense.swift */; };
@@ -111,7 +106,7 @@
 		E253C9002C5211FD00739FAD /* ExpenseAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseAddView.swift; sourceTree = "<group>"; };
 		E253C9032C5B256700739FAD /* ExpenseAmountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseAmountView.swift; sourceTree = "<group>"; };
 		E253C9062C5DDDEC00739FAD /* SearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarView.swift; sourceTree = "<group>"; };
-		E253C9092C5ED18600739FAD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		E253C9092C5ED18600739FAD /* SettingsView_iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView_iOS.swift; sourceTree = "<group>"; };
 		E253C90F2C61D48600739FAD /* Mula-iOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Mula-iOS-Info.plist"; sourceTree = SOURCE_ROOT; };
 		E253C9102C61D5AC00739FAD /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		E27223DD2BF9C2FE0065089A /* Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
@@ -256,7 +251,7 @@
 				E253C8F12C4C949B00739FAD /* RowView.swift */,
 				E253C8FA2C51E4DA00739FAD /* ExpenseSwipeActionsModifier.swift */,
 				E253C9062C5DDDEC00739FAD /* SearchBarView.swift */,
-				E253C9092C5ED18600739FAD /* SettingsView.swift */,
+				E253C9092C5ED18600739FAD /* SettingsView_iOS.swift */,
 				E2E1AA3B2C64778200E7B459 /* ExpensesView.swift */,
 			);
 			path = Views;
@@ -457,12 +452,10 @@
 				DE9AF9B52BA2C4AF00D1F4DC /* PieChartView.swift in Sources */,
 				E253C8F02C4C74D100739FAD /* ExpenseView.swift in Sources */,
 				DE9AF9312B7851F700D1F4DC /* UploadFormView.swift in Sources */,
-				E253C8FE2C51EA6F00739FAD /* ExpenseEditView.swift in Sources */,
 				DEF8FE192B6B976E00D10468 /* ExpenseFormView.swift in Sources */,
 				E253C9112C61D5B100739FAD /* SignInView.swift in Sources */,
 				E253C8F62C4C98EA00739FAD /* Constants.swift in Sources */,
 				DE9AF9B72BA7995800D1F4DC /* BudgetView.swift in Sources */,
-				E253C8ED2C4C6C6100739FAD /* ExpenseFormView.swift in Sources */,
 				E284D4CC2C44FDC500F72684 /* DataManager.swift in Sources */,
 				E284D4AC2C3CF42800F72684 /* TileView.swift in Sources */,
 				E2F9559D2C46315E007D2E8E /* HeaderView.swift in Sources */,
@@ -475,16 +468,13 @@
 				DEF8FE222B6B9E1000D10468 /* SummaryView.swift in Sources */,
 				E253C9042C5B256700739FAD /* ExpenseAmountView.swift in Sources */,
 				E253C9072C5DDDEC00739FAD /* SearchBarView.swift in Sources */,
-				E253C90A2C5ED18600739FAD /* SettingsView.swift in Sources */,
 				E284D4B22C3CF44700F72684 /* Bucket.swift in Sources */,
 				E27223E02C0EB5A10065089A /* SettingsView.swift in Sources */,
 				DEF8FE1C2B6B989A00D10468 /* Extensions.swift in Sources */,
 				E27223EF2C1FF14E0065089A /* Tab.swift in Sources */,
 				E27223E52C0EB9240065089A /* Budget.swift in Sources */,
 				E253C8F22C4C949B00739FAD /* RowView.swift in Sources */,
-				DEF8FE1E2B6B995500D10468 /* ExpenseView.swift in Sources */,
 				E27223ED2C1EB5CC0065089A /* ProgressBar.swift in Sources */,
-				E253C9012C52120100739FAD /* ExpenseAddView.swift in Sources */,
 				E27223EB2C15136E0065089A /* Bank.swift in Sources */,
 				E284D4A12C28CBCE00F72684 /* HomeView.swift in Sources */,
 			);
@@ -509,7 +499,7 @@
 				E253C8FC2C51E4DA00739FAD /* ExpenseSwipeActionsModifier.swift in Sources */,
 				E284D4B72C44482000F72684 /* ContentView.swift in Sources */,
 				E253C8EE2C4C6C6100739FAD /* ExpenseFormView.swift in Sources */,
-				E253C90B2C5ED18600739FAD /* SettingsView.swift in Sources */,
+				E253C90B2C5ED18600739FAD /* SettingsView_iOS.swift in Sources */,
 				E284D4B52C44479800F72684 /* ChartView.swift in Sources */,
 				E288FB192C27612900B6D57A /* TransactionSelector.swift in Sources */,
 				E288FB162C275FBA00B6D57A /* Tab.swift in Sources */,

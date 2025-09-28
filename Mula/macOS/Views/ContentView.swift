@@ -25,17 +25,17 @@ struct ContentView: View {
 //                    Image(systemName: "gear")
                 }
             }
-            
             .listStyle(.sidebar)
-            .toolbar {
-                ToolbarItem {
-                    Button {
-                        toggleSidebar()
-                    } label: {
-                        Image(systemName: "sidebar.leading")
-                    }
-                }
-            }
+            // TODO: fix Ambiguous use of 'toolbar(content:)'
+//            .toolbar {
+//                ToolbarItem {
+//                    Button {
+//                        toggleSidebar()
+//                    } label: {
+//                        Image(systemName: "sidebar.leading")
+//                    }
+//                }
+//            }
 
             switch selectedTab {
             case .home:
@@ -47,7 +47,8 @@ struct ContentView: View {
                     .toolbar {
                         ToolbarItem {
                             Button {
-                                DataManager.shared.addFakeExpense()
+                                // TODO: fix add expense
+//                                DataManager.shared.addFakeExpense()
                             } label: {
                                 Image(systemName: "plus")
                             }
@@ -55,7 +56,8 @@ struct ContentView: View {
 
                         ToolbarItem {
                             Button {
-                                DataManager.shared.readFakeExpenses()
+                                // TODO: fix read expense
+//                                DataManager.shared.readFakeExpenses()
                             } label: {
                                 Image(systemName: "star")
                             }
@@ -76,7 +78,7 @@ struct ContentView: View {
     }
 
     var nonIncomeExpenses: [Expense] {
-        return expenses.filter { !$0.isIncome }
+        return expenses.filter { $0.amount < 0 }
     }
 
     private func toggleSidebar() {

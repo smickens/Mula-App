@@ -92,7 +92,7 @@ struct SummaryView: View {
     }
     
     private var totalMoneyIn: Double {
-        return expensesForMonth.filter { $0.category == .income }.reduce(0) { $0 + $1.amount }
+        return 0 //expensesForMonth.filter { $0.category == .income }.reduce(0) { $0 + $1.amount }
     }
 
     private var totalMoneyOut: Double {
@@ -103,9 +103,9 @@ struct SummaryView: View {
         VStack(alignment: .leading) {
             LazyVGrid(columns: [GridItem(), GridItem()], alignment: .leading, spacing: 5) {
                 ForEach(Category.allCases, id: \.self) { category in
-                    if category != .income {
+//                    if category != .income {
                         getCategoryView(for: category)
-                    }
+//                    }
                 }
             }
             .padding(.horizontal)
@@ -119,7 +119,7 @@ struct SummaryView: View {
                     .fill(category.tintColor)
                     .frame(width: 28, height: 28)
 
-                category.icon
+                Image(systemName: category.iconName)
                     .foregroundColor(.white)
             }
 

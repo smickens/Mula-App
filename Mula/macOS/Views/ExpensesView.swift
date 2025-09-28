@@ -50,7 +50,7 @@ struct ExpensesView: View {
             .padding()
 
             List(filteredExpenses) { expense in
-                ExpenseView(selectedExpense: $selectedExpense, expense: expense, swipeActionsEnabled: true)
+                ExpenseView(selectedExpense: $selectedExpense, swipeActionsEnabled: true, expense: expense)
             }
             .searchable(text: $searchText)
         }
