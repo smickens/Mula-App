@@ -18,25 +18,14 @@
 		DEF8FE192B6B976E00D10468 /* ExpenseFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE182B6B976E00D10468 /* ExpenseFormView.swift */; };
 		DEF8FE1C2B6B989A00D10468 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE1B2B6B989A00D10468 /* Extensions.swift */; };
 		DEF8FE222B6B9E1000D10468 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE212B6B9E1000D10468 /* SummaryView.swift */; };
-		E253C8EE2C4C6C6100739FAD /* ExpenseFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8EC2C4C6C6100739FAD /* ExpenseFormView.swift */; };
 		E253C8F02C4C74D100739FAD /* ExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8EF2C4C74D100739FAD /* ExpenseView.swift */; };
 		E253C8F22C4C949B00739FAD /* RowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8F12C4C949B00739FAD /* RowView.swift */; };
-		E253C8F32C4C949B00739FAD /* RowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8F12C4C949B00739FAD /* RowView.swift */; };
-		E253C8F52C4C98EA00739FAD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8F42C4C98E700739FAD /* Constants.swift */; };
 		E253C8F62C4C98EA00739FAD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8F42C4C98E700739FAD /* Constants.swift */; };
-		E253C8F82C4DDFB600739FAD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E253C8F72C4DDFB600739FAD /* GoogleService-Info.plist */; };
 		E253C8F92C4DDFB600739FAD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E253C8F72C4DDFB600739FAD /* GoogleService-Info.plist */; };
 		E253C8FB2C51E4DA00739FAD /* ExpenseSwipeActionsModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8FA2C51E4DA00739FAD /* ExpenseSwipeActionsModifier.swift */; };
-		E253C8FC2C51E4DA00739FAD /* ExpenseSwipeActionsModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8FA2C51E4DA00739FAD /* ExpenseSwipeActionsModifier.swift */; };
-		E253C8FF2C51EA6F00739FAD /* ExpenseEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8FD2C51EA6500739FAD /* ExpenseEditView.swift */; };
-		E253C9022C52120100739FAD /* ExpenseAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9002C5211FD00739FAD /* ExpenseAddView.swift */; };
 		E253C9042C5B256700739FAD /* ExpenseAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9032C5B256700739FAD /* ExpenseAmountView.swift */; };
-		E253C9052C5B256700739FAD /* ExpenseAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9032C5B256700739FAD /* ExpenseAmountView.swift */; };
 		E253C9072C5DDDEC00739FAD /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9062C5DDDEC00739FAD /* SearchBarView.swift */; };
-		E253C9082C5DDDEC00739FAD /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9062C5DDDEC00739FAD /* SearchBarView.swift */; };
-		E253C90B2C5ED18600739FAD /* SettingsView_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9092C5ED18600739FAD /* SettingsView_iOS.swift */; };
 		E253C9112C61D5B100739FAD /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9102C61D5AC00739FAD /* SignInView.swift */; };
-		E253C9122C61D5B100739FAD /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9102C61D5AC00739FAD /* SignInView.swift */; };
 		E27223DE2BF9C2FE0065089A /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223DD2BF9C2FE0065089A /* Expense.swift */; };
 		E27223E02C0EB5A10065089A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223DF2C0EB5A10065089A /* SettingsView.swift */; };
 		E27223E52C0EB9240065089A /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223E42C0EB9240065089A /* Budget.swift */; };
@@ -44,47 +33,20 @@
 		E27223ED2C1EB5CC0065089A /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223EC2C1EB5CC0065089A /* ProgressBar.swift */; };
 		E27223EF2C1FF14E0065089A /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223EE2C1FF14E0065089A /* Tab.swift */; };
 		E27223F12C1FF2300065089A /* ExpensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223F02C1FF2300065089A /* ExpensesView.swift */; };
-		E284D49D2C27647200F72684 /* FinancialDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D49C2C27647200F72684 /* FinancialDataViewModel.swift */; };
 		E284D49F2C28CA8900F72684 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D49E2C28CA8900F72684 /* ChartView.swift */; };
 		E284D4A12C28CBCE00F72684 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4A02C28CBCE00F72684 /* HomeView.swift */; };
 		E284D4AC2C3CF42800F72684 /* TileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4AA2C3CF42800F72684 /* TileView.swift */; };
-		E284D4AE2C3CF42800F72684 /* TileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4AA2C3CF42800F72684 /* TileView.swift */; };
-		E284D4AF2C3CF42800F72684 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4A92C3CF42800F72684 /* HomeView.swift */; };
 		E284D4B22C3CF44700F72684 /* Bucket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4B12C3CF43800F72684 /* Bucket.swift */; };
-		E284D4B32C3CF44700F72684 /* Bucket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4B12C3CF43800F72684 /* Bucket.swift */; };
-		E284D4B42C3CFD1B00F72684 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE1B2B6B989A00D10468 /* Extensions.swift */; };
-		E284D4B52C44479800F72684 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D49E2C28CA8900F72684 /* ChartView.swift */; };
-		E284D4B72C44482000F72684 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4B62C44482000F72684 /* ContentView.swift */; };
-		E284D4BE2C444AAF00F72684 /* ExpensesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4BC2C444AAF00F72684 /* ExpensesListView.swift */; };
 		E284D4C42C44F49A00F72684 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E284D4C32C44F49A00F72684 /* FirebaseAuth */; };
 		E284D4C62C44F49A00F72684 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E284D4C52C44F49A00F72684 /* FirebaseDatabaseSwift */; };
-		E284D4CB2C44FDC500F72684 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4CA2C44FDC300F72684 /* DataManager.swift */; };
 		E284D4CC2C44FDC500F72684 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4CA2C44FDC300F72684 /* DataManager.swift */; };
-		E288FB032C275D2D00B6D57A /* ContentView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E288FB022C275D2D00B6D57A /* ContentView2.swift */; };
-		E288FB052C275D2D00B6D57A /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = E288FB042C275D2D00B6D57A /* Item.swift */; };
-		E288FB072C275D2E00B6D57A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E288FB062C275D2E00B6D57A /* Assets.xcassets */; };
-		E288FB0A2C275D2E00B6D57A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E288FB092C275D2E00B6D57A /* Preview Assets.xcassets */; };
-		E288FB122C275FBA00B6D57A /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE162B6AE51D00D10468 /* Category.swift */; };
-		E288FB132C275FBA00B6D57A /* Bank.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223EA2C15136E0065089A /* Bank.swift */; };
-		E288FB142C275FBA00B6D57A /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223E42C0EB9240065089A /* Budget.swift */; };
-		E288FB152C275FBA00B6D57A /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223DD2BF9C2FE0065089A /* Expense.swift */; };
-		E288FB162C275FBA00B6D57A /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223EE2C1FF14E0065089A /* Tab.swift */; };
-		E288FB172C275FCB00B6D57A /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223EC2C1EB5CC0065089A /* ProgressBar.swift */; };
-		E288FB192C27612900B6D57A /* TransactionSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E288FB182C27612900B6D57A /* TransactionSelector.swift */; };
-		E2E1AA3C2C64778200E7B459 /* ExpensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E1AA3B2C64778200E7B459 /* ExpensesView.swift */; };
-		E2F955952C462E2D007D2E8E /* MulaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF3CAE52B61BB9300C926ED /* MulaApp.swift */; };
-		E2F955982C462E60007D2E8E /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E2F955972C462E60007D2E8E /* FirebaseAuth */; };
-		E2F9559A2C462E60007D2E8E /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E2F955992C462E60007D2E8E /* FirebaseDatabaseSwift */; };
-		E2F9559C2C46315E007D2E8E /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F9559B2C46315E007D2E8E /* HeaderView.swift */; };
 		E2F9559D2C46315E007D2E8E /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F9559B2C46315E007D2E8E /* HeaderView.swift */; };
-		E2F9559E2C4631E7007D2E8E /* ExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE1D2B6B995500D10468 /* ExpenseView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		DE9AF9302B7851F700D1F4DC /* UploadFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFormView.swift; sourceTree = "<group>"; };
 		DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChartView.swift; sourceTree = "<group>"; };
 		DE9AF9B62BA7995800D1F4DC /* BudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
-		DEED96BF2C799BDA0058955A /* Mula iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Mula iOS.entitlements"; sourceTree = "<group>"; };
 		DEF3CAE22B61BB9300C926ED /* Mula.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mula.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEF3CAE52B61BB9300C926ED /* MulaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MulaApp.swift; sourceTree = "<group>"; };
 		DEF3CAE72B61BB9300C926ED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -107,7 +69,6 @@
 		E253C9032C5B256700739FAD /* ExpenseAmountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseAmountView.swift; sourceTree = "<group>"; };
 		E253C9062C5DDDEC00739FAD /* SearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarView.swift; sourceTree = "<group>"; };
 		E253C9092C5ED18600739FAD /* SettingsView_iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView_iOS.swift; sourceTree = "<group>"; };
-		E253C90F2C61D48600739FAD /* Mula-iOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Mula-iOS-Info.plist"; sourceTree = SOURCE_ROOT; };
 		E253C9102C61D5AC00739FAD /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		E27223DD2BF9C2FE0065089A /* Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
 		E27223DF2C0EB5A10065089A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -116,7 +77,6 @@
 		E27223EC2C1EB5CC0065089A /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
 		E27223EE2C1FF14E0065089A /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		E27223F02C1FF2300065089A /* ExpensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesView.swift; sourceTree = "<group>"; };
-		E284D49C2C27647200F72684 /* FinancialDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancialDataViewModel.swift; sourceTree = "<group>"; };
 		E284D49E2C28CA8900F72684 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 		E284D4A02C28CBCE00F72684 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		E284D4A92C3CF42800F72684 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -125,12 +85,6 @@
 		E284D4B62C44482000F72684 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		E284D4BC2C444AAF00F72684 /* ExpensesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesListView.swift; sourceTree = "<group>"; };
 		E284D4CA2C44FDC300F72684 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
-		E288FAFE2C275D2D00B6D57A /* Mula iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mula iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E288FB022C275D2D00B6D57A /* ContentView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView2.swift; sourceTree = "<group>"; };
-		E288FB042C275D2D00B6D57A /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
-		E288FB062C275D2E00B6D57A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		E288FB092C275D2E00B6D57A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		E288FB182C27612900B6D57A /* TransactionSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionSelector.swift; sourceTree = "<group>"; };
 		E2E1AA3B2C64778200E7B459 /* ExpensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesView.swift; sourceTree = "<group>"; };
 		E2F9559B2C46315E007D2E8E /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -145,15 +99,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E288FAFB2C275D2D00B6D57A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E2F9559A2C462E60007D2E8E /* FirebaseDatabaseSwift in Frameworks */,
-				E2F955982C462E60007D2E8E /* FirebaseAuth in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -161,7 +106,6 @@
 			isa = PBXGroup;
 			children = (
 				DEF3CAE42B61BB9300C926ED /* Mula */,
-				E288FAFF2C275D2D00B6D57A /* Mula iOS */,
 				DEF3CAE32B61BB9300C926ED /* Products */,
 				E2F955962C462E60007D2E8E /* Frameworks */,
 			);
@@ -171,7 +115,6 @@
 			isa = PBXGroup;
 			children = (
 				DEF3CAE22B61BB9300C926ED /* Mula.app */,
-				E288FAFE2C275D2D00B6D57A /* Mula iOS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -265,29 +208,6 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		E288FAFF2C275D2D00B6D57A /* Mula iOS */ = {
-			isa = PBXGroup;
-			children = (
-				DEED96BF2C799BDA0058955A /* Mula iOS.entitlements */,
-				E253C90F2C61D48600739FAD /* Mula-iOS-Info.plist */,
-				E288FB022C275D2D00B6D57A /* ContentView2.swift */,
-				E288FB182C27612900B6D57A /* TransactionSelector.swift */,
-				E288FB042C275D2D00B6D57A /* Item.swift */,
-				E288FB062C275D2E00B6D57A /* Assets.xcassets */,
-				E288FB082C275D2E00B6D57A /* Preview Content */,
-				E284D49C2C27647200F72684 /* FinancialDataViewModel.swift */,
-			);
-			path = "Mula iOS";
-			sourceTree = "<group>";
-		};
-		E288FB082C275D2E00B6D57A /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				E288FB092C275D2E00B6D57A /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
 		E288FB0E2C275D7D00B6D57A /* Shared */ = {
 			isa = PBXGroup;
 			children = (
@@ -359,27 +279,6 @@
 			productReference = DEF3CAE22B61BB9300C926ED /* Mula.app */;
 			productType = "com.apple.product-type.application";
 		};
-		E288FAFD2C275D2D00B6D57A /* Mula iOS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E288FB0D2C275D2E00B6D57A /* Build configuration list for PBXNativeTarget "Mula iOS" */;
-			buildPhases = (
-				E288FAFA2C275D2D00B6D57A /* Sources */,
-				E288FAFB2C275D2D00B6D57A /* Frameworks */,
-				E288FAFC2C275D2D00B6D57A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Mula iOS";
-			packageProductDependencies = (
-				E2F955972C462E60007D2E8E /* FirebaseAuth */,
-				E2F955992C462E60007D2E8E /* FirebaseDatabaseSwift */,
-			);
-			productName = "Mula iOS";
-			productReference = E288FAFE2C275D2D00B6D57A /* Mula iOS.app */;
-			productType = "com.apple.product-type.application";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -391,9 +290,6 @@
 				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					DEF3CAE12B61BB9200C926ED = {
-						CreatedOnToolsVersion = 15.2;
-					};
-					E288FAFD2C275D2D00B6D57A = {
 						CreatedOnToolsVersion = 15.2;
 					};
 				};
@@ -415,7 +311,6 @@
 			projectRoot = "";
 			targets = (
 				DEF3CAE12B61BB9200C926ED /* Mula */,
-				E288FAFD2C275D2D00B6D57A /* Mula iOS */,
 			);
 		};
 /* End PBXProject section */
@@ -428,16 +323,6 @@
 				DEF3CAED2B61BB9500C926ED /* Preview Assets.xcassets in Resources */,
 				DEF3CAEA2B61BB9500C926ED /* Assets.xcassets in Resources */,
 				E253C8F92C4DDFB600739FAD /* GoogleService-Info.plist in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E288FAFC2C275D2D00B6D57A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E288FB0A2C275D2E00B6D57A /* Preview Assets.xcassets in Resources */,
-				E288FB072C275D2E00B6D57A /* Assets.xcassets in Resources */,
-				E253C8F82C4DDFB600739FAD /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -477,45 +362,6 @@
 				E27223ED2C1EB5CC0065089A /* ProgressBar.swift in Sources */,
 				E27223EB2C15136E0065089A /* Bank.swift in Sources */,
 				E284D4A12C28CBCE00F72684 /* HomeView.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E288FAFA2C275D2D00B6D57A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E288FB152C275FBA00B6D57A /* Expense.swift in Sources */,
-				E284D49D2C27647200F72684 /* FinancialDataViewModel.swift in Sources */,
-				E288FB032C275D2D00B6D57A /* ContentView2.swift in Sources */,
-				E288FB052C275D2D00B6D57A /* Item.swift in Sources */,
-				E253C9022C52120100739FAD /* ExpenseAddView.swift in Sources */,
-				E284D4AE2C3CF42800F72684 /* TileView.swift in Sources */,
-				E284D4B32C3CF44700F72684 /* Bucket.swift in Sources */,
-				E253C8F52C4C98EA00739FAD /* Constants.swift in Sources */,
-				E284D4AF2C3CF42800F72684 /* HomeView.swift in Sources */,
-				E2F955952C462E2D007D2E8E /* MulaApp.swift in Sources */,
-				E284D4BE2C444AAF00F72684 /* ExpensesListView.swift in Sources */,
-				E253C8FF2C51EA6F00739FAD /* ExpenseEditView.swift in Sources */,
-				E253C8FC2C51E4DA00739FAD /* ExpenseSwipeActionsModifier.swift in Sources */,
-				E284D4B72C44482000F72684 /* ContentView.swift in Sources */,
-				E253C8EE2C4C6C6100739FAD /* ExpenseFormView.swift in Sources */,
-				E253C90B2C5ED18600739FAD /* SettingsView_iOS.swift in Sources */,
-				E284D4B52C44479800F72684 /* ChartView.swift in Sources */,
-				E288FB192C27612900B6D57A /* TransactionSelector.swift in Sources */,
-				E288FB162C275FBA00B6D57A /* Tab.swift in Sources */,
-				E2E1AA3C2C64778200E7B459 /* ExpensesView.swift in Sources */,
-				E253C9082C5DDDEC00739FAD /* SearchBarView.swift in Sources */,
-				E253C8F32C4C949B00739FAD /* RowView.swift in Sources */,
-				E288FB172C275FCB00B6D57A /* ProgressBar.swift in Sources */,
-				E284D4B42C3CFD1B00F72684 /* Extensions.swift in Sources */,
-				E253C9052C5B256700739FAD /* ExpenseAmountView.swift in Sources */,
-				E2F9559C2C46315E007D2E8E /* HeaderView.swift in Sources */,
-				E284D4CB2C44FDC500F72684 /* DataManager.swift in Sources */,
-				E2F9559E2C4631E7007D2E8E /* ExpenseView.swift in Sources */,
-				E288FB142C275FBA00B6D57A /* Budget.swift in Sources */,
-				E288FB132C275FBA00B6D57A /* Bank.swift in Sources */,
-				E288FB122C275FBA00B6D57A /* Category.swift in Sources */,
-				E253C9122C61D5B100739FAD /* SignInView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -702,77 +548,6 @@
 			};
 			name = Release;
 		};
-		E288FB0B2C275D2E00B6D57A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Mula iOS/Mula iOS.entitlements";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Mula iOS/Preview Content\"";
-				DEVELOPMENT_TEAM = S85ULMGGX9;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Mula-iOS-Info.plist";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kayapps.Mula;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SDKROOT = iphoneos;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		E288FB0C2C275D2E00B6D57A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Mula iOS/Mula iOS.entitlements";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Mula iOS/Preview Content\"";
-				DEVELOPMENT_TEAM = S85ULMGGX9;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Mula-iOS-Info.plist";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kayapps.Mula;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SDKROOT = iphoneos;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -790,15 +565,6 @@
 			buildConfigurations = (
 				DEF3CAF22B61BB9500C926ED /* Debug */,
 				DEF3CAF32B61BB9500C926ED /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		E288FB0D2C275D2E00B6D57A /* Build configuration list for PBXNativeTarget "Mula iOS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E288FB0B2C275D2E00B6D57A /* Debug */,
-				E288FB0C2C275D2E00B6D57A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -823,16 +589,6 @@
 			productName = FirebaseAuth;
 		};
 		E284D4C52C44F49A00F72684 /* FirebaseDatabaseSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E284D4C22C44F49A00F72684 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseDatabaseSwift;
-		};
-		E2F955972C462E60007D2E8E /* FirebaseAuth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E284D4C22C44F49A00F72684 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAuth;
-		};
-		E2F955992C462E60007D2E8E /* FirebaseDatabaseSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E284D4C22C44F49A00F72684 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseDatabaseSwift;
