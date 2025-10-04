@@ -8,9 +8,14 @@
 import SwiftUI
 
 struct ExpensesView: View {
+    @State private var dataManager = DataManager.shared
+
     @State private var searchText: String = ""
     @State private var fileContent: String = ""
-    
+
+    @State private var selectedYear: String = Date().year
+    private let currentYear: Int = Calendar.current.component(.year, from: Date())
+
     @State private var selectedMonth: String = Date().month
     @State private var selectedExpense: Expense? = nil
     @State private var selectedCategory: Category? = nil
@@ -24,9 +29,18 @@ struct ExpensesView: View {
     var body: some View {
         HStack(spacing: 0) {
             VStack {
-                Picker("Month", selection: $selectedMonth) {
-                    ForEach(months, id: \.self) { month in
-                        Text(month)
+                HStack {
+                    Picker("Year", selection: $selectedYear) {
+                        ForEach(2024...currentYear, id: \.self) { year in
+                            Text(String(year))
+                                .tag(String(year))
+                        }
+                    }
+
+                    Picker("Month", selection: $selectedMonth) {
+                        ForEach(months, id: \.self) { month in
+                            Text(month)
+                        }
                     }
                 }
                 
@@ -49,7 +63,7 @@ struct ExpensesView: View {
             }
             .padding()
 
-            List(filteredExpenses) { expense in
+            List(dataManager.expenses(with: selectedYear, and: selectedMonth)) { expense in
                 ExpenseView(selectedExpense: $selectedExpense, swipeActionsEnabled: true, expense: expense)
             }
             .searchable(text: $searchText)
