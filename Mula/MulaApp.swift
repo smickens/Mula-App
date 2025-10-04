@@ -22,38 +22,13 @@ struct Platform {
 #endif
 }
 
-class AppDelegate: NSObject, Platform.delegate {
-#if os(iOS)
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        FirebaseApp.configure()
-        Database.database().isPersistenceEnabled = true
-        return true
-    }
-#elseif os(macOS)
-    func applicationDidFinishLaunching(_ notification: Notification) {
-        FirebaseApp.configure()
-
-//        Auth.auth().signInAnonymously { (authResult, error) in
-//            if let error = error {
-//                print("Error signing in anonymously: \(error.localizedDescription)")
-//            } else {
-//                print("Successfully signed in anonymously.")
-//                // Handle successful sign-in
-//            }
-//        }
-    }
-#endif
-}
-
 
 @main
 struct MulaApp: App {
-    // register app delegate for Firebase setup
-#if os(iOS)
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-#elseif os(macOS)
-    @NSApplicationDelegateAdaptor(AppDelegate.self) var delegate
-#endif
+    // Configure Firebase when the app launches
+    init() {
+        FirebaseApp.configure()
+    }
 
     var body: some Scene {
         WindowGroup {
