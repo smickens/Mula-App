@@ -8,9 +8,8 @@
 import Firebase
 import FirebaseDatabase
 
-// TODO: do things default to private or public in this, can remove the other
-
-@Observable final class DataManager {
+@Observable
+final class DataManager {
 
     static let shared = DataManager()
 
@@ -34,7 +33,7 @@ import FirebaseDatabase
 //        }
 //    }
 
-    private var allExpenses: [Expense] = []
+    var allExpenses: [Expense] = []
 //    {
 //        didSet {
 //            refreshData(with: selectedYear, and: selectedMonth)
@@ -389,7 +388,9 @@ import FirebaseDatabase
                 }
             }
 
-            self.allExpenses = expenses
+            Task { @MainActor in
+                self.allExpenses = expenses
+            }
         }
     }
 
@@ -457,13 +458,19 @@ import FirebaseDatabase
 // MARK: Deleting data
 
     public func deleteExpense(id: String) {
-        expenseRef.child(id).removeValue() { error, _ in
-            if let error = error {
+        expenseRef.child(id).removeValue() { [weak self] error, _ in
+            guard let self = self else { return }
+
+            if let error {
                 print("Error deleting expense w/ id \(id): \(error.localizedDescription)")
-            } else if let expenseIndex = self.allExpenses.firstIndex(where: { $0.id == id }) {
-                self.allExpenses.remove(at: expenseIndex)
             } else {
-                print("Error didn't find expense id \(id) in expenses list to remove")
+                Task { @MainActor in
+                    if let index = self.allExpenses.firstIndex(where: { $0.id == id }) {
+                        self.allExpenses.remove(at: index)
+
+                        print("Deleted expense w/ id \(id))")
+                    }
+                }
             }
         }
     }

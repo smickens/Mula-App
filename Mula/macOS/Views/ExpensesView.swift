@@ -11,19 +11,15 @@ struct ExpensesView: View {
     @Environment(DataManager.self) private var dataManager
 
     @State private var searchText: String = ""
-    @State private var fileContent: String = ""
-
     @State private var selectedYear: String = Date().year
-    private let currentYear: Int = Calendar.current.component(.year, from: Date())
-
     @State private var selectedMonth: String = Date().month
     @State private var selectedExpense: Expense? = nil
     @State private var selectedCategory: Category? = nil
-    
     @State private var showingNewExpenseForm: Bool = false
     @State private var showingUploadExpensesForm: Bool = false
-    
-    @State private var expenses: [Expense] = []
+    @State private var fileContent: String = ""
+
+    private let currentYear: Int = Calendar.current.component(.year, from: Date())
     let months: [String] = DateFormatter().monthSymbols
 
     var body: some View {
@@ -91,24 +87,18 @@ struct ExpensesView: View {
         .sheet(isPresented: $showingUploadExpensesForm) {
             UploadFormView(fileContent: $fileContent)
         }
-        .onAppear(perform: loadExpenses)
-        .onChange(of: selectedMonth) { _, _ in loadExpenses() }
-        .onChange(of: selectedYear) { _, _ in loadExpenses() }
-    }
-
-    private func loadExpenses() {
-        expenses = dataManager.expensesSortedByDate(with: selectedYear, and: selectedMonth)
     }
 
     private var filteredExpenses: [Expense] {
-        let filteredByCategory = expenses.filter { selectedCategory != nil ? $0.category == selectedCategory : true }
-        let filteredByCategoryAndSearch = filteredByCategory.filter { searchText.isEmpty || $0.title.localizedStandardContains(searchText) == true }
-        return filteredByCategoryAndSearch
+        dataManager
+            .expensesSortedByDate(with: selectedYear, and: selectedMonth)
+            .filter { selectedCategory != nil ? $0.category == selectedCategory : true }
+            .filter { searchText.isEmpty || $0.title.localizedStandardContains(searchText) }
     }
     
     private var totalsByCategory: [Category: Double] {
         var totals: [Category: Double] = [:]
-        expenses.forEach { expense in
+        filteredExpenses.forEach { expense in
             // Multiply expense amount by -1 so that +10 represents $10 spent and -5 means $5 gained
             totals[expense.category] = (expense.amount * -1) + (totals[expense.category] ?? 0)
         }
