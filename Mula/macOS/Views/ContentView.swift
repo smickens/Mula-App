@@ -39,7 +39,7 @@ struct ContentView: View {
             case .home:
                 HomeView(expenses: expenses)
             case .expenses:
-                ExpensesView(expenses: expenses)
+                ExpensesView()
             case .trends:
                 Text("Trends")
                     // TODO: fix Ambiguous use of 'toolbar(content:)'

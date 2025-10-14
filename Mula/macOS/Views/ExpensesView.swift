@@ -23,9 +23,9 @@ struct ExpensesView: View {
     @State private var showingNewExpenseForm: Bool = false
     @State private var showingUploadExpensesForm: Bool = false
     
-    let expenses: [Expense]
+    @State private var expenses: [Expense] = []
     let months: [String] = DateFormatter().monthSymbols
-    
+
     var body: some View {
         HStack(spacing: 0) {
             VStack {
@@ -45,7 +45,7 @@ struct ExpensesView: View {
                 }
                 
                 TabView {
-                    SummaryView(selectedCategory: $selectedCategory, expensesForMonth: expensesForMonth, totalsByCategory: totalsByCategory)
+                    SummaryView(selectedCategory: $selectedCategory, expensesForMonth: filteredExpenses, totalsByCategory: totalsByCategory)
                         .tabItem {
                             Text("Summary")
                         }
@@ -55,7 +55,7 @@ struct ExpensesView: View {
                             Text("Budget")
                         }
 
-                    HomeView(expenses: expenses)
+                    HomeView(expenses: filteredExpenses)
                         .tabItem {
                             Text("Trends")
                         }
@@ -63,7 +63,7 @@ struct ExpensesView: View {
             }
             .padding()
 
-            List(dataManager.expenses(with: selectedYear, and: selectedMonth)) { expense in
+            List(filteredExpenses) { expense in
                 ExpenseView(selectedExpense: $selectedExpense, swipeActionsEnabled: true, expense: expense)
             }
             .searchable(text: $searchText)
@@ -91,21 +91,24 @@ struct ExpensesView: View {
         .sheet(isPresented: $showingUploadExpensesForm) {
             UploadFormView(fileContent: $fileContent)
         }
+        .onAppear(perform: loadExpenses)
+        .onChange(of: selectedMonth) { _, _ in loadExpenses() }
+        .onChange(of: selectedYear) { _, _ in loadExpenses() }
     }
-    
-    private var expensesForMonth: [Expense] {
-        return expenses.filter { $0.date.month == selectedMonth }
+
+    private func loadExpenses() {
+        expenses = dataManager.expensesSortedByDate(with: selectedYear, and: selectedMonth)
     }
 
     private var filteredExpenses: [Expense] {
-        let filteredByCategory = expensesForMonth.filter { selectedCategory != nil ? $0.category == selectedCategory : true }
-        let filteredBySearch = filteredByCategory.filter { searchText.isEmpty || $0.title.localizedStandardContains(searchText) == true }
-        return filteredBySearch
+        let filteredByCategory = expenses.filter { selectedCategory != nil ? $0.category == selectedCategory : true }
+        let filteredByCategoryAndSearch = filteredByCategory.filter { searchText.isEmpty || $0.title.localizedStandardContains(searchText) == true }
+        return filteredByCategoryAndSearch
     }
     
     private var totalsByCategory: [Category: Double] {
         var totals: [Category: Double] = [:]
-        expensesForMonth.forEach { expense in
+        expenses.forEach { expense in
             // Multiply expense amount by -1 so that +10 represents $10 spent and -5 means $5 gained
             totals[expense.category] = (expense.amount * -1) + (totals[expense.category] ?? 0)
         }

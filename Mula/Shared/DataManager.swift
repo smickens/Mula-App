@@ -261,6 +261,10 @@ import FirebaseDatabase
 // MARK: Helper functions
     // TODO: add helpers that have this take in Ints
 
+    func expensesSortedByDate(with year: String, and month: String) -> [Expense] {
+        return expenses(with: year, and: month).sorted { $0.date < $1.date }
+    }
+
     func expenses(with year: String, and month: String) -> [Expense] {
         return allExpenses.filter { $0.date.year == year && $0.date.month == month }
     }
