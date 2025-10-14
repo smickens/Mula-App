@@ -9,7 +9,9 @@ import FirebaseAuth
 import FirebaseCore
 import SwiftUI
 
+// TODO: rename to something related to Firebase more so since this also injects the data manager into the environment
 struct SignInView: View {
+    @State private var dataManager = DataManager.shared
     @State private var authViewModel = AuthViewModel()
     @State private var email: String = ""
     @State private var password: String = ""
@@ -19,6 +21,7 @@ struct SignInView: View {
         if authViewModel.isSignedIn {
             ContentView()
                 .environment(authViewModel)
+                .environment(dataManager)
         } else {
             VStack {
                 TextField("Email", text: $email)

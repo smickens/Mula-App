@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ExpensesView: View {
-    @State private var dataManager = DataManager.shared
+    @Environment(DataManager.self) private var dataManager
 
     @State private var searchText: String = ""
     @State private var fileContent: String = ""

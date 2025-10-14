@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ExpenseView: View {
+    @Environment(DataManager.self) private var dataManager
+
     @Binding var selectedExpense: Expense?
     @State private var showingEditExpenseForm = false
     let swipeActionsEnabled: Bool
@@ -68,8 +70,13 @@ struct ExpenseView: View {
         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
             if swipeActionsEnabled {
                 Button(role: .destructive) {
-                    print("delete item: \(expense.id) w/ title \(expense.title)")
-                    // TODO: DataManager.delete(expense.id)
+                    guard let expenseID = expense.id else {
+                        print("Failed to delete item: \(expense.id ?? "no id") \(expense.title), due to missing ID")
+                        return
+                    }
+                    print("delete item: \(expense.id ?? "no id") w/ title \(expense.title)")
+
+                    dataManager.deleteExpense(id: expenseID)
                 } label: {
                     Label("Delete", systemImage: "trash.fill")
                 }
