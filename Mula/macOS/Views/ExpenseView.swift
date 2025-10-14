@@ -9,20 +9,17 @@ import SwiftUI
 
 struct ExpenseView: View {
     @Environment(\.modelContext) private var modelContext
-    @Environment(\.dismiss) private var dismiss
 
-#if os(macOS)
     @Binding var selectedExpense: Expense?
     @State private var showingEditExpenseForm = false
     let swipeActionsEnabled: Bool
-#endif
     let expense: Expense
 
     var body: some View {
         HStack {
             ZStack {
                 Circle()
-                    .fill(expense.bucket.tint)
+                    .fill(expense.category.tintColor)
                     .frame(width: 35, height: 35)
 
                 Image(systemName: expense.category.iconName)
@@ -52,7 +49,6 @@ struct ExpenseView: View {
                 )
         }
         .padding(5)
-#if os(macOS)
         .contentShape(Rectangle())
         .gesture(tapGesture)
         .background(
@@ -81,19 +77,11 @@ struct ExpenseView: View {
                 }
             }
         }
-#endif
-#if os(iOS)
-        .navigationDestination(for: Expense.self) { expense in
-            TransactionEditView(transaction: expense)
-        }
-#elseif os(macOS)
         .sheet(isPresented: $showingEditExpenseForm) {
             EditExpenseFormView(expense: expense)
         }
-#endif
     }
 
-#if os(macOS)
     private var tapGesture: some Gesture {
         TapGesture(count: 1)
             .onEnded {
@@ -109,7 +97,6 @@ struct ExpenseView: View {
                 }
             )
     }
-#endif
 
     private var expenseColor: Color {
         return expense.amount > 0 ? .green : .red
@@ -117,7 +104,7 @@ struct ExpenseView: View {
 
     private func formatDate(_ date: Date?) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE, MMM d"
+        dateFormatter.dateFormat = "E, MMM d"
         return dateFormatter.string(from: date ?? Date())
     }
 }
