@@ -20,7 +20,7 @@ struct MulaApp: App {
         WindowGroup {
             SignInView()
                 .fontDesign(.monospaced)
-                .frame(minWidth: 850, idealWidth: 850, minHeight: 500, idealHeight: 500)
+                .frame(minWidth: 900, idealWidth: 900, minHeight: 650, idealHeight: 650)
         }
         .commands {
             SidebarCommands()
