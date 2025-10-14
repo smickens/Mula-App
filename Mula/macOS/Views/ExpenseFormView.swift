@@ -8,12 +8,16 @@
 import SwiftUI
 
 struct NewExpenseFormView: View {
-    let selectedMonth: String
-    
+    @Environment(DataManager.self) private var dataManager
+
+    // TODO: add bucket to form
+
     @State private var title: String = ""
     @State private var date: Date = Date()
     @State private var amount: Double = 0.0
     @State private var category: Category = .misc
+
+    let selectedMonth: String
 
     var body: some View {
         ExpenseFormView(title: $title, date: $date, amount: $amount, category: $category, formTitle: "New Expense", save: save)
@@ -23,11 +27,11 @@ struct NewExpenseFormView: View {
     }
 
     private func save() {
-        // Handle saving the new expense, for example, you could add it to an array or store it in a database.
         let expenseAmount = amount //category == .income ? amount : -amount
 
-        // TODO: save the expense into the DataManager
-//        let newExpense = Expense(title: title, date: date, amount: expenseAmount, category: category)
+        // TODO: set bucket
+        let success = dataManager.addNewExpense(title: title, date: date, amount: amount, bucket: .fixed, category: category)
+        print("Adding new expense: \(success ? "success" : "failed")")
     }
     
     private func firstDayOfMonth(month: String) -> Date {
@@ -50,6 +54,8 @@ struct NewExpenseFormView: View {
 }
 
 struct EditExpenseFormView: View {
+    @Environment(DataManager.self) private var dataManager
+
     @Bindable var expense: Expense
     
     @State private var title: String
@@ -74,11 +80,16 @@ struct EditExpenseFormView: View {
         expense.date = date
         expense.amount = amount
         expense.category = category
+
+        // TODO: set bucket
+
+        dataManager.updateExpense(expense: expense)
     }
 }
 
 struct ExpenseFormView: View {
     @Environment(\.dismiss) private var dismiss
+
     @Binding var title: String
     @Binding var date: Date
     @Binding var amount: Double

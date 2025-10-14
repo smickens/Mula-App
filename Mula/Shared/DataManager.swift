@@ -151,7 +151,7 @@ final class DataManager {
             return nil
         }
 
-        return Expense(id: UUID().uuidString, title: expenseTitle, date: expenseDate, amount: expenseAmount, bucket: expenseBucket, category: expenseCategory)
+        return newExpense(title: expenseTitle, date: expenseDate, amount: expenseAmount, bucket: expenseBucket, category: expenseCategory)
     }
 
     private func processUSBankTransaction(_ row: String) -> Expense? {
@@ -173,7 +173,7 @@ final class DataManager {
             return nil
         }
 
-        return Expense(id: UUID().uuidString, title: expenseTitle, date: expenseDate, amount: expenseAmount, bucket: expenseBucket, category: expenseCategory)
+        return newExpense(title: expenseTitle, date: expenseDate, amount: expenseAmount, bucket: expenseBucket, category: expenseCategory)
     }
 
     private func processBiltTransaction(_ row: String) -> Expense? {
@@ -195,7 +195,7 @@ final class DataManager {
             return nil
         }
 
-        return Expense(id: UUID().uuidString, title: expenseTitle, date: expenseDate, amount: expenseAmount, bucket: expenseBucket, category: expenseCategory)
+        return newExpense(title: expenseTitle, date: expenseDate, amount: expenseAmount, bucket: expenseBucket, category: expenseCategory)
     }
 
     private func classifyFromCreditCardCategory(_ categoryString: String) -> (Bucket, Category) {
@@ -304,6 +304,15 @@ final class DataManager {
     }()
 
 // MARK: Creating data
+
+    func newExpense(title: String, date: Date, amount: Double, bucket: Bucket, category: Category) -> Expense {
+        return Expense(id: UUID().uuidString, title: title, date: date, amount: amount, bucket: bucket, category: category)
+    }
+
+    func addNewExpense(title: String, date: Date, amount: Double, bucket: Bucket, category: Category) -> Bool {
+        let newExpense = newExpense(title: title, date: date, amount: amount, bucket: bucket, category: category)
+        return addExpense(expense: newExpense)
+    }
 
     public func addExpenses(_ expenses: [Expense]) -> [Expense] {
         var expensesFailed: [Expense] = []
