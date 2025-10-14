@@ -6,14 +6,10 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct SettingsView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Environment(\.dismiss) private var dismiss
-    
-    @Query var budgets: [Budget]
-    
+    var budgets: [Budget]
+
     var body: some View {
         VStack {
             Text("Settings")
@@ -43,7 +39,7 @@ struct SettingsView: View {
                             
 //                            Text("\(budget.category.name):")
                             
-                            TextField("", value: Bindable(budget).target, format: .currency(code: "USD"))
+//                            TextField("", value: Bindable(budget).target, format: .currency(code: "USD"))
 //                        }
                     }
                     .padding(.horizontal)
@@ -63,9 +59,10 @@ struct SettingsView: View {
         if let budget = budgets.first(where: { $0.category == category }) {
             return budget
         }
-        
+
+        // TODO: add new budget to DataManager
         let newBudget = Budget(category: category, target: 0)
-        modelContext.insert(newBudget)
+
         return newBudget
     }
     

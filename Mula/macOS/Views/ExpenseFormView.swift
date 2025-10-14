@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct NewExpenseFormView: View {
-    @Environment(\.modelContext) private var modelContext
-    
     let selectedMonth: String
     
     @State private var title: String = ""
@@ -28,9 +26,8 @@ struct NewExpenseFormView: View {
         // Handle saving the new expense, for example, you could add it to an array or store it in a database.
         let expenseAmount = amount //category == .income ? amount : -amount
 
-        // TODO: save the expense
+        // TODO: save the expense into the DataManager
 //        let newExpense = Expense(title: title, date: date, amount: expenseAmount, category: category)
-//        modelContext.insert(newExpense)
     }
     
     private func firstDayOfMonth(month: String) -> Date {

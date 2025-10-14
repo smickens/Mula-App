@@ -6,11 +6,9 @@
 //
 
 import Foundation
-import SwiftData
 
-@Model
 class Budget {
-    @Attribute(.unique) let categoryTitle: String
+    let categoryTitle: String
     let category: Category
     var target: Double
     

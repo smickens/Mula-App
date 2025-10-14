@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct UploadFormView: View {
-    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
     @Binding var fileContent: String
@@ -71,8 +70,8 @@ struct UploadFormView: View {
             ExpenseView(selectedExpense: $selectedExpense, swipeActionsEnabled: false, expense: expense)
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                     Button(role: .destructive) {
+                        // TODO: delete expense from DataManager
                         newExpenses.removeAll { $0.id == expense.id }
-//                        modelContext.delete(expense)
                     } label: {
                         Label("Delete", systemImage: "trash.fill")
                     }
@@ -120,11 +119,8 @@ struct UploadFormView: View {
 
     private func saveNewExpenses() {
         do {
-            try modelContext.transaction {
-                for expense in newExpenses {
-//                    modelContext.insert(expense)
-                }
-            }
+            // TODO: add newExpenses to data manager
+
         } catch {
             // Handle error
         }
@@ -133,9 +129,7 @@ struct UploadFormView: View {
     }
 
     private func clearAllNewExpenses() {
-        for expense in newExpenses {
-//            modelContext.delete(expense)
-        }
+        // TODO: delete newExpenses in data manager
     }
 
 // MARK: Transaction CSV Processing

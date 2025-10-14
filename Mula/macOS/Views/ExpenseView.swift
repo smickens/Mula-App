@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct ExpenseView: View {
-    @Environment(\.modelContext) private var modelContext
-
     @Binding var selectedExpense: Expense?
     @State private var showingEditExpenseForm = false
     let swipeActionsEnabled: Bool

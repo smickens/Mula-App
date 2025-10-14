@@ -50,7 +50,7 @@ struct ExpensesView: View {
                             Text("Summary")
                         }
 
-                    BudgetView(totalsByCategory: totalsByCategory)
+                    BudgetView(budgets: [], totalsByCategory: totalsByCategory)
                         .tabItem {
                             Text("Budget")
                         }

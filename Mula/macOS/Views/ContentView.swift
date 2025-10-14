@@ -6,12 +6,10 @@
 //
 
 import SwiftUI
-import SwiftData
 import Firebase
 import FirebaseAuth
 
 struct ContentView: View {
-//    @Query(sort: \Expense.date, order: .forward) var expenses: [Expense]
     var expenses: [Expense] = []
 
     @State private var selectedTab: TabName = .home
@@ -44,6 +42,7 @@ struct ContentView: View {
                 ExpensesView(expenses: expenses)
             case .trends:
                 Text("Trends")
+                    // TODO: fix Ambiguous use of 'toolbar(content:)'
                     .toolbar {
                         ToolbarItem {
                             Button {
@@ -72,7 +71,7 @@ struct ContentView: View {
 //                        }
                     }
             case .settings:
-                SettingsView()
+                SettingsView(budgets: [])
             }
         }
     }
@@ -82,8 +81,6 @@ struct ContentView: View {
     }
 
     private func toggleSidebar() {
-        #if os(macOS)
         NSApp.keyWindow?.firstResponder?.tryToPerform(#selector(NSSplitViewController.toggleSidebar(_:)), with: nil)
-        #endif
     }
 }

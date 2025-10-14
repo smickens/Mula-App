@@ -6,10 +6,9 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct BudgetView: View {
-    @Query(sort: \Budget.categoryTitle, order: .forward) var budgets: [Budget]
+    var budgets: [Budget]
     let totalsByCategory: [Category: Double]
 
     var body: some View {
