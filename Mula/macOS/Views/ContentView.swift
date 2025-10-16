@@ -40,38 +40,6 @@ struct ContentView: View {
                 HomeView(expenses: expenses)
             case .expenses:
                 ExpensesView()
-            case .trends:
-                Text("Trends")
-                    // TODO: fix Ambiguous use of 'toolbar(content:)'
-                    .toolbar {
-                        ToolbarItem {
-                            Button {
-                                // TODO: fix add expense
-//                                DataManager.shared.addFakeExpense()
-                            } label: {
-                                Image(systemName: "plus")
-                            }
-                        }
-
-                        ToolbarItem {
-                            Button {
-                                // TODO: fix read expense
-//                                DataManager.shared.readFakeExpenses()
-                            } label: {
-                                Image(systemName: "star")
-                            }
-                        }
-
-//                        ToolbarItem {
-//                            Button {
-//                                DataManager.shared.uploadExpenses(expenses: expenses)
-//                            } label: {
-//                                Image(systemName: "minus")
-//                            }
-//                        }
-                    }
-            case .settings:
-                SettingsView(budgets: [])
             }
         }
     }
