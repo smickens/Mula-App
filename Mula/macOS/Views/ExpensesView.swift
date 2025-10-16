@@ -45,16 +45,6 @@ struct ExpensesView: View {
                         .tabItem {
                             Text("Summary")
                         }
-
-                    BudgetView(budgets: [], totalsByCategory: totalsByCategory)
-                        .tabItem {
-                            Text("Budget")
-                        }
-
-                    HomeView(expenses: filteredExpenses)
-                        .tabItem {
-                            Text("Trends")
-                        }
                 }
             }
             .padding()
