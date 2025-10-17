@@ -40,6 +40,8 @@ struct ContentView: View {
                 HomeView(expenses: expenses)
             case .expenses:
                 ExpensesView()
+            case .settings:
+                AccountsView()
             }
         }
     }

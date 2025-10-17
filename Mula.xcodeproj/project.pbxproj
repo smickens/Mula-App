@@ -37,6 +37,12 @@
 		E284D4C62C44F49A00F72684 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E284D4C52C44F49A00F72684 /* FirebaseDatabaseSwift */; };
 		E284D4CC2C44FDC500F72684 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4CA2C44FDC300F72684 /* DataManager.swift */; };
 		E2992F832E91DDFE00E86606 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E2992F822E91DDFE00E86606 /* GoogleService-Info.plist */; };
+		E2992FB02EA2030700E86606 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FAF2EA2030700E86606 /* Account.swift */; };
+		E2992FB22EA2036000E86606 /* AccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FB12EA2036000E86606 /* AccountsView.swift */; };
+		E2992FB42EA2036E00E86606 /* AddAccountSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FB32EA2036E00E86606 /* AddAccountSheet.swift */; };
+		E2992FBB2EA205A200E86606 /* DataManager+Accounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FBA2EA205A200E86606 /* DataManager+Accounts.swift */; };
+		E2992FBD2EA209E900E86606 /* AccountFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FBC2EA209E900E86606 /* AccountFormView.swift */; };
+		E2992FBF2EA20A1B00E86606 /* EditAccountSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FBE2EA20A1B00E86606 /* EditAccountSheet.swift */; };
 		E2F9559D2C46315E007D2E8E /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F9559B2C46315E007D2E8E /* HeaderView.swift */; };
 /* End PBXBuildFile section */
 
@@ -78,6 +84,12 @@
 		E284D4CA2C44FDC300F72684 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		E2992F812E91DC4400E86606 /* Mula.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mula.entitlements; sourceTree = "<group>"; };
 		E2992F822E91DDFE00E86606 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E2992FAF2EA2030700E86606 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
+		E2992FB12EA2036000E86606 /* AccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsView.swift; sourceTree = "<group>"; };
+		E2992FB32EA2036E00E86606 /* AddAccountSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAccountSheet.swift; sourceTree = "<group>"; };
+		E2992FBA2EA205A200E86606 /* DataManager+Accounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataManager+Accounts.swift"; sourceTree = "<group>"; };
+		E2992FBC2EA209E900E86606 /* AccountFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountFormView.swift; sourceTree = "<group>"; };
+		E2992FBE2EA20A1B00E86606 /* EditAccountSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAccountSheet.swift; sourceTree = "<group>"; };
 		E2E1AA3B2C64778200E7B459 /* ExpensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesView.swift; sourceTree = "<group>"; };
 		E2F9559B2C46315E007D2E8E /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -118,7 +130,10 @@
 				E2992F822E91DDFE00E86606 /* GoogleService-Info.plist */,
 				E2992F812E91DC4400E86606 /* Mula.entitlements */,
 				DEF3CAE52B61BB9300C926ED /* MulaApp.swift */,
-				E288FB0E2C275D7D00B6D57A /* Shared */,
+				E288FB0E2C275D7D00B6D57A /* DataManager */,
+				DEF3CAFA2B61BD2000C926ED /* Model */,
+				DEF8FE1A2B6B988C00D10468 /* Utilities */,
+				E288FB112C275E3400B6D57A /* Views */,
 				E288FB0F2C275E1800B6D57A /* iOS */,
 				E288FB102C275E2400B6D57A /* macOS */,
 				DEF3CAE92B61BB9500C926ED /* Assets.xcassets */,
@@ -138,9 +153,10 @@
 		DEF3CAFA2B61BD2000C926ED /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				E2992FAF2EA2030700E86606 /* Account.swift */,
+				E27223EA2C15136E0065089A /* Bank.swift */,
 				DEF8FE162B6AE51D00D10468 /* Category.swift */,
 				E27223DD2BF9C2FE0065089A /* Expense.swift */,
-				E27223EA2C15136E0065089A /* Bank.swift */,
 				E27223EE2C1FF14E0065089A /* Tab.swift */,
 			);
 			path = Model;
@@ -198,15 +214,13 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		E288FB0E2C275D7D00B6D57A /* Shared */ = {
+		E288FB0E2C275D7D00B6D57A /* DataManager */ = {
 			isa = PBXGroup;
 			children = (
 				E284D4CA2C44FDC300F72684 /* DataManager.swift */,
-				DEF3CAFA2B61BD2000C926ED /* Model */,
-				DEF8FE1A2B6B988C00D10468 /* Utilities */,
-				E288FB112C275E3400B6D57A /* Views */,
+				E2992FBA2EA205A200E86606 /* DataManager+Accounts.swift */,
 			);
-			path = Shared;
+			path = DataManager;
 			sourceTree = "<group>";
 		};
 		E288FB0F2C275E1800B6D57A /* iOS */ = {
@@ -229,12 +243,24 @@
 		E288FB112C275E3400B6D57A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E2992FB52EA2037500E86606 /* Accounts */,
+				E284D49E2C28CA8900F72684 /* ChartView.swift */,
 				DEF8FE1D2B6B995500D10468 /* ExpenseView.swift */,
 				E253C9032C5B256700739FAD /* ExpenseAmountView.swift */,
 				E27223EC2C1EB5CC0065089A /* ProgressBar.swift */,
-				E284D49E2C28CA8900F72684 /* ChartView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		E2992FB52EA2037500E86606 /* Accounts */ = {
+			isa = PBXGroup;
+			children = (
+				E2992FBC2EA209E900E86606 /* AccountFormView.swift */,
+				E2992FB12EA2036000E86606 /* AccountsView.swift */,
+				E2992FB32EA2036E00E86606 /* AddAccountSheet.swift */,
+				E2992FBE2EA20A1B00E86606 /* EditAccountSheet.swift */,
+			);
+			path = Accounts;
 			sourceTree = "<group>";
 		};
 		E2F955962C462E60007D2E8E /* Frameworks */ = {
@@ -326,8 +352,10 @@
 				DE9AF9B52BA2C4AF00D1F4DC /* PieChartView.swift in Sources */,
 				E253C8F02C4C74D100739FAD /* ExpenseView.swift in Sources */,
 				DE9AF9312B7851F700D1F4DC /* UploadFormView.swift in Sources */,
+				E2992FB22EA2036000E86606 /* AccountsView.swift in Sources */,
 				DEF8FE192B6B976E00D10468 /* ExpenseFormView.swift in Sources */,
 				E253C9112C61D5B100739FAD /* SignInView.swift in Sources */,
+				E2992FBD2EA209E900E86606 /* AccountFormView.swift in Sources */,
 				E253C8F62C4C98EA00739FAD /* Constants.swift in Sources */,
 				E284D4CC2C44FDC500F72684 /* DataManager.swift in Sources */,
 				E284D4AC2C3CF42800F72684 /* TileView.swift in Sources */,
@@ -341,11 +369,15 @@
 				DEF8FE222B6B9E1000D10468 /* SummaryView.swift in Sources */,
 				E253C9042C5B256700739FAD /* ExpenseAmountView.swift in Sources */,
 				E253C9072C5DDDEC00739FAD /* SearchBarView.swift in Sources */,
+				E2992FBB2EA205A200E86606 /* DataManager+Accounts.swift in Sources */,
 				E284D4B22C3CF44700F72684 /* Bucket.swift in Sources */,
 				DEF8FE1C2B6B989A00D10468 /* Extensions.swift in Sources */,
+				E2992FB42EA2036E00E86606 /* AddAccountSheet.swift in Sources */,
 				E27223EF2C1FF14E0065089A /* Tab.swift in Sources */,
 				E253C8F22C4C949B00739FAD /* RowView.swift in Sources */,
+				E2992FB02EA2030700E86606 /* Account.swift in Sources */,
 				E27223ED2C1EB5CC0065089A /* ProgressBar.swift in Sources */,
+				E2992FBF2EA20A1B00E86606 /* EditAccountSheet.swift in Sources */,
 				E27223EB2C15136E0065089A /* Bank.swift in Sources */,
 				E284D4A12C28CBCE00F72684 /* HomeView.swift in Sources */,
 			);

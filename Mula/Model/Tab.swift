@@ -10,4 +10,5 @@ import Foundation
 enum TabName: String, CaseIterable {
     case home = "Home"
     case expenses = "Expenses"
+    case settings = "Settings"
 }

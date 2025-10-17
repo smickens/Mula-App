@@ -15,13 +15,16 @@ final class DataManager {
 
     private init() {
         let dbRef = Database.database().reference()
+        accountRef = dbRef.child("account")
         expenseRef = dbRef.child("expense")
         budgetRef = dbRef.child("budget")
 
+        loadAccounts()
         loadExpenses()
         loadBudgets()
     }
 
+    internal var accountRef: DatabaseReference
     private var expenseRef: DatabaseReference
     private var budgetRef: DatabaseReference
 
@@ -32,6 +35,8 @@ final class DataManager {
 //            refreshData(with: selectedYear, and: selectedMonth)
 //        }
 //    }
+
+    var accounts: [Account] = []
 
     var allExpenses: [Expense] = []
 //    {
