@@ -14,7 +14,6 @@
 		DEF3CAEA2B61BB9500C926ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEF3CAE92B61BB9500C926ED /* Assets.xcassets */; };
 		DEF3CAED2B61BB9500C926ED /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEF3CAEC2B61BB9500C926ED /* Preview Assets.xcassets */; };
 		DEF8FE172B6AE51D00D10468 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE162B6AE51D00D10468 /* Category.swift */; };
-		DEF8FE192B6B976E00D10468 /* ExpenseFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE182B6B976E00D10468 /* ExpenseFormView.swift */; };
 		DEF8FE1C2B6B989A00D10468 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE1B2B6B989A00D10468 /* Extensions.swift */; };
 		DEF8FE222B6B9E1000D10468 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE212B6B9E1000D10468 /* SummaryView.swift */; };
 		E253C8F02C4C74D100739FAD /* ExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8EF2C4C74D100739FAD /* ExpenseView.swift */; };
@@ -43,6 +42,9 @@
 		E2992FBB2EA205A200E86606 /* DataManager+Accounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FBA2EA205A200E86606 /* DataManager+Accounts.swift */; };
 		E2992FBD2EA209E900E86606 /* AccountFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FBC2EA209E900E86606 /* AccountFormView.swift */; };
 		E2992FBF2EA20A1B00E86606 /* EditAccountSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FBE2EA20A1B00E86606 /* EditAccountSheet.swift */; };
+		E2992FC12EA20D4100E86606 /* NewExpenseFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FC02EA20D4100E86606 /* NewExpenseFormView.swift */; };
+		E2992FC32EA20D4800E86606 /* EditExpenseFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FC22EA20D4800E86606 /* EditExpenseFormView.swift */; };
+		E2992FC52EA20D4D00E86606 /* ExpenseFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FC42EA20D4D00E86606 /* ExpenseFormView.swift */; };
 		E2F9559D2C46315E007D2E8E /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F9559B2C46315E007D2E8E /* HeaderView.swift */; };
 /* End PBXBuildFile section */
 
@@ -55,7 +57,6 @@
 		DEF3CAE92B61BB9500C926ED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DEF3CAEC2B61BB9500C926ED /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		DEF8FE162B6AE51D00D10468 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
-		DEF8FE182B6B976E00D10468 /* ExpenseFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseFormView.swift; sourceTree = "<group>"; };
 		DEF8FE1B2B6B989A00D10468 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		DEF8FE1D2B6B995500D10468 /* ExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseView.swift; sourceTree = "<group>"; };
 		DEF8FE212B6B9E1000D10468 /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
@@ -90,6 +91,9 @@
 		E2992FBA2EA205A200E86606 /* DataManager+Accounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataManager+Accounts.swift"; sourceTree = "<group>"; };
 		E2992FBC2EA209E900E86606 /* AccountFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountFormView.swift; sourceTree = "<group>"; };
 		E2992FBE2EA20A1B00E86606 /* EditAccountSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAccountSheet.swift; sourceTree = "<group>"; };
+		E2992FC02EA20D4100E86606 /* NewExpenseFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewExpenseFormView.swift; sourceTree = "<group>"; };
+		E2992FC22EA20D4800E86606 /* EditExpenseFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditExpenseFormView.swift; sourceTree = "<group>"; };
+		E2992FC42EA20D4D00E86606 /* ExpenseFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseFormView.swift; sourceTree = "<group>"; };
 		E2E1AA3B2C64778200E7B459 /* ExpensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesView.swift; sourceTree = "<group>"; };
 		E2F9559B2C46315E007D2E8E /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -167,7 +171,6 @@
 			children = (
 				E27223F02C1FF2300065089A /* ExpensesView.swift */,
 				DEF3CAE72B61BB9300C926ED /* ContentView.swift */,
-				DEF8FE182B6B976E00D10468 /* ExpenseFormView.swift */,
 				DEF8FE212B6B9E1000D10468 /* SummaryView.swift */,
 				DE9AF9302B7851F700D1F4DC /* UploadFormView.swift */,
 				DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */,
@@ -244,6 +247,7 @@
 			isa = PBXGroup;
 			children = (
 				E2992FB52EA2037500E86606 /* Accounts */,
+				E2992FC62EA20D5100E86606 /* Expenses */,
 				E284D49E2C28CA8900F72684 /* ChartView.swift */,
 				DEF8FE1D2B6B995500D10468 /* ExpenseView.swift */,
 				E253C9032C5B256700739FAD /* ExpenseAmountView.swift */,
@@ -261,6 +265,16 @@
 				E2992FBE2EA20A1B00E86606 /* EditAccountSheet.swift */,
 			);
 			path = Accounts;
+			sourceTree = "<group>";
+		};
+		E2992FC62EA20D5100E86606 /* Expenses */ = {
+			isa = PBXGroup;
+			children = (
+				E2992FC02EA20D4100E86606 /* NewExpenseFormView.swift */,
+				E2992FC22EA20D4800E86606 /* EditExpenseFormView.swift */,
+				E2992FC42EA20D4D00E86606 /* ExpenseFormView.swift */,
+			);
+			path = Expenses;
 			sourceTree = "<group>";
 		};
 		E2F955962C462E60007D2E8E /* Frameworks */ = {
@@ -353,7 +367,6 @@
 				E253C8F02C4C74D100739FAD /* ExpenseView.swift in Sources */,
 				DE9AF9312B7851F700D1F4DC /* UploadFormView.swift in Sources */,
 				E2992FB22EA2036000E86606 /* AccountsView.swift in Sources */,
-				DEF8FE192B6B976E00D10468 /* ExpenseFormView.swift in Sources */,
 				E253C9112C61D5B100739FAD /* SignInView.swift in Sources */,
 				E2992FBD2EA209E900E86606 /* AccountFormView.swift in Sources */,
 				E253C8F62C4C98EA00739FAD /* Constants.swift in Sources */,
@@ -361,6 +374,7 @@
 				E284D4AC2C3CF42800F72684 /* TileView.swift in Sources */,
 				E2F9559D2C46315E007D2E8E /* HeaderView.swift in Sources */,
 				E284D49F2C28CA8900F72684 /* ChartView.swift in Sources */,
+				E2992FC32EA20D4800E86606 /* EditExpenseFormView.swift in Sources */,
 				DEF8FE172B6AE51D00D10468 /* Category.swift in Sources */,
 				E253C8FB2C51E4DA00739FAD /* ExpenseSwipeActionsModifier.swift in Sources */,
 				DEF3CAE82B61BB9300C926ED /* ContentView.swift in Sources */,
@@ -375,8 +389,10 @@
 				E2992FB42EA2036E00E86606 /* AddAccountSheet.swift in Sources */,
 				E27223EF2C1FF14E0065089A /* Tab.swift in Sources */,
 				E253C8F22C4C949B00739FAD /* RowView.swift in Sources */,
+				E2992FC12EA20D4100E86606 /* NewExpenseFormView.swift in Sources */,
 				E2992FB02EA2030700E86606 /* Account.swift in Sources */,
 				E27223ED2C1EB5CC0065089A /* ProgressBar.swift in Sources */,
+				E2992FC52EA20D4D00E86606 /* ExpenseFormView.swift in Sources */,
 				E2992FBF2EA20A1B00E86606 /* EditAccountSheet.swift in Sources */,
 				E27223EB2C15136E0065089A /* Bank.swift in Sources */,
 				E284D4A12C28CBCE00F72684 /* HomeView.swift in Sources */,
