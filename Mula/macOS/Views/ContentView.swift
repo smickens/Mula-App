@@ -12,7 +12,7 @@ import FirebaseAuth
 struct ContentView: View {
     var expenses: [Expense] = []
 
-    @State private var selectedTab: TabName = .home
+    @State private var selectedTab: TabName = .transactions
 
     var body: some View {
         NavigationView {
@@ -36,9 +36,7 @@ struct ContentView: View {
 //            }
 
             switch selectedTab {
-            case .home:
-                HomeView(expenses: expenses)
-            case .expenses:
+            case .transactions:
                 TransactionsView()
             case .settings:
                 AccountsView()
