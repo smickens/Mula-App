@@ -9,6 +9,11 @@ import SwiftUI
 import Firebase
 import FirebaseAuth
 
+enum TabName: String, CaseIterable {
+    case transactions = "Transactions"
+    case settings = "Settings"
+}
+
 struct ContentView: View {
     var expenses: [Expense] = []
 

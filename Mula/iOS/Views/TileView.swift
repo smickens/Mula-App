@@ -52,20 +52,3 @@ struct TileView: View {
         .cornerRadius(backgroundCornerRadius)
     }
 }
-
-//#Preview {
-//    Grid {
-//        GridRow {
-//            TileView(title: "Fixed", icon: "grid", tint: .cyan)
-//
-//            TileView(title: "Spending", icon: "tag.fill", tint: .pink)
-//        }
-//
-//        GridRow {
-//            TileView(title: "Savings", icon: "bolt.fill", tint: .green)
-//
-//            TileView(title: "Investments", icon: "hourglass", tint: .indigo)
-//        }
-//    }
-//    .padding()
-//}

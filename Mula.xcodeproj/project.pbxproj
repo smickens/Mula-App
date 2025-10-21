@@ -15,16 +15,11 @@
 		DEF3CAED2B61BB9500C926ED /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEF3CAEC2B61BB9500C926ED /* Preview Assets.xcassets */; };
 		DEF8FE172B6AE51D00D10468 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE162B6AE51D00D10468 /* Category.swift */; };
 		DEF8FE1C2B6B989A00D10468 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE1B2B6B989A00D10468 /* Extensions.swift */; };
-		DEF8FE222B6B9E1000D10468 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE212B6B9E1000D10468 /* SummaryView.swift */; };
 		E253C8F02C4C74D100739FAD /* TransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8EF2C4C74D100739FAD /* TransactionView.swift */; };
-		E253C8F22C4C949B00739FAD /* RowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8F12C4C949B00739FAD /* RowView.swift */; };
 		E253C8F62C4C98EA00739FAD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8F42C4C98E700739FAD /* Constants.swift */; };
-		E253C8FB2C51E4DA00739FAD /* ExpenseSwipeActionsModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8FA2C51E4DA00739FAD /* ExpenseSwipeActionsModifier.swift */; };
-		E253C9072C5DDDEC00739FAD /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9062C5DDDEC00739FAD /* SearchBarView.swift */; };
 		E253C9112C61D5B100739FAD /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9102C61D5AC00739FAD /* SignInView.swift */; };
 		E27223DE2BF9C2FE0065089A /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223DD2BF9C2FE0065089A /* Expense.swift */; };
 		E27223EB2C15136E0065089A /* Bank.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223EA2C15136E0065089A /* Bank.swift */; };
-		E27223EF2C1FF14E0065089A /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223EE2C1FF14E0065089A /* Tab.swift */; };
 		E284D49F2C28CA8900F72684 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D49E2C28CA8900F72684 /* ChartView.swift */; };
 		E284D4AC2C3CF42800F72684 /* TileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4AA2C3CF42800F72684 /* TileView.swift */; };
 		E284D4B22C3CF44700F72684 /* Bucket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4B12C3CF43800F72684 /* Bucket.swift */; };
@@ -44,7 +39,7 @@
 		E2992FD02EA7373300E86606 /* TransactionFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FCF2EA7373300E86606 /* TransactionFormView.swift */; };
 		E2992FD22EA7373900E86606 /* NewTransactionFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FD12EA7373900E86606 /* NewTransactionFormView.swift */; };
 		E2992FD42EA7373E00E86606 /* EditTransactionFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FD32EA7373E00E86606 /* EditTransactionFormView.swift */; };
-		E2F9559D2C46315E007D2E8E /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F9559B2C46315E007D2E8E /* HeaderView.swift */; };
+		E2992FD72EA7439D00E86606 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FD62EA7439D00E86606 /* SummaryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,24 +52,14 @@
 		DEF3CAEC2B61BB9500C926ED /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		DEF8FE162B6AE51D00D10468 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		DEF8FE1B2B6B989A00D10468 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		DEF8FE212B6B9E1000D10468 /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
-		E253C8EC2C4C6C6100739FAD /* ExpenseFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseFormView.swift; sourceTree = "<group>"; };
 		E253C8EF2C4C74D100739FAD /* TransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionView.swift; sourceTree = "<group>"; };
-		E253C8F12C4C949B00739FAD /* RowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowView.swift; sourceTree = "<group>"; };
 		E253C8F42C4C98E700739FAD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		E253C8FA2C51E4DA00739FAD /* ExpenseSwipeActionsModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseSwipeActionsModifier.swift; sourceTree = "<group>"; };
-		E253C8FD2C51EA6500739FAD /* ExpenseEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseEditView.swift; sourceTree = "<group>"; };
-		E253C9002C5211FD00739FAD /* ExpenseAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseAddView.swift; sourceTree = "<group>"; };
-		E253C9062C5DDDEC00739FAD /* SearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarView.swift; sourceTree = "<group>"; };
 		E253C9102C61D5AC00739FAD /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		E27223DD2BF9C2FE0065089A /* Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
 		E27223EA2C15136E0065089A /* Bank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bank.swift; sourceTree = "<group>"; };
-		E27223EE2C1FF14E0065089A /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		E284D49E2C28CA8900F72684 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 		E284D4AA2C3CF42800F72684 /* TileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileView.swift; sourceTree = "<group>"; };
 		E284D4B12C3CF43800F72684 /* Bucket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bucket.swift; sourceTree = "<group>"; };
-		E284D4B62C44482000F72684 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		E284D4BC2C444AAF00F72684 /* ExpensesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesListView.swift; sourceTree = "<group>"; };
 		E284D4CA2C44FDC300F72684 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		E2992F812E91DC4400E86606 /* Mula.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mula.entitlements; sourceTree = "<group>"; };
 		E2992F822E91DDFE00E86606 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -90,8 +75,7 @@
 		E2992FCF2EA7373300E86606 /* TransactionFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionFormView.swift; sourceTree = "<group>"; };
 		E2992FD12EA7373900E86606 /* NewTransactionFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTransactionFormView.swift; sourceTree = "<group>"; };
 		E2992FD32EA7373E00E86606 /* EditTransactionFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTransactionFormView.swift; sourceTree = "<group>"; };
-		E2E1AA3B2C64778200E7B459 /* ExpensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpensesView.swift; sourceTree = "<group>"; };
-		E2F9559B2C46315E007D2E8E /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		E2992FD62EA7439D00E86606 /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,7 +141,6 @@
 				E27223EA2C15136E0065089A /* Bank.swift */,
 				DEF8FE162B6AE51D00D10468 /* Category.swift */,
 				E27223DD2BF9C2FE0065089A /* Expense.swift */,
-				E27223EE2C1FF14E0065089A /* Tab.swift */,
 				E2992FC72EA7349500E86606 /* Transaction.swift */,
 			);
 			path = Model;
@@ -166,8 +149,7 @@
 		DEF3CB032B61BFD800C926ED /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				DEF3CAE72B61BB9300C926ED /* ContentView.swift */,
-				DEF8FE212B6B9E1000D10468 /* SummaryView.swift */,
+				E2992FD62EA7439D00E86606 /* SummaryView.swift */,
 				DE9AF9302B7851F700D1F4DC /* UploadFormView.swift */,
 				DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */,
 			);
@@ -186,18 +168,7 @@
 		E284D4AB2C3CF42800F72684 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E253C9102C61D5AC00739FAD /* SignInView.swift */,
-				E253C9002C5211FD00739FAD /* ExpenseAddView.swift */,
-				E284D4BC2C444AAF00F72684 /* ExpensesListView.swift */,
-				E253C8FD2C51EA6500739FAD /* ExpenseEditView.swift */,
-				E284D4B62C44482000F72684 /* ContentView.swift */,
 				E284D4AA2C3CF42800F72684 /* TileView.swift */,
-				E2F9559B2C46315E007D2E8E /* HeaderView.swift */,
-				E253C8EC2C4C6C6100739FAD /* ExpenseFormView.swift */,
-				E253C8F12C4C949B00739FAD /* RowView.swift */,
-				E253C8FA2C51E4DA00739FAD /* ExpenseSwipeActionsModifier.swift */,
-				E253C9062C5DDDEC00739FAD /* SearchBarView.swift */,
-				E2E1AA3B2C64778200E7B459 /* ExpensesView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -240,9 +211,11 @@
 		E288FB112C275E3400B6D57A /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E2992FD52EA7375400E86606 /* Transactions */,
 				E2992FB52EA2037500E86606 /* Accounts */,
+				E2992FD52EA7375400E86606 /* Transactions */,
 				E284D49E2C28CA8900F72684 /* ChartView.swift */,
+				DEF3CAE72B61BB9300C926ED /* ContentView.swift */,
+				E253C9102C61D5AC00739FAD /* SignInView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -366,24 +339,19 @@
 				E2992FBD2EA209E900E86606 /* AccountFormView.swift in Sources */,
 				E2992FD22EA7373900E86606 /* NewTransactionFormView.swift in Sources */,
 				E253C8F62C4C98EA00739FAD /* Constants.swift in Sources */,
+				E2992FD72EA7439D00E86606 /* SummaryView.swift in Sources */,
 				E284D4CC2C44FDC500F72684 /* DataManager.swift in Sources */,
 				E284D4AC2C3CF42800F72684 /* TileView.swift in Sources */,
-				E2F9559D2C46315E007D2E8E /* HeaderView.swift in Sources */,
 				E284D49F2C28CA8900F72684 /* ChartView.swift in Sources */,
 				DEF8FE172B6AE51D00D10468 /* Category.swift in Sources */,
 				E2992FCC2EA7352100E86606 /* DataManager+Transaction.swift in Sources */,
 				E2992FC82EA7349500E86606 /* Transaction.swift in Sources */,
-				E253C8FB2C51E4DA00739FAD /* ExpenseSwipeActionsModifier.swift in Sources */,
 				DEF3CAE82B61BB9300C926ED /* ContentView.swift in Sources */,
 				DEF3CAE62B61BB9300C926ED /* MulaApp.swift in Sources */,
-				DEF8FE222B6B9E1000D10468 /* SummaryView.swift in Sources */,
-				E253C9072C5DDDEC00739FAD /* SearchBarView.swift in Sources */,
 				E2992FBB2EA205A200E86606 /* DataManager+Accounts.swift in Sources */,
 				E284D4B22C3CF44700F72684 /* Bucket.swift in Sources */,
 				DEF8FE1C2B6B989A00D10468 /* Extensions.swift in Sources */,
 				E2992FB42EA2036E00E86606 /* AddAccountSheet.swift in Sources */,
-				E27223EF2C1FF14E0065089A /* Tab.swift in Sources */,
-				E253C8F22C4C949B00739FAD /* RowView.swift in Sources */,
 				E2992FB02EA2030700E86606 /* Account.swift in Sources */,
 				E2992FD42EA7373E00E86606 /* EditTransactionFormView.swift in Sources */,
 				E2992FBF2EA20A1B00E86606 /* EditAccountSheet.swift in Sources */,
