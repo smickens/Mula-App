@@ -64,7 +64,18 @@ extension DataManager {
             "importBatchId": transaction.importBatchId?.uuidString as Any
         ]
 
-        transactionRef.child(transaction.id.uuidString).setValue(transactionDictionary)
+        let transactionID = transaction.id.uuidString
+
+        transactionRef.child(transactionID).setValue(transactionDictionary) { [weak self] error, _ in
+            guard let self = self else { return }
+
+            if let error {
+                print("❌ Error adding transaction: \(error.localizedDescription)")
+            } else {
+                self.transactions.append(transaction)
+                print("✅ Added new transaction \(transaction.title)")
+            }
+        }
     }
 
     /// Updates an existing transaction in Firebase
@@ -102,7 +113,7 @@ extension DataManager {
             if let error {
                 print("❌ Error deleting transaction: \(error.localizedDescription)")
             } else if let index = self.transactions.firstIndex(where: { $0.id == transaction.id }) {
-                self.accounts.remove(at: index)
+                self.transactions.remove(at: index)
                 print("✅ Deleted transaction with id \(transaction.id) name \(transaction.title)")
             }
         }

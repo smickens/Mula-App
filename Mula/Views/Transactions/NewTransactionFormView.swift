@@ -13,7 +13,7 @@ struct NewTransactionFormView: View {
 
     @State private var newTransaction = Transaction(
         id: UUID(),
-        accountId: nil,
+        accountId: NewTransactionFormView.defaultAccountId,
         importBatchId: nil,
         title: "",
         date: Date(),
@@ -34,4 +34,6 @@ struct NewTransactionFormView: View {
             }
         )
     }
+
+    static private let defaultAccountId = UUID(uuidString: "781259EA-A78D-431A-B697-3EC87A9183D2")
 }

@@ -9,44 +9,39 @@ import SwiftUI
 
 struct TransactionFormView: View {
     @Environment(DataManager.self) private var dataManager
+    @Environment(\.dismiss) private var dismiss
 
     @Binding var transaction: Transaction
+
+    @State private var amountString: String = ""
+
     let title: String
     let onSave: () -> Void
     let onCancel: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            // Header
             Text(title)
                 .font(.title2)
                 .fontWeight(.semibold)
                 .padding(.bottom, 4)
 
-            // Form Fields
             VStack(alignment: .leading, spacing: 12) {
                 TextField("Title", text: $transaction.title)
                     .textFieldStyle(.roundedBorder)
 
-                TextField("Amount", value: $transaction.amount, format: .currency(code: "USD"))
-                    .textFieldStyle(.roundedBorder)
+                HStack(spacing: 0) {
+                    Text("$")
+                        .padding(.leading, 6)
+                        .foregroundColor(.secondary)
 
-                Picker("Account", selection: Binding(
-                    get: {
-                        dataManager.accounts.first(where: { $0.id == transaction.accountId })
-                    },
-                    set: { selected in
-                        transaction.accountId = selected?.id
-                    })
-                ) {
-                    Text("Select Account")
-                        .tag(Optional<Account>.none)
-                    ForEach(dataManager.accounts, id: \.id) { account in
-                        Text(account.name)
-                            .tag(Optional(account))
-                    }
+                    TextField("Amount", value: $transaction.amount, formatter: transactionAmountFormatter)
+                        .textFieldStyle(.roundedBorder)
+                        .onChange(of: amountString) { newValue, _ in
+                            transaction.amount = Double(newValue) ?? 0.0
+                        }
+                        .padding(6)
                 }
-                .pickerStyle(.menu)
 
                 Picker("Category", selection: $transaction.category) {
                     ForEach(TransactionCategory.allCases, id: \.self) { category in
@@ -55,32 +50,50 @@ struct TransactionFormView: View {
                 }
                 .pickerStyle(.menu)
 
+                Picker("Account", selection: Binding(
+                    get: { transaction.accountId },
+                    set: { transaction.accountId = $0 }
+                )) {
+                    ForEach(dataManager.accounts) { account in Text(account.name)
+                            .tag(account.id)
+                    }
+                }
+                .pickerStyle(.menu)
+
                 DatePicker("Date", selection: $transaction.date, in: ...Date(), displayedComponents: .date)
             }
 
-            // Action Buttons
             HStack {
                 Button("Cancel", role: .cancel) {
                     onCancel()
                 }
+                .keyboardShortcut(.cancelAction)
+                .padding(.trailing, 6)
                 .buttonStyle(.bordered)
-                .controlSize(.large)
-                .tint(.gray)
 
                 Button("Save") {
                     onSave()
                 }
                 .buttonStyle(.borderedProminent)
-                .controlSize(.large)
                 .disabled(!isFormValid)
+                .keyboardShortcut(.defaultAction)
             }
             .padding(.top, 12)
         }
         .padding(20)
-        .frame(width: 380)
+        .frame(width: 360)
     }
 
     private var isFormValid: Bool {
         !transaction.title.trimmingCharacters(in: .whitespaces).isEmpty && transaction.amount != 0
     }
+
+    private let transactionAmountFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        formatter.alwaysShowsDecimalSeparator = true
+        return formatter
+    }()
 }
