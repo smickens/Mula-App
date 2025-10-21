@@ -19,41 +19,6 @@ struct ImportBatch {
     let name: String?
 }
 
-struct Transaction {
-    let id: UUID
-
-    let accountId: UUID?
-    let importBatchId: UUID?
-
-    let title: String
-    let date: Date
-    let amount: Double
-
-    let category: TransactionCategory
-}
-
-enum TransactionCategory: String, CaseIterable {
-    case housing = "Housing" // rent, utils, internet, etc.
-
-    case eatingOut = "Eating Out"
-    case groceries = "Groceries"
-
-    case shopping = "Shopping"
-
-    case car = "Lil Red" // gas, maintenance (servicing, tire, etc.)
-    case transit = "Transit" // flights, bus, caltrain, ubers
-
-    case entertainment = "Entertainment"
-
-    case income = "Income"
-    case transfer = "Transfer"
-    case refund = "Refund"
-    case dividend = "Dividend"
-    case interest = "Interest"
-
-    case other = "Other"
-}
-
 
 
 

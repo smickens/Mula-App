@@ -11,9 +11,9 @@ struct UploadFormView: View {
     @Environment(\.dismiss) private var dismiss
     
     @Binding var fileContent: String
-    @State private var newExpenses: [Expense] = []
-    @State private var selectedExpense: Expense?
-    
+    @State private var newTransactions: [Transaction] = []
+    @State private var selectedTransaction: Transaction?
+
     @State private var editedTitle: String = ""
     @State private var editedAmount: Double = 0.0
     @State private var editedCategory: Category = .misc
@@ -53,25 +53,26 @@ struct UploadFormView: View {
             }
         }
         .onAppear {
-            newExpenses = processCSV(fileContent)
-            selectedExpense = newExpenses.first
+            // TODO: update processing to handle transactions
+//            newTransactions = processCSV(fileContent)
+            selectedTransaction = newTransactions.first
         }
-        .onChange(of: selectedExpense) { _, newValue in
+        .onChange(of: selectedTransaction) { _, newValue in
             guard let newValue else { return }
             editedTitle = newValue.title
             editedAmount = newValue.amount
-            editedCategory = newValue.category
+//            editedCategory = newValue.category
             editedDate = newValue.date
         }
     }
     
     private var newExpensesList: some View {
-        List(newExpenses) { expense in
-            ExpenseView(selectedExpense: $selectedExpense, swipeActionsEnabled: false, expense: expense)
+        List(newTransactions) { transaction in
+            TransactionView(selectedTransaction: $selectedTransaction, swipeActionsEnabled: false, transaction: transaction)
                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                     Button(role: .destructive) {
                         // TODO: delete expense from DataManager
-                        newExpenses.removeAll { $0.id == expense.id }
+                        newTransactions.removeAll { $0.id == transaction.id }
                     } label: {
                         Label("Delete", systemImage: "trash.fill")
                     }
@@ -79,7 +80,7 @@ struct UploadFormView: View {
                 .contentShape(Rectangle())
                 .onTapGesture {
                     withAnimation {
-                        selectedExpense = expense
+                        selectedTransaction = transaction
                     }
                 }
         }
@@ -91,12 +92,12 @@ struct UploadFormView: View {
             Form {
                 TextField("Title", text: $editedTitle, prompt: Text("Groceries"))
                     .onChange(of: editedTitle) { _, newValue in
-                        selectedExpense?.title = editedTitle
+                        selectedTransaction?.title = editedTitle
                     }
 
                 TextField("Amount", value: $editedAmount, format: .currency(code: "USD"))
                     .onChange(of: editedAmount) { _, newValue in
-                        selectedExpense?.amount = editedAmount
+                        selectedTransaction?.amount = editedAmount
                     }
 
                 Picker("Category", selection: $editedCategory) {
@@ -105,12 +106,12 @@ struct UploadFormView: View {
                     }
                 }
                 .onChange(of: editedCategory) { _, newValue in
-                    selectedExpense?.category = editedCategory
+//                    selectedTransaction?.category = editedCategory
                 }
 
                 DatePicker("Date", selection: $editedDate, in: ...Date(), displayedComponents: .date)
                     .onChange(of: editedDate) { _, newValue in
-                        selectedExpense?.date = editedDate
+                        selectedTransaction?.date = editedDate
                     }
             }
             .textFieldStyle(.roundedBorder)

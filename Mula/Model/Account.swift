@@ -7,11 +7,6 @@
 
 import Foundation
 
-// etrade?
-// apple_savings, usbank_cd1, usbank_cd2, usbank_cd3
-// credit_card ?, usbank_checking
-// OR AccountType ?
-
 struct Account: Identifiable, Codable, Hashable {
     let id: UUID
     var name: String

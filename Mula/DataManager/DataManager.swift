@@ -18,15 +18,18 @@ final class DataManager {
         accountRef = dbRef.child("account")
         expenseRef = dbRef.child("expense")
         budgetRef = dbRef.child("budget")
+        transactionRef = dbRef.child("transaction")
 
         loadAccounts()
+        loadTransactions()
         loadExpenses()
         loadBudgets()
     }
 
     internal var accountRef: DatabaseReference
-    private var expenseRef: DatabaseReference
+    internal var expenseRef: DatabaseReference
     private var budgetRef: DatabaseReference
+    internal var transactionRef: DatabaseReference
 
     // TODO: might remove this property altogether
 //    public var selectedMonth = Date().month
@@ -37,6 +40,7 @@ final class DataManager {
 //    }
 
     var accounts: [Account] = []
+    var transactions: [Transaction] = []
 
     var allExpenses: [Expense] = []
 //    {
@@ -261,6 +265,27 @@ final class DataManager {
 
         return .misc
     }
+
+    // MARK: - Transactions Queries
+
+    func transactionsSortedByDate(with year: String, and month: String) -> [Transaction] {
+        transactions(with: year, and: month).sorted { $0.date < $1.date }
+    }
+
+    func transactions(with year: String, and month: String) -> [Transaction] {
+        transactions.filter { $0.date.year == year && $0.date.month == month }
+    }
+
+    func transactions(with year: String, and month: String, in category: TransactionCategory) -> [Transaction] {
+        let filtered = transactions(with: year, and: month)
+        return filtered.filter { $0.category == category }
+    }
+
+    func totalTransactions(with year: String, and month: String, in category: TransactionCategory) -> Double {
+        let filtered = transactions(with: year, and: month, in: category)
+        return filtered.reduce(0.0) { $0 + $1.amount }
+    }
+
 
 // MARK: Helper functions
     // TODO: add helpers that have this take in Ints

@@ -7,45 +7,49 @@
 
 import SwiftUI
 
-struct ExpenseView: View {
+struct TransactionView: View {
     @Environment(DataManager.self) private var dataManager
 
-    @Binding var selectedExpense: Expense?
-    @State private var showingEditExpenseForm = false
+    @Binding var selectedTransaction: Transaction?
+    @State private var showingEditTransactionForm = false
+
     let swipeActionsEnabled: Bool
-    let expense: Expense
+    let transaction: Transaction
 
     var body: some View {
         HStack {
+            // Category Icon
             ZStack {
                 Circle()
-                    .fill(expense.category.tintColor)
+                    .fill(transaction.category.tintColor)
                     .frame(width: 35, height: 35)
 
-                Image(systemName: expense.category.iconName)
+                Image(systemName: transaction.category.iconName)
                     .foregroundColor(.white)
             }
 
+            // Title + Date
             VStack(alignment: .leading) {
-                Text(expense.title)
+                Text(transaction.title)
                     .font(.headline)
                     .lineLimit(1)
 
-                Text(formatDate(expense.date))
+                Text(formatDate(transaction.date))
                     .font(.caption)
             }
 
             Spacer()
 
-            Text(expense.amount, format: .currency(code: "USD"))
+            // Amount display
+            Text(transaction.amount, format: .currency(code: "USD"))
                 .font(.headline)
-                .foregroundStyle(expenseColor)
+                .foregroundStyle(transactionColor)
                 .fontWeight(.medium)
                 .padding(.horizontal, 5)
                 .padding(.vertical, 2)
                 .background(
                     RoundedRectangle(cornerRadius: 5)
-                        .fill(expenseColor.opacity(0.2))
+                        .fill(transactionColor.opacity(0.2))
                 )
         }
         .padding(5)
@@ -53,14 +57,13 @@ struct ExpenseView: View {
         .gesture(tapGesture)
         .background(
             RoundedRectangle(cornerRadius: 8)
-                .fill(selectedExpense == expense ? .gray.opacity(0.2) : .clear)
+                .fill(selectedTransaction?.id == transaction.id ? .gray.opacity(0.2) : .clear)
         )
         .swipeActions(edge: .leading, allowsFullSwipe: false) {
             if swipeActionsEnabled {
                 Button {
-                    selectedExpense = expense
-
-                    showingEditExpenseForm.toggle()
+                    selectedTransaction = transaction
+                    showingEditTransactionForm.toggle()
                 } label: {
                     Label("Edit", systemImage: "pencil")
                 }
@@ -70,50 +73,47 @@ struct ExpenseView: View {
         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
             if swipeActionsEnabled {
                 Button(role: .destructive) {
-                    guard let expenseID = expense.id else {
-                        print("Failed to delete item: \(expense.id ?? "no id") \(expense.title), due to missing ID")
-                        return
-                    }
-                    print("delete item: \(expense.id ?? "no id") w/ title \(expense.title)")
-
-                    dataManager.deleteExpense(id: expenseID)
+                    deleteTransaction()
                 } label: {
                     Label("Delete", systemImage: "trash.fill")
                 }
             }
         }
-        .sheet(isPresented: $showingEditExpenseForm) {
-            EditExpenseFormView(expense: expense)
+        .sheet(isPresented: $showingEditTransactionForm) {
+            EditTransactionFormView(transaction: transaction)
         }
     }
+
+    // MARK: - Gestures
 
     private var tapGesture: some Gesture {
         TapGesture(count: 1)
             .onEnded {
-                // first tap
-                selectedExpense = expense
+                selectedTransaction = transaction
             }
             .simultaneously(with: TapGesture(count: 2)
                 .onEnded {
-                    // double tap
                     if swipeActionsEnabled {
-                        showingEditExpenseForm.toggle()
+                        showingEditTransactionForm.toggle()
                     }
                 }
             )
     }
 
-    private var expenseColor: Color {
-        return expense.amount > 0 ? .green : .red
+    // MARK: - Helpers
+
+    private var transactionColor: Color {
+        transaction.amount > 0 ? .green : .red
     }
 
-    private func formatDate(_ date: Date?) -> String {
+    private func formatDate(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "E, MMM d"
-        return dateFormatter.string(from: date ?? Date())
+        return dateFormatter.string(from: date)
+    }
+
+    private func deleteTransaction() {
+        print("Deleting transaction: \(transaction.id) \(transaction.title)")
+        dataManager.deleteTransaction(transaction)
     }
 }
-
-//#Preview {
-//    ExpenseView()
-//}

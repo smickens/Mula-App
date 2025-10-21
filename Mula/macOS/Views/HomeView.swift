@@ -7,6 +7,23 @@
 
 import SwiftUI
 
+struct DataMigrationButton: View {
+    @Environment(DataManager.self) private var dataManager
+
+    var body: some View {
+        Button {
+            Task {
+                await dataManager.migrateExpensesToTransactions()
+            }
+        } label: {
+            Label("Migrate Expenses → Transactions", systemImage: "arrow.right.arrow.left.circle.fill")
+        }
+        .buttonStyle(.borderedProminent)
+        .tint(.blue)
+        .padding()
+    }
+}
+
 struct HomeView: View {
     let expenses: [Expense]
 
@@ -16,6 +33,8 @@ struct HomeView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
+//            DataMigrationButton()
+
             Text("Spending in May")
                 .font(.headline)
 

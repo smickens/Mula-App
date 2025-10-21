@@ -1,19 +1,20 @@
 //
-//  ExpensesView.swift
+//  TransactionsView.swift
 //  Mula
 //
-//  Created by Shanti Mickens on 6/16/24.
+//  Created by Shanti Mickens on 10/20/25.
 //
+
 
 import SwiftUI
 
-struct ExpensesView: View {
+struct TransactionsView: View {
     @Environment(DataManager.self) private var dataManager
 
     @State private var searchText: String = ""
     @State private var selectedYear: String = Date().year
     @State private var selectedMonth: String = Date().month
-    @State private var selectedExpense: Expense? = nil
+    @State private var selectedTransaction: Transaction? = nil
     @State private var selectedCategory: Category? = nil
     @State private var showingNewExpenseForm: Bool = false
     @State private var showingUploadExpensesForm: Bool = false
@@ -39,9 +40,9 @@ struct ExpensesView: View {
                         }
                     }
                 }
-                
+
                 TabView {
-                    SummaryView(selectedCategory: $selectedCategory, expensesForMonth: filteredExpenses, totalsByCategory: totalsByCategory)
+                    SummaryView(selectedCategory: $selectedCategory, expensesForMonth: [], totalsByCategory: [:])
                         .tabItem {
                             Text("Summary")
                         }
@@ -49,8 +50,8 @@ struct ExpensesView: View {
             }
             .padding()
 
-            List(filteredExpenses) { expense in
-                ExpenseView(selectedExpense: $selectedExpense, swipeActionsEnabled: true, expense: expense)
+            List(filteredTransactions) { transaction in
+                TransactionView(selectedTransaction: $selectedTransaction, swipeActionsEnabled: true, transaction: transaction)
             }
             .searchable(text: $searchText)
         }
@@ -72,29 +73,30 @@ struct ExpensesView: View {
             }
         }
         .sheet(isPresented: $showingNewExpenseForm) {
-            NewExpenseFormView(selectedMonth: selectedMonth)
+            // TODO: pass in the current selected month to default the picker to that
+            NewTransactionFormView()
         }
         .sheet(isPresented: $showingUploadExpensesForm) {
             UploadFormView(fileContent: $fileContent)
         }
     }
 
-    private var filteredExpenses: [Expense] {
+    private var filteredTransactions: [Transaction] {
         dataManager
-            .expensesSortedByDate(with: selectedYear, and: selectedMonth)
-            .filter { selectedCategory != nil ? $0.category == selectedCategory : true }
+            .transactionsSortedByDate(with: selectedYear, and: selectedMonth)
+//            .filter { selectedCategory != nil ? $0.category == selectedCategory : true }
             .filter { searchText.isEmpty || $0.title.localizedStandardContains(searchText) }
     }
-    
-    private var totalsByCategory: [Category: Double] {
-        var totals: [Category: Double] = [:]
-        filteredExpenses.forEach { expense in
-            // Multiply expense amount by -1 so that +10 represents $10 spent and -5 means $5 gained
-            totals[expense.category] = (expense.amount * -1) + (totals[expense.category] ?? 0)
-        }
+
+    private var totalsByCategory: [TransactionCategory: Double] {
+        var totals: [TransactionCategory: Double] = [:]
+//        filteredTransactions.forEach { expense in
+//            // Multiply expense amount by -1 so that +10 represents $10 spent and -5 means $5 gained
+//            totals[expense.category] = (expense.amount * -1) + (totals[expense.category] ?? 0)
+//        }
         return totals
     }
-    
+
     private func importCSV() {
         let openPanel = NSOpenPanel()
         openPanel.allowedContentTypes = [.commaSeparatedText]
