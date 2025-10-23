@@ -28,40 +28,10 @@ final class DataManager {
     internal var expenseRef: DatabaseReference
     internal var transactionRef: DatabaseReference
 
-    // TODO: might remove this property altogether
-//    public var selectedMonth = Date().month
-//    {
-//        didSet {
-//            refreshData(with: selectedYear, and: selectedMonth)
-//        }
-//    }
-
     var accounts: [Account] = []
     var transactions: [Transaction] = []
 
     var allExpenses: [Expense] = []
-//    {
-//        didSet {
-//            refreshData(with: selectedYear, and: selectedMonth)
-//        }
-//    }
-
-    var expensesForSelectedMonth: [Expense] = []
-    var bucketTotalsForSelectedMonth: [Bucket: Double] = [:]
-    var categoryTotalsForSelectedMonth: [Category: Double] = [:]
-
-    public func refreshData(with selectedYear: String, and selectedMonth: String) {
-        print("Refreshing data for \(selectedMonth) \(selectedYear)...")
-        expensesForSelectedMonth = DataManager.shared.expenses(with: selectedYear, and: selectedMonth).sorted(by: { $0.date < $1.date })
-
-        for bucket in Bucket.allCases {
-            bucketTotalsForSelectedMonth[bucket] = totalExpense(with: selectedYear, and: selectedMonth, in: bucket)
-        }
-
-        for category in Category.allCases {
-            categoryTotalsForSelectedMonth[category] = totalExpense(with: selectedYear, and: selectedMonth, in: category)
-        }
-    }
 
 // MARK: Import expenses from .csv file
 
