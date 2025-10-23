@@ -41,7 +41,7 @@ struct ContentView: View {
             case .transactions:
                 TransactionsView()
             case .settings:
-                AccountsView()
+                SettingsView()
             }
         }
     }

@@ -12,6 +12,8 @@ extension DataManager {
 
     /// Loads accounts from Firebase
     func loadAccounts() {
+        accounts.removeAll()
+
         accountRef.getData { [weak self] error, snapshot in
             guard let self = self else { return }
 

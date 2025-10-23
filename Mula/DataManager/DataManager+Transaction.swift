@@ -12,6 +12,8 @@ extension DataManager {
 
     /// Loads transactions from Firebase
     func loadTransactions() {
+        transactions.removeAll()
+
         transactionRef.getData { [weak self] error, snapshot in
             guard let self = self else { return }
 
