@@ -17,18 +17,15 @@ final class DataManager {
         let dbRef = Database.database().reference()
         accountRef = dbRef.child("account")
         expenseRef = dbRef.child("expense")
-        budgetRef = dbRef.child("budget")
         transactionRef = dbRef.child("transaction")
 
         loadAccounts()
         loadTransactions()
         loadExpenses()
-        loadBudgets()
     }
 
     internal var accountRef: DatabaseReference
     internal var expenseRef: DatabaseReference
-    private var budgetRef: DatabaseReference
     internal var transactionRef: DatabaseReference
 
     // TODO: might remove this property altogether
@@ -48,8 +45,6 @@ final class DataManager {
 //            refreshData(with: selectedYear, and: selectedMonth)
 //        }
 //    }
-
-    public var budget: [Bucket: Double] = [:]
 
     var expensesForSelectedMonth: [Expense] = []
     var bucketTotalsForSelectedMonth: [Bucket: Double] = [:]
@@ -322,10 +317,6 @@ final class DataManager {
         return e.reduce(0.0) { $0 + $1.amount }
     }
 
-    func budget(for bucket: Bucket) -> Double {
-        return budget[bucket] ?? 0.0
-    }
-
     private var numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -433,32 +424,6 @@ final class DataManager {
         }
     }
 
-    private func loadBudgets() {
-        budgetRef.getData { [weak self] error, snapshot in
-            guard let self = self else { return }
-
-            if let error = error {
-                print("Error getting budgets: \(error.localizedDescription)")
-                return
-            }
-
-            guard let value = snapshot?.value else {
-                print("No budget data available")
-                return
-            }
-
-            if let data = value as? [String: Any] {
-                for (bucketString, budgetAmount) in data {
-                    let bucket = Bucket.get(from: bucketString)
-
-                    budget[bucket] = budgetAmount as? Double ?? 0.0
-
-                    print("Budget for bucket \(bucket.name) is \(String(describing: budget[bucket]))")
-                }
-            }
-        }
-    }
-
 // MARK: Updating data
 
     public func updateExpense(expense: Expense) {
@@ -478,18 +443,6 @@ final class DataManager {
         expenseRef.child(expenseID).updateChildValues(updatedExpense) { error, _ in
             if let error = error {
                 print("Error updating expense w/ id \(expenseID): \(error.localizedDescription)")
-            }
-        }
-    }
-
-    public func updateBudget(for bucket: Bucket, to amount: Double) {
-        let updatedBudget = [
-            "\(bucket.name.lowercased())": amount,
-        ] as [String : Any]
-
-        budgetRef.updateChildValues(updatedBudget) { error, _ in
-            if let error = error {
-                print("Error updating budget for bucket \(bucket.name): \(error.localizedDescription)")
             }
         }
     }
