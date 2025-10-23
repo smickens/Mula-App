@@ -24,21 +24,18 @@ struct ContentView: View {
             List(selection: $selectedTab) {
                 ForEach(TabName.allCases, id: \.self) { tab in
                     Text(tab.rawValue)
-
-//                    Image(systemName: "gear")
                 }
             }
             .listStyle(.sidebar)
-            // TODO: fix Ambiguous use of 'toolbar(content:)'
-//            .toolbar {
-//                ToolbarItem {
-//                    Button {
-//                        toggleSidebar()
-//                    } label: {
-//                        Image(systemName: "sidebar.leading")
-//                    }
-//                }
-//            }
+            .toolbar {
+                ToolbarItem {
+                    Button {
+                        toggleSidebar()
+                    } label: {
+                        Image(systemName: "sidebar.leading")
+                    }
+                }
+            }
 
             switch selectedTab {
             case .transactions:
@@ -47,10 +44,6 @@ struct ContentView: View {
                 AccountsView()
             }
         }
-    }
-
-    var nonIncomeExpenses: [Expense] {
-        return expenses.filter { $0.amount < 0 }
     }
 
     private func toggleSidebar() {
