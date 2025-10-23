@@ -25,21 +25,21 @@ extension DataManager {
                 return
             }
 
-            for (id, data) in value {
-                guard let title = data["title"] as? String,
-                      let amount = data["amount"] as? Double,
-                      let dateTimestamp = data["date"] as? TimeInterval,
-                      let categoryString = data["category"] as? String,
+            for (firebaseKey, firebaseData) in value {
+                guard let title = firebaseData["title"] as? String,
+                      let amount = firebaseData["amount"] as? Double,
+                      let dateTimestamp = firebaseData["date"] as? TimeInterval,
+                      let categoryString = firebaseData["category"] as? String,
                       let category = TransactionCategory(rawValue: categoryString)
                 else {
-                    print("⚠️ Skipping invalid transaction: \(id)")
+                    print("⚠️ Skipping invalid transaction: \(firebaseKey)")
                     continue
                 }
 
                 let transaction = Transaction(
-                    id: UUID(uuidString: id) ?? UUID(),
-                    accountId: (data["accountId"] as? String).flatMap(UUID.init(uuidString:)),
-                    importBatchId: (data["importBatchId"] as? String).flatMap(UUID.init(uuidString:)),
+                    id: UUID(uuidString: firebaseKey) ?? UUID(),
+                    accountId: (firebaseData["accountId"] as? String).flatMap(UUID.init(uuidString:)),
+                    importBatchId: (firebaseData["importBatchId"] as? String).flatMap(UUID.init(uuidString:)),
                     title: title,
                     date: Date(timeIntervalSince1970: dateTimestamp),
                     amount: amount,
@@ -64,9 +64,7 @@ extension DataManager {
             "importBatchId": transaction.importBatchId?.uuidString as Any
         ]
 
-        let transactionID = transaction.id.uuidString
-
-        transactionRef.child(transactionID).setValue(transactionDictionary) { [weak self] error, _ in
+        transactionRef.child(transaction.firebaseKey).setValue(transactionDictionary) { [weak self] error, _ in
             guard let self = self else { return }
 
             if let error {
@@ -89,7 +87,7 @@ extension DataManager {
             "importBatchId": transaction.importBatchId?.uuidString as Any
         ]
 
-        transactionRef.child(transaction.id.uuidString).updateChildValues(transactionDictionary) { [weak self] error, _ in
+        transactionRef.child(transaction.firebaseKey).updateChildValues(transactionDictionary) { [weak self] error, _ in
             if let error = error {
                 print("❌ Failed to update transaction: \(error.localizedDescription)")
             }
@@ -107,7 +105,7 @@ extension DataManager {
 
     /// Deletes a transaction from Firebase
     func deleteTransaction(_ transaction: Transaction) {
-        transactionRef.child(transaction.id.uuidString).removeValue { [weak self] error, _ in
+        transactionRef.child(transaction.firebaseKey).removeValue { [weak self] error, _ in
             guard let self = self else { return }
 
             if let error {

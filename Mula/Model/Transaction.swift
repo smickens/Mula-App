@@ -19,6 +19,10 @@ struct Transaction: Identifiable, Codable, Hashable {
     var amount: Double
 
     var category: TransactionCategory
+
+    var firebaseKey: String {
+        id.uuidString
+    }
 }
 
 enum TransactionCategory: String, CaseIterable, Codable, Identifiable {
