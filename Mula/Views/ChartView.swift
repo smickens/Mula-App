@@ -18,18 +18,19 @@ struct ChartView: View {
     let data: [ChartData]
     let color: Color = .gray
 
-    init(expenses: [Expense]) {
+    init(transactions: [Transaction]) {
         var aggregated: [ChartData] = []
         var currentValue = 0.0
         var prevDate: Date? = nil
-        expenses.sorted(by: { $0.date < $1.date }).forEach { expense in
-            currentValue += expense.amount
-            if prevDate == nil || prevDate != expense.date {
+        transactions.sorted(by: { $0.date < $1.date }).forEach { transaction in
+            let date = transaction.date
+            currentValue += transaction.amount
+            if prevDate == nil || prevDate != date {
                 aggregated.append(ChartData(
                     value: currentValue,
-                    date: expense.date)
+                    date: date)
                 )
-                prevDate = expense.date
+                prevDate = date
             }
         }
         self.data = aggregated
@@ -38,7 +39,7 @@ struct ChartView: View {
     var body: some View {
         // TODO: use up the same amount of height when empty
         if data.count == 0 {
-            Text("No expenses")
+            Text("No transactions")
         } else {
             Chart(data) {
                 // could use multiple line marks to break out by category

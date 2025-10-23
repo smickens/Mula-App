@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct SummaryView: View {
-    @Binding var selectedCategory: Category?
-    let expensesForMonth: [Expense]
-    let totalsByCategory: [Category: Double]
+    @Binding var selectedCategory: TransactionCategory?
+    let transactionsForMonth: [Transaction]
+    let totalsByCategory: [TransactionCategory: Double]
 
     var body: some View {
         VStack(spacing: 0) {
@@ -24,7 +24,7 @@ struct SummaryView: View {
                     .font(.title)
                     .fontWeight(.medium)
 
-                Text("in \(expensesForMonth.first?.date.month ?? "xxx")")
+                Text("in \(transactionsForMonth.first?.date.month ?? "xxx")")
                     .font(.headline)
                     .foregroundStyle(.secondary)
 
@@ -32,7 +32,7 @@ struct SummaryView: View {
             }
             .padding(.bottom)
 
-            ChartView(expenses: expensesForMonth)
+            ChartView(transactions: transactionsForMonth)
 
 //            Text("Spending Overview")
 //                .font(.headline)
@@ -96,13 +96,13 @@ struct SummaryView: View {
     }
 
     private var totalMoneyOut: Double {
-        return expensesForMonth.filter { $0.amount < 0 }.reduce(0) { $0 + $1.amount }
+        return transactionsForMonth.filter { $0.amount < 0 }.reduce(0) { $0 + $1.amount }
     }
 
     private var categoryBreakdown: some View {
         VStack(alignment: .leading) {
             LazyVGrid(columns: [GridItem(), GridItem()], alignment: .leading, spacing: 5) {
-                ForEach(Category.allCases, id: \.self) { category in
+                ForEach(TransactionCategory.allCases, id: \.self) { category in
 //                    if category != .income {
                         getCategoryView(for: category)
 //                    }
@@ -112,7 +112,7 @@ struct SummaryView: View {
         }
     }
 
-    private func getCategoryView(for category: Category) -> some View {
+    private func getCategoryView(for category: TransactionCategory) -> some View {
         HStack {
             ZStack {
                 Circle()

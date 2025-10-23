@@ -9,21 +9,21 @@ import SwiftUI
 import Charts
 
 struct CategoryCount {
-    var category: Category
+    var category: TransactionCategory
     var total: Double
 }
 
 struct PieChartView: View {
-    @Binding var selectedCategory: Category?
+    @Binding var selectedCategory: TransactionCategory?
     let data: [CategoryCount]
     let totalSpent: Double
 
-    init(selectedCategory: Binding<Category?>, totalsByCategory: [Category: Double]) {
+    init(selectedCategory: Binding<TransactionCategory?>, totalsByCategory: [TransactionCategory: Double]) {
         _selectedCategory = selectedCategory
         var counts: [CategoryCount] = []
         var t = 0.0
         totalsByCategory.sorted(by: { $0.value < $1.value }).forEach { category, total in
-            guard total > 0 else { return }
+            guard total < 0 else { return }
             counts.append(CategoryCount(category: category, total: total))
             t += total
         }

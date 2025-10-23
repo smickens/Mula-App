@@ -119,7 +119,6 @@
 				DEF8FE1A2B6B988C00D10468 /* Utilities */,
 				E288FB112C275E3400B6D57A /* Views */,
 				E288FB0F2C275E1800B6D57A /* iOS */,
-				E288FB102C275E2400B6D57A /* macOS */,
 				DEF3CAE92B61BB9500C926ED /* Assets.xcassets */,
 				DEF3CAEB2B61BB9500C926ED /* Preview Content */,
 			);
@@ -144,16 +143,6 @@
 				E2992FC72EA7349500E86606 /* Transaction.swift */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		DEF3CB032B61BFD800C926ED /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				E2992FD62EA7439D00E86606 /* SummaryView.swift */,
-				DE9AF9302B7851F700D1F4DC /* UploadFormView.swift */,
-				DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		DEF8FE1A2B6B988C00D10468 /* Utilities */ = {
@@ -200,14 +189,6 @@
 			path = iOS;
 			sourceTree = "<group>";
 		};
-		E288FB102C275E2400B6D57A /* macOS */ = {
-			isa = PBXGroup;
-			children = (
-				DEF3CB032B61BFD800C926ED /* Views */,
-			);
-			path = macOS;
-			sourceTree = "<group>";
-		};
 		E288FB112C275E3400B6D57A /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -215,7 +196,10 @@
 				E2992FD52EA7375400E86606 /* Transactions */,
 				E284D49E2C28CA8900F72684 /* ChartView.swift */,
 				DEF3CAE72B61BB9300C926ED /* ContentView.swift */,
+				DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */,
 				E253C9102C61D5AC00739FAD /* SignInView.swift */,
+				E2992FD62EA7439D00E86606 /* SummaryView.swift */,
+				DE9AF9302B7851F700D1F4DC /* UploadFormView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
