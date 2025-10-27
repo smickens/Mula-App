@@ -25,7 +25,7 @@ extension DataManager {
 
     /// Loads ImportBatches from Firebase.
     func loadImportBatches() {
-        var loadedBatches: [ImportBatch] = []
+        importBatches.removeAll()
 
         importBatchRef.getData { [weak self] error, snapshot in
             guard let self = self else { return }
@@ -52,12 +52,10 @@ extension DataManager {
                     date: Date(timeIntervalSince1970: timestamp),
                     name: firebaseData["name"] as? String
                 )
-                loadedBatches.append(batch)
+                self.importBatches.append(batch)
             }
 
-            self.importBatches = loadedBatches
-
-            print("✅ Loaded \(loadedBatches.count) import batches from Firebase.")
+            print("✅ Loaded \(self.importBatches.count) import batches from Firebase.")
         }
     }
 

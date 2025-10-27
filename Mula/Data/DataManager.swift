@@ -19,9 +19,7 @@ final class DataManager {
         importBatchRef = dbRef.child("importBatch")
         transactionRef = dbRef.child("transaction")
 
-        loadAccounts()
-        loadImportBatches()
-        loadTransactions()
+        loadData()
     }
 
     internal var accountRef: DatabaseReference
@@ -31,6 +29,12 @@ final class DataManager {
     var accounts: [Account] = []
     var importBatches: [ImportBatch] = []
     var transactions: [Transaction] = []
+
+    func loadData() {
+        loadAccounts()
+        loadImportBatches()
+        loadTransactions()
+    }
 
     // MARK: - Transactions Queries
 

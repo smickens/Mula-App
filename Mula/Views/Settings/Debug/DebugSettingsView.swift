@@ -65,15 +65,8 @@ struct DebugSettingsView: View {
         isReloading = true
         reloadMessage = nil
 
-        do {
-            await MainActor.run {
-                dataManager.loadAccounts()
-                dataManager.loadTransactions()
-            }
-            reloadMessage = "✅ Data reloaded successfully."
-        } catch {
-            reloadMessage = "❌ Failed to reload data: \(error.localizedDescription)"
-        }
+        dataManager.loadData()
+        reloadMessage = "✅ Data reloaded successfully."
 
         isReloading = false
     }
