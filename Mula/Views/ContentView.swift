@@ -11,6 +11,7 @@ import FirebaseAuth
 
 enum TabName: String, CaseIterable {
     case transactions = "Transactions"
+    case imports = "Imports"
     case settings = "Settings"
 }
 
@@ -20,33 +21,35 @@ struct ContentView: View {
     @State private var selectedTab: TabName = .transactions
 
     var body: some View {
-        NavigationView {
+        NavigationSplitView {
             List(selection: $selectedTab) {
                 ForEach(TabName.allCases, id: \.self) { tab in
-                    Text(tab.rawValue)
+                    Label(tab.rawValue, systemImage: iconForTab(tab))
+                        .tag(tab)
                 }
             }
+            .navigationSplitViewColumnWidth(min: 180, ideal: 200, max: 250)
             .listStyle(.sidebar)
-            .toolbar {
-                ToolbarItem {
-                    Button {
-                        toggleSidebar()
-                    } label: {
-                        Image(systemName: "sidebar.leading")
-                    }
-                }
-            }
-
+        } detail: {
             switch selectedTab {
             case .transactions:
                 TransactionsView()
+            case .imports:
+                ImportsView()
             case .settings:
                 SettingsView()
             }
         }
     }
 
-    private func toggleSidebar() {
-        NSApp.keyWindow?.firstResponder?.tryToPerform(#selector(NSSplitViewController.toggleSidebar(_:)), with: nil)
+    private func iconForTab(_ tab: TabName) -> String {
+        switch tab {
+        case .transactions:
+            return "list.bullet.rectangle"
+        case .imports:
+            return "tray.and.arrow.down"
+        case .settings:
+            return "gear"
+        }
     }
 }

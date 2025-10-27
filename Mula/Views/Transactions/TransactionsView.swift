@@ -18,11 +18,7 @@ struct TransactionsView: View {
     @State private var selectedTransaction: Transaction? = nil
     @State private var selectedCategory: TransactionCategory? = nil
 
-    @State private var showingNewExpenseForm: Bool = false
-    @State private var showingUploadExpensesForm: Bool = false
-
-    @State private var fileContent: String = ""
-    @State private var fileName: String = ""
+    @State private var showingNewTransactionForm: Bool = false
 
     private let currentYear: Int = Calendar.current.component(.year, from: Date())
     private let months: [String] = DateFormatter().monthSymbols
@@ -62,26 +58,15 @@ struct TransactionsView: View {
         .toolbar {
             ToolbarItem {
                 Button {
-                    importCSV()
-                } label: {
-                    Image(systemName: "arrow.up")
-                }
-            }
-
-            ToolbarItem {
-                Button {
-                    showingNewExpenseForm.toggle()
+                    showingNewTransactionForm.toggle()
                 } label: {
                     Image(systemName: "plus")
                 }
             }
         }
-        .sheet(isPresented: $showingNewExpenseForm) {
+        .sheet(isPresented: $showingNewTransactionForm) {
             // TODO: pass in the current selected month to default the picker to that
             NewTransactionFormView()
-        }
-        .sheet(isPresented: $showingUploadExpensesForm) {
-            ImportTransactionsView(fileName: $fileName, fileContent: $fileContent)
         }
     }
 
@@ -101,25 +86,5 @@ struct TransactionsView: View {
             totals[transaction.category] = (transaction.amount) + (totals[transaction.category] ?? 0)
         }
         return totals
-    }
-
-    private func importCSV() {
-        let openPanel = NSOpenPanel()
-        openPanel.allowedContentTypes = [.commaSeparatedText]
-        openPanel.canChooseFiles = true
-        openPanel.canChooseDirectories = false
-
-        if openPanel.runModal() == .OK,
-           let fileURL = openPanel.url,
-           let data = try? Data(contentsOf: fileURL),
-           let content = String(data: data, encoding: .utf8) {
-            fileContent = content
-            fileName = fileURL.lastPathComponent // <-- Capture the file name
-            print("✅ Imported file: \(fileName)")
-
-            showingUploadExpensesForm.toggle()
-        } else {
-            print("❌ Failed to import file")
-        }
     }
 }

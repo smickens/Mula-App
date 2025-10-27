@@ -45,6 +45,7 @@
 		E2992FE12EA9EBC900E86606 /* ImportBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FE02EA9EBC900E86606 /* ImportBatch.swift */; };
 		E2992FE32EA9EC4E00E86606 /* DataManager+ImportBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FE22EA9EC4E00E86606 /* DataManager+ImportBatch.swift */; };
 		E2992FE72EA9F3D500E86606 /* Bank.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FE62EA9F3D500E86606 /* Bank.swift */; };
+		E2992FE92EAF146D00E86606 /* ImportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FE82EAF146D00E86606 /* ImportsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,6 +87,7 @@
 		E2992FE02EA9EBC900E86606 /* ImportBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportBatch.swift; sourceTree = "<group>"; };
 		E2992FE22EA9EC4E00E86606 /* DataManager+ImportBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataManager+ImportBatch.swift"; sourceTree = "<group>"; };
 		E2992FE62EA9F3D500E86606 /* Bank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bank.swift; sourceTree = "<group>"; };
+		E2992FE82EAF146D00E86606 /* ImportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -230,6 +232,7 @@
 		E2992FD52EA7375400E86606 /* Transactions */ = {
 			isa = PBXGroup;
 			children = (
+				E2992FE82EAF146D00E86606 /* ImportsView.swift */,
 				E2992FD32EA7373E00E86606 /* EditTransactionFormView.swift */,
 				DE9AF9302B7851F700D1F4DC /* ImportTransactionsView.swift */,
 				E2992FD12EA7373900E86606 /* NewTransactionFormView.swift */,
@@ -348,6 +351,7 @@
 				DE9AF9B52BA2C4AF00D1F4DC /* PieChartView.swift in Sources */,
 				E2992FCE2EA7372900E86606 /* TransactionsView.swift in Sources */,
 				E253C8F02C4C74D100739FAD /* TransactionView.swift in Sources */,
+				E2992FE92EAF146D00E86606 /* ImportsView.swift in Sources */,
 				DE9AF9312B7851F700D1F4DC /* ImportTransactionsView.swift in Sources */,
 				E2992FB22EA2036000E86606 /* AccountsView.swift in Sources */,
 				E253C9112C61D5B100739FAD /* SignInView.swift in Sources */,

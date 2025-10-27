@@ -1,0 +1,265 @@
+//
+//  ImportsView.swift
+//  Mula
+//
+//  Created by Shanti Mickens on 10/26/25.
+//
+
+import SwiftUI
+
+struct ImportsView: View {
+    @Environment(DataManager.self) private var dataManager
+
+    @State private var selectedImportBatch: ImportBatch?
+    @State private var selectedTransaction: Transaction?
+
+    @State private var showingImportTransactionsForm: Bool = false
+    @State private var fileContent: String = ""
+    @State private var fileName: String = ""
+
+    var body: some View {
+        HStack(spacing: 0) {
+            // Left: Import Batches List
+            importBatchesList
+
+            Divider()
+
+            // Right: Transactions and Detail
+            if let selectedImportBatch = selectedImportBatch {
+                transactionsAndDetailView(for: selectedImportBatch)
+            } else {
+                emptyImportView
+            }
+        }
+        .navigationTitle("Imports")
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    importTransactionsCSVFile()
+                } label: {
+                    Label("Import", systemImage: "square.and.arrow.down")
+                }
+            }
+        }
+        .sheet(isPresented: $showingImportTransactionsForm) {
+            ImportTransactionsView(importName: $fileName, fileContent: $fileContent)
+        }
+    }
+
+    private func importTransactionsCSVFile() {
+        let openPanel = NSOpenPanel()
+        openPanel.allowedContentTypes = [.commaSeparatedText]
+        openPanel.canChooseFiles = true
+        openPanel.canChooseDirectories = false
+
+        if openPanel.runModal() == .OK,
+           let fileURL = openPanel.url,
+           let data = try? Data(contentsOf: fileURL),
+           let content = String(data: data, encoding: .utf8) {
+            fileContent = content
+            fileName = fileURL.lastPathComponent // <-- Capture the file name
+            print("✅ Imported file: \(fileName)")
+
+            showingImportTransactionsForm.toggle()
+        } else {
+            print("❌ Failed to import file")
+        }
+    }
+
+    // MARK: - Import Batches List
+
+    private var importBatchesList: some View {
+        List(selection: $selectedImportBatch) {
+            ForEach(dataManager.importBatches) { batch in
+                ImportBatchRow(batch: batch)
+                    .tag(batch)
+            }
+        }
+        .frame(minWidth: 200, idealWidth: 250, maxWidth: 300)
+    }
+
+    // MARK: - Transactions and Detail View
+
+    private func transactionsAndDetailView(for batch: ImportBatch) -> some View {
+        let transactions = dataManager.transactions
+            .filter { $0.importBatchId == batch.id }
+            .sorted { $0.date > $1.date }
+
+        return HStack(spacing: 0) {
+            // Middle: Transactions List
+            VStack(spacing: 0) {
+                // Header
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(batch.name ?? "Untitled Import")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                    Text(batch.date, format: .dateTime.month().day().year())
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                    Text("\(transactions.count) transaction\(transactions.count == 1 ? "" : "s")")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
+                .background(Color(NSColor.controlBackgroundColor))
+
+                Divider()
+
+                // Transactions List
+                List(selection: $selectedTransaction) {
+                    ForEach(transactions) { transaction in
+                        TransactionView(
+                            selectedTransaction: $selectedTransaction,
+                            swipeActionsEnabled: true,
+                            transaction: transaction
+                        )
+                        .tag(transaction)
+                    }
+                }
+            }
+            .frame(minWidth: 300, idealWidth: 400, maxWidth: 500)
+
+            Divider()
+
+            // Right: Transaction Detail
+            if let selectedTransaction = selectedTransaction {
+                transactionDetail(selectedTransaction)
+            } else {
+                emptyTransactionView
+            }
+        }
+    }
+
+    // MARK: - Transaction Detail
+
+    private func transactionDetail(_ transaction: Transaction) -> some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                // Transaction Header
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Circle()
+                            .fill(transaction.category.tintColor)
+                            .frame(width: 50, height: 50)
+                            .overlay {
+                                Image(systemName: transaction.category.iconName)
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 24))
+                            }
+
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(transaction.title)
+                                .font(.title2)
+                                .fontWeight(.semibold)
+
+                            Text(transaction.date, format: .dateTime.month().day().year())
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+
+                        Spacer()
+
+                        Text(transaction.amount, format: .currency(code: "USD"))
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(transaction.amount > 0 ? .green : .red)
+                    }
+                }
+
+                Divider()
+
+                // Transaction Details
+                VStack(alignment: .leading, spacing: 16) {
+                    DetailRow(label: "Category", value: transaction.category.displayName)
+                    DetailRow(label: "Account", value: accountName(for: transaction.accountId))
+
+                    if let importBatch = dataManager.importBatches.first(where: { $0.id == transaction.importBatchId }) {
+                        DetailRow(
+                            label: "Import",
+                            value: importBatch.name ?? "Untitled Import"
+                        )
+                    }
+                }
+            }
+            .padding()
+        }
+        .frame(minWidth: 350, idealWidth: 400)
+    }
+
+    // MARK: - Empty States
+
+    private var emptyImportView: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "tray")
+                .font(.system(size: 48))
+                .foregroundColor(.secondary)
+            Text("No Import Selected")
+                .font(.title2)
+                .fontWeight(.semibold)
+            Text("Select an import batch to view its transactions")
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    private var emptyTransactionView: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "doc.text.magnifyingglass")
+                .font(.system(size: 48))
+                .foregroundColor(.secondary)
+            Text("No Transaction Selected")
+                .font(.title2)
+                .fontWeight(.semibold)
+            Text("Select a transaction to view its details")
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    // MARK: - Helpers
+
+    private func accountName(for accountId: UUID?) -> String {
+        guard let accountId = accountId,
+              let account = dataManager.accounts.first(where: { $0.id == accountId }) else {
+            return "Unknown"
+        }
+        return account.name
+    }
+}
+
+// MARK: - Supporting Views
+
+struct ImportBatchRow: View {
+    let batch: ImportBatch
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(batch.name ?? "Untitled Import")
+                .font(.headline)
+
+            Text(batch.date, format: .dateTime.month().day().year())
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .padding(.vertical, 4)
+    }
+}
+
+struct DetailRow: View {
+    let label: String
+    let value: String
+
+    var body: some View {
+        HStack {
+            Text(label)
+                .foregroundColor(.secondary)
+                .frame(width: 100, alignment: .leading)
+
+            Text(value)
+                .fontWeight(.medium)
+
+            Spacer()
+        }
+    }
+}

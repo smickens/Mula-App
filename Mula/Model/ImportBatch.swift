@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ImportBatch: Identifiable, Codable, Equatable {
+struct ImportBatch: Identifiable, Codable, Equatable, Hashable {
     let id: UUID
     let date: Date
     let name: String?

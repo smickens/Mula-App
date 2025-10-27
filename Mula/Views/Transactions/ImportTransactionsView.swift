@@ -11,16 +11,32 @@ struct ImportTransactionsView: View {
     @Environment(DataManager.self) private var dataManager
     @Environment(\.dismiss) private var dismiss
 
-    @Binding var fileName: String
+    @Binding var importName: String
     @Binding var fileContent: String
     @State private var newTransactions: [Transaction] = []
     @State private var selectedTransaction: Transaction?
 
     var body: some View {
         VStack {
-            Text("Import Transactions")
-                .font(.title)
-                .fontWeight(.bold)
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Import Transactions")
+                    .font(.title)
+                    .fontWeight(.bold)
+
+                HStack {
+                    Text("Import as:")
+                        .foregroundColor(.secondary)
+
+                    TextField("Import name", text: $importName)
+                        .textFieldStyle(.roundedBorder)
+                        .frame(maxWidth: 300)
+                }
+            }
+            .padding(.horizontal)
+            .padding(.top)
+            .padding(.bottom, 12)
+
+            Divider()
 
             HStack {
                 newTransactionsList
@@ -52,6 +68,7 @@ struct ImportTransactionsView: View {
                 } label: {
                     Text("Import")
                 }
+                .disabled(newTransactions.isEmpty || importName.trimmingCharacters(in: .whitespaces).isEmpty)
             }
         }
         .onAppear {
@@ -85,7 +102,8 @@ struct ImportTransactionsView: View {
 
     private func saveNewExpenses() {
         if !newTransactions.isEmpty {
-            dataManager.importTransactions(newTransactions, fileName: fileName)
+            let trimmedName = importName.trimmingCharacters(in: .whitespaces)
+            dataManager.importTransactions(newTransactions, fileName: trimmedName)
         }
 
         dismiss()
