@@ -20,3 +20,9 @@ extension Date {
         return dateFormatter.string(from: self)
     }
 }
+
+extension String {
+    func removingQuotes() -> String {
+        self.trimmingCharacters(in: CharacterSet(charactersIn: "\"'"))
+    }
+}

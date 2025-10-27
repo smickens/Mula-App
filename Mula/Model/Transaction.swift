@@ -40,6 +40,8 @@ enum TransactionCategory: String, CaseIterable, Codable, Identifiable {
     case refund
     case dividend
     case interest
+    case investment
+    case creditCardPayment
     case other
 
     static func get(from string: String) -> TransactionCategory? {
@@ -48,32 +50,21 @@ enum TransactionCategory: String, CaseIterable, Codable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .housing:
-            return "Housing"
-        case .eatingOut:
-            return "Eating Out"
-        case .groceries:
-            return "Groceries"
-        case .shopping:
-            return "Shopping"
-        case .car:
-            return "Car"
-        case .transit:
-            return "Transit"
-        case .entertainment:
-            return "Entertainment"
-        case .income:
-            return "Income"
-        case .transfer:
-            return "Transfer"
-        case .refund:
-            return "Refund"
-        case .dividend:
-            return "Dividend"
-        case .interest:
-            return "Interest"
-        case .other:
-            return "Other"
+        case .housing: return "Housing"
+        case .eatingOut: return "Eating Out"
+        case .groceries: return "Groceries"
+        case .shopping: return "Shopping"
+        case .car: return "Car"
+        case .transit: return "Transit"
+        case .entertainment: return "Entertainment"
+        case .income: return "Income"
+        case .transfer: return "Transfer"
+        case .refund: return "Refund"
+        case .dividend: return "Dividend"
+        case .interest: return "Interest"
+        case .investment: return "Investment"
+        case .creditCardPayment: return "Credit Card Payment"
+        case .other: return "Other"
         }
     }
 
@@ -92,6 +83,8 @@ enum TransactionCategory: String, CaseIterable, Codable, Identifiable {
         case .dividend: return "chart.bar.fill"
         case .interest: return "percent"
         case .other: return "ellipsis.circle.fill"
+        case .investment: return "dollarsign.bank.building.fill"
+        case .creditCardPayment: return "creditcard.fill"
         }
     }
 
@@ -109,6 +102,8 @@ enum TransactionCategory: String, CaseIterable, Codable, Identifiable {
         case .refund: return .mint
         case .dividend: return .indigo
         case .interest: return .cyan
+        case .investment: return .indigo
+        case .creditCardPayment: return .teal
         case .other: return .brown
         }
     }
