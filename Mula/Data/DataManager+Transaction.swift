@@ -78,6 +78,8 @@ extension DataManager {
         }
     }
 
+    // TODO: create a bulk operation add
+
     /// Updates an existing transaction in Firebase
     func updateTransaction(_ transaction: Transaction) {
         let transactionDictionary: [String: Any] = [
@@ -194,4 +196,48 @@ extension DataManager {
             print("❌ Error during migration: \(error.localizedDescription)")
         }
     }
+
+    func migrateTransactionKeysToUUID() {
+        transactionRef.getData { [weak self] error, snapshot in
+            guard let self = self else { return }
+
+            if let error {
+                print("❌ Failed to fetch transactions for key migration: \(error.localizedDescription)")
+                return
+            }
+
+            guard let value = snapshot?.value as? [String: Any] else {
+                print("⚠️ No transactions found for migration")
+                return
+            }
+
+            for (key, transactionData) in value {
+                // Check if the key is already a valid UUID
+                if UUID(uuidString: key) != nil {
+                    continue
+                }
+
+                // Generate a new UUID
+                let newKey = UUID().uuidString
+
+                // Copy the node to the new key
+                transactionRef.child(newKey).setValue(transactionData) { error, _ in
+                    if let error = error {
+                        print("❌ Failed to copy transaction \(key) to new key \(newKey): \(error.localizedDescription)")
+                    } else {
+                        // Remove the old key
+                        self.transactionRef.child(key).removeValue { error, _ in
+                            if let error {
+                                print("❌ Failed to delete old transaction key \(key): \(error.localizedDescription)")
+                            } else {
+                                print("✅ Migrated transaction \(key) → \(newKey)")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
 }

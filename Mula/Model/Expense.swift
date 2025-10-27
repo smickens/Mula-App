@@ -13,12 +13,6 @@ struct AccountStatement {
     let balance: Double
 }
 
-struct ImportBatch {
-    let id: UUID
-    let date: Date
-    let name: String?
-}
-
 
 
 

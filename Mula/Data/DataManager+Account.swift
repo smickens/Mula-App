@@ -1,5 +1,5 @@
 //
-//  DataManager+Accounts.swift
+//  DataManager+Account.swift
 //  Mula
 //
 //  Created by Shanti Mickens on 10/16/25.

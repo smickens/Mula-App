@@ -33,6 +33,7 @@ struct NewTransactionFormView: View {
                 dismiss()
             }
         )
+        .frame(width: 360)
     }
 
     static private let defaultAccountId = UUID(uuidString: "781259EA-A78D-431A-B697-3EC87A9183D2")

@@ -12,13 +12,17 @@ struct TransactionsView: View {
     @Environment(DataManager.self) private var dataManager
 
     @State private var searchText: String = ""
+
     @State private var selectedYear: String = Date().year
     @State private var selectedMonth: String = Date().month
     @State private var selectedTransaction: Transaction? = nil
     @State private var selectedCategory: TransactionCategory? = nil
+
     @State private var showingNewExpenseForm: Bool = false
     @State private var showingUploadExpensesForm: Bool = false
+
     @State private var fileContent: String = ""
+    @State private var fileName: String = ""
 
     private let currentYear: Int = Calendar.current.component(.year, from: Date())
     private let months: [String] = DateFormatter().monthSymbols
@@ -77,7 +81,7 @@ struct TransactionsView: View {
             NewTransactionFormView()
         }
         .sheet(isPresented: $showingUploadExpensesForm) {
-            UploadFormView(fileContent: $fileContent)
+            ImportTransactionsView(fileName: $fileName, fileContent: $fileContent)
         }
     }
 
@@ -110,6 +114,9 @@ struct TransactionsView: View {
            let data = try? Data(contentsOf: fileURL),
            let content = String(data: data, encoding: .utf8) {
             fileContent = content
+            fileName = fileURL.lastPathComponent // <-- Capture the file name
+            print("✅ Imported file: \(fileName)")
+
             showingUploadExpensesForm.toggle()
         } else {
             print("❌ Failed to import file")

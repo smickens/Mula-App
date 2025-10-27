@@ -15,16 +15,30 @@ struct TransactionFormView: View {
 
     @State private var amountString: String = ""
 
-    let title: String
-    let onSave: () -> Void
-    let onCancel: () -> Void
+    let title: String?
+    let onSave: (() -> Void)?
+    let onCancel: (() -> Void)?
+
+    init(
+        transaction: Binding<Transaction>,
+        title: String? = nil,
+        onSave: (() -> Void)? = nil,
+        onCancel: (() -> Void)? = nil
+    ) {
+        self._transaction = transaction
+        self.title = title
+        self.onSave = onSave
+        self.onCancel = onCancel
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(title)
-                .font(.title2)
-                .fontWeight(.semibold)
-                .padding(.bottom, 4)
+            if let title {
+                Text(title)
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .padding(.bottom, 4)
+            }
 
             VStack(alignment: .leading, spacing: 12) {
                 TextField("Title", text: $transaction.title)
@@ -54,7 +68,8 @@ struct TransactionFormView: View {
                     get: { transaction.accountId },
                     set: { transaction.accountId = $0 }
                 )) {
-                    ForEach(dataManager.accounts) { account in Text(account.name)
+                    ForEach(dataManager.accounts) { account in
+                        Text(account.name)
                             .tag(account.id)
                     }
                 }
@@ -63,14 +78,25 @@ struct TransactionFormView: View {
                 DatePicker("Date", selection: $transaction.date, in: ...Date(), displayedComponents: .date)
             }
 
-            HStack {
+            actionButtons
+                .padding(.top, 12)
+        }
+        .padding(20)
+    }
+
+    @ViewBuilder
+    private var actionButtons: some View {
+        HStack {
+            if let onCancel = onCancel {
                 Button("Cancel", role: .cancel) {
                     onCancel()
                 }
                 .keyboardShortcut(.cancelAction)
                 .padding(.trailing, 6)
                 .buttonStyle(.bordered)
+            }
 
+            if let onSave = onSave {
                 Button("Save") {
                     onSave()
                 }
@@ -78,10 +104,7 @@ struct TransactionFormView: View {
                 .disabled(!isFormValid)
                 .keyboardShortcut(.defaultAction)
             }
-            .padding(.top, 12)
         }
-        .padding(20)
-        .frame(width: 360)
     }
 
     private var isFormValid: Bool {

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DE9AF9312B7851F700D1F4DC /* UploadFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9AF9302B7851F700D1F4DC /* UploadFormView.swift */; };
+		DE9AF9312B7851F700D1F4DC /* ImportTransactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9AF9302B7851F700D1F4DC /* ImportTransactionsView.swift */; };
 		DE9AF9B52BA2C4AF00D1F4DC /* PieChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */; };
 		DEF3CAE62B61BB9300C926ED /* MulaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF3CAE52B61BB9300C926ED /* MulaApp.swift */; };
 		DEF3CAE82B61BB9300C926ED /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF3CAE72B61BB9300C926ED /* ContentView.swift */; };
@@ -19,7 +19,6 @@
 		E253C8F62C4C98EA00739FAD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8F42C4C98E700739FAD /* Constants.swift */; };
 		E253C9112C61D5B100739FAD /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9102C61D5AC00739FAD /* SignInView.swift */; };
 		E27223DE2BF9C2FE0065089A /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223DD2BF9C2FE0065089A /* Expense.swift */; };
-		E27223EB2C15136E0065089A /* Bank.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223EA2C15136E0065089A /* Bank.swift */; };
 		E284D49F2C28CA8900F72684 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D49E2C28CA8900F72684 /* ChartView.swift */; };
 		E284D4AC2C3CF42800F72684 /* TileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4AA2C3CF42800F72684 /* TileView.swift */; };
 		E284D4B22C3CF44700F72684 /* Bucket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4B12C3CF43800F72684 /* Bucket.swift */; };
@@ -30,7 +29,7 @@
 		E2992FB02EA2030700E86606 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FAF2EA2030700E86606 /* Account.swift */; };
 		E2992FB22EA2036000E86606 /* AccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FB12EA2036000E86606 /* AccountsView.swift */; };
 		E2992FB42EA2036E00E86606 /* AddAccountSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FB32EA2036E00E86606 /* AddAccountSheet.swift */; };
-		E2992FBB2EA205A200E86606 /* DataManager+Accounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FBA2EA205A200E86606 /* DataManager+Accounts.swift */; };
+		E2992FBB2EA205A200E86606 /* DataManager+Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FBA2EA205A200E86606 /* DataManager+Account.swift */; };
 		E2992FBD2EA209E900E86606 /* AccountFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FBC2EA209E900E86606 /* AccountFormView.swift */; };
 		E2992FBF2EA20A1B00E86606 /* EditAccountSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FBE2EA20A1B00E86606 /* EditAccountSheet.swift */; };
 		E2992FC82EA7349500E86606 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FC72EA7349500E86606 /* Transaction.swift */; };
@@ -42,10 +41,14 @@
 		E2992FD72EA7439D00E86606 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FD62EA7439D00E86606 /* SummaryView.swift */; };
 		E2992FD92EA9E6C000E86606 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FD82EA9E6C000E86606 /* SettingsView.swift */; };
 		E2992FDC2EA9E6E500E86606 /* DebugSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FDB2EA9E6E500E86606 /* DebugSettingsView.swift */; };
+		E2992FDF2EA9EB0200E86606 /* ImportProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FDE2EA9EB0200E86606 /* ImportProcessor.swift */; };
+		E2992FE12EA9EBC900E86606 /* ImportBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FE02EA9EBC900E86606 /* ImportBatch.swift */; };
+		E2992FE32EA9EC4E00E86606 /* DataManager+ImportBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FE22EA9EC4E00E86606 /* DataManager+ImportBatch.swift */; };
+		E2992FE72EA9F3D500E86606 /* Bank.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FE62EA9F3D500E86606 /* Bank.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		DE9AF9302B7851F700D1F4DC /* UploadFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFormView.swift; sourceTree = "<group>"; };
+		DE9AF9302B7851F700D1F4DC /* ImportTransactionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportTransactionsView.swift; sourceTree = "<group>"; };
 		DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChartView.swift; sourceTree = "<group>"; };
 		DEF3CAE22B61BB9300C926ED /* Mula.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mula.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEF3CAE52B61BB9300C926ED /* MulaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MulaApp.swift; sourceTree = "<group>"; };
@@ -58,7 +61,6 @@
 		E253C8F42C4C98E700739FAD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		E253C9102C61D5AC00739FAD /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		E27223DD2BF9C2FE0065089A /* Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
-		E27223EA2C15136E0065089A /* Bank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bank.swift; sourceTree = "<group>"; };
 		E284D49E2C28CA8900F72684 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 		E284D4AA2C3CF42800F72684 /* TileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileView.swift; sourceTree = "<group>"; };
 		E284D4B12C3CF43800F72684 /* Bucket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bucket.swift; sourceTree = "<group>"; };
@@ -68,7 +70,7 @@
 		E2992FAF2EA2030700E86606 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		E2992FB12EA2036000E86606 /* AccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsView.swift; sourceTree = "<group>"; };
 		E2992FB32EA2036E00E86606 /* AddAccountSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAccountSheet.swift; sourceTree = "<group>"; };
-		E2992FBA2EA205A200E86606 /* DataManager+Accounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataManager+Accounts.swift"; sourceTree = "<group>"; };
+		E2992FBA2EA205A200E86606 /* DataManager+Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataManager+Account.swift"; sourceTree = "<group>"; };
 		E2992FBC2EA209E900E86606 /* AccountFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountFormView.swift; sourceTree = "<group>"; };
 		E2992FBE2EA20A1B00E86606 /* EditAccountSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAccountSheet.swift; sourceTree = "<group>"; };
 		E2992FC72EA7349500E86606 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
@@ -80,6 +82,10 @@
 		E2992FD62EA7439D00E86606 /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
 		E2992FD82EA9E6C000E86606 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		E2992FDB2EA9E6E500E86606 /* DebugSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSettingsView.swift; sourceTree = "<group>"; };
+		E2992FDE2EA9EB0200E86606 /* ImportProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportProcessor.swift; sourceTree = "<group>"; };
+		E2992FE02EA9EBC900E86606 /* ImportBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportBatch.swift; sourceTree = "<group>"; };
+		E2992FE22EA9EC4E00E86606 /* DataManager+ImportBatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataManager+ImportBatch.swift"; sourceTree = "<group>"; };
+		E2992FE62EA9F3D500E86606 /* Bank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bank.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,7 +124,7 @@
 				E2992F822E91DDFE00E86606 /* GoogleService-Info.plist */,
 				E2992F812E91DC4400E86606 /* Mula.entitlements */,
 				DEF3CAE52B61BB9300C926ED /* MulaApp.swift */,
-				E288FB0E2C275D7D00B6D57A /* DataManager */,
+				E288FB0E2C275D7D00B6D57A /* Data */,
 				DEF3CAFA2B61BD2000C926ED /* Model */,
 				DEF8FE1A2B6B988C00D10468 /* Utilities */,
 				E288FB112C275E3400B6D57A /* Views */,
@@ -140,10 +146,11 @@
 		DEF3CAFA2B61BD2000C926ED /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				E2992FE62EA9F3D500E86606 /* Bank.swift */,
 				E2992FAF2EA2030700E86606 /* Account.swift */,
-				E27223EA2C15136E0065089A /* Bank.swift */,
 				DEF8FE162B6AE51D00D10468 /* Category.swift */,
 				E27223DD2BF9C2FE0065089A /* Expense.swift */,
+				E2992FE02EA9EBC900E86606 /* ImportBatch.swift */,
 				E2992FC72EA7349500E86606 /* Transaction.swift */,
 			);
 			path = Model;
@@ -174,14 +181,16 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		E288FB0E2C275D7D00B6D57A /* DataManager */ = {
+		E288FB0E2C275D7D00B6D57A /* Data */ = {
 			isa = PBXGroup;
 			children = (
 				E284D4CA2C44FDC300F72684 /* DataManager.swift */,
-				E2992FBA2EA205A200E86606 /* DataManager+Accounts.swift */,
+				E2992FBA2EA205A200E86606 /* DataManager+Account.swift */,
 				E2992FCB2EA7352100E86606 /* DataManager+Transaction.swift */,
+				E2992FE22EA9EC4E00E86606 /* DataManager+ImportBatch.swift */,
+				E2992FDE2EA9EB0200E86606 /* ImportProcessor.swift */,
 			);
-			path = DataManager;
+			path = Data;
 			sourceTree = "<group>";
 		};
 		E288FB0F2C275E1800B6D57A /* iOS */ = {
@@ -203,7 +212,6 @@
 				DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */,
 				E253C9102C61D5AC00739FAD /* SignInView.swift */,
 				E2992FD62EA7439D00E86606 /* SummaryView.swift */,
-				DE9AF9302B7851F700D1F4DC /* UploadFormView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -223,6 +231,7 @@
 			isa = PBXGroup;
 			children = (
 				E2992FD32EA7373E00E86606 /* EditTransactionFormView.swift */,
+				DE9AF9302B7851F700D1F4DC /* ImportTransactionsView.swift */,
 				E2992FD12EA7373900E86606 /* NewTransactionFormView.swift */,
 				E2992FCF2EA7373300E86606 /* TransactionFormView.swift */,
 				E2992FCD2EA7372900E86606 /* TransactionsView.swift */,
@@ -339,10 +348,11 @@
 				DE9AF9B52BA2C4AF00D1F4DC /* PieChartView.swift in Sources */,
 				E2992FCE2EA7372900E86606 /* TransactionsView.swift in Sources */,
 				E253C8F02C4C74D100739FAD /* TransactionView.swift in Sources */,
-				DE9AF9312B7851F700D1F4DC /* UploadFormView.swift in Sources */,
+				DE9AF9312B7851F700D1F4DC /* ImportTransactionsView.swift in Sources */,
 				E2992FB22EA2036000E86606 /* AccountsView.swift in Sources */,
 				E253C9112C61D5B100739FAD /* SignInView.swift in Sources */,
 				E2992FBD2EA209E900E86606 /* AccountFormView.swift in Sources */,
+				E2992FE12EA9EBC900E86606 /* ImportBatch.swift in Sources */,
 				E2992FD22EA7373900E86606 /* NewTransactionFormView.swift in Sources */,
 				E253C8F62C4C98EA00739FAD /* Constants.swift in Sources */,
 				E2992FD72EA7439D00E86606 /* SummaryView.swift in Sources */,
@@ -351,18 +361,20 @@
 				E284D49F2C28CA8900F72684 /* ChartView.swift in Sources */,
 				DEF8FE172B6AE51D00D10468 /* Category.swift in Sources */,
 				E2992FCC2EA7352100E86606 /* DataManager+Transaction.swift in Sources */,
+				E2992FE72EA9F3D500E86606 /* Bank.swift in Sources */,
 				E2992FC82EA7349500E86606 /* Transaction.swift in Sources */,
 				E2992FD92EA9E6C000E86606 /* SettingsView.swift in Sources */,
 				DEF3CAE82B61BB9300C926ED /* ContentView.swift in Sources */,
+				E2992FE32EA9EC4E00E86606 /* DataManager+ImportBatch.swift in Sources */,
 				DEF3CAE62B61BB9300C926ED /* MulaApp.swift in Sources */,
-				E2992FBB2EA205A200E86606 /* DataManager+Accounts.swift in Sources */,
+				E2992FBB2EA205A200E86606 /* DataManager+Account.swift in Sources */,
 				E284D4B22C3CF44700F72684 /* Bucket.swift in Sources */,
 				DEF8FE1C2B6B989A00D10468 /* Extensions.swift in Sources */,
 				E2992FB42EA2036E00E86606 /* AddAccountSheet.swift in Sources */,
 				E2992FB02EA2030700E86606 /* Account.swift in Sources */,
+				E2992FDF2EA9EB0200E86606 /* ImportProcessor.swift in Sources */,
 				E2992FD42EA7373E00E86606 /* EditTransactionFormView.swift in Sources */,
 				E2992FBF2EA20A1B00E86606 /* EditAccountSheet.swift in Sources */,
-				E27223EB2C15136E0065089A /* Bank.swift in Sources */,
 				E2992FDC2EA9E6E500E86606 /* DebugSettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

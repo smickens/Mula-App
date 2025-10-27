@@ -25,5 +25,6 @@ struct EditTransactionFormView: View {
                 dismiss()
             }
         )
+        .frame(width: 360)
     }
 }
