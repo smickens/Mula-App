@@ -10,7 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     var body: some View {
         TabView {
-            AccountsView()
+            AccountsSettingsView()
                 .tabItem {
                     Text("Accounts")
                 }

@@ -10,6 +10,7 @@ import Firebase
 import FirebaseAuth
 
 enum TabName: String, CaseIterable {
+    case accounts = "Accounts"
     case transactions = "Transactions"
     case imports = "Imports"
     case settings = "Settings"
@@ -32,6 +33,8 @@ struct ContentView: View {
             .listStyle(.sidebar)
         } detail: {
             switch selectedTab {
+            case .accounts:
+                AccountsView()
             case .transactions:
                 TransactionsView()
             case .imports:
@@ -44,6 +47,8 @@ struct ContentView: View {
 
     private func iconForTab(_ tab: TabName) -> String {
         switch tab {
+        case .accounts:
+            return "person.crop.circle"
         case .transactions:
             return "list.bullet.rectangle"
         case .imports:

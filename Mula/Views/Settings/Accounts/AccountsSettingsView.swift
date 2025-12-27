@@ -1,5 +1,5 @@
 //
-//  AccountsView.swift
+//  AccountsSettingsView.swift
 //  Mula
 //
 //  Created by Shanti Mickens on 10/16/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AccountsView: View {
+struct AccountsSettingsView: View {
     @Environment(DataManager.self) private var dataManager
     @State private var showingAddSheet = false
     @State private var selectedAccount: Account?
