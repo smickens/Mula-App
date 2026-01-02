@@ -12,6 +12,7 @@ struct Transaction: Identifiable, Codable, Hashable {
     let id: UUID
 
     var accountId: UUID?
+    var destinationAccountId: UUID?
     var importBatchId: UUID?
 
     var title: String
@@ -32,6 +33,7 @@ struct Transaction: Identifiable, Codable, Hashable {
             "category": category.rawValue,
             "type": type.rawValue,
             "accountId": accountId?.uuidString as Any,
+            "destinationAccountId": destinationAccountId?.uuidString as Any,
             "importBatchId": importBatchId?.uuidString as Any
         ]
     }

@@ -40,10 +40,15 @@ extension DataManager {
                     continue
                 }
 
+                let accountIdString = (firebaseData["accountId"] as? String).flatMap(UUID.init(uuidString:))
+                let destinationAccountIdString = (firebaseData["destinationAccountId"] as? String).flatMap(UUID.init(uuidString:))
+                let importBatchIdString = (firebaseData["importBatchId"] as? String).flatMap(UUID.init(uuidString:))
+
                 let transaction = Transaction(
                     id: UUID(uuidString: firebaseKey) ?? UUID(),
-                    accountId: (firebaseData["accountId"] as? String).flatMap(UUID.init(uuidString:)),
-                    importBatchId: (firebaseData["importBatchId"] as? String).flatMap(UUID.init(uuidString:)),
+                    accountId: accountIdString,
+                    destinationAccountId: destinationAccountIdString,
+                    importBatchId: importBatchIdString,
                     title: title,
                     date: Date(timeIntervalSince1970: dateTimestamp),
                     amount: amount,

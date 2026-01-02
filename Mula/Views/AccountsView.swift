@@ -176,7 +176,9 @@ struct AccountsView: View {
         if selectedAccountId == allAccountsId {
             return dataManager.transactions
         } else if let selectedAccountId = selectedAccountId {
-            return dataManager.transactions.filter { $0.accountId == selectedAccountId }
+            return dataManager.transactions.filter {
+                $0.accountId == selectedAccountId || $0.destinationAccountId == selectedAccountId
+            }
         }
         return []
     }
