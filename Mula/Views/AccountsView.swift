@@ -39,7 +39,7 @@ struct AccountsView: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
-                    // Action to add new account
+                    // TODO: Action to add new account
                 } label: {
                     Label("Add Account", systemImage: "plus")
                 }

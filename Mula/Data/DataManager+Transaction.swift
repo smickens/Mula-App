@@ -60,6 +60,26 @@ extension DataManager {
             }
 
             print("✅ Loaded \(transactions.count) transactions from Firebase.")
+
+            // TEMP: update transactions to have a type
+//            for transaction in transactions {
+//                guard transaction.type == nil else { continue }
+//
+//                let updatedTransaction = Transaction(
+//                    id: transaction.id,
+//                    accountId: transaction.accountId ?? Bank.usBank.accountId,
+//                    importBatchId: nil,
+//                    title: transaction.title,
+//                    date: transaction.date,
+//                    amount: transaction.amount,
+//                    category: transaction.category,
+//                    type: .expense
+//                )
+//
+//                updateTransaction(updatedTransaction)
+//            }
+//
+//            print("✅ Done updating transactions")
         }
     }
 
