@@ -55,10 +55,6 @@ struct TransactionView: View {
         .padding(5)
         .contentShape(Rectangle())
         .gesture(tapGesture)
-        .background(
-            RoundedRectangle(cornerRadius: 8)
-                .fill(selectedTransaction?.id == transaction.id ? .gray.opacity(0.2) : .clear)
-        )
         .swipeActions(edge: .leading, allowsFullSwipe: false) {
             if swipeActionsEnabled {
                 Button {
