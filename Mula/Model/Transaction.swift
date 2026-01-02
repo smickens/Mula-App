@@ -40,6 +40,7 @@ enum TransactionCategory: String, CaseIterable, Codable, Identifiable {
     case refund
     case dividend
     case interest
+    case savings
     case investment
     case creditCardPayment
     case other
@@ -62,6 +63,7 @@ enum TransactionCategory: String, CaseIterable, Codable, Identifiable {
         case .refund: return "Refund"
         case .dividend: return "Dividend"
         case .interest: return "Interest"
+        case .savings: return "Savings"
         case .investment: return "Investment"
         case .creditCardPayment: return "Credit Card Payment"
         case .other: return "Other"
@@ -83,6 +85,7 @@ enum TransactionCategory: String, CaseIterable, Codable, Identifiable {
         case .dividend: return "chart.bar.fill"
         case .interest: return "percent"
         case .other: return "ellipsis.circle.fill"
+        case .savings: return "dollarsign.bank.building.fill"
         case .investment: return "dollarsign.bank.building.fill"
         case .creditCardPayment: return "creditcard.fill"
         }
@@ -102,6 +105,7 @@ enum TransactionCategory: String, CaseIterable, Codable, Identifiable {
         case .refund: return .mint
         case .dividend: return .indigo
         case .interest: return .cyan
+        case .savings: return .indigo
         case .investment: return .indigo
         case .creditCardPayment: return .teal
         case .other: return .brown
