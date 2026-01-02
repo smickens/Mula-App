@@ -80,7 +80,7 @@ struct ImportTransactionsView: View {
     private var newTransactionsList: some View {
         List(selection: $selectedTransaction) {
             ForEach(newTransactions) { transaction in
-                TransactionView(selectedTransaction: $selectedTransaction, swipeActionsEnabled: false, transaction: transaction)
+                TransactionView(selectedTransaction: $selectedTransaction, swipeActionsEnabled: false, transaction: transaction, displayingAccountId: nil)
                     .tag(transaction.id)
             }
             .onDelete { indexSet in

@@ -51,7 +51,7 @@ extension DataManager {
                     importBatchId: importBatchIdString,
                     title: title,
                     date: Date(timeIntervalSince1970: dateTimestamp),
-                    amount: amount,
+                    amount: abs(amount),
                     category: category,
                     type: type
                 )

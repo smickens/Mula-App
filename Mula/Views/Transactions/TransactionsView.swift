@@ -50,7 +50,7 @@ struct TransactionsView: View {
             .padding()
 
             List(filteredTransactions) { transaction in
-                TransactionView(selectedTransaction: $selectedTransaction, swipeActionsEnabled: true, transaction: transaction)
+                TransactionView(selectedTransaction: $selectedTransaction, swipeActionsEnabled: true, transaction: transaction, displayingAccountId: nil)
             }
             .searchable(text: $searchText)
         }

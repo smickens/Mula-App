@@ -15,6 +15,7 @@ struct TransactionView: View {
 
     let swipeActionsEnabled: Bool
     let transaction: Transaction
+    let displayingAccountId: UUID?
 
     var body: some View {
         HStack {
@@ -41,7 +42,7 @@ struct TransactionView: View {
             Spacer()
 
             // Amount display
-            Text(transaction.amount, format: .currency(code: "USD"))
+            Text(transactionAmount, format: .currency(code: "USD"))
                 .font(.headline)
                 .foregroundStyle(transactionColor)
                 .fontWeight(.medium)
@@ -98,8 +99,30 @@ struct TransactionView: View {
 
     // MARK: - Helpers
 
+    private var transactionAmount: Double {
+        switch transaction.type {
+        case .expense:
+            return -transaction.amount
+        case .income:
+            return transaction.amount
+        case .transfer:
+            guard let displayingAccountId else { return transaction.amount }
+            let isTransferOut = displayingAccountId == transaction.accountId
+            return isTransferOut ? -transaction.amount : transaction.amount
+        }
+    }
+
     private var transactionColor: Color {
-        transaction.amount > 0 ? .green : .red
+        switch transaction.type {
+        case .expense:
+            return .red
+        case .income:
+            return .green
+        case .transfer:
+            guard let displayingAccountId else { return .gray }
+            let isTransferOut = displayingAccountId == transaction.accountId
+            return isTransferOut ? .red : .green
+        }
     }
 
     private func formatDate(_ date: Date) -> String {
