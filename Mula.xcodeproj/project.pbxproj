@@ -199,6 +199,15 @@
 			path = Forms;
 			sourceTree = "<group>";
 		};
+		E2866C312F07985400DB6CE3 /* Imports */ = {
+			isa = PBXGroup;
+			children = (
+				E2992FE82EAF146D00E86606 /* ImportsView.swift */,
+				DE9AF9302B7851F700D1F4DC /* ImportTransactionsView.swift */,
+			);
+			path = Imports;
+			sourceTree = "<group>";
+		};
 		E288FB0E2C275D7D00B6D57A /* Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -223,6 +232,7 @@
 		E288FB112C275E3400B6D57A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E2866C312F07985400DB6CE3 /* Imports */,
 				E2992FDA2EA9E6D400E86606 /* Settings */,
 				E2992FD52EA7375400E86606 /* Transactions */,
 				E2992FEA2EAF39C700E86606 /* AccountsView.swift */,
@@ -252,8 +262,6 @@
 				E2866C2F2F0797A900DB6CE3 /* Forms */,
 				E2866C282F07574800DB6CE3 /* DetailRow.swift */,
 				E2866C292F07574800DB6CE3 /* TransactionDetailView.swift */,
-				E2992FE82EAF146D00E86606 /* ImportsView.swift */,
-				DE9AF9302B7851F700D1F4DC /* ImportTransactionsView.swift */,
 				E2992FCD2EA7372900E86606 /* TransactionsView.swift */,
 				E253C8EF2C4C74D100739FAD /* TransactionView.swift */,
 			);
