@@ -18,13 +18,14 @@ struct NewTransactionFormView: View {
         title: "",
         date: Date(),
         amount: 0.0,
-        category: .other
+        category: .other,
+        type: .expense
     )
 
     var body: some View {
         TransactionFormView(
             transaction: $newTransaction,
-            title: "New Transaction",
+            title: "New Item",
             onSave: {
                 dataManager.addTransaction(newTransaction)
                 dismiss()

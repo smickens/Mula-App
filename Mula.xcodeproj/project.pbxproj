@@ -25,6 +25,8 @@
 		E284D4C42C44F49A00F72684 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E284D4C32C44F49A00F72684 /* FirebaseAuth */; };
 		E284D4C62C44F49A00F72684 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E284D4C52C44F49A00F72684 /* FirebaseDatabaseSwift */; };
 		E284D4CC2C44FDC500F72684 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4CA2C44FDC300F72684 /* DataManager.swift */; };
+		E2866C2A2F07574800DB6CE3 /* TransactionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C292F07574800DB6CE3 /* TransactionDetailView.swift */; };
+		E2866C2B2F07574800DB6CE3 /* DetailRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C282F07574800DB6CE3 /* DetailRow.swift */; };
 		E2992F832E91DDFE00E86606 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E2992F822E91DDFE00E86606 /* GoogleService-Info.plist */; };
 		E2992FB02EA2030700E86606 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FAF2EA2030700E86606 /* Account.swift */; };
 		E2992FB22EA2036000E86606 /* AccountsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FB12EA2036000E86606 /* AccountsSettingsView.swift */; };
@@ -67,6 +69,8 @@
 		E284D4AA2C3CF42800F72684 /* TileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileView.swift; sourceTree = "<group>"; };
 		E284D4B12C3CF43800F72684 /* Bucket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bucket.swift; sourceTree = "<group>"; };
 		E284D4CA2C44FDC300F72684 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		E2866C282F07574800DB6CE3 /* DetailRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRow.swift; sourceTree = "<group>"; };
+		E2866C292F07574800DB6CE3 /* TransactionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailView.swift; sourceTree = "<group>"; };
 		E2992F812E91DC4400E86606 /* Mula.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mula.entitlements; sourceTree = "<group>"; };
 		E2992F822E91DDFE00E86606 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E2992FAF2EA2030700E86606 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
@@ -235,6 +239,8 @@
 		E2992FD52EA7375400E86606 /* Transactions */ = {
 			isa = PBXGroup;
 			children = (
+				E2866C282F07574800DB6CE3 /* DetailRow.swift */,
+				E2866C292F07574800DB6CE3 /* TransactionDetailView.swift */,
 				E2992FE82EAF146D00E86606 /* ImportsView.swift */,
 				E2992FD32EA7373E00E86606 /* EditTransactionFormView.swift */,
 				DE9AF9302B7851F700D1F4DC /* ImportTransactionsView.swift */,
@@ -360,6 +366,8 @@
 				E253C9112C61D5B100739FAD /* SignInView.swift in Sources */,
 				E2992FBD2EA209E900E86606 /* AccountFormView.swift in Sources */,
 				E2992FE12EA9EBC900E86606 /* ImportBatch.swift in Sources */,
+				E2866C2A2F07574800DB6CE3 /* TransactionDetailView.swift in Sources */,
+				E2866C2B2F07574800DB6CE3 /* DetailRow.swift in Sources */,
 				E2992FD22EA7373900E86606 /* NewTransactionFormView.swift in Sources */,
 				E253C8F62C4C98EA00739FAD /* Constants.swift in Sources */,
 				E2992FD72EA7439D00E86606 /* SummaryView.swift in Sources */,

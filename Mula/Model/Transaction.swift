@@ -17,11 +17,37 @@ struct Transaction: Identifiable, Codable, Hashable {
     var title: String
     var date: Date
     var amount: Double
-
     var category: TransactionCategory
+    var type: TransactionType
 
     var firebaseKey: String {
         id.uuidString
+    }
+
+    var asDictionary: [String: Any] {
+        [
+            "title": title,
+            "amount": amount,
+            "date": date.timeIntervalSince1970,
+            "category": category.rawValue,
+            "type": type.rawValue,
+            "accountId": accountId?.uuidString as Any,
+            "importBatchId": importBatchId?.uuidString as Any
+        ]
+    }
+}
+
+enum TransactionType: String, CaseIterable, Codable {
+    case income
+    case expense
+    case transfer
+
+    var displayName: String {
+        switch self {
+        case .income: return "Income"
+        case .expense: return "Expense"
+        case .transfer: return "Transfer"
+        }
     }
 }
 

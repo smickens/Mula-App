@@ -16,7 +16,7 @@ struct EditTransactionFormView: View {
     var body: some View {
         TransactionFormView(
             transaction: $transaction,
-            title: "Edit Transaction",
+            title: "Edit Item",
             onSave: {
                 dataManager.updateTransaction(transaction)
                 dismiss()

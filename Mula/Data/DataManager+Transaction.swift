@@ -32,7 +32,9 @@ extension DataManager {
                       let amount = firebaseData["amount"] as? Double,
                       let dateTimestamp = firebaseData["date"] as? TimeInterval,
                       let categoryString = firebaseData["category"] as? String,
-                      let category = TransactionCategory(rawValue: categoryString)
+                      let category = TransactionCategory(rawValue: categoryString),
+                      let typeString = firebaseData["type"] as? String,
+                      let type = TransactionType(rawValue: typeString)
                 else {
                     print("⚠️ Skipping invalid transaction: \(firebaseKey)")
                     continue
@@ -45,7 +47,8 @@ extension DataManager {
                     title: title,
                     date: Date(timeIntervalSince1970: dateTimestamp),
                     amount: amount,
-                    category: category
+                    category: category,
+                    type: type
                 )
 
                 self.transactions.append(transaction)
@@ -57,16 +60,7 @@ extension DataManager {
 
     /// Adds a new transaction to Firebase
     func addTransaction(_ transaction: Transaction) {
-        let transactionDictionary: [String: Any] = [
-            "title": transaction.title,
-            "amount": transaction.amount,
-            "date": transaction.date.timeIntervalSince1970,
-            "category": transaction.category.rawValue,
-            "accountId": transaction.accountId?.uuidString as Any,
-            "importBatchId": transaction.importBatchId?.uuidString as Any
-        ]
-
-        transactionRef.child(transaction.firebaseKey).setValue(transactionDictionary) { [weak self] error, _ in
+        transactionRef.child(transaction.firebaseKey).setValue(transaction.asDictionary) { [weak self] error, _ in
             guard let self = self else { return }
 
             if let error {
@@ -82,16 +76,7 @@ extension DataManager {
 
     /// Updates an existing transaction in Firebase
     func updateTransaction(_ transaction: Transaction) {
-        let transactionDictionary: [String: Any] = [
-            "title": transaction.title,
-            "amount": transaction.amount,
-            "date": transaction.date.timeIntervalSince1970,
-            "category": transaction.category.rawValue,
-            "accountId": transaction.accountId?.uuidString as Any,
-            "importBatchId": transaction.importBatchId?.uuidString as Any
-        ]
-
-        transactionRef.child(transaction.firebaseKey).updateChildValues(transactionDictionary) { [weak self] error, _ in
+        transactionRef.child(transaction.firebaseKey).updateChildValues(transaction.asDictionary) { [weak self] error, _ in
             if let error = error {
                 print("❌ Failed to update transaction: \(error.localizedDescription)")
             }

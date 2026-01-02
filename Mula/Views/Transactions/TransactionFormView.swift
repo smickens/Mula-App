@@ -32,13 +32,20 @@ struct TransactionFormView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .center, spacing: 16) {
             if let title {
                 Text(title)
                     .font(.title2)
                     .fontWeight(.semibold)
                     .padding(.bottom, 4)
             }
+
+            Picker("", selection: $transaction.type) {
+                ForEach(TransactionType.allCases, id: \.self) { type in
+                    Text(type.displayName)
+                }
+            }
+            .pickerStyle(.segmented)
 
             VStack(alignment: .leading, spacing: 12) {
                 TextField("Title", text: $transaction.title)
@@ -64,7 +71,7 @@ struct TransactionFormView: View {
                 }
                 .pickerStyle(.menu)
 
-                Picker("Account", selection: Binding(
+                Picker(transaction.type == .transfer ? "From" : "Account", selection: Binding(
                     get: { transaction.accountId },
                     set: { transaction.accountId = $0 }
                 )) {
@@ -75,6 +82,19 @@ struct TransactionFormView: View {
                 }
                 .pickerStyle(.menu)
 
+                if (transaction.type == .transfer) {
+                    Picker("To", selection: Binding(
+                        get: { transaction.destinationAccountId },
+                        set: { transaction.destinationAccountId = $0 }
+                    )) {
+                        ForEach(dataManager.accounts) { account in
+                            Text(account.name)
+                                .tag(account.id)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                }
+
                 DatePicker("Date", selection: $transaction.date, in: ...Date(), displayedComponents: .date)
             }
 
@@ -82,6 +102,17 @@ struct TransactionFormView: View {
                 .padding(.top, 12)
         }
         .padding(20)
+        .onChange(of: transaction.type) { oldValue, newValue in
+            // Clear destination account value when changing from transfer type
+            if oldValue == .transfer {
+                transaction.destinationAccountId = nil
+            }
+
+            // Select first account by default as destination
+            if newValue == .transfer {
+                transaction.destinationAccountId = dataManager.accounts.first?.id
+            }
+        }
     }
 
     @ViewBuilder
@@ -108,7 +139,11 @@ struct TransactionFormView: View {
     }
 
     private var isFormValid: Bool {
-        !transaction.title.trimmingCharacters(in: .whitespaces).isEmpty && transaction.amount != 0
+        let hasTitle = !transaction.title.trimmingCharacters(in: .whitespaces).isEmpty
+        let hasAmount = transaction.amount != 0
+        let isTransfer = transaction.type == .transfer
+        let isTransferMissingDestination = isTransfer && transaction.destinationAccountId == nil
+        return hasTitle && hasAmount && !isTransferMissingDestination
     }
 
     private let transactionAmountFormatter: NumberFormatter = {

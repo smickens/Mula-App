@@ -114,25 +114,26 @@ struct ImportProcessor {
             title: title,
             date: date,
             amount: amount,
-            category: category
+            category: category,
+            type: .expense
         )
     }
 
     // MARK: US Bank
 
-    private static let usBankKnownNames: [String: (String, TransactionCategory)] = [
-        "ELECTRONIC DEPOSIT APPLE INC.": ("Apple Job", .income),
-        "WEB AUTHORIZED PMT VENMO": ("Venmo (out)", .entertainment),
-        "ELECTRONIC DEPOSIT VENMO": ("Venmo (in)", .other),
-        "ELECTRONIC WITHDRAWAL ATT": ("Internet Bill", .housing),
-        "ELECTRONIC WITHDRAWAL FID BKG SVC LLC": ("Fidelity Investment", .investment),
-        "ELECTRONIC DEPOSIT APPLE GS SAVINGS": ("Transfer from Apple Savings", .transfer),
-        "WEB AUTHORIZED PMT APPLE GS SAVINGS": ("Withdrawal to Apple Savings", .transfer),
-        "WEB AUTHORIZED PMT APPLECARD GSBANK": ("Apple Card Payment", .creditCardPayment),
-        "WEB AUTHORIZED PMT WELLS FARGO CARD": ("Bilt Card Payment", .creditCardPayment),
-        "WEB AUTHORIZED PMT CHASE CREDIT CRD": ("Chase Card Payment", .creditCardPayment),
-        "MOBILE BANKING PAYMENT TO CREDIT CARD 5895": ("US Bank 5895 Card Payment", .creditCardPayment),
-        "MOBILE BANKING PAYMENT TO CREDIT CARD 9996": ("US Bank 9996 Card Payment", .creditCardPayment),
+    private static let usBankKnownNames: [String: (String, TransactionCategory, TransactionType)] = [
+        "ELECTRONIC DEPOSIT APPLE INC.": ("Apple Job", .income, .income),
+        "WEB AUTHORIZED PMT VENMO": ("Venmo (out)", .entertainment, .transfer),
+        "ELECTRONIC DEPOSIT VENMO": ("Venmo (in)", .other, .transfer),
+        "ELECTRONIC WITHDRAWAL ATT": ("Internet Bill", .housing, .expense),
+        "ELECTRONIC WITHDRAWAL FID BKG SVC LLC": ("Fidelity Investment", .investment, .transfer),
+        "ELECTRONIC DEPOSIT APPLE GS SAVINGS": ("Transfer from Apple Savings", .transfer, .transfer),
+        "WEB AUTHORIZED PMT APPLE GS SAVINGS": ("Withdrawal to Apple Savings", .savings, .transfer),
+        "WEB AUTHORIZED PMT APPLECARD GSBANK": ("Apple Card Payment", .creditCardPayment, .transfer),
+        "WEB AUTHORIZED PMT WELLS FARGO CARD": ("Bilt Card Payment", .creditCardPayment, .transfer),
+        "WEB AUTHORIZED PMT CHASE CREDIT CRD": ("Chase Card Payment", .creditCardPayment, .transfer),
+        "MOBILE BANKING PAYMENT TO CREDIT CARD 5895": ("US Bank 5895 Card Payment", .creditCardPayment, .transfer),
+        "MOBILE BANKING PAYMENT TO CREDIT CARD 9996": ("US Bank 9996 Card Payment", .creditCardPayment, .transfer),
     ]
 
     private static func processUSBankTransaction(_ row: String) -> Transaction? {
@@ -157,10 +158,12 @@ struct ImportProcessor {
 
         let amount = Double(values[4]) ?? 0.0
         var category: TransactionCategory = .other
+        var type: TransactionType = .expense
 
-        if let (newTitle, newCategory) = usBankKnownNames[title] {
+        if let (newTitle, newCategory, newType) = usBankKnownNames[title] {
             title = newTitle
             category = newCategory
+            type = newType
         }
 
         return Transaction(
@@ -169,20 +172,21 @@ struct ImportProcessor {
             title: title,
             date: date,
             amount: amount,
-            category: category
+            category: category,
+            type: type
         )
     }
 
     // MARK: Bilt / Wells Fargo
 
-    private static let biltKnownNames: [String: (String, TransactionCategory)] = [
-        "BPS*BILT RENT NEW YORK NY": ("Rent", .housing),
-        "BPS*BILT REWARDS B NEW YORK NY": ("Rent", .housing),
-        "TST*BAE - CAMPBELL CAMPBELL CA": ("Best Artisan Empanadas", .eatingOut),
-        "APPLE CAFFE AP01:1 CUPERTINO CA": ("Apple Caffe", .eatingOut),
-        "CVS/PHARMACY #09856 SUNNYVALE CA": ("CVS", .groceries),
-        "APPLE ESPR BAR AP01 S5 CUPERTINO CA": ("Apple Caffe", .eatingOut),
-        "WEST SAN JOSE GROCER SAN JOSE CA": ("Grocery Outlet", .groceries),
+    private static let biltKnownNames: [String: (String, TransactionCategory, TransactionType)] = [
+        "BPS*BILT RENT NEW YORK NY": ("Rent", .housing, .expense),
+        "BPS*BILT REWARDS B NEW YORK NY": ("Rent", .housing, .expense),
+        "TST*BAE - CAMPBELL CAMPBELL CA": ("Best Artisan Empanadas", .eatingOut, .expense),
+        "APPLE CAFFE AP01:1 CUPERTINO CA": ("Apple Caffe", .eatingOut, .expense),
+        "CVS/PHARMACY #09856 SUNNYVALE CA": ("CVS", .groceries, .expense),
+        "APPLE ESPR BAR AP01 S5 CUPERTINO CA": ("Apple Caffe", .eatingOut, .expense),
+        "WEST SAN JOSE GROCER SAN JOSE CA": ("Grocery Outlet", .groceries, .expense),
     ]
 
     private static func processBiltTransaction(_ row: String) -> Transaction? {
@@ -203,10 +207,12 @@ struct ImportProcessor {
 
         let amount = Double(values[1]) ?? 0.0
         var category: TransactionCategory = .eatingOut
+        var type: TransactionType = .expense
 
-        if let (newTitle, newCategory) = biltKnownNames[title] {
+        if let (newTitle, newCategory, newType) = biltKnownNames[title] {
             title = newTitle
             category = newCategory
+            type = newType
         }
 
         return Transaction(
@@ -215,7 +221,8 @@ struct ImportProcessor {
             title: title,
             date: date,
             amount: amount,
-            category: category
+            category: category,
+            type: type
         )
     }
 
