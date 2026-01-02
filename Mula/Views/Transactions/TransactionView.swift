@@ -1,5 +1,5 @@
 //
-//  ExpenseView.swift
+//  TransactionView.swift
 //  Mula
 //
 //  Created by Shanti Mickens on 7/20/24.

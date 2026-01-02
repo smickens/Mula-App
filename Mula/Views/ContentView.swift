@@ -17,8 +17,6 @@ enum TabName: String, CaseIterable {
 }
 
 struct ContentView: View {
-    var expenses: [Expense] = []
-
     @State private var selectedTab: TabName = .transactions
 
     var body: some View {
