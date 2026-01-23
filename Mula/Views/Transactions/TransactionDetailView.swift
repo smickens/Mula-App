@@ -36,13 +36,6 @@ struct TransactionDetailView: View {
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
-
-                        Spacer()
-
-                        Text(transaction.amountSigned(displayingAccountId: displayingAccountId), format: .currency(code: "USD"))
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .foregroundColor(transaction.amountColor(displayingAccountId: displayingAccountId))
                     }
                 }
 
@@ -50,9 +43,11 @@ struct TransactionDetailView: View {
 
                 // Transaction Details
                 VStack(alignment: .leading, spacing: 16) {
-                    DetailRow(label: "Category", value: transaction.category.displayName)
-
                     DetailRow(label: "Type", value: transaction.type.displayName)
+
+                    DetailRow(label: "Amount", value: "\(transaction.amountSigned(displayingAccountId: displayingAccountId))")
+
+                    DetailRow(label: "Category", value: transaction.category.displayName)
 
                     if (transaction.type == .transfer) {
                         DetailRow(label: "From", value: accountName(for: transaction.accountId))
