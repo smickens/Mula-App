@@ -19,12 +19,10 @@ struct ImportsView: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            // Left: Import Batches List
             importBatchesList
 
             Divider()
 
-            // Right: Transactions and Detail
             if let selectedImportBatch = selectedImportBatch {
                 transactionsAndDetailView(for: selectedImportBatch)
             } else {
@@ -83,7 +81,7 @@ struct ImportsView: View {
     private func transactionsAndDetailView(for batch: ImportBatch) -> some View {
         let transactions = dataManager.transactions
             .filter { $0.importBatchId == batch.id }
-            .sorted { $0.date > $1.date }
+            .sorted { $0.date < $1.date }
 
         return HStack(spacing: 0) {
             // Middle: Transactions List
@@ -119,13 +117,13 @@ struct ImportsView: View {
                     }
                 }
             }
-            .frame(minWidth: 300, idealWidth: 400, maxWidth: 500)
+            .frame(idealWidth: 400, maxWidth: 500)
 
             Divider()
 
             // Right: Transaction Detail
             if let selectedTransaction = selectedTransaction {
-                TransactionDetailView(transaction: selectedTransaction)
+                TransactionDetailView(transaction: selectedTransaction, displayingAccountId: nil)
             } else {
                 emptyTransactionView
             }

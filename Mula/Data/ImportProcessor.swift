@@ -105,7 +105,7 @@ struct ImportProcessor {
         }
 
         let title = values[3]
-        let amount = (Double(values[6]) ?? 0.0) * -1
+        let amount = abs(Double(values[6]) ?? 0.0)
         let category = classifyFromCreditCardCategory(categoryString)
 
         return Transaction(
@@ -123,8 +123,8 @@ struct ImportProcessor {
 
     private static let usBankKnownNames: [String: (String, TransactionCategory, TransactionType)] = [
         "ELECTRONIC DEPOSIT APPLE INC.": ("Apple Job", .income, .income),
-        "WEB AUTHORIZED PMT VENMO": ("Venmo (out)", .entertainment, .transfer),
-        "ELECTRONIC DEPOSIT VENMO": ("Venmo (in)", .other, .transfer),
+        "WEB AUTHORIZED PMT VENMO": ("Venmo (out)", .entertainment, .expense),
+        "ELECTRONIC DEPOSIT VENMO": ("Venmo (in)", .other, .income),
         "ELECTRONIC WITHDRAWAL ATT": ("Internet Bill", .housing, .expense),
         "ELECTRONIC WITHDRAWAL FID BKG SVC LLC": ("Fidelity Investment", .investment, .transfer),
         "ELECTRONIC DEPOSIT APPLE GS SAVINGS": ("Transfer from Apple Savings", .transfer, .transfer),
@@ -134,6 +134,7 @@ struct ImportProcessor {
         "WEB AUTHORIZED PMT CHASE CREDIT CRD": ("Chase Card Payment", .creditCardPayment, .transfer),
         "MOBILE BANKING PAYMENT TO CREDIT CARD 5895": ("US Bank 5895 Card Payment", .creditCardPayment, .transfer),
         "MOBILE BANKING PAYMENT TO CREDIT CARD 9996": ("US Bank 9996 Card Payment", .creditCardPayment, .transfer),
+        "MOBILE CHECK DEPOSIT": ("Mobile Check Deposit", .other, .income),
     ]
 
     private static func processUSBankTransaction(_ row: String) -> Transaction? {
@@ -156,7 +157,7 @@ struct ImportProcessor {
             return nil
         }
 
-        let amount = Double(values[4]) ?? 0.0
+        let amount = abs(Double(values[4]) ?? 0.0)
         var category: TransactionCategory = .other
         var type: TransactionType = .expense
 
@@ -205,7 +206,7 @@ struct ImportProcessor {
             return nil
         }
 
-        let amount = Double(values[1]) ?? 0.0
+        let amount = abs(Double(values[1]) ?? 0.0)
         var category: TransactionCategory = .eatingOut
         var type: TransactionType = .expense
 

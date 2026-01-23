@@ -30,7 +30,7 @@ struct AccountsView: View {
 
             // Right: Transaction Detail
             if let selectedTransaction = selectedTransaction {
-                TransactionDetailView(transaction: selectedTransaction)
+                TransactionDetailView(transaction: selectedTransaction, displayingAccountId: selectedAccountId)
             } else {
                 emptyTransactionView
             }
@@ -174,14 +174,14 @@ struct AccountsView: View {
     // MARK: - Computed Properties
 
     private var filteredTransactions: [Transaction] {
-        if selectedAccountId == allAccountsId {
-            return dataManager.transactions
-        } else if let selectedAccountId = selectedAccountId {
-            return dataManager.transactions.filter {
-                $0.accountId == selectedAccountId || $0.destinationAccountId == selectedAccountId
+        dataManager.transactions
+            .filter {
+                let isAllAccountsSelected = selectedAccountId == allAccountsId
+                let isFromAccount = $0.accountId == selectedAccountId
+                let isToAccount = $0.destinationAccountId == selectedAccountId
+                return isAllAccountsSelected || isFromAccount || isToAccount
             }
-        }
-        return []
+            .sorted { $0.date < $1.date }
     }
 
     private var headerTitle: String {

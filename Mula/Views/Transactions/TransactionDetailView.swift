@@ -10,6 +10,7 @@ import SwiftUI
 struct TransactionDetailView: View {
     @Environment(DataManager.self) private var dataManager
     let transaction: Transaction
+    let displayingAccountId: UUID?
 
     var body: some View {
         ScrollView {
@@ -38,10 +39,10 @@ struct TransactionDetailView: View {
 
                         Spacer()
 
-                        Text(transaction.amount, format: .currency(code: "USD"))
+                        Text(transaction.amountSigned(displayingAccountId: displayingAccountId), format: .currency(code: "USD"))
                             .font(.title)
                             .fontWeight(.bold)
-                            .foregroundColor(transaction.amount > 0 ? .green : .red)
+                            .foregroundColor(transaction.amountColor(displayingAccountId: displayingAccountId))
                     }
                 }
 

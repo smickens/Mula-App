@@ -43,7 +43,8 @@ struct ImportTransactionsView: View {
 
                 Divider()
 
-                if let selectedTransaction = selectedTransaction, let index = newTransactions.firstIndex(where: { $0.id == selectedTransaction.id }) {
+                if let selectedTransaction = selectedTransaction,
+                   let index = newTransactions.firstIndex(where: { $0.id == selectedTransaction.id }) {
                     TransactionFormView(transaction: $newTransactions[index])
                 } else {
                     emptyDetailView
@@ -81,7 +82,7 @@ struct ImportTransactionsView: View {
         List(selection: $selectedTransaction) {
             ForEach(newTransactions) { transaction in
                 TransactionView(selectedTransaction: $selectedTransaction, swipeActionsEnabled: false, transaction: transaction, displayingAccountId: nil)
-                    .tag(transaction.id)
+                    .tag(transaction)
             }
             .onDelete { indexSet in
                 newTransactions.remove(atOffsets: indexSet)

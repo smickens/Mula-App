@@ -42,15 +42,15 @@ struct TransactionView: View {
             Spacer()
 
             // Amount display
-            Text(transactionAmount, format: .currency(code: "USD"))
+            Text(amountSigned, format: .currency(code: "USD"))
                 .font(.headline)
-                .foregroundStyle(transactionColor)
+                .foregroundStyle(amountColor)
                 .fontWeight(.medium)
                 .padding(.horizontal, 5)
                 .padding(.vertical, 2)
                 .background(
                     RoundedRectangle(cornerRadius: 5)
-                        .fill(transactionColor.opacity(0.2))
+                        .fill(amountColor.opacity(0.2))
                 )
         }
         .padding(5)
@@ -81,6 +81,14 @@ struct TransactionView: View {
         }
     }
 
+    private var amountSigned: Double {
+        transaction.amountSigned(displayingAccountId: displayingAccountId)
+    }
+
+    private var amountColor: Color {
+        transaction.amountColor(displayingAccountId: displayingAccountId)
+    }
+
     // MARK: - Gestures
 
     private var tapGesture: some Gesture {
@@ -98,32 +106,6 @@ struct TransactionView: View {
     }
 
     // MARK: - Helpers
-
-    private var transactionAmount: Double {
-        switch transaction.type {
-        case .expense:
-            return -transaction.amount
-        case .income:
-            return transaction.amount
-        case .transfer:
-            guard let displayingAccountId else { return transaction.amount }
-            let isTransferOut = displayingAccountId == transaction.accountId
-            return isTransferOut ? -transaction.amount : transaction.amount
-        }
-    }
-
-    private var transactionColor: Color {
-        switch transaction.type {
-        case .expense:
-            return .red
-        case .income:
-            return .green
-        case .transfer:
-            guard let displayingAccountId else { return .gray }
-            let isTransferOut = displayingAccountId == transaction.accountId
-            return isTransferOut ? .red : .green
-        }
-    }
 
     private func formatDate(_ date: Date) -> String {
         let dateFormatter = DateFormatter()

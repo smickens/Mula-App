@@ -37,6 +37,33 @@ struct Transaction: Identifiable, Codable, Hashable {
             "importBatchId": importBatchId?.uuidString as Any
         ]
     }
+
+    func amountSigned(displayingAccountId: UUID? = nil) -> Double {
+        switch type {
+        case .expense:
+            return -amount
+        case .income:
+            return amount
+        case .transfer:
+            guard let displayingAccountId else { return amount }
+            let isTransferOut = displayingAccountId == accountId
+            return isTransferOut ? -amount : amount
+        }
+    }
+
+    func amountColor(displayingAccountId: UUID? = nil) -> Color {
+        switch type {
+        case .expense:
+            return .red
+        case .income:
+            return .green
+        case .transfer:
+            guard let displayingAccountId else { return .gray }
+            let isTransferOut = displayingAccountId == accountId
+            let isTransferIn = displayingAccountId == destinationAccountId
+            return isTransferOut ? .red : (isTransferIn ? .green : .gray)
+        }
+    }
 }
 
 enum TransactionType: String, CaseIterable, Codable {
