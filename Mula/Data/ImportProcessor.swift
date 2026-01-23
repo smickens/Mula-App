@@ -58,16 +58,22 @@ struct ImportProcessor {
         } else if t.title.localizedCaseInsensitiveContains("Lyft") {
             t.title = "Lyft"
             t.category = .transit
-        } else if t.title.localizedCaseInsensitiveContains("SAFEWAY") {
+        } else if t.title.localizedCaseInsensitiveContains("Safeway") {
             t.title = "Safeway"
             t.category = .groceries
-        } else if t.title.localizedCaseInsensitiveContains("TARGET") {
+        } else if t.title.localizedCaseInsensitiveContains("Target") {
             t.title = "Target"
             t.category = .groceries
-        } else if t.title.localizedCaseInsensitiveContains("DUNKIN") {
+        } else if t.title.localizedCaseInsensitiveContains("Dunkin") {
             t.title = "Dunkin"
             t.category = .eatingOut
+        } else if t.title.localizedCaseInsensitiveContains("Walmart") {
+            t.category = .groceries
+        } else if t.title.localizedCaseInsensitiveContains("USAA") {
+            t.title = "USAA insurance"
+            t.category = .car
         } else if t.title.localizedCaseInsensitiveContains("return") {
+            t.type = .income
             t.category = .refund
         }
     }
