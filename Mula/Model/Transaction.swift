@@ -90,8 +90,8 @@ enum TransactionCategory: String, CaseIterable, Codable, Identifiable {
     case car              // gas, maintenance, servicing, tires, etc.
     case transit          // flights, bus, caltrain, ubers
     case entertainment
-    case income         // change to job
-    case transfer       // remove later
+    case income           // change to job
+    case transfer         // remove later
     case refund
     case dividend
     case interest

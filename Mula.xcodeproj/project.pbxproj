@@ -26,6 +26,9 @@
 		E284D4CC2C44FDC500F72684 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4CA2C44FDC300F72684 /* DataManager.swift */; };
 		E2866C2A2F07574800DB6CE3 /* TransactionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C292F07574800DB6CE3 /* TransactionDetailView.swift */; };
 		E2866C2B2F07574800DB6CE3 /* DetailRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C282F07574800DB6CE3 /* DetailRow.swift */; };
+		E2866C332F2349B300DB6CE3 /* TrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C322F2349B300DB6CE3 /* TrendsView.swift */; };
+		E2866C352F2349C500DB6CE3 /* SpendingBarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C342F2349C500DB6CE3 /* SpendingBarChartView.swift */; };
+		E2866C372F234B3100DB6CE3 /* SpendingLineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C362F234B3100DB6CE3 /* SpendingLineChartView.swift */; };
 		E2992F832E91DDFE00E86606 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E2992F822E91DDFE00E86606 /* GoogleService-Info.plist */; };
 		E2992FB02EA2030700E86606 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FAF2EA2030700E86606 /* Account.swift */; };
 		E2992FB22EA2036000E86606 /* AccountsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FB12EA2036000E86606 /* AccountsSettingsView.swift */; };
@@ -69,6 +72,9 @@
 		E284D4CA2C44FDC300F72684 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		E2866C282F07574800DB6CE3 /* DetailRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRow.swift; sourceTree = "<group>"; };
 		E2866C292F07574800DB6CE3 /* TransactionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailView.swift; sourceTree = "<group>"; };
+		E2866C322F2349B300DB6CE3 /* TrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendsView.swift; sourceTree = "<group>"; };
+		E2866C342F2349C500DB6CE3 /* SpendingBarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpendingBarChartView.swift; sourceTree = "<group>"; };
+		E2866C362F234B3100DB6CE3 /* SpendingLineChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpendingLineChartView.swift; sourceTree = "<group>"; };
 		E2992F812E91DC4400E86606 /* Mula.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mula.entitlements; sourceTree = "<group>"; };
 		E2992F822E91DDFE00E86606 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E2992FAF2EA2030700E86606 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
@@ -237,7 +243,10 @@
 				DEF3CAE72B61BB9300C926ED /* ContentView.swift */,
 				DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */,
 				E253C9102C61D5AC00739FAD /* SignInView.swift */,
+				E2866C342F2349C500DB6CE3 /* SpendingBarChartView.swift */,
+				E2866C362F234B3100DB6CE3 /* SpendingLineChartView.swift */,
 				E2992FD62EA7439D00E86606 /* SummaryView.swift */,
+				E2866C322F2349B300DB6CE3 /* TrendsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -371,12 +380,14 @@
 				E27223DE2BF9C2FE0065089A /* AccountStatement.swift in Sources */,
 				E2992FD02EA7373300E86606 /* TransactionFormView.swift in Sources */,
 				DE9AF9B52BA2C4AF00D1F4DC /* PieChartView.swift in Sources */,
+				E2866C372F234B3100DB6CE3 /* SpendingLineChartView.swift in Sources */,
 				E2992FCE2EA7372900E86606 /* TransactionsView.swift in Sources */,
 				E253C8F02C4C74D100739FAD /* TransactionView.swift in Sources */,
 				E2992FE92EAF146D00E86606 /* ImportsView.swift in Sources */,
 				DE9AF9312B7851F700D1F4DC /* ImportTransactionsView.swift in Sources */,
 				E2992FB22EA2036000E86606 /* AccountsSettingsView.swift in Sources */,
 				E253C9112C61D5B100739FAD /* SignInView.swift in Sources */,
+				E2866C352F2349C500DB6CE3 /* SpendingBarChartView.swift in Sources */,
 				E2992FBD2EA209E900E86606 /* AccountFormView.swift in Sources */,
 				E2992FE12EA9EBC900E86606 /* ImportBatch.swift in Sources */,
 				E2866C2A2F07574800DB6CE3 /* TransactionDetailView.swift in Sources */,
@@ -386,6 +397,7 @@
 				E2992FD72EA7439D00E86606 /* SummaryView.swift in Sources */,
 				E284D4CC2C44FDC500F72684 /* DataManager.swift in Sources */,
 				E284D4AC2C3CF42800F72684 /* TileView.swift in Sources */,
+				E2866C332F2349B300DB6CE3 /* TrendsView.swift in Sources */,
 				E284D49F2C28CA8900F72684 /* ChartView.swift in Sources */,
 				E2992FCC2EA7352100E86606 /* DataManager+Transaction.swift in Sources */,
 				E2992FE72EA9F3D500E86606 /* Bank.swift in Sources */,
