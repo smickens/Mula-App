@@ -34,9 +34,13 @@ struct TrendsView: View {
             HStack(alignment: .top, spacing: 24) {
                 DonutChartView(spendingByCategory: viewData.spendingByCategory, totalSpending: viewData.totalSpending)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(12)
 
                 CategoryListView(spendingByCategory: viewData.spendingByCategory, totalSpending: viewData.totalSpending)
-                    .frame(width: 350)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(12)
             }
             .padding(.horizontal)
             

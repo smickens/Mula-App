@@ -23,6 +23,8 @@
 		E27E0CDE2F4BCE9E004C744B /* TransactionFormState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27E0CDD2F4BCE9E004C744B /* TransactionFormState.swift */; };
 		E27E0CE02F4BECFD004C744B /* FirebaseRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27E0CDF2F4BECFD004C744B /* FirebaseRepresentable.swift */; };
 		E27E0CE22F4BEE62004C744B /* Transaction+FirebaseRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27E0CE12F4BEE62004C744B /* Transaction+FirebaseRepresentable.swift */; };
+		E27E0CE42F4EBED6004C744B /* CategoryProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27E0CE32F4EBED6004C744B /* CategoryProgressBar.swift */; };
+		E27E0CE62F4EBEE6004C744B /* CategoryListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27E0CE52F4EBEE6004C744B /* CategoryListRow.swift */; };
 		E284D49F2C28CA8900F72684 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D49E2C28CA8900F72684 /* ChartView.swift */; };
 		E284D4AC2C3CF42800F72684 /* TileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4AA2C3CF42800F72684 /* TileView.swift */; };
 		E284D4B22C3CF44700F72684 /* Bucket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4B12C3CF43800F72684 /* Bucket.swift */; };
@@ -79,6 +81,8 @@
 		E27E0CDD2F4BCE9E004C744B /* TransactionFormState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionFormState.swift; sourceTree = "<group>"; };
 		E27E0CDF2F4BECFD004C744B /* FirebaseRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseRepresentable.swift; sourceTree = "<group>"; };
 		E27E0CE12F4BEE62004C744B /* Transaction+FirebaseRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Transaction+FirebaseRepresentable.swift"; sourceTree = "<group>"; };
+		E27E0CE32F4EBED6004C744B /* CategoryProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryProgressBar.swift; sourceTree = "<group>"; };
+		E27E0CE52F4EBEE6004C744B /* CategoryListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListRow.swift; sourceTree = "<group>"; };
 		E284D49E2C28CA8900F72684 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 		E284D4AA2C3CF42800F72684 /* TileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileView.swift; sourceTree = "<group>"; };
 		E284D4B12C3CF43800F72684 /* Bucket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bucket.swift; sourceTree = "<group>"; };
@@ -195,6 +199,19 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
+		E27E0CE72F4EC641004C744B /* Trends */ = {
+			isa = PBXGroup;
+			children = (
+				E27E0CE52F4EBEE6004C744B /* CategoryListRow.swift */,
+				E2866C382F28935200DB6CE3 /* CategoryListView.swift */,
+				E27E0CE32F4EBED6004C744B /* CategoryProgressBar.swift */,
+				E2866C392F28935200DB6CE3 /* DonutChartView.swift */,
+				E2866C3A2F28935200DB6CE3 /* SummaryCardView.swift */,
+				E2866C322F2349B300DB6CE3 /* TrendsView.swift */,
+			);
+			path = Trends;
+			sourceTree = "<group>";
+		};
 		E284D4AB2C3CF42800F72684 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -256,12 +273,10 @@
 		E288FB112C275E3400B6D57A /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E2866C382F28935200DB6CE3 /* CategoryListView.swift */,
-				E2866C392F28935200DB6CE3 /* DonutChartView.swift */,
-				E2866C3A2F28935200DB6CE3 /* SummaryCardView.swift */,
 				E2866C312F07985400DB6CE3 /* Imports */,
 				E2992FDA2EA9E6D400E86606 /* Settings */,
 				E2992FD52EA7375400E86606 /* Transactions */,
+				E27E0CE72F4EC641004C744B /* Trends */,
 				E2992FEA2EAF39C700E86606 /* AccountsView.swift */,
 				E284D49E2C28CA8900F72684 /* ChartView.swift */,
 				DEF3CAE72B61BB9300C926ED /* ContentView.swift */,
@@ -270,7 +285,6 @@
 				E2866C342F2349C500DB6CE3 /* SpendingBarChartView.swift */,
 				E2866C362F234B3100DB6CE3 /* SpendingLineChartView.swift */,
 				E2992FD62EA7439D00E86606 /* SummaryView.swift */,
-				E2866C322F2349B300DB6CE3 /* TrendsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -408,6 +422,7 @@
 				E2866C372F234B3100DB6CE3 /* SpendingLineChartView.swift in Sources */,
 				E2992FCE2EA7372900E86606 /* TransactionsView.swift in Sources */,
 				E253C8F02C4C74D100739FAD /* TransactionView.swift in Sources */,
+				E27E0CE42F4EBED6004C744B /* CategoryProgressBar.swift in Sources */,
 				E2992FE92EAF146D00E86606 /* ImportsView.swift in Sources */,
 				DE9AF9312B7851F700D1F4DC /* ImportTransactionsView.swift in Sources */,
 				E2992FB22EA2036000E86606 /* AccountsSettingsView.swift in Sources */,
@@ -435,6 +450,7 @@
 				E2992FC82EA7349500E86606 /* Transaction.swift in Sources */,
 				E2992FD92EA9E6C000E86606 /* SettingsView.swift in Sources */,
 				DEF3CAE82B61BB9300C926ED /* ContentView.swift in Sources */,
+				E27E0CE62F4EBEE6004C744B /* CategoryListRow.swift in Sources */,
 				E2992FE32EA9EC4E00E86606 /* DataManager+ImportBatch.swift in Sources */,
 				DEF3CAE62B61BB9300C926ED /* MulaApp.swift in Sources */,
 				E2992FEB2EAF39C700E86606 /* AccountsView.swift in Sources */,
