@@ -19,7 +19,7 @@ struct TransactionDetailView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Circle()
-                            .fill(transaction.category.tintColor)
+                            .fill(transaction.category.baseColor)
                             .frame(width: 50, height: 50)
                             .overlay {
                                 Image(systemName: transaction.category.iconName)
@@ -43,18 +43,18 @@ struct TransactionDetailView: View {
 
                 // Transaction Details
                 VStack(alignment: .leading, spacing: 16) {
-                    DetailRow(label: "Type", value: transaction.type.displayName)
+                    DetailRow(label: "Type", value: transaction.kind.displayName)
 
                     DetailRow(label: "Amount", value: "\(transaction.amountSigned(displayingAccountId: displayingAccountId))")
 
                     DetailRow(label: "Category", value: transaction.category.displayName)
 
-                    if (transaction.type == .transfer) {
-                        DetailRow(label: "From", value: accountName(for: transaction.accountId))
+                    if case .transfer(_, let destinationAccountId) = transaction.kind {
+                        DetailRow(label: "From", value: accountName(for: transaction.sourceAccountId))
 
-                        DetailRow(label: "To", value: accountName(for: transaction.destinationAccountId))
+                        DetailRow(label: "To", value: accountName(for: destinationAccountId))
                     } else {
-                        DetailRow(label: "Account", value: accountName(for: transaction.accountId))
+                        DetailRow(label: "Account", value: accountName(for: transaction.sourceAccountId))
                     }
 
                     if let importBatch = dataManager.importBatches.first(where: { $0.id == transaction.importBatchId }) {

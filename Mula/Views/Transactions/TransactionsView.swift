@@ -15,7 +15,7 @@ struct TransactionsView: View {
     @State private var selectedYear: String = Date().year
     @State private var selectedMonth: String = Date().month
     @State private var selectedTransaction: Transaction? = nil
-    @State private var selectedCategory: TransactionCategory? = nil
+    @State private var selectedCategory: (any TransactionCategoryProtocol)? = nil
 
     @State private var showingNewTransactionForm: Bool = false
 
@@ -75,15 +75,37 @@ struct TransactionsView: View {
 
     private var filteredTransactions: [Transaction] {
         transactionsForSelectedDate
-            .filter { selectedCategory != nil ? $0.category == selectedCategory : true }
-            .filter { searchText.isEmpty || $0.title.localizedStandardContains(searchText) }
+            .filter {
+                guard let selectedCategory else { return true }
+                return $0.category.id == selectedCategory.id
+            }
+            .filter {
+                searchText.isEmpty || $0.title.localizedStandardContains(searchText)
+            }
     }
 
-    private var totalsByCategory: [TransactionCategory: Double] {
-        var totals: [TransactionCategory: Double] = [:]
-        transactionsForSelectedDate.forEach { transaction in
-            totals[transaction.category] = (transaction.amount) + (totals[transaction.category] ?? 0)
+    private var totalsByCategory: [(any TransactionCategoryProtocol, Decimal)] {
+        var totalsById: [String: (any TransactionCategoryProtocol, Decimal)] = [:]
+
+        for transaction in transactionsForSelectedDate {
+            switch transaction.kind {
+            case .expense(let category):
+                let key = category.id
+                let currentTotal = totalsById[key]?.1 ?? 0
+                totalsById[key] = (category, currentTotal + transaction.amount)
+            case .income(let category):
+                let key = category.id
+                let currentTotal = totalsById[key]?.1 ?? 0
+                totalsById[key] = (category, currentTotal + transaction.amount)
+            case .transfer(let category, _):
+                let key = category.id
+                let currentTotal = totalsById[key]?.1 ?? 0
+                totalsById[key] = (category, currentTotal + transaction.amount)
+            }
         }
-        return totals
+
+
+        return Array(totalsById.values)
     }
+
 }

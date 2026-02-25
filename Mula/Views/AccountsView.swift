@@ -177,8 +177,11 @@ struct AccountsView: View {
         dataManager.transactions
             .filter {
                 let isAllAccountsSelected = selectedAccountId == allAccountsId
-                let isFromAccount = $0.accountId == selectedAccountId
-                let isToAccount = $0.destinationAccountId == selectedAccountId
+                let isFromAccount = $0.sourceAccountId == selectedAccountId
+                var isToAccount = false
+                if case .transfer(_, let destinationAccountId) = $0.kind {
+                    isToAccount = destinationAccountId == selectedAccountId
+                }
                 return isAllAccountsSelected || isFromAccount || isToAccount
             }
             .sorted { $0.date < $1.date }

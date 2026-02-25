@@ -22,7 +22,7 @@ struct TransactionView: View {
             // Category Icon
             ZStack {
                 Circle()
-                    .fill(transaction.category.tintColor)
+                    .fill(transaction.category.baseColor)
                     .frame(width: 35, height: 35)
 
                 Image(systemName: transaction.category.iconName)
@@ -81,7 +81,7 @@ struct TransactionView: View {
         }
     }
 
-    private var amountSigned: Double {
+    private var amountSigned: Decimal {
         transaction.amountSigned(displayingAccountId: displayingAccountId)
     }
 

@@ -18,6 +18,11 @@
 		E253C8F62C4C98EA00739FAD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8F42C4C98E700739FAD /* Constants.swift */; };
 		E253C9112C61D5B100739FAD /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9102C61D5AC00739FAD /* SignInView.swift */; };
 		E27223DE2BF9C2FE0065089A /* AccountStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223DD2BF9C2FE0065089A /* AccountStatement.swift */; };
+		E27E0CD42F3C4B3E004C744B /* TransactionCategoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27E0CD32F3C4B3E004C744B /* TransactionCategoryProtocol.swift */; };
+		E27E0CDA2F3C50BE004C744B /* TransactionAdditions.swift in Resources */ = {isa = PBXBuildFile; fileRef = E27E0CD92F3C50BE004C744B /* TransactionAdditions.swift */; };
+		E27E0CDE2F4BCE9E004C744B /* TransactionFormState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27E0CDD2F4BCE9E004C744B /* TransactionFormState.swift */; };
+		E27E0CE02F4BECFD004C744B /* FirebaseRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27E0CDF2F4BECFD004C744B /* FirebaseRepresentable.swift */; };
+		E27E0CE22F4BEE62004C744B /* Transaction+FirebaseRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27E0CE12F4BEE62004C744B /* Transaction+FirebaseRepresentable.swift */; };
 		E284D49F2C28CA8900F72684 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D49E2C28CA8900F72684 /* ChartView.swift */; };
 		E284D4AC2C3CF42800F72684 /* TileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4AA2C3CF42800F72684 /* TileView.swift */; };
 		E284D4B22C3CF44700F72684 /* Bucket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4B12C3CF43800F72684 /* Bucket.swift */; };
@@ -29,6 +34,9 @@
 		E2866C332F2349B300DB6CE3 /* TrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C322F2349B300DB6CE3 /* TrendsView.swift */; };
 		E2866C352F2349C500DB6CE3 /* SpendingBarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C342F2349C500DB6CE3 /* SpendingBarChartView.swift */; };
 		E2866C372F234B3100DB6CE3 /* SpendingLineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C362F234B3100DB6CE3 /* SpendingLineChartView.swift */; };
+		E2866C3B2F28935200DB6CE3 /* DonutChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C392F28935200DB6CE3 /* DonutChartView.swift */; };
+		E2866C3C2F28935200DB6CE3 /* CategoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C382F28935200DB6CE3 /* CategoryListView.swift */; };
+		E2866C3D2F28935200DB6CE3 /* SummaryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C3A2F28935200DB6CE3 /* SummaryCardView.swift */; };
 		E2992F832E91DDFE00E86606 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E2992F822E91DDFE00E86606 /* GoogleService-Info.plist */; };
 		E2992FB02EA2030700E86606 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FAF2EA2030700E86606 /* Account.swift */; };
 		E2992FB22EA2036000E86606 /* AccountsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2992FB12EA2036000E86606 /* AccountsSettingsView.swift */; };
@@ -66,6 +74,11 @@
 		E253C8F42C4C98E700739FAD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		E253C9102C61D5AC00739FAD /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		E27223DD2BF9C2FE0065089A /* AccountStatement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountStatement.swift; sourceTree = "<group>"; };
+		E27E0CD32F3C4B3E004C744B /* TransactionCategoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategoryProtocol.swift; sourceTree = "<group>"; };
+		E27E0CD92F3C50BE004C744B /* TransactionAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionAdditions.swift; sourceTree = "<group>"; };
+		E27E0CDD2F4BCE9E004C744B /* TransactionFormState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionFormState.swift; sourceTree = "<group>"; };
+		E27E0CDF2F4BECFD004C744B /* FirebaseRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseRepresentable.swift; sourceTree = "<group>"; };
+		E27E0CE12F4BEE62004C744B /* Transaction+FirebaseRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Transaction+FirebaseRepresentable.swift"; sourceTree = "<group>"; };
 		E284D49E2C28CA8900F72684 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 		E284D4AA2C3CF42800F72684 /* TileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileView.swift; sourceTree = "<group>"; };
 		E284D4B12C3CF43800F72684 /* Bucket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bucket.swift; sourceTree = "<group>"; };
@@ -75,6 +88,9 @@
 		E2866C322F2349B300DB6CE3 /* TrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendsView.swift; sourceTree = "<group>"; };
 		E2866C342F2349C500DB6CE3 /* SpendingBarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpendingBarChartView.swift; sourceTree = "<group>"; };
 		E2866C362F234B3100DB6CE3 /* SpendingLineChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpendingLineChartView.swift; sourceTree = "<group>"; };
+		E2866C382F28935200DB6CE3 /* CategoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListView.swift; sourceTree = "<group>"; };
+		E2866C392F28935200DB6CE3 /* DonutChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonutChartView.swift; sourceTree = "<group>"; };
+		E2866C3A2F28935200DB6CE3 /* SummaryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryCardView.swift; sourceTree = "<group>"; };
 		E2992F812E91DC4400E86606 /* Mula.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mula.entitlements; sourceTree = "<group>"; };
 		E2992F822E91DDFE00E86606 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E2992FAF2EA2030700E86606 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
@@ -163,6 +179,8 @@
 				E27223DD2BF9C2FE0065089A /* AccountStatement.swift */,
 				E2992FE02EA9EBC900E86606 /* ImportBatch.swift */,
 				E2992FC72EA7349500E86606 /* Transaction.swift */,
+				E27E0CD32F3C4B3E004C744B /* TransactionCategoryProtocol.swift */,
+				E27E0CDD2F4BCE9E004C744B /* TransactionFormState.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -170,6 +188,7 @@
 		DEF8FE1A2B6B988C00D10468 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				E27E0CD92F3C50BE004C744B /* TransactionAdditions.swift */,
 				E253C8F42C4C98E700739FAD /* Constants.swift */,
 				DEF8FE1B2B6B989A00D10468 /* Extensions.swift */,
 			);
@@ -214,6 +233,8 @@
 		E288FB0E2C275D7D00B6D57A /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				E27E0CDF2F4BECFD004C744B /* FirebaseRepresentable.swift */,
+				E27E0CE12F4BEE62004C744B /* Transaction+FirebaseRepresentable.swift */,
 				E284D4CA2C44FDC300F72684 /* DataManager.swift */,
 				E2992FBA2EA205A200E86606 /* DataManager+Account.swift */,
 				E2992FCB2EA7352100E86606 /* DataManager+Transaction.swift */,
@@ -235,6 +256,9 @@
 		E288FB112C275E3400B6D57A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E2866C382F28935200DB6CE3 /* CategoryListView.swift */,
+				E2866C392F28935200DB6CE3 /* DonutChartView.swift */,
+				E2866C3A2F28935200DB6CE3 /* SummaryCardView.swift */,
 				E2866C312F07985400DB6CE3 /* Imports */,
 				E2992FDA2EA9E6D400E86606 /* Settings */,
 				E2992FD52EA7375400E86606 /* Transactions */,
@@ -364,6 +388,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E27E0CDA2F3C50BE004C744B /* TransactionAdditions.swift in Resources */,
 				DEF3CAED2B61BB9500C926ED /* Preview Assets.xcassets in Resources */,
 				DEF3CAEA2B61BB9500C926ED /* Assets.xcassets in Resources */,
 				E2992F832E91DDFE00E86606 /* GoogleService-Info.plist in Resources */,
@@ -394,13 +419,19 @@
 				E2866C2B2F07574800DB6CE3 /* DetailRow.swift in Sources */,
 				E2992FD22EA7373900E86606 /* NewTransactionFormView.swift in Sources */,
 				E253C8F62C4C98EA00739FAD /* Constants.swift in Sources */,
+				E27E0CE02F4BECFD004C744B /* FirebaseRepresentable.swift in Sources */,
 				E2992FD72EA7439D00E86606 /* SummaryView.swift in Sources */,
 				E284D4CC2C44FDC500F72684 /* DataManager.swift in Sources */,
 				E284D4AC2C3CF42800F72684 /* TileView.swift in Sources */,
 				E2866C332F2349B300DB6CE3 /* TrendsView.swift in Sources */,
 				E284D49F2C28CA8900F72684 /* ChartView.swift in Sources */,
 				E2992FCC2EA7352100E86606 /* DataManager+Transaction.swift in Sources */,
+				E2866C3B2F28935200DB6CE3 /* DonutChartView.swift in Sources */,
+				E2866C3C2F28935200DB6CE3 /* CategoryListView.swift in Sources */,
+				E2866C3D2F28935200DB6CE3 /* SummaryCardView.swift in Sources */,
 				E2992FE72EA9F3D500E86606 /* Bank.swift in Sources */,
+				E27E0CDE2F4BCE9E004C744B /* TransactionFormState.swift in Sources */,
+				E27E0CE22F4BEE62004C744B /* Transaction+FirebaseRepresentable.swift in Sources */,
 				E2992FC82EA7349500E86606 /* Transaction.swift in Sources */,
 				E2992FD92EA9E6C000E86606 /* SettingsView.swift in Sources */,
 				DEF3CAE82B61BB9300C926ED /* ContentView.swift in Sources */,
@@ -416,6 +447,7 @@
 				E2992FD42EA7373E00E86606 /* EditTransactionFormView.swift in Sources */,
 				E2992FBF2EA20A1B00E86606 /* EditAccountSheet.swift in Sources */,
 				E2992FDC2EA9E6E500E86606 /* DebugSettingsView.swift in Sources */,
+				E27E0CD42F3C4B3E004C744B /* TransactionCategoryProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

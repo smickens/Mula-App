@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct SummaryView: View {
-    @Binding var selectedCategory: TransactionCategory?
+    @Binding var selectedCategory: (any TransactionCategoryProtocol)?
     let transactionsForMonth: [Transaction]
-    let totalsByCategory: [TransactionCategory: Double]
+    let totalsByCategory: [(any TransactionCategoryProtocol, Decimal)]
 
     var body: some View {
         VStack(spacing: 0) {
@@ -91,32 +91,40 @@ struct SummaryView: View {
         .foregroundStyle(.gray)
     }
     
-    private var totalMoneyIn: Double {
+    private var totalMoneyIn: Decimal {
         return 0 //expensesForMonth.filter { $0.category == .income }.reduce(0) { $0 + $1.amount }
     }
 
-    private var totalMoneyOut: Double {
+    private var totalMoneyOut: Decimal {
         return transactionsForMonth.filter { $0.amount < 0 }.reduce(0) { $0 + $1.amount }
     }
 
     private var categoryBreakdown: some View {
         VStack(alignment: .leading) {
             LazyVGrid(columns: [GridItem(), GridItem()], alignment: .leading, spacing: 5) {
-                ForEach(TransactionCategory.allCases, id: \.self) { category in
+                ForEach(ExpenseCategory.allCases, id: \.self) { category in
 //                    if category != .income {
                         getCategoryView(for: category)
 //                    }
                 }
+//                ForEach(IncomeCategory.allCases, id: \.self) { category in
+//                    getCategoryView(for: category)
+//                }
             }
             .padding(.horizontal)
         }
     }
 
-    private func getCategoryView(for category: TransactionCategory) -> some View {
-        HStack {
+    private func getCategoryView(for category: (any TransactionCategoryProtocol)) -> some View {
+        let isMatchingCategory = {
+            guard let selectedCategory else { return false }
+            return selectedCategory.id == category.id
+        }()
+
+        return HStack {
             ZStack {
                 Circle()
-                    .fill(category.tintColor)
+                    .fill(category.baseColor)
                     .frame(width: 28, height: 28)
 
                 Image(systemName: category.iconName)
@@ -125,13 +133,14 @@ struct SummaryView: View {
 
             Spacer()
 
-            Text(totalsByCategory[category] ?? 0.0, format: .currency(code: "USD"))
+            let categoryTotal = (totalsByCategory.first { $0.0.id == category.id })?.1 ?? 0.0
+            Text(categoryTotal, format: .currency(code: "USD"))
         }
         .padding(.horizontal)
-        .border(Color.blue, width: selectedCategory == category ? 1 : 0)
+        .border(Color.blue, width: isMatchingCategory ? 1 : 0)
         .contentShape(Rectangle())
         .onTapGesture {
-            selectedCategory = category == selectedCategory ? nil : category
+            selectedCategory = isMatchingCategory ? nil : category
         }
     }
 }

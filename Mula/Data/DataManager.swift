@@ -46,84 +46,103 @@ final class DataManager {
         transactions.filter { $0.date.year == year && $0.date.month == month }
     }
 
-    func transactions(with year: String, and month: String, in category: TransactionCategory) -> [Transaction] {
+    func transactions(with year: String, and month: String, in category: any TransactionCategoryProtocol) -> [Transaction] {
         let filtered = transactions(with: year, and: month)
-        return filtered.filter { $0.category == category }
+        return filtered.filter { $0.category.id == category.id }
     }
 
-    func totalTransactions(with year: String, and month: String, in category: TransactionCategory) -> Double {
+    func totalTransactions(with year: String, and month: String, in category: any TransactionCategoryProtocol) -> Decimal {
         let filtered = transactions(with: year, and: month, in: category)
-        return filtered.reduce(0.0) { $0 + $1.amount }
+        return filtered.reduce(0) { $0 + $1.amount }
     }
 
-    // MARK: - Trends
-    
+    // MARK: - Breakdown
+
+    func transactions(from startDate: Date, to endDate: Date) -> [Transaction] {
+        return transactions.filter { $0.date >= startDate && $0.date <= endDate }
+    }
+
     struct CategorySpending: Identifiable {
-        var id: TransactionCategory { category }
-        let category: TransactionCategory
-        let total: Double
+        var id = UUID()
+        let category: any TransactionCategoryProtocol
+        let total: Decimal
     }
-    
-    struct MonthlySpending: Identifiable {
-        let id = UUID()
-        let date: Date
-        var spendingByCategory: [TransactionCategory: Double]
+
+    func groupSpendingByCategory(transactions: [Transaction], maxCategories: Int = 6) -> [CategorySpending] {
+        guard !transactions.isEmpty else { return [] }
+
+        // 1️⃣ Count spending by category id
+        let spendingById: [String: (any TransactionCategoryProtocol, Decimal)] =
+            transactions.reduce(into: [:]) { dict, transaction in
+                let category = transaction.category
+                let key = category.id
+                let currentTotal = dict[key]?.1 ?? 0
+                dict[key] = (category, currentTotal + transaction.amount)
+            }
+
+        // 2️⃣ Sort descending by total
+        let sortedSpending = spendingById.values.sorted { $0.1 > $1.1 }
+
+        // 3️⃣ Handle maxCategories & "Other"
+        if sortedSpending.count > maxCategories {
+            let topSpending = sortedSpending.prefix(maxCategories - 1)
+            let otherSpending = sortedSpending.suffix(from: maxCategories - 1)
+            let otherTotal = otherSpending.reduce(0) { $0 + $1.1 }
+
+            var result = topSpending.map { CategorySpending(category: $0.0, total: $0.1) }
+            // Use a generic "Other" category — you’ll need an actual .other instance
+            let otherCategory = TransferCategory.other as any TransactionCategoryProtocol
+            result.append(CategorySpending(category: otherCategory, total: otherTotal))
+            return result
+        } else {
+            return sortedSpending.map { CategorySpending(category: $0.0, total: $0.1) }
+        }
     }
-    
-    func spendingData(for timeRange: TrendsView.TimeRange) -> (totalSpending: Double, averageMonthlySpending: Double, topCategory: String, spendingByCategory: [CategorySpending], spendingByMonth: [MonthlySpending]) {
+
+
+    func calculateAverageMonthlySpending(forLastMonths months: Int) -> Decimal {
         let calendar = Calendar.current
         let today = Date()
-        let excludedCategories: Set<TransactionCategory> = [.transfer, .creditCardPayment, .income]
-        
-        var startDate: Date
-        var numberOfMonths: Int
-        
-        switch timeRange {
-        case .oneMonth:
-            startDate = calendar.date(byAdding: .month, value: -1, to: today)!
-            numberOfMonths = 1
-        case .threeMonths:
-            startDate = calendar.date(byAdding: .month, value: -3, to: today)!
-            numberOfMonths = 3
-        case .sixMonths:
-            startDate = calendar.date(byAdding: .month, value: -6, to: today)!
-            numberOfMonths = 6
-        case .oneYear:
-            startDate = calendar.date(byAdding: .year, value: -1, to: today)!
-            numberOfMonths = 12
-        }
-        
-        let filteredTransactions = transactions.filter { $0.date >= startDate && $0.type == .expense && !excludedCategories.contains($0.category) }
-        
-        let totalSpending = filteredTransactions.reduce(0) { $0 + $1.amount }
-        let averageMonthlySpending = totalSpending / Double(numberOfMonths)
-        
-        var spendingByCategoryDict = [TransactionCategory: Double]()
-        for transaction in filteredTransactions {
-            spendingByCategoryDict[transaction.category, default: 0] += transaction.amount
-        }
-        
-        let spendingByCategory = spendingByCategoryDict.map { CategorySpending(category: $0.key, total: $0.value) }.sorted { $0.total > $1.total }
-        
-        let topCategory = spendingByCategory.first?.category.displayName ?? "N/A"
-        
-        // Group by month
-        let groupedByMonth = Dictionary(grouping: filteredTransactions) { (transaction) -> Date in
-            return calendar.date(from: calendar.dateComponents([.year, .month], from: transaction.date))!
-        }
-        
-        var spendingByMonth: [MonthlySpending] = []
-        for (month, transactions) in groupedByMonth {
-            var monthlySpendingByCategory = [TransactionCategory: Double]()
-            for transaction in transactions {
-                monthlySpendingByCategory[transaction.category, default: 0] += transaction.amount
+        var totalSpending: Decimal = 0.0
+        var monthsWithExpenses = 0
+
+        for i in 0..<months {
+            guard let startDate = calendar.date(byAdding: .month, value: -(i + 1), to: today),
+                  let endDate = calendar.date(byAdding: .month, value: -i, to: today) else {
+                continue
             }
-            spendingByMonth.append(MonthlySpending(date: month, spendingByCategory: monthlySpendingByCategory))
+            
+            let monthTransactions = transactions(from: startDate, to: endDate)
+            if !monthTransactions.isEmpty {
+                totalSpending += monthTransactions.reduce(0) { $0 + $1.amount }
+                monthsWithExpenses += 1
+            }
         }
-        
-        spendingByMonth.sort { $0.date < $1.date }
-        
-        return (totalSpending, averageMonthlySpending, topCategory, spendingByCategory, spendingByMonth)
+
+        return monthsWithExpenses > 0 ? totalSpending / Decimal(monthsWithExpenses) : 0.0
+    }
+
+    func mostFrequentCategory(in transactions: [Transaction]) -> (category: any TransactionCategoryProtocol, count: Int)? {
+        guard !transactions.isEmpty else { return nil }
+
+        var counts: [String: (any TransactionCategoryProtocol, Int)] = [:]
+
+        for transaction in transactions {
+            let category = transaction.category
+            let key = category.id
+
+            if let existing = counts[key] {
+                counts[key] = (category, existing.1 + 1)
+            } else {
+                counts[key] = (category, 1)
+            }
+        }
+
+        return counts.values.max(by: { $0.1 < $1.1 })
+    }
+
+    func largestTransaction(in transactions: [Transaction]) -> Transaction? {
+        return transactions.max(by: { $0.amount < $1.amount })
     }
 
     // MARK: Helper functions

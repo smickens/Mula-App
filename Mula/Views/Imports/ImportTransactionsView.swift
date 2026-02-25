@@ -45,7 +45,13 @@ struct ImportTransactionsView: View {
 
                 if let selectedTransaction = selectedTransaction,
                    let index = newTransactions.firstIndex(where: { $0.id == selectedTransaction.id }) {
-                    TransactionFormView(transaction: $newTransactions[index])
+                    TransactionFormView(
+                        transaction: newTransactions[index],
+                        title: "",
+                        onSave: { newTransactions[index] = $0 },
+                        onCancel: { print("update cancelled") }
+                    )
+                    .id(selectedTransaction.id)
                 } else {
                     emptyDetailView
                 }

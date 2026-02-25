@@ -15,10 +15,10 @@ struct EditTransactionFormView: View {
 
     var body: some View {
         TransactionFormView(
-            transaction: $transaction,
+            transaction: transaction,
             title: "Edit Item",
-            onSave: {
-                dataManager.updateTransaction(transaction)
+            onSave: { updatedTransaction in
+                dataManager.updateTransaction(updatedTransaction)
                 dismiss()
             },
             onCancel: {

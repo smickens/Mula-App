@@ -11,147 +11,171 @@ struct TransactionFormView: View {
     @Environment(DataManager.self) private var dataManager
     @Environment(\.dismiss) private var dismiss
 
-    @Binding var transaction: Transaction
-
-    @State private var amountString: String = ""
+    @State private var state: TransactionFormState
+    @State private var errorMessage: String?
 
     let title: String?
-    let onSave: (() -> Void)?
+    let onSave: (Transaction) -> Void
     let onCancel: (() -> Void)?
 
-    init(
-        transaction: Binding<Transaction>,
+    init (
+        initialState: TransactionFormState,
         title: String? = nil,
-        onSave: (() -> Void)? = nil,
+        onSave: @escaping (Transaction) -> Void,
         onCancel: (() -> Void)? = nil
     ) {
-        self._transaction = transaction
         self.title = title
         self.onSave = onSave
         self.onCancel = onCancel
+        _state = State(initialValue: initialState)
+    }
+
+
+    // New transaction
+    init(
+        title: String? = nil,
+        onSave: @escaping (Transaction) -> Void,
+        onCancel: (() -> Void)? = nil
+    ) {
+        self.init(initialState: TransactionFormState(), title: title, onSave: onSave, onCancel: onCancel)
+    }
+
+    // Edit existing transaction
+    init(
+        transaction: Transaction,
+        title: String? = nil,
+        onSave: @escaping (Transaction) -> Void,
+        onCancel: (() -> Void)? = nil
+    ) {
+        self.init(initialState: TransactionFormState(from: transaction), title: title, onSave: onSave, onCancel: onCancel)
     }
 
     var body: some View {
-        VStack(alignment: .center, spacing: 16) {
+        VStack(spacing: 16) {
+
+            // MARK: Form Title
             if let title {
                 Text(title)
                     .font(.title2)
                     .fontWeight(.semibold)
-                    .padding(.bottom, 4)
             }
 
-            Picker("", selection: $transaction.type) {
-                ForEach(TransactionType.allCases, id: \.self) { type in
-                    Text(type.displayName)
+            // MARK: Type Picker
+            Picker("", selection: $state.type) {
+                ForEach(TransactionKindType.allCases) { type in
+                    Text(type.displayName).tag(type)
                 }
             }
             .pickerStyle(.segmented)
 
-            VStack(alignment: .leading, spacing: 12) {
-                TextField("Title", text: $transaction.title)
+            // MARK: Title
+            TextField("Title", text: $state.title)
+                .textFieldStyle(.roundedBorder)
+
+            // MARK: Amount
+            HStack(spacing: 0) {
+                Text("$")
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 6)
+
+                TextField("Amount", text: $state.amountString)
                     .textFieldStyle(.roundedBorder)
+                    .padding(6)
+            }
 
-                HStack(spacing: 0) {
-                    Text("$")
-                        .padding(.leading, 6)
-                        .foregroundColor(.secondary)
-
-                    TextField("Amount", value: $transaction.amount, formatter: transactionAmountFormatter)
-                        .textFieldStyle(.roundedBorder)
-                        .onChange(of: amountString) { newValue, _ in
-                            transaction.amount = Double(newValue) ?? 0.0
-                        }
-                        .padding(6)
+            // MARK: Source Account
+            Picker(state.type == .transfer ? "From" : "Account", selection: $state.sourceAccountId) {
+                ForEach(dataManager.accounts) { account in
+                    Text(account.name).tag(Optional(account.id))
                 }
+            }
+            .pickerStyle(.menu)
 
-                Picker("Category", selection: $transaction.category) {
-                    ForEach(TransactionCategory.allCases, id: \.self) { category in
-                        Text(category.displayName)
-                    }
-                }
-                .pickerStyle(.menu)
+            // MARK: Category Picker
+            categoryPicker
 
-                Picker(transaction.type == .transfer ? "From" : "Account", selection: Binding(
-                    get: { transaction.accountId },
-                    set: { transaction.accountId = $0 }
-                )) {
+            // MARK: Transfer Destination
+            if state.type == .transfer {
+                Picker("To", selection: $state.destinationAccountId) {
                     ForEach(dataManager.accounts) { account in
-                        Text(account.name)
-                            .tag(account.id)
+                        Text(account.name).tag(Optional(account.id))
                     }
                 }
                 .pickerStyle(.menu)
+            }
 
-                if (transaction.type == .transfer) {
-                    Picker("To", selection: Binding(
-                        get: { transaction.destinationAccountId },
-                        set: { transaction.destinationAccountId = $0 }
-                    )) {
-                        ForEach(dataManager.accounts) { account in
-                            Text(account.name)
-                                .tag(account.id)
-                        }
+            // MARK: Date
+            DatePicker("Date",
+                       selection: $state.date,
+                       in: ...Date(),
+                       displayedComponents: .date)
+
+            // MARK: Error Message
+            if let errorMessage {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+            }
+
+            // MARK: Buttons
+            HStack {
+                if let onCancel {
+                    Button("Cancel", role: .cancel) {
+                        onCancel()
+                        dismiss()
                     }
-                    .pickerStyle(.menu)
                 }
 
-                DatePicker("Date", selection: $transaction.date, in: ...Date(), displayedComponents: .date)
-            }
-
-            actionButtons
-                .padding(.top, 12)
-        }
-        .padding(20)
-        .onChange(of: transaction.type) { oldValue, newValue in
-            // Clear destination account value when changing from transfer type
-            if oldValue == .transfer {
-                transaction.destinationAccountId = nil
-            }
-
-            // Select first account by default as destination
-            if newValue == .transfer {
-                transaction.destinationAccountId = dataManager.accounts.first?.id
-            }
-        }
-    }
-
-    @ViewBuilder
-    private var actionButtons: some View {
-        HStack {
-            if let onCancel = onCancel {
-                Button("Cancel", role: .cancel) {
-                    onCancel()
-                }
-                .keyboardShortcut(.cancelAction)
-                .padding(.trailing, 6)
-                .buttonStyle(.bordered)
-            }
-
-            if let onSave = onSave {
                 Button("Save") {
-                    onSave()
+                    save()
                 }
                 .buttonStyle(.borderedProminent)
-                .disabled(!isFormValid)
                 .keyboardShortcut(.defaultAction)
             }
+            .padding(.top, 12)
+        }
+        .padding(20)
+    }
+
+    // MARK: Category Picker ViewBuilder
+
+    @ViewBuilder
+    private var categoryPicker: some View {
+        switch state.type {
+        case .expense:
+            Picker("Category", selection: $state.expenseCategory) {
+                ForEach(ExpenseCategory.allCases, id: \.self) { category in
+                    Text(category.displayName).tag(category)
+                }
+            }
+            .pickerStyle(.menu)
+
+        case .income:
+            Picker("Category", selection: $state.incomeCategory) {
+                ForEach(IncomeCategory.allCases, id: \.self) { category in
+                    Text(category.displayName).tag(category)
+                }
+            }
+            .pickerStyle(.menu)
+
+        case .transfer:
+            Picker("Category", selection: $state.transferCategory) {
+                ForEach(TransferCategory.allCases, id: \.self) { category in
+                    Text(category.displayName).tag(category)
+                }
+            }
+            .pickerStyle(.menu)
         }
     }
 
-    private var isFormValid: Bool {
-        let hasTitle = !transaction.title.trimmingCharacters(in: .whitespaces).isEmpty
-        let hasAmount = transaction.amount != 0
-        let isTransfer = transaction.type == .transfer
-        let isTransferMissingDestination = isTransfer && transaction.destinationAccountId == nil
-        return hasTitle && hasAmount && !isTransferMissingDestination
-    }
+    // MARK: Save
 
-    private let transactionAmountFormatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
-        formatter.alwaysShowsDecimalSeparator = true
-        return formatter
-    }()
+    private func save() {
+        do {
+            let transaction = try state.toTransaction()
+            onSave(transaction)
+            dismiss()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
 }

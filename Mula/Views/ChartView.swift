@@ -10,7 +10,7 @@ import Charts
 
 struct ChartData: Identifiable {
     let id = UUID()
-    let value: Double
+    let value: Decimal
     let date: Date
 }
 
@@ -20,7 +20,7 @@ struct ChartView: View {
 
     init(transactions: [Transaction]) {
         var aggregated: [ChartData] = []
-        var currentValue = 0.0
+        var currentValue: Decimal = 0.0
         var prevDate: Date? = nil
         transactions.sorted(by: { $0.date < $1.date }).forEach { transaction in
             let date = transaction.date

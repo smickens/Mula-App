@@ -17,7 +17,7 @@ struct SpendingBarChartView: View {
                 x: .value("Category", categorySpending.category.displayName),
                 y: .value("Amount", categorySpending.total)
             )
-            .foregroundStyle(categorySpending.category.tintColor)
+            .foregroundStyle(categorySpending.category.baseColor)
         }
         .chartXAxis {
             AxisMarks(values: .automatic) { _ in

@@ -9,42 +9,41 @@ import SwiftUI
 import Charts
 
 struct CategoryCount {
-    var category: TransactionCategory
-    var total: Double
+    var category: any TransactionCategoryProtocol
+    var total: Decimal
 }
 
 struct PieChartView: View {
-    @Binding var selectedCategory: TransactionCategory?
+    @Binding var selectedCategory: (any TransactionCategoryProtocol)?
     let data: [CategoryCount]
-    let totalSpent: Double
+    let totalSpent: Decimal
 
-    init(selectedCategory: Binding<TransactionCategory?>, totalsByCategory: [TransactionCategory: Double]) {
+    init(selectedCategory: Binding<(any TransactionCategoryProtocol)?>, totalsByCategory: [(any TransactionCategoryProtocol, Decimal)]) {
         _selectedCategory = selectedCategory
+
         var counts: [CategoryCount] = []
-        var t = 0.0
-        totalsByCategory.sorted(by: { $0.value < $1.value }).forEach { category, total in
-            guard total < 0 else { return }
+        var t: Decimal = 0.0
+
+        totalsByCategory.sorted(by: { $0.1 < $1.1 }).forEach { category, total in
+            guard total < 0 else { return } // only spending
             counts.append(CategoryCount(category: category, total: total))
             t += total
         }
-        data = counts
-        totalSpent = t
-        print(data)
+
+        self.data = counts
+        self.totalSpent = t
     }
 
     var body: some View {
-        Chart(data, id: \.category) { item in
+        Chart(data, id: \.category.id) { item in
             SectorMark(
                 angle: .value("Total", item.total),
                 innerRadius: .ratio(0.6)
-//                angularInset: 2
             )
-//            .cornerRadius(5)
-            .foregroundStyle(item.category.tintColor)
-            .opacity(selectedCategory == nil || selectedCategory == item.category ? 1 : 0.5)
+            .foregroundStyle(item.category.baseColor)
+            .opacity(selectedCategory == nil || selectedCategory?.id == item.category.id ? 1 : 0.5)
         }
         .chartLegend(.hidden)
-//        .chartAngleSelection(value: $selectedAngle)
         .scaledToFit()
         .chartBackground { chartProxy in
             GeometryReader { geometry in
