@@ -51,44 +51,43 @@ struct ImportProcessor {
     private static func normalizeTransaction(_ t: inout Transaction) {
         if t.title.localizedCaseInsensitiveContains("Uber Eats") {
             t.title = "Uber Eats"
-            t.category = .eatingOut
+            t.kind = .expense(.eatingOut)
         } else if t.title.localizedCaseInsensitiveContains("Uber") {
             t.title = "Uber"
-            t.category = .transit
+            t.kind = .expense(.transit)
         } else if t.title.localizedCaseInsensitiveContains("Lyft") {
             t.title = "Lyft"
-            t.category = .transit
+            t.kind = .expense(.transit)
         } else if t.title.localizedCaseInsensitiveContains("Safeway") {
             t.title = "Safeway"
-            t.category = .groceries
+            t.kind = .expense(.groceries)
         } else if t.title.localizedCaseInsensitiveContains("Target") {
             t.title = "Target"
-            t.category = .groceries
+            t.kind = .expense(.groceries)
         } else if t.title.localizedCaseInsensitiveContains("Dunkin") {
             t.title = "Dunkin"
-            t.category = .eatingOut
+            t.kind = .expense(.eatingOut)
         } else if t.title.localizedCaseInsensitiveContains("Walmart") {
-            t.category = .groceries
+            t.kind = .expense(.groceries)
         } else if t.title.localizedCaseInsensitiveContains("USAA") {
             t.title = "USAA insurance"
-            t.category = .car
+            t.kind = .expense(.car)
         } else if t.title.localizedCaseInsensitiveContains("return") {
-            t.type = .income
-            t.category = .refund
+            t.kind = .income(.refund)
         }
     }
 
     // MARK: Apple
 
-    private static func classifyFromCreditCardCategory(_ categoryString: String) -> (TransactionCategory) {
+    private static func classifyFromCreditCardCategory(_ categoryString: String) -> TransactionKind {
         switch categoryString {
-        case "Hotels": return .housing
-        case "Restaurants": return .eatingOut
-        case "Grocery": return .groceries
-        case "Shopping": return .shopping
-        case "Airlines", "Transportation": return .transit
-        case "Entertainment": return .entertainment
-        default: return .other
+        case "Hotels": return .expense(.housing)
+        case "Restaurants": return .expense(.eatingOut)
+        case "Grocery": return .expense(.groceries)
+        case "Shopping": return .expense(.shopping)
+        case "Airlines", "Transportation": return .expense(.transit)
+        case "Entertainment": return .expense(.entertainment)
+        default: return .expense(.other)
         }
     }
 
@@ -111,36 +110,35 @@ struct ImportProcessor {
         }
 
         let title = values[3]
-        let amount = abs(Double(values[6]) ?? 0.0)
-        let category = classifyFromCreditCardCategory(categoryString)
+        let amount = abs(Decimal(string: values[6]) ?? 0.0)
+        let kind = classifyFromCreditCardCategory(categoryString)
 
         return Transaction(
             id: UUID(),
-            accountId: Bank.apple.accountId,
             title: title,
             date: date,
+            kind: kind,
             amount: amount,
-            category: category,
-            type: .expense
+            sourceAccountId: Bank.apple.accountId
         )
     }
 
     // MARK: US Bank
 
-    private static let usBankKnownNames: [String: (String, TransactionCategory, TransactionType)] = [
-        "ELECTRONIC DEPOSIT APPLE INC.": ("Apple Job", .income, .income),
-        "WEB AUTHORIZED PMT VENMO": ("Venmo (out)", .entertainment, .expense),
-        "ELECTRONIC DEPOSIT VENMO": ("Venmo (in)", .other, .income),
-        "ELECTRONIC WITHDRAWAL ATT": ("Internet Bill", .housing, .expense),
-        "ELECTRONIC WITHDRAWAL FID BKG SVC LLC": ("Fidelity Investment", .investment, .transfer),
-        "ELECTRONIC DEPOSIT APPLE GS SAVINGS": ("Transfer from Apple Savings", .transfer, .transfer),
-        "WEB AUTHORIZED PMT APPLE GS SAVINGS": ("Withdrawal to Apple Savings", .savings, .transfer),
-        "WEB AUTHORIZED PMT APPLECARD GSBANK": ("Apple Card Payment", .creditCardPayment, .transfer),
-        "WEB AUTHORIZED PMT WELLS FARGO CARD": ("Bilt Card Payment", .creditCardPayment, .transfer),
-        "WEB AUTHORIZED PMT CHASE CREDIT CRD": ("Chase Card Payment", .creditCardPayment, .transfer),
-        "MOBILE BANKING PAYMENT TO CREDIT CARD 5895": ("US Bank 5895 Card Payment", .creditCardPayment, .transfer),
-        "MOBILE BANKING PAYMENT TO CREDIT CARD 9996": ("US Bank 9996 Card Payment", .creditCardPayment, .transfer),
-        "MOBILE CHECK DEPOSIT": ("Mobile Check Deposit", .other, .income),
+    private static let usBankKnownNames: [String: (String, TransactionKind)] = [
+        "ELECTRONIC DEPOSIT APPLE INC.": ("Apple Job", .income(.job)),
+        "WEB AUTHORIZED PMT VENMO": ("Venmo (out)", .expense(.entertainment)),
+        "ELECTRONIC DEPOSIT VENMO": ("Venmo (in)", .income(.other)),
+        "ELECTRONIC WITHDRAWAL ATT": ("Internet Bill", .expense(.housing)),
+        "ELECTRONIC WITHDRAWAL FID BKG SVC LLC": ("Fidelity Investment", .transfer(.investment)),
+        "ELECTRONIC DEPOSIT APPLE GS SAVINGS": ("Transfer from Apple Savings", .transfer(.other)),
+        "WEB AUTHORIZED PMT APPLE GS SAVINGS": ("Withdrawal to Apple Savings", .transfer(.savings)),
+        "WEB AUTHORIZED PMT APPLECARD GSBANK": ("Apple Card Payment", .transfer(.creditCardPayment)),
+        "WEB AUTHORIZED PMT WELLS FARGO CARD": ("Bilt Card Payment", .transfer(.creditCardPayment)),
+        "WEB AUTHORIZED PMT CHASE CREDIT CRD": ("Chase Card Payment",.transfer(.creditCardPayment)),
+        "MOBILE BANKING PAYMENT TO CREDIT CARD 5895": ("US Bank 5895 Card Payment", .transfer(.creditCardPayment)),
+        "MOBILE BANKING PAYMENT TO CREDIT CARD 9996": ("US Bank 9996 Card Payment",.transfer(.creditCardPayment)),
+        "MOBILE CHECK DEPOSIT": ("Mobile Check Deposit", .income(.other)),
     ]
 
     private static func processUSBankTransaction(_ row: String) -> Transaction? {
@@ -163,37 +161,34 @@ struct ImportProcessor {
             return nil
         }
 
-        let amount = abs(Double(values[4]) ?? 0.0)
-        var category: TransactionCategory = .other
-        var type: TransactionType = .expense
+        let amount = abs(Decimal(string: values[4]) ?? 0)
+        var kind: TransactionKind = .expense(.other)
 
-        if let (newTitle, newCategory, newType) = usBankKnownNames[title] {
+        if let (newTitle, newKind) = usBankKnownNames[title] {
             title = newTitle
-            category = newCategory
-            type = newType
+            kind = newKind
         }
 
         return Transaction(
             id: UUID(),
-            accountId: Bank.usBank.accountId,
             title: title,
             date: date,
+            kind: kind,
             amount: amount,
-            category: category,
-            type: type
+            sourceAccountId: Bank.usBank.accountId
         )
     }
 
     // MARK: Bilt / Wells Fargo
 
-    private static let biltKnownNames: [String: (String, TransactionCategory, TransactionType)] = [
-        "BPS*BILT RENT NEW YORK NY": ("Rent", .housing, .expense),
-        "BPS*BILT REWARDS B NEW YORK NY": ("Rent", .housing, .expense),
-        "TST*BAE - CAMPBELL CAMPBELL CA": ("Best Artisan Empanadas", .eatingOut, .expense),
-        "APPLE CAFFE AP01:1 CUPERTINO CA": ("Apple Caffe", .eatingOut, .expense),
-        "CVS/PHARMACY #09856 SUNNYVALE CA": ("CVS", .groceries, .expense),
-        "APPLE ESPR BAR AP01 S5 CUPERTINO CA": ("Apple Caffe", .eatingOut, .expense),
-        "WEST SAN JOSE GROCER SAN JOSE CA": ("Grocery Outlet", .groceries, .expense),
+    private static let biltKnownNames: [String: (String, TransactionKind)] = [
+        "BPS*BILT RENT NEW YORK NY": ("Rent", .expense(.housing)),
+        "BPS*BILT REWARDS B NEW YORK NY": ("Rent", .expense(.housing)),
+        "TST*BAE - CAMPBELL CAMPBELL CA": ("Best Artisan Empanadas", .expense(.eatingOut)),
+        "APPLE CAFFE AP01:1 CUPERTINO CA": ("Apple Caffe", .expense(.eatingOut)),
+        "CVS/PHARMACY #09856 SUNNYVALE CA": ("CVS", .expense(.groceries)),
+        "APPLE ESPR BAR AP01 S5 CUPERTINO CA": ("Apple Caffe", .expense(.eatingOut)),
+        "WEST SAN JOSE GROCER SAN JOSE CA": ("Grocery Outlet", .expense(.groceries)),
     ]
 
     private static func processBiltTransaction(_ row: String) -> Transaction? {
@@ -212,24 +207,21 @@ struct ImportProcessor {
             return nil
         }
 
-        let amount = abs(Double(values[1]) ?? 0.0)
-        var category: TransactionCategory = .eatingOut
-        var type: TransactionType = .expense
+        let amount = abs(Decimal(string: values[1]) ?? 0.0)
+        var kind: TransactionKind = .expense(.eatingOut)
 
-        if let (newTitle, newCategory, newType) = biltKnownNames[title] {
+        if let (newTitle, newKind) = biltKnownNames[title] {
             title = newTitle
-            category = newCategory
-            type = newType
+            kind = newKind
         }
 
         return Transaction(
             id: UUID(),
-            accountId: Bank.bilt.accountId,
             title: title,
             date: date,
+            kind: kind,
             amount: amount,
-            category: category,
-            type: type
+            sourceAccountId: Bank.bilt.accountId
         )
     }
 

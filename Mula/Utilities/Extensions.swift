@@ -26,3 +26,15 @@ extension String {
         self.trimmingCharacters(in: CharacterSet(charactersIn: "\"'"))
     }
 }
+
+extension Decimal {
+    func toCurrency() -> String {
+        Self.currencyFormatter.string(from: self as NSDecimalNumber) ?? "$0.00"
+    }
+
+    private static let currencyFormatter: NumberFormatter = {
+        let f = NumberFormatter()
+        f.numberStyle = .currency
+        return f
+    }()
+}

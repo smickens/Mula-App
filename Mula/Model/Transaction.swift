@@ -11,163 +11,76 @@ import SwiftUI
 struct Transaction: Identifiable, Codable, Hashable {
     let id: UUID
 
-    var accountId: UUID? // TODO: remove optional
-    var destinationAccountId: UUID?
-    var importBatchId: UUID?
-
     var title: String
     var date: Date
-    var amount: Double
-    var category: TransactionCategory
-    var type: TransactionType
+    var kind: TransactionKind
+    var amount: Decimal
+    var sourceAccountId: UUID
+    var importBatchId: UUID?
 
-    var firebaseKey: String {
-        id.uuidString
-    }
-
-    var asDictionary: [String: Any] {
-        [
-            "title": title,
-            "amount": amount,
-            "date": date.timeIntervalSince1970,
-            "category": category.rawValue,
-            "type": type.rawValue,
-            "accountId": accountId?.uuidString as Any,
-            "destinationAccountId": destinationAccountId?.uuidString as Any,
-            "importBatchId": importBatchId?.uuidString as Any
-        ]
-    }
-
-    func amountSigned(displayingAccountId: UUID? = nil) -> Double {
-        switch type {
+    func amountSigned(displayingAccountId: UUID? = nil) -> Decimal {
+        switch kind {
         case .expense:
             return -amount
         case .income:
             return amount
         case .transfer:
             guard let displayingAccountId else { return amount }
-            let isTransferOut = displayingAccountId == accountId
+            let isTransferOut = displayingAccountId == sourceAccountId
             return isTransferOut ? -amount : amount
         }
     }
 
     func amountColor(displayingAccountId: UUID? = nil) -> Color {
-        switch type {
+        switch kind {
         case .expense:
             return .red
         case .income:
             return .green
-        case .transfer:
+        case .transfer(_, let destinationAccountId):
             guard let displayingAccountId else { return .gray }
-            let isTransferOut = displayingAccountId == accountId
+            let isTransferOut = displayingAccountId == sourceAccountId
             let isTransferIn = displayingAccountId == destinationAccountId
             return isTransferOut ? .red : (isTransferIn ? .green : .gray)
         }
     }
 }
 
-enum TransactionType: String, CaseIterable, Codable {
-    case income
-    case expense
-    case transfer
+enum TransactionKind: Codable, Hashable {
+    case expense(ExpenseCategory)
+    case income(IncomeCategory)
+    case transfer(_ category: TransferCategory, destinationAccountId: UUID = Account.default)
+
+    struct ExpenseDetails {
+        let category: ExpenseCategory
+    }
+    struct IncomeDetails {
+        let category: ExpenseCategory
+    }
+    struct TransferDetails {
+        let category: TransferCategory
+        let destinationAccountId: UUID = Account.default
+    }
 
     var displayName: String {
         switch self {
-        case .income: return "Income"
-        case .expense: return "Expense"
-        case .transfer: return "Transfer"
+        case .expense(let category): return category.displayName
+        case .income(let category): return category.displayName
+        case .transfer(let category, _): return category.displayName
         }
     }
 }
 
-enum TransactionCategory: String, CaseIterable, Codable, Identifiable {
-    var id: String { rawValue }
+extension Transaction {
 
-    case housing          // rent, utilities, internet, etc.
-    case eatingOut
-    case groceries
-    case shopping
-    case car              // gas, maintenance, servicing, tires, etc.
-    case transit          // flights, bus, caltrain, ubers
-    case entertainment
-    case income           // change to job
-    case transfer         // remove later
-    case refund
-    case dividend
-    case interest
-    case savings
-    case investment
-    case creditCardPayment
-    case other
-
-    static func get(from string: String) -> TransactionCategory? {
-        TransactionCategory(rawValue: string)
-    }
-
-    var displayName: String {
-        switch self {
-        case .housing: return "Housing"
-        case .eatingOut: return "Eating Out"
-        case .groceries: return "Groceries"
-        case .shopping: return "Shopping"
-        case .car: return "Car"
-        case .transit: return "Transit"
-        case .entertainment: return "Entertainment"
-        case .income: return "Income"
-        case .transfer: return "Transfer"
-        case .refund: return "Refund"
-        case .dividend: return "Dividend"
-        case .interest: return "Interest"
-        case .savings: return "Savings"
-        case .investment: return "Investment"
-        case .creditCardPayment: return "Credit Card Payment"
-        case .other: return "Other"
+    /// Computed property to get/set the category for the current transaction kind
+    var category: any TransactionCategoryProtocol {
+        get {
+            switch kind {
+            case .expense(let c): return c
+            case .income(let c): return c
+            case .transfer(let c, _): return c
+            }
         }
-    }
-
-    var iconName: String {
-        switch self {
-        case .housing: return "house.fill"
-        case .eatingOut: return "fork.knife"
-        case .groceries: return "flame"
-        case .shopping: return "bag.fill"
-        case .car: return "car.fill"
-        case .transit: return "tram.fill"
-        case .entertainment: return "smiley.fill"
-        case .income: return "briefcase.fill"
-        case .transfer: return "arrow.left.arrow.right"
-        case .refund: return "arrow.uturn.backward.circle.fill"
-        case .dividend: return "chart.bar.fill"
-        case .interest: return "percent"
-        case .other: return "ellipsis.circle.fill"
-        case .savings: return "dollarsign.bank.building.fill"
-        case .investment: return "dollarsign.bank.building.fill"
-        case .creditCardPayment: return "creditcard.fill"
-        }
-    }
-
-    private var tint: Color {
-        switch self {
-        case .housing: return .blue
-        case .eatingOut: return .orange
-        case .groceries: return .green
-        case .shopping: return .pink
-        case .car: return .red
-        case .transit: return .purple
-        case .entertainment: return .teal
-        case .income: return .green
-        case .transfer: return .gray
-        case .refund: return .mint
-        case .dividend: return .indigo
-        case .interest: return .cyan
-        case .savings: return .indigo
-        case .investment: return .indigo
-        case .creditCardPayment: return .teal
-        case .other: return .brown
-        }
-    }
-
-    var tintColor: Color {
-        return tint.opacity(0.7)
     }
 }

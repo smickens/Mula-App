@@ -27,73 +27,47 @@ extension DataManager {
                 return
             }
 
+            // TODO: may change to storing amount as a string in firebase
+//            let amount = Decimal(string: firebaseData["amount"] as? String ?? "") ?? 0
+
             for (firebaseKey, firebaseData) in value {
-                guard let title = firebaseData["title"] as? String,
-                      let amount = firebaseData["amount"] as? Double,
-                      let dateTimestamp = firebaseData["date"] as? TimeInterval,
-                      let categoryString = firebaseData["category"] as? String,
-                      let category = TransactionCategory(rawValue: categoryString),
-                      let typeString = firebaseData["type"] as? String,
-                      let type = TransactionType(rawValue: typeString)
-                else {
-                    print("⚠️ Skipping invalid transaction: \(firebaseKey)")
-                    continue
+                do {
+                    let transaction = try Transaction.decode(from: firebaseData)
+
+                    self.transactions.append(transaction)
+                } catch {
+                    print("❌ Failed to decode transaction \(firebaseKey): \(error)")
                 }
-
-                let accountIdString = (firebaseData["accountId"] as? String).flatMap(UUID.init(uuidString:))
-                let destinationAccountIdString = (firebaseData["destinationAccountId"] as? String).flatMap(UUID.init(uuidString:))
-                let importBatchIdString = (firebaseData["importBatchId"] as? String).flatMap(UUID.init(uuidString:))
-
-                let transaction = Transaction(
-                    id: UUID(uuidString: firebaseKey) ?? UUID(),
-                    accountId: accountIdString,
-                    destinationAccountId: destinationAccountIdString,
-                    importBatchId: importBatchIdString,
-                    title: title,
-                    date: Date(timeIntervalSince1970: dateTimestamp),
-                    amount: abs(amount),
-                    category: category,
-                    type: type
-                )
-
-                self.transactions.append(transaction)
             }
 
             print("✅ Loaded \(transactions.count) transactions from Firebase.")
 
-            // TEMP: update transactions to have a type
+//            // TEMP: update transactions to have a type
 //            for transaction in transactions {
-//                guard transaction.type == nil else { continue }
-//
-//                let updatedTransaction = Transaction(
-//                    id: transaction.id,
-//                    accountId: transaction.accountId ?? Bank.usBank.accountId,
-//                    importBatchId: nil,
-//                    title: transaction.title,
-//                    date: transaction.date,
-//                    amount: transaction.amount,
-//                    category: transaction.category,
-//                    type: .expense
-//                )
-//
-//                updateTransaction(updatedTransaction)
+//                updateTransaction(transaction)
 //            }
-//
+////
 //            print("✅ Done updating transactions")
         }
     }
 
     /// Adds a new transaction to Firebase
     func addTransaction(_ transaction: Transaction) {
-        transactionRef.child(transaction.firebaseKey).setValue(transaction.asDictionary) { [weak self] error, _ in
-            guard let self = self else { return }
+        do {
+            let transactionData = try transaction.asDictionary()
 
-            if let error {
-                print("❌ Error adding transaction: \(error.localizedDescription)")
-            } else {
-                self.transactions.append(transaction)
-                print("✅ Added new transaction \(transaction.title)")
+            transactionRef.child(transaction.firebaseKey).setValue(transactionData) { [weak self] error, _ in
+                guard let self = self else { return }
+
+                if let error {
+                    print("❌ Error adding transaction: \(error.localizedDescription)")
+                } else {
+                    self.transactions.append(transaction)
+                    print("✅ Added new transaction \"\(transaction.title)\"")
+                }
             }
+        } catch {
+            print("❌ Failed to add transaction: \(error.localizedDescription)")
         }
     }
 
@@ -101,7 +75,12 @@ extension DataManager {
 
     /// Updates an existing transaction in Firebase
     func updateTransaction(_ transaction: Transaction) {
-        transactionRef.child(transaction.firebaseKey).updateChildValues(transaction.asDictionary) { [weak self] error, _ in
+        guard let transactionData = try? transaction.asDictionary() else {
+            print("❌ Failed to update transaction")
+            return
+        }
+
+        transactionRef.child(transaction.firebaseKey).updateChildValues(transactionData) { [weak self] error, _ in
             if let error = error {
                 print("❌ Failed to update transaction: \(error.localizedDescription)")
             }
