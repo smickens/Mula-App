@@ -16,18 +16,35 @@ struct DonutChartView: View {
             let sortedSpending = spendingByCategory.sorted { $0.total > $1.total }
 
             // Precompute start/end angles
+            let gapDegrees: Double = 1.5
+
             let segments: [(start: Double, end: Double, color: Color)] = {
                 var result: [(Double, Double, Color)] = []
                 var currentStart: Double = -90
 
                 for item in sortedSpending {
-                    let percentage = (totalSpending != 0) ? (item.total / totalSpending) : 0
-                    let end = currentStart + (Double(truncating: percentage as NSNumber) * 360)
-                    result.append((start: currentStart, end: end, color: item.category.baseColor))
-                    currentStart = end
+                    let percentage = (totalSpending != 0)
+                        ? (item.total as NSDecimalNumber).doubleValue /
+                          (totalSpending as NSDecimalNumber).doubleValue
+                        : 0
+
+                    let degrees = percentage * 360
+                    let adjustedEnd = currentStart + degrees - gapDegrees
+
+                    if degrees > 0 {
+                        result.append((
+                            start: currentStart,
+                            end: adjustedEnd,
+                            color: item.category.baseColor
+                        ))
+                    }
+
+                    currentStart += degrees
                 }
+
                 return result
             }()
+
 
             // Render segments
             ForEach(0..<segments.count, id: \.self) { index in
@@ -40,13 +57,15 @@ struct DonutChartView: View {
             }
 
             // Center text
-            VStack {
+            VStack(spacing: 6) {
                 Text("Total Spending")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
+                    .textCase(.uppercase)
+                    .tracking(1)
+
                 Text(totalSpending.toCurrency())
-                    .font(.title)
-                    .fontWeight(.bold)
+                    .font(.system(size: 28, weight: .semibold))
             }
         }
         .frame(width: 300, height: 300)
@@ -57,30 +76,47 @@ struct DonutSegment: View {
     let startAngle: Angle
     let endAngle: Angle
     let color: Color
-    
+
     var body: some View {
-        DonutSegmentShape(startAngle: startAngle, endAngle: endAngle)
-            .stroke(color, style: StrokeStyle(lineWidth: 50, lineCap: .butt))
+        DonutSegmentShape(
+            startAngle: startAngle,
+            endAngle: endAngle,
+            thickness: 40
+        )
+        .fill(color)
     }
 }
 
 struct DonutSegmentShape: Shape {
     var startAngle: Angle
     var endAngle: Angle
+    var thickness: CGFloat
 
     func path(in rect: CGRect) -> Path {
-        var path = Path()
         let center = CGPoint(x: rect.midX, y: rect.midY)
-        let radius = rect.width / 2 - 25 // 25 is half of the lineWidth
-        
+        let outerRadius = rect.width / 2
+        let innerRadius = outerRadius - thickness
+
+        var path = Path()
+
         path.addArc(
             center: center,
-            radius: radius,
+            radius: outerRadius,
             startAngle: startAngle,
             endAngle: endAngle,
             clockwise: false
         )
-        
+
+        path.addArc(
+            center: center,
+            radius: innerRadius,
+            startAngle: endAngle,
+            endAngle: startAngle,
+            clockwise: true
+        )
+
+        path.closeSubpath()
+
         return path
     }
 }
