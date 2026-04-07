@@ -10,7 +10,7 @@ import SwiftUI
 struct TransactionView: View {
     @Environment(DataManager.self) private var dataManager
 
-    @Binding var selectedTransaction: Transaction?
+    @Binding var selectedTransactionID: UUID?
     @State private var showingEditTransactionForm = false
 
     let swipeActionsEnabled: Bool
@@ -59,7 +59,7 @@ struct TransactionView: View {
         .swipeActions(edge: .leading, allowsFullSwipe: false) {
             if swipeActionsEnabled {
                 Button {
-                    selectedTransaction = transaction
+                    selectedTransactionID = transaction.id
                     showingEditTransactionForm.toggle()
                 } label: {
                     Label("Edit", systemImage: "pencil")
@@ -94,7 +94,7 @@ struct TransactionView: View {
     private var tapGesture: some Gesture {
         TapGesture(count: 1)
             .onEnded {
-                selectedTransaction = transaction
+                selectedTransactionID = transaction.id
             }
             .simultaneously(with: TapGesture(count: 2)
                 .onEnded {

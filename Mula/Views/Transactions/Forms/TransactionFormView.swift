@@ -121,12 +121,16 @@ struct TransactionFormView: View {
                 if let onCancel {
                     Button("Cancel", role: .cancel) {
                         onCancel()
-                        dismiss()
                     }
                 }
 
                 Button("Save") {
-                    save()
+                    do {
+                        let transaction = try state.toTransaction()
+                        onSave(transaction)
+                    } catch {
+                        errorMessage = error.localizedDescription
+                    }
                 }
                 .buttonStyle(.borderedProminent)
                 .keyboardShortcut(.defaultAction)
@@ -164,18 +168,6 @@ struct TransactionFormView: View {
                 }
             }
             .pickerStyle(.menu)
-        }
-    }
-
-    // MARK: Save
-
-    private func save() {
-        do {
-            let transaction = try state.toTransaction()
-            onSave(transaction)
-            dismiss()
-        } catch {
-            errorMessage = error.localizedDescription
         }
     }
 }

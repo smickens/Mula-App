@@ -14,11 +14,11 @@ struct ImportTransactionsView: View {
     @Binding var importName: String
     @Binding var fileContent: String
     @State private var newTransactions: [Transaction] = []
-    @State private var selectedTransaction: Transaction?
+    @State private var selectedTransactionID: UUID?
 
     var body: some View {
         VStack {
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(spacing: 8) {
                 Text("Import Transactions")
                     .font(.title)
                     .fontWeight(.bold)
@@ -43,21 +43,25 @@ struct ImportTransactionsView: View {
 
                 Divider()
 
-                if let selectedTransaction = selectedTransaction,
-                   let index = newTransactions.firstIndex(where: { $0.id == selectedTransaction.id }) {
+                // TODO: [next step] sometimes seeing that when updating the category of a transaction that it
+                // ends up with the same transaction in the list twice (multiple of same ID)
+
+                if let selectedTransactionID,
+                   let index = newTransactions.firstIndex(where: { $0.id == selectedTransactionID }) {
                     TransactionFormView(
                         transaction: newTransactions[index],
                         title: "",
-                        onSave: { newTransactions[index] = $0 },
-                        onCancel: { print("update cancelled") }
+                        onSave: { updatedTransaction in
+                            newTransactions[index] = updatedTransaction
+                        }
                     )
-                    .id(selectedTransaction.id)
+                    .id(selectedTransactionID)
                 } else {
                     emptyDetailView
                 }
             }
         }
-        .frame(width: 650, height: 340)
+        .frame(width: 650, height: 450)
         .padding()
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
@@ -80,15 +84,15 @@ struct ImportTransactionsView: View {
         }
         .onAppear {
             newTransactions = ImportProcessor.processFileContentIntoTransactions(fileContent)
-            selectedTransaction = newTransactions.first
+            selectedTransactionID = newTransactions.first?.id
         }
     }
 
     private var newTransactionsList: some View {
-        List(selection: $selectedTransaction) {
+        List(selection: $selectedTransactionID) {
             ForEach(newTransactions) { transaction in
-                TransactionView(selectedTransaction: $selectedTransaction, swipeActionsEnabled: false, transaction: transaction, displayingAccountId: nil)
-                    .tag(transaction)
+                TransactionView(selectedTransactionID: $selectedTransactionID, swipeActionsEnabled: false, transaction: transaction, displayingAccountId: nil)
+                    .tag(transaction.id)
             }
             .onDelete { indexSet in
                 newTransactions.remove(atOffsets: indexSet)

@@ -14,7 +14,7 @@ struct TransactionsView: View {
 
     @State private var selectedYear: String = Date().year
     @State private var selectedMonth: String = Date().month
-    @State private var selectedTransaction: Transaction? = nil
+    @State private var selectedTransactionID: UUID? = nil
     @State private var selectedCategory: (any TransactionCategoryProtocol)? = nil
 
     @State private var showingNewTransactionForm: Bool = false
@@ -50,7 +50,7 @@ struct TransactionsView: View {
             .padding()
 
             List(filteredTransactions) { transaction in
-                TransactionView(selectedTransaction: $selectedTransaction, swipeActionsEnabled: true, transaction: transaction, displayingAccountId: nil)
+                TransactionView(selectedTransactionID: $selectedTransactionID, swipeActionsEnabled: true, transaction: transaction, displayingAccountId: nil)
             }
             .searchable(text: $searchText)
         }

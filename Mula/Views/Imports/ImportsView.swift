@@ -11,7 +11,7 @@ struct ImportsView: View {
     @Environment(DataManager.self) private var dataManager
 
     @State private var selectedImportBatch: ImportBatch?
-    @State private var selectedTransaction: Transaction?
+    @State private var selectedTransactionID: UUID?
 
     @State private var showingImportTransactionsForm: Bool = false
     @State private var fileContent: String = ""
@@ -56,11 +56,11 @@ struct ImportsView: View {
            let content = String(data: data, encoding: .utf8) {
             fileContent = content
             fileName = fileURL.lastPathComponent // <-- Capture the file name
-            print("✅ Imported file: \(fileName)")
+            print("✅ Imported transactions from file (\(fileName)) for processing")
 
             showingImportTransactionsForm.toggle()
         } else {
-            print("❌ Failed to import file")
+            print("❌ Failed to import transactions from file to process")
         }
     }
 
@@ -105,15 +105,15 @@ struct ImportsView: View {
                 Divider()
 
                 // Transactions List
-                List(selection: $selectedTransaction) {
+                List(selection: $selectedTransactionID) {
                     ForEach(transactions) { transaction in
                         TransactionView(
-                            selectedTransaction: $selectedTransaction,
+                            selectedTransactionID: $selectedTransactionID,
                             swipeActionsEnabled: true,
                             transaction: transaction,
                             displayingAccountId: nil
                         )
-                        .tag(transaction)
+                        .tag(transaction.id)
                     }
                 }
             }
@@ -122,7 +122,8 @@ struct ImportsView: View {
             Divider()
 
             // Right: Transaction Detail
-            if let selectedTransaction = selectedTransaction {
+            if let selectedTransactionID,
+               let selectedTransaction = transactions.first(where: { $0.id == selectedTransactionID }) {
                 TransactionDetailView(transaction: selectedTransaction, displayingAccountId: nil)
             } else {
                 emptyTransactionView

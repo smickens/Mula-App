@@ -10,7 +10,7 @@ import SwiftUI
 struct AccountsView: View {
     @Environment(DataManager.self) private var dataManager
     @State private var selectedAccountId: UUID?
-    @State private var selectedTransaction: Transaction?
+    @State private var selectedTransactionID: UUID?
     @State private var expandedSections: Set<AccountType> = Set(AccountType.allCases)
 
     // Special UUID to represent "All Accounts"
@@ -29,7 +29,8 @@ struct AccountsView: View {
             Divider()
 
             // Right: Transaction Detail
-            if let selectedTransaction = selectedTransaction {
+            if let selectedTransactionID,
+               let selectedTransaction = filteredTransactions.first(where: { $0.id == selectedTransactionID }) {
                 TransactionDetailView(transaction: selectedTransaction, displayingAccountId: selectedAccountId)
             } else {
                 emptyTransactionView
@@ -125,15 +126,15 @@ struct AccountsView: View {
             if transactions.isEmpty {
                 emptyTransactionsListView
             } else {
-                List(selection: $selectedTransaction) {
+                List(selection: $selectedTransactionID) {
                     ForEach(transactions) { transaction in
                         TransactionView(
-                            selectedTransaction: $selectedTransaction,
+                            selectedTransactionID: $selectedTransactionID,
                             swipeActionsEnabled: true,
                             transaction: transaction,
                             displayingAccountId: selectedAccountId
                         )
-                        .tag(transaction)
+                        .tag(transaction.id)
                     }
                 }
             }
