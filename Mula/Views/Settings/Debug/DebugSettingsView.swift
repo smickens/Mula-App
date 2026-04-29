@@ -15,10 +15,9 @@ struct DebugSettingsView: View {
     @State private var reloadMessage: String?
     @State private var showForceReloadConfirmation = false
 
-    // Test Data
-    @State private var useTestData = false
-
     var body: some View {
+        @Bindable var dataManager = dataManager
+
         VStack(alignment: .leading, spacing: 20) {
             Text("Debug Tools")
                 .font(.title2)
@@ -47,10 +46,7 @@ struct DebugSettingsView: View {
                         .padding(.top, 6)
                 }
 
-                Toggle("Use Test Data", isOn: $useTestData)
-                    .onChange(of: useTestData) { _, newValue in
-                        dataManager.useTestData = newValue
-                    }
+                Toggle("Use Test Data", isOn: $dataManager.useTestData)
             }
 
             Spacer()
@@ -67,7 +63,7 @@ struct DebugSettingsView: View {
 
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("This will reload all data from Firebase, including transactions and accounts. Use this if the local data is out of sync or corrupted.")
+            Text("This will reload all data from the selected data source, including transactions and accounts. Use this if the local data is out of sync or corrupted.")
         }
     }
 
