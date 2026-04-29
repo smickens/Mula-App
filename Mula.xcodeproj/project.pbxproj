@@ -21,21 +21,16 @@
 		E253C9112C61D5B100739FAD /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9102C61D5AC00739FAD /* SignInView.swift */; };
 		E27223DE2BF9C2FE0065089A /* AccountStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27223DD2BF9C2FE0065089A /* AccountStatement.swift */; };
 		E27E0CD42F3C4B3E004C744B /* TransactionCategoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27E0CD32F3C4B3E004C744B /* TransactionCategoryProtocol.swift */; };
-		E27E0CDA2F3C50BE004C744B /* TransactionAdditions.swift in Resources */ = {isa = PBXBuildFile; fileRef = E27E0CD92F3C50BE004C744B /* TransactionAdditions.swift */; };
 		E27E0CDE2F4BCE9E004C744B /* TransactionFormState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27E0CDD2F4BCE9E004C744B /* TransactionFormState.swift */; };
 		E27E0CE42F4EBED6004C744B /* CategoryProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27E0CE32F4EBED6004C744B /* CategoryProgressBar.swift */; };
 		E27E0CE62F4EBEE6004C744B /* CategoryListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27E0CE52F4EBEE6004C744B /* CategoryListRow.swift */; };
 		E284D49F2C28CA8900F72684 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D49E2C28CA8900F72684 /* ChartView.swift */; };
-		E284D4AC2C3CF42800F72684 /* TileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4AA2C3CF42800F72684 /* TileView.swift */; };
-		E284D4B22C3CF44700F72684 /* Bucket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4B12C3CF43800F72684 /* Bucket.swift */; };
 		E284D4C42C44F49A00F72684 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E284D4C32C44F49A00F72684 /* FirebaseAuth */; };
 		E284D4C62C44F49A00F72684 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E284D4C52C44F49A00F72684 /* FirebaseDatabaseSwift */; };
 		E284D4CC2C44FDC500F72684 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E284D4CA2C44FDC300F72684 /* DataManager.swift */; };
 		E2866C2A2F07574800DB6CE3 /* TransactionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C292F07574800DB6CE3 /* TransactionDetailView.swift */; };
 		E2866C2B2F07574800DB6CE3 /* DetailRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C282F07574800DB6CE3 /* DetailRow.swift */; };
 		E2866C332F2349B300DB6CE3 /* TrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C322F2349B300DB6CE3 /* TrendsView.swift */; };
-		E2866C352F2349C500DB6CE3 /* SpendingBarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C342F2349C500DB6CE3 /* SpendingBarChartView.swift */; };
-		E2866C372F234B3100DB6CE3 /* SpendingLineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C362F234B3100DB6CE3 /* SpendingLineChartView.swift */; };
 		E2866C3B2F28935200DB6CE3 /* DonutChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C392F28935200DB6CE3 /* DonutChartView.swift */; };
 		E2866C3C2F28935200DB6CE3 /* CategoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C382F28935200DB6CE3 /* CategoryListView.swift */; };
 		E2866C3D2F28935200DB6CE3 /* SummaryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2866C3A2F28935200DB6CE3 /* SummaryCardView.swift */; };
@@ -76,19 +71,14 @@
 		E253C9102C61D5AC00739FAD /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		E27223DD2BF9C2FE0065089A /* AccountStatement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountStatement.swift; sourceTree = "<group>"; };
 		E27E0CD32F3C4B3E004C744B /* TransactionCategoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategoryProtocol.swift; sourceTree = "<group>"; };
-		E27E0CD92F3C50BE004C744B /* TransactionAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionAdditions.swift; sourceTree = "<group>"; };
 		E27E0CDD2F4BCE9E004C744B /* TransactionFormState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionFormState.swift; sourceTree = "<group>"; };
 		E27E0CE32F4EBED6004C744B /* CategoryProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryProgressBar.swift; sourceTree = "<group>"; };
 		E27E0CE52F4EBEE6004C744B /* CategoryListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListRow.swift; sourceTree = "<group>"; };
 		E284D49E2C28CA8900F72684 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
-		E284D4AA2C3CF42800F72684 /* TileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileView.swift; sourceTree = "<group>"; };
-		E284D4B12C3CF43800F72684 /* Bucket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bucket.swift; sourceTree = "<group>"; };
 		E284D4CA2C44FDC300F72684 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		E2866C282F07574800DB6CE3 /* DetailRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRow.swift; sourceTree = "<group>"; };
 		E2866C292F07574800DB6CE3 /* TransactionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailView.swift; sourceTree = "<group>"; };
 		E2866C322F2349B300DB6CE3 /* TrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendsView.swift; sourceTree = "<group>"; };
-		E2866C342F2349C500DB6CE3 /* SpendingBarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpendingBarChartView.swift; sourceTree = "<group>"; };
-		E2866C362F234B3100DB6CE3 /* SpendingLineChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpendingLineChartView.swift; sourceTree = "<group>"; };
 		E2866C382F28935200DB6CE3 /* CategoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListView.swift; sourceTree = "<group>"; };
 		E2866C392F28935200DB6CE3 /* DonutChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonutChartView.swift; sourceTree = "<group>"; };
 		E2866C3A2F28935200DB6CE3 /* SummaryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryCardView.swift; sourceTree = "<group>"; };
@@ -159,7 +149,6 @@
 				DEF3CAFA2B61BD2000C926ED /* Model */,
 				DEF8FE1A2B6B988C00D10468 /* Utilities */,
 				E288FB112C275E3400B6D57A /* Views */,
-				E288FB0F2C275E1800B6D57A /* iOS */,
 				DEF3CAE92B61BB9500C926ED /* Assets.xcassets */,
 				DEF3CAEB2B61BB9500C926ED /* Preview Content */,
 			);
@@ -191,7 +180,6 @@
 		DEF8FE1A2B6B988C00D10468 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				E27E0CD92F3C50BE004C744B /* TransactionAdditions.swift */,
 				E253C8F42C4C98E700739FAD /* Constants.swift */,
 				DEF8FE1B2B6B989A00D10468 /* Extensions.swift */,
 			);
@@ -209,22 +197,6 @@
 				E2866C322F2349B300DB6CE3 /* TrendsView.swift */,
 			);
 			path = Trends;
-			sourceTree = "<group>";
-		};
-		E284D4AB2C3CF42800F72684 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				E284D4AA2C3CF42800F72684 /* TileView.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		E284D4B02C3CF43200F72684 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				E284D4B12C3CF43800F72684 /* Bucket.swift */,
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		E2866C2F2F0797A900DB6CE3 /* Forms */ = {
@@ -259,15 +231,6 @@
 			path = Data;
 			sourceTree = "<group>";
 		};
-		E288FB0F2C275E1800B6D57A /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				E284D4B02C3CF43200F72684 /* Models */,
-				E284D4AB2C3CF42800F72684 /* Views */,
-			);
-			path = iOS;
-			sourceTree = "<group>";
-		};
 		E288FB112C275E3400B6D57A /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -280,8 +243,6 @@
 				DEF3CAE72B61BB9300C926ED /* ContentView.swift */,
 				DE9AF9B42BA2C4AF00D1F4DC /* PieChartView.swift */,
 				E253C9102C61D5AC00739FAD /* SignInView.swift */,
-				E2866C342F2349C500DB6CE3 /* SpendingBarChartView.swift */,
-				E2866C362F234B3100DB6CE3 /* SpendingLineChartView.swift */,
 				E2992FD62EA7439D00E86606 /* SummaryView.swift */,
 			);
 			path = Views;
@@ -404,7 +365,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E27E0CDA2F3C50BE004C744B /* TransactionAdditions.swift in Resources */,
 				DEF3CAED2B61BB9500C926ED /* Preview Assets.xcassets in Resources */,
 				DEF3CAEA2B61BB9500C926ED /* Assets.xcassets in Resources */,
 				E2992F832E91DDFE00E86606 /* GoogleService-Info.plist in Resources */,
@@ -421,7 +381,6 @@
 				E27223DE2BF9C2FE0065089A /* AccountStatement.swift in Sources */,
 				E2992FD02EA7373300E86606 /* TransactionFormView.swift in Sources */,
 				DE9AF9B52BA2C4AF00D1F4DC /* PieChartView.swift in Sources */,
-				E2866C372F234B3100DB6CE3 /* SpendingLineChartView.swift in Sources */,
 				E2992FCE2EA7372900E86606 /* TransactionsView.swift in Sources */,
 				E253C8F02C4C74D100739FAD /* TransactionView.swift in Sources */,
 				E27E0CE42F4EBED6004C744B /* CategoryProgressBar.swift in Sources */,
@@ -429,7 +388,6 @@
 				DE9AF9312B7851F700D1F4DC /* ImportTransactionsView.swift in Sources */,
 				E2992FB22EA2036000E86606 /* AccountsSettingsView.swift in Sources */,
 				E253C9112C61D5B100739FAD /* SignInView.swift in Sources */,
-				E2866C352F2349C500DB6CE3 /* SpendingBarChartView.swift in Sources */,
 				E2992FBD2EA209E900E86606 /* AccountFormView.swift in Sources */,
 				E2992FE12EA9EBC900E86606 /* ImportBatch.swift in Sources */,
 				E2866C2A2F07574800DB6CE3 /* TransactionDetailView.swift in Sources */,
@@ -438,7 +396,6 @@
 				E253C8F62C4C98EA00739FAD /* Constants.swift in Sources */,
 				E2992FD72EA7439D00E86606 /* SummaryView.swift in Sources */,
 				E284D4CC2C44FDC500F72684 /* DataManager.swift in Sources */,
-				E284D4AC2C3CF42800F72684 /* TileView.swift in Sources */,
 				E2866C332F2349B300DB6CE3 /* TrendsView.swift in Sources */,
 				E284D49F2C28CA8900F72684 /* ChartView.swift in Sources */,
 				E2866C3B2F28935200DB6CE3 /* DonutChartView.swift in Sources */,
@@ -453,7 +410,6 @@
 				E252B50B2FA1D0010064A197 /* DataManager+DataSource.swift in Sources */,
 				DEF3CAE62B61BB9300C926ED /* MulaApp.swift in Sources */,
 				E2992FEB2EAF39C700E86606 /* AccountsView.swift in Sources */,
-				E284D4B22C3CF44700F72684 /* Bucket.swift in Sources */,
 				DEF8FE1C2B6B989A00D10468 /* Extensions.swift in Sources */,
 				E2992FB42EA2036E00E86606 /* AddAccountSheet.swift in Sources */,
 				E2992FB02EA2030700E86606 /* Account.swift in Sources */,
