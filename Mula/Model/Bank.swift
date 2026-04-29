@@ -14,6 +14,7 @@ enum Bank: String, CaseIterable, Codable, Identifiable {
 
     var id: String { rawValue }
 
+    // credit card accounts only
     var accountId: UUID {
         switch self {
         case .apple:

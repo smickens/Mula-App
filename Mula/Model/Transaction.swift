@@ -11,6 +11,7 @@ import SwiftUI
 struct Transaction: Identifiable, Codable, Hashable {
     let id: UUID
 
+    // TODO: later try to change to let
     var title: String
     var date: Date
     var kind: TransactionKind
@@ -62,6 +63,7 @@ enum TransactionKind: Codable, Hashable {
         let destinationAccountId: UUID = Account.default
     }
 
+    // TODO: rename categoryDisplayName or don't have the convenience accessor here ?
     var displayName: String {
         switch self {
         case .expense(let category): return category.displayName

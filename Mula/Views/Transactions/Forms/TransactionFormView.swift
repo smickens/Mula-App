@@ -133,7 +133,7 @@ struct TransactionFormView: View {
                     }
                 }
                 .buttonStyle(.borderedProminent)
-                .keyboardShortcut(.defaultAction)
+//                .keyboardShortcut(.defaultAction)
             }
             .padding(.top, 12)
         }

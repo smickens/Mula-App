@@ -12,6 +12,7 @@ struct Account: Identifiable, Codable, Hashable {
     var name: String
     var type: AccountType
 
+    // TODO: default should read from DataManager instead ?
     static let `default`: UUID = UUID(uuidString: "781259EA-A78D-431A-B697-3EC87A9183D2")!
 
     init(id: UUID = UUID(), name: String, type: AccountType) {

@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// TODO: add deleting whole import batch and associated expenses (with confirmation)
+
 struct ImportTransactionsView: View {
     @Environment(DataManager.self) private var dataManager
     @Environment(\.dismiss) private var dismiss
