@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,6 +14,8 @@
 		DEF3CAEA2B61BB9500C926ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEF3CAE92B61BB9500C926ED /* Assets.xcassets */; };
 		DEF3CAED2B61BB9500C926ED /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEF3CAEC2B61BB9500C926ED /* Preview Assets.xcassets */; };
 		DEF8FE1C2B6B989A00D10468 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF8FE1B2B6B989A00D10468 /* Extensions.swift */; };
+		E252B5072F85810E0064A197 /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E252B5062F85810E0064A197 /* DataSource.swift */; };
+		E252B5092FA1B7770064A197 /* FirebaseDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E252B5082FA1B7770064A197 /* FirebaseDataSource.swift */; };
 		E253C8F02C4C74D100739FAD /* TransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8EF2C4C74D100739FAD /* TransactionView.swift */; };
 		E253C8F62C4C98EA00739FAD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C8F42C4C98E700739FAD /* Constants.swift */; };
 		E253C9112C61D5B100739FAD /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E253C9102C61D5AC00739FAD /* SignInView.swift */; };
@@ -72,6 +74,8 @@
 		DEF3CAE92B61BB9500C926ED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DEF3CAEC2B61BB9500C926ED /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		DEF8FE1B2B6B989A00D10468 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		E252B5062F85810E0064A197 /* DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSource.swift; sourceTree = "<group>"; };
+		E252B5082FA1B7770064A197 /* FirebaseDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDataSource.swift; sourceTree = "<group>"; };
 		E253C8EF2C4C74D100739FAD /* TransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionView.swift; sourceTree = "<group>"; };
 		E253C8F42C4C98E700739FAD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		E253C9102C61D5AC00739FAD /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
@@ -119,6 +123,10 @@
 		E2992FE82EAF146D00E86606 /* ImportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportsView.swift; sourceTree = "<group>"; };
 		E2992FEA2EAF39C700E86606 /* AccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		E27E0CEA2F82F297004C744B /* Test Data */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Test Data"; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		DEF3CADF2B61BB9200C926ED /* Frameworks */ = {
@@ -250,6 +258,9 @@
 		E288FB0E2C275D7D00B6D57A /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				E252B5062F85810E0064A197 /* DataSource.swift */,
+				E252B5082FA1B7770064A197 /* FirebaseDataSource.swift */,
+				E27E0CEA2F82F297004C744B /* Test Data */,
 				E27E0CDF2F4BECFD004C744B /* FirebaseRepresentable.swift */,
 				E27E0CE12F4BEE62004C744B /* Transaction+FirebaseRepresentable.swift */,
 				E284D4CA2C44FDC300F72684 /* DataManager.swift */,
@@ -352,6 +363,9 @@
 			);
 			dependencies = (
 			);
+			fileSystemSynchronizedGroups = (
+				E27E0CEA2F82F297004C744B /* Test Data */,
+			);
 			name = Mula;
 			packageProductDependencies = (
 				E284D4C32C44F49A00F72684 /* FirebaseAuth */,
@@ -447,6 +461,7 @@
 				E2992FE72EA9F3D500E86606 /* Bank.swift in Sources */,
 				E27E0CDE2F4BCE9E004C744B /* TransactionFormState.swift in Sources */,
 				E27E0CE22F4BEE62004C744B /* Transaction+FirebaseRepresentable.swift in Sources */,
+				E252B5092FA1B7770064A197 /* FirebaseDataSource.swift in Sources */,
 				E2992FC82EA7349500E86606 /* Transaction.swift in Sources */,
 				E2992FD92EA9E6C000E86606 /* SettingsView.swift in Sources */,
 				DEF3CAE82B61BB9300C926ED /* ContentView.swift in Sources */,
@@ -463,6 +478,7 @@
 				E2992FD42EA7373E00E86606 /* EditTransactionFormView.swift in Sources */,
 				E2992FBF2EA20A1B00E86606 /* EditAccountSheet.swift in Sources */,
 				E2992FDC2EA9E6E500E86606 /* DebugSettingsView.swift in Sources */,
+				E252B5072F85810E0064A197 /* DataSource.swift in Sources */,
 				E27E0CD42F3C4B3E004C744B /* TransactionCategoryProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -594,6 +610,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Mula/Mula.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -611,6 +628,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kayapps.Mula;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = macosx;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -625,6 +643,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Mula/Mula.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -642,6 +661,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kayapps.Mula;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = macosx;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

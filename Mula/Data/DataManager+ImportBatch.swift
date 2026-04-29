@@ -6,74 +6,53 @@
 //
 
 import Foundation
-import FirebaseDatabase
 
 extension DataManager {
 
     func importTransactions(_ transactions: [Transaction], fileName: String? = nil) {
         let batch = ImportBatch(name: fileName)
 
-        for var transaction in transactions {
-            transaction.importBatchId = batch.id
-            addTransaction(transaction)
-        }
+        Task {
+            do {
+                var importedTransactions: [Transaction] = []
 
-        addImportBatch(batch)
-
-        print("✅ Imported \(transactions.count) transactions in batch \(batch.id) (\(fileName ?? "unnamed file"))")
-    }
-
-    /// Loads ImportBatches from Firebase.
-    func loadImportBatches() {
-        importBatches.removeAll()
-
-        importBatchRef.getData { [weak self] error, snapshot in
-            guard let self = self else { return }
-
-            if let error {
-                print("❌ Error loading import batches: \(error.localizedDescription)")
-                return
-            }
-
-            guard let data = snapshot?.value as? [String: [String: Any]] else {
-                print("ℹ️ No import batch data found.")
-                return
-            }
-
-            for (firebaseKey, firebaseData) in data {
-                guard let id = UUID(uuidString: firebaseKey),
-                      let timestamp = firebaseData["date"] as? TimeInterval else {
-                    print("⚠️ Skipping malformed batch record.")
-                    continue
+                for var transaction in transactions {
+                    transaction.importBatchId = batch.id
+                    try await dataSource.addTransaction(transaction)
+                    importedTransactions.append(transaction)
                 }
 
-                let batch = ImportBatch(
-                    id: id,
-                    date: Date(timeIntervalSince1970: timestamp),
-                    name: firebaseData["name"] as? String
-                )
-                self.importBatches.append(batch)
-            }
+                try await dataSource.addImportBatch(batch)
 
-            print("✅ Loaded \(self.importBatches.count) import batches from Firebase.")
+                self.transactions.append(contentsOf: importedTransactions)
+                importBatches.append(batch)
+
+                print("✅ Imported \(transactions.count) transactions in batch \(batch.id) (\(fileName ?? "unnamed file"))")
+            } catch {
+                print("❌ Failed to import transactions: \(error.localizedDescription)")
+            }
         }
     }
 
-    /// Adds a new ImportBatch to Firebase.
+    /// Loads import batches from the active data source.
+    func loadImportBatches() {
+        Task {
+            do {
+                importBatches = try await dataSource.loadImportBatches()
+            } catch {
+                print("❌ Error loading import batches: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    /// Adds a new import batch to the active data source.
     func addImportBatch(_ batch: ImportBatch) {
-        let importBatchDictionary: [String: Any] = [
-            "date": batch.date.timeIntervalSince1970,
-            "name": batch.name ?? ""
-        ]
-
-        importBatchRef.child(batch.firebaseKey).setValue(importBatchDictionary) { [weak self] error, _ in
-            guard let self = self else { return }
-
-            if let error {
+        Task {
+            do {
+                try await dataSource.addImportBatch(batch)
+                importBatches.append(batch)
+            } catch {
                 print("❌ Error adding import batch: \(error.localizedDescription)")
-            } else {
-                self.importBatches.append(batch)
-                print("✅ Added new import batch: \(String(describing: batch.name))")
             }
         }
     }

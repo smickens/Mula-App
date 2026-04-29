@@ -6,106 +6,54 @@
 //
 
 import Foundation
-import FirebaseDatabase
 
 extension DataManager {
 
-    /// Loads accounts from Firebase
+    /// Loads accounts from the active data source.
     func loadAccounts() {
-        accounts.removeAll()
-
-        accountRef.getData { [weak self] error, snapshot in
-            guard let self = self else { return }
-
-            if let error {
-                print("❌ Error getting account data: \(error.localizedDescription)")
-                return
+        Task {
+            do {
+                accounts = try await dataSource.loadAccounts()
+            } catch {
+                print("❌ Error loading accounts: \(error.localizedDescription)")
             }
-
-            guard let value = snapshot?.value else {
-                print("⚠️ No account data available")
-                return
-            }
-
-            if let data = value as? [String: [String: Any]] {
-                for (accountId, accountData) in data {
-                    guard let name = accountData["name"] as? String,
-                          let typeString = accountData["type"] as? String,
-                          let type = AccountType.get(from: typeString)
-                    else {
-                        print("⚠️ Skipping malformed account: \(accountData)")
-                        continue
-                    }
-
-                    let account = Account(
-                        id: UUID(uuidString: accountId) ?? UUID(),
-                        name: name,
-                        type: type
-                    )
-
-                    self.accounts.append(account)
-                }
-            }
-
-            print("✅ Loaded \(accounts.count) accounts from Firebase.")
         }
     }
 
-    /// Adds a new account to Firebase
+    /// Adds a new account to the active data source.
     func addAccount(_ account: Account) {
-        let accountDictionary: [String: Any] = [
-            "name": account.name,
-            "type": account.type.rawValue
-        ]
-
-        let accountID = account.id.uuidString
-
-        accountRef.child(accountID).setValue(accountDictionary) { [weak self] error, _ in
-            guard let self = self else { return }
-
-            if let error {
+        Task {
+            do {
+                try await dataSource.addAccount(account)
+                accounts.append(account)
+            } catch {
                 print("❌ Error adding account: \(error.localizedDescription)")
-            } else {
-                self.accounts.append(account)
-                print("✅ Added new account \(account.name)")
             }
         }
     }
 
-    /// Updates an existing account in Firebase
+    /// Updates an existing account in the active data source.
     func updateAccount(_ account: Account) {
-        let accountDictionary: [String: Any] = [
-            "name": account.name,
-            "type": account.type.rawValue
-        ]
-
-        accountRef.child(account.id.uuidString).updateChildValues(accountDictionary) { [weak self] error, _ in
-            if let error {
+        Task {
+            do {
+                try await dataSource.updateAccount(account)
+                if let index = accounts.firstIndex(where: { $0.id == account.id }) {
+                    accounts[index] = account
+                }
+            } catch {
                 print("❌ Error updating account: \(error.localizedDescription)")
-                return
-            }
-
-            guard let self = self else { return }
-
-            print("✅ Updated account \(account.name)")
-
-            // Update locally so UI reflects the change immediately
-            if let index = self.accounts.firstIndex(where: { $0.id == account.id }) {
-                self.accounts[index] = account
             }
         }
     }
 
-    /// Deletes an account from Firebase
+    /// Deletes an account from the active data source.
     func deleteAccount(_ account: Account) {
-        accountRef.child(account.id.uuidString).removeValue { [weak self] error, _ in
-            guard let self = self else { return }
-
-            if let error {
+        Task {
+            do {
+                try await dataSource.deleteAccount(account)
+                accounts.removeAll { $0.id == account.id }
+            } catch {
                 print("❌ Error deleting account: \(error.localizedDescription)")
-            } else if let index = self.accounts.firstIndex(where: { $0.id == account.id }) {
-                self.accounts.remove(at: index)
-                print("✅ Deleted account with id \(account.id) name \(account.name)")
             }
         }
     }

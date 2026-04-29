@@ -5,35 +5,77 @@
 //  Created by Shanti Mickens on 7/14/24.
 //
 
-import Firebase
-import FirebaseDatabase
+import Foundation
 
 @Observable
+@MainActor
 final class DataManager {
 
     static let shared = DataManager()
 
+    private let firebaseDataSource = FirebaseDataSource()
+    private let testDataSource = TestDataSource()
+    var dataSource: any DataSource
+    private var loadTask: Task<Void, Never>?
+
     private init() {
-        let dbRef = Database.database().reference()
-        accountRef = dbRef.child("account")
-        importBatchRef = dbRef.child("importBatch")
-        transactionRef = dbRef.child("transaction")
+        dataSource = firebaseDataSource
 
         loadData()
     }
-
-    internal var accountRef: DatabaseReference
-    internal var importBatchRef: DatabaseReference
-    internal var transactionRef: DatabaseReference
 
     var accounts: [Account] = []
     var importBatches: [ImportBatch] = []
     var transactions: [Transaction] = []
 
+    var useTestData: Bool = false {
+        didSet {
+            print("🔄 Switching to \(useTestData ? "TEST" : "FIREBASE") mode")
+            dataSource = useTestData ? testDataSource : firebaseDataSource
+
+            print("Force reloading data...")
+            loadData()
+        }
+    }
+
     func loadData() {
-        loadAccounts()
-        loadImportBatches()
-        loadTransactions()
+        loadTask?.cancel()
+
+        accounts.removeAll()
+        importBatches.removeAll()
+        transactions.removeAll()
+
+        let dataSource = dataSource
+
+        loadTask = Task {
+            await reloadData(from: dataSource)
+        }
+    }
+
+    private func reloadData(from dataSource: any DataSource) async {
+        do {
+            async let loadedAccounts = dataSource.loadAccounts()
+            async let loadedImportBatches = dataSource.loadImportBatches()
+            async let loadedTransactions = dataSource.loadTransactions()
+
+            let (accounts, importBatches, transactions) = try await (
+                loadedAccounts,
+                loadedImportBatches,
+                loadedTransactions
+            )
+
+            try Task.checkCancellation()
+
+            self.accounts = accounts
+            self.importBatches = importBatches
+            self.transactions = transactions
+
+            print("✅ Loaded \(useTestData ? "test" : "Firebase") data: \(accounts.count) accounts, \(importBatches.count) batches, \(transactions.count) transactions")
+        } catch is CancellationError {
+            print("ℹ️ Load cancelled.")
+        } catch {
+            print("❌ Failed to load data: \(error.localizedDescription)")
+        }
     }
 
     // MARK: - Transactions Queries

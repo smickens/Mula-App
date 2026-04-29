@@ -9,9 +9,14 @@ import SwiftUI
 
 struct DebugSettingsView: View {
     @Environment(DataManager.self) private var dataManager
+
+    // Force Reload
     @State private var isReloading = false
     @State private var reloadMessage: String?
-    @State private var showingConfirmation = false
+    @State private var showForceReloadConfirmation = false
+
+    // Test Data
+    @State private var useTestData = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -22,7 +27,7 @@ struct DebugSettingsView: View {
 
             VStack(alignment: .leading, spacing: 10) {
                 Button {
-                    showingConfirmation = true
+                    showForceReloadConfirmation = true
                 } label: {
                     if isReloading {
                         ProgressView()
@@ -41,6 +46,11 @@ struct DebugSettingsView: View {
                         .foregroundColor(.secondary)
                         .padding(.top, 6)
                 }
+
+                Toggle("Use Test Data", isOn: $useTestData)
+                    .onChange(of: useTestData) { _, newValue in
+                        dataManager.useTestData = newValue
+                    }
             }
 
             Spacer()
@@ -48,7 +58,7 @@ struct DebugSettingsView: View {
         .padding(30)
         .confirmationDialog(
             "Force Reload Data",
-            isPresented: $showingConfirmation,
+            isPresented: $showForceReloadConfirmation,
             titleVisibility: .visible
         ) {
             Button("Force Reload", role: .destructive) {
