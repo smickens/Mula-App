@@ -11,6 +11,7 @@ struct TrendsView: View {
     @Environment(DataManager.self) private var dataManager
     
     @State private var selectedDate: Date = Date()
+    @State private var isShowingMonthYearPicker = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
@@ -78,23 +79,51 @@ struct TrendsView: View {
     }
 
     private func monthSelector() -> some View {
-        HStack {
+        HStack(spacing: 8) {
             Button(action: {
-                selectedDate = Calendar.current.date(byAdding: .month, value: -1, to: selectedDate) ?? Date()
+                moveSelectedMonth(by: -1)
             }) {
                 Image(systemName: "chevron.left")
             }
-            
-            Text(selectedDate.monthYearFormat())
+            .buttonStyle(.borderless)
+
+            Button {
+                isShowingMonthYearPicker.toggle()
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "calendar")
+
+                    Text(selectedDate.monthYearFormat())
+                        .fontWeight(.semibold)
+
+                    Image(systemName: "chevron.down")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
                 .font(.title2)
-                .fontWeight(.semibold)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(Color(NSColor.controlBackgroundColor))
+                .cornerRadius(8)
+            }
+            .buttonStyle(.plain)
+            .popover(isPresented: $isShowingMonthYearPicker, arrowEdge: .bottom) {
+                MonthYearPicker(selectedDate: $selectedDate)
+                    .padding()
+                    .frame(width: 320)
+            }
             
             Button(action: {
-                selectedDate = Calendar.current.date(byAdding: .month, value: 1, to: selectedDate) ?? Date()
+                moveSelectedMonth(by: 1)
             }) {
                 Image(systemName: "chevron.right")
             }
+            .buttonStyle(.borderless)
         }
+    }
+
+    private func moveSelectedMonth(by value: Int) {
+        selectedDate = Calendar.current.date(byAdding: .month, value: value, to: selectedDate) ?? Date()
     }
     
     private func summaryGrid() -> some View {
@@ -159,10 +188,99 @@ struct TrendsView: View {
     }
 }
 
+// TODO: move to separate file
+private struct MonthYearPicker: View {
+    @Binding var selectedDate: Date
+
+    @State private var selectedMonth: Int = Calendar.current.component(.month, from: Date())
+    @State private var selectedYear: Int = Calendar.current.component(.year, from: Date())
+
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 3)
+    private let months = Calendar.current.shortMonthSymbols
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack {
+                Button {
+                    selectedYear -= 1
+                    applySelection()
+                } label: {
+                    Image(systemName: "chevron.left")
+                }
+                .buttonStyle(.borderless)
+
+                Spacer()
+
+                Text(String(selectedYear))
+                    .font(.headline)
+                    .monospacedDigit()
+
+                Spacer()
+
+                Button {
+                    selectedYear += 1
+                    applySelection()
+                } label: {
+                    Image(systemName: "chevron.right")
+                }
+                .buttonStyle(.borderless)
+            }
+
+            LazyVGrid(columns: columns, spacing: 8) {
+                ForEach(1...12, id: \.self) { month in
+                    Button {
+                        selectedMonth = month
+                        applySelection()
+                    } label: {
+                        Text(months[month - 1])
+                            .font(.subheadline)
+                            .fontWeight(selectedMonth == month ? .semibold : .regular)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 8)
+                            .background(selectedMonth == month ? Color.accentColor : Color(NSColor.controlBackgroundColor))
+                            .foregroundColor(selectedMonth == month ? .white : .primary)
+                            .cornerRadius(6)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+        .onAppear {
+            selectedMonth = Calendar.current.component(.month, from: selectedDate)
+            selectedYear = Calendar.current.component(.year, from: selectedDate)
+        }
+    }
+
+    private func applySelection() {
+        var components = Calendar.current.dateComponents([.day, .hour, .minute, .second], from: selectedDate)
+        components.year = selectedYear
+        components.month = selectedMonth
+        components.day = min(components.day ?? 1, daysInSelectedMonth)
+
+        if let date = Calendar.current.date(from: components) {
+            selectedDate = date
+        }
+    }
+
+    private var daysInSelectedMonth: Int {
+        var components = DateComponents()
+        components.year = selectedYear
+        components.month = selectedMonth
+        components.day = 1
+
+        guard let date = Calendar.current.date(from: components),
+              let range = Calendar.current.range(of: .day, in: .month, for: date) else {
+            return 28
+        }
+
+        return range.count
+    }
+}
+
 extension Date {
     func monthYearFormat() -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM YYYY"
+        formatter.dateFormat = "MMMM yyyy"
         return formatter.string(from: self)
     }
 }
