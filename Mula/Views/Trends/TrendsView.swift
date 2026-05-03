@@ -11,22 +11,12 @@ struct TrendsView: View {
     @Environment(DataManager.self) private var dataManager
     
     @State private var selectedDate: Date = Date()
-    @State private var selectedCategoryFilter: (any TransactionCategoryProtocol)?
-    @State private var selectedAccountFilter: Account?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
             // MARK: - Header
             VStack(alignment: .leading) {
-                Text("Spending Breakdown")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                
-                HStack {
-                    monthSelector()
-                    Spacer()
-                    filterMenus()
-                }
+                monthSelector()
             }
             .padding(.horizontal)
             
@@ -67,14 +57,6 @@ struct TrendsView: View {
 
         var filteredTransactions = dataManager.transactions(from: dateInterval.start, to: dateInterval.end)
 
-        if let category = selectedCategoryFilter {
-            filteredTransactions = filteredTransactions.filter { $0.category.id == category.id }
-        }
-
-        if let account = selectedAccountFilter {
-            filteredTransactions = filteredTransactions.filter { $0.sourceAccountId == account.id }
-        }
-
         let totalSpending = filteredTransactions.reduce(0) { $0 + $1.amount }
         let spendingByCategory = dataManager.groupSpendingByCategory(transactions: filteredTransactions)
 
@@ -112,35 +94,6 @@ struct TrendsView: View {
             }) {
                 Image(systemName: "chevron.right")
             }
-        }
-    }
-    
-    private func filterMenus() -> some View {
-        HStack {
-            Menu {
-                Button("All Categories", action: { selectedCategoryFilter = nil })
-
-                let allCategories: [any TransactionCategoryProtocol] = ExpenseCategory.allCases + IncomeCategory.allCases
-
-                ForEach(allCategories, id: \.id) { category in
-                    Button(category.displayName, action: { selectedCategoryFilter = category })
-                }
-            } label: {
-                Text(selectedCategoryFilter?.displayName ?? "All Categories")
-                Image(systemName: "chevron.down")
-            }
-            .menuStyle(.borderlessButton)
-            
-            Menu {
-                Button("All Accounts", action: { selectedAccountFilter = nil })
-                ForEach(dataManager.accounts) { account in
-                    Button(account.name, action: { selectedAccountFilter = account })
-                }
-            } label: {
-                Text(selectedAccountFilter?.name ?? "All Accounts")
-                Image(systemName: "chevron.down")
-            }
-            .menuStyle(.borderlessButton)
         }
     }
     
