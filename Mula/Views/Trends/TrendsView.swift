@@ -125,7 +125,9 @@ struct TrendsView: View {
     private func moveSelectedMonth(by value: Int) {
         selectedDate = Calendar.current.date(byAdding: .month, value: value, to: selectedDate) ?? Date()
     }
-    
+
+    // TODO: rearrange to have 4 tiles under the pie chart and give the category breakdown more vertical
+    // space to show more things
     private func summaryGrid() -> some View {
         Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 24) {
             GridRow {

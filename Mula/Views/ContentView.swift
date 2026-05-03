@@ -10,15 +10,15 @@ import Firebase
 import FirebaseAuth
 
 enum TabName: String, CaseIterable {
+    case trends = "Trends"
     case accounts = "Accounts"
     case transactions = "Transactions"
-    case trends = "Trends"
     case imports = "Imports"
     case settings = "Settings"
 }
 
 struct ContentView: View {
-    @State private var selectedTab: TabName = .transactions
+    @State private var selectedTab: TabName = .trends
 
     var body: some View {
         NavigationSplitView {
