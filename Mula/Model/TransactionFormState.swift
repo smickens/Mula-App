@@ -22,6 +22,8 @@ struct TransactionFormState {
     var sourceAccountId: UUID = Account.default
     var destinationAccountId: UUID = Account.default
 
+    var importBatchId: UUID? = nil
+
     var category: any TransactionCategoryProtocol {
         switch type {
         case .expense: return expenseCategory
@@ -83,7 +85,8 @@ extension TransactionFormState {
             date: date,
             kind: kind,
             amount: amount,
-            sourceAccountId: sourceAccountId
+            sourceAccountId: sourceAccountId,
+            importBatchId: importBatchId
         )
     }
 }
@@ -94,8 +97,10 @@ extension TransactionFormState {
         self.id = transaction.id
         self.title = transaction.title
         self.date = transaction.date
+        // TODO: add unit tests for this!! and the conversion back, seen errors when the value is over >= 1000 (2980 -> 2)
         self.amountString = Self.decimalToString(transaction.amount)
         self.sourceAccountId = transaction.sourceAccountId
+        self.importBatchId = transaction.importBatchId
 
         switch transaction.kind {
 
