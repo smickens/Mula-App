@@ -131,7 +131,7 @@ extension DataManager {
                 try await dataSource.addImportBatch(batch)
 
                 self.transactions.append(contentsOf: importedTransactions)
-                importBatches.append(batch)
+                importBatches.insert(batch, at: 0)
 
                 print("✅ Imported \(transactions.count) transactions in batch \(batch.id) (\(fileName ?? "unnamed file"))")
             } catch {

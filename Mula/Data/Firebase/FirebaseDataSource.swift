@@ -148,7 +148,11 @@ final class FirebaseDataSource: DataSource {
             )
         }
 
+        // Sort import batches by date added
+        importBatches.sort { $0.date > $1.date }
+
         print("✅ Loaded \(importBatches.count) import batches from Firebase.")
+
         return importBatches
     }
 
