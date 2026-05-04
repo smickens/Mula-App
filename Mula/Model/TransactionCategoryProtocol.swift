@@ -60,6 +60,9 @@ enum ExpenseCategory: String, CaseIterable, TransactionCategoryProtocol {
     }
 }
 
+// TODO: add a page similar to TrendsView that breaks down transactions with income categories
+// breaks down the money i have coming in
+// while TrendsView breaks down the spending that went out
 enum IncomeCategory: String, CaseIterable, TransactionCategoryProtocol {
     case job, refund, dividend, interest, other
 
@@ -96,6 +99,14 @@ enum IncomeCategory: String, CaseIterable, TransactionCategoryProtocol {
     }
 }
 
+// TODO: add an savings/investing category enum
+// it should allow me to break down when i put money into some kind of savings/investing account
+// these accounts will then at times earn interest, dividends, or i may save a checkpoint of what they are valued at (if it's a stock), that may be done with the AccountStatement. still have to figure that out
+// savings, stocks, retirement ? (can mostly all be derived from account?)
+
+
+
+// TODO: later consider removing this category type
 enum TransferCategory: String, CaseIterable, TransactionCategoryProtocol {
     case savings
     case investment
