@@ -71,6 +71,16 @@ enum TransactionKind: Codable, Hashable {
         case .transfer(let category, _): return category.displayName
         }
     }
+
+    var isExpense: Bool {
+        if case .expense = self { return true }
+        return false
+    }
+
+    var isIncome: Bool {
+        if case .income = self { return true }
+        return false
+    }
 }
 
 extension Transaction {
