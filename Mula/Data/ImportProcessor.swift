@@ -74,6 +74,8 @@ struct ImportProcessor {
             t.kind = .expense(.car)
         } else if t.title.localizedCaseInsensitiveContains("return") {
             t.kind = .income(.refund)
+        } else if t.title.localizedCaseInsensitiveContains("Hollister") {
+            t.kind = .expense(.shopping)
         }
     }
 
@@ -125,20 +127,14 @@ struct ImportProcessor {
 
     // MARK: US Bank
 
-    private static let usBankKnownNames: [String: (String, TransactionKind)] = [
-        "ELECTRONIC DEPOSIT APPLE INC.": ("Apple Job", .income(.job)),
+    private static let usBankKnownNames: [String: (String?, TransactionKind)] = [
         "WEB AUTHORIZED PMT VENMO": ("Venmo (out)", .expense(.entertainment)),
         "ELECTRONIC DEPOSIT VENMO": ("Venmo (in)", .income(.other)),
         "ELECTRONIC WITHDRAWAL ATT": ("Internet Bill", .expense(.housing)),
         "ELECTRONIC WITHDRAWAL FID BKG SVC LLC": ("Fidelity Investment", .transfer(.investment)),
-        "ELECTRONIC DEPOSIT APPLE GS SAVINGS": ("Transfer from Apple Savings", .transfer(.other)),
-        "WEB AUTHORIZED PMT APPLE GS SAVINGS": ("Withdrawal to Apple Savings", .transfer(.savings)),
-        "WEB AUTHORIZED PMT APPLECARD GSBANK": ("Apple Card Payment", .transfer(.creditCardPayment)),
-        "WEB AUTHORIZED PMT WELLS FARGO CARD": ("Bilt Card Payment", .transfer(.creditCardPayment)),
-        "WEB AUTHORIZED PMT CHASE CREDIT CRD": ("Chase Card Payment",.transfer(.creditCardPayment)),
-        "MOBILE BANKING PAYMENT TO CREDIT CARD 5895": ("US Bank 5895 Card Payment", .transfer(.creditCardPayment)),
-        "MOBILE BANKING PAYMENT TO CREDIT CARD 9996": ("US Bank 9996 Card Payment",.transfer(.creditCardPayment)),
         "MOBILE CHECK DEPOSIT": ("Mobile Check Deposit", .income(.other)),
+        "ZELLE INSTANT PMT FROM": (nil, .income(.other)),
+        "ZELLE INSTANT PMT TO": (nil, .expense(.entertainment))
     ]
 
     private static func processUSBankTransaction(_ row: String) -> Transaction? {
@@ -152,9 +148,18 @@ struct ImportProcessor {
 
         var title = values[2]
 
+        // Ignore internal transfers between my accounts and maintenance fees that are waived
         let ignored = [
             "MONTHLY MAINTENANCE FEE",
-            "MONTHLY MAINTENANCE FEE WAIVED"
+            "MONTHLY MAINTENANCE FEE WAIVED",
+            "WEB AUTHORIZED PMT APPLECARD GSBANK",        // Apple Card Payment
+            "WEB AUTHORIZED PMT WELLS FARGO CARD",        // Bilt Card Payment
+            "WEB AUTHORIZED PMT CHASE CREDIT CRD",        // Chase Card Paymen
+            "WEB AUTHORIZED PMT APPLE GS SAVINGS",        // Withdrawal to Apple Savings
+            "ELECTRONIC DEPOSIT APPLE GS SAVINGS",        // Transfer from Apple Savings
+            "MOBILE BANKING PAYMENT TO CREDIT CARD 5895", // US Bank 5895 Card Payment
+            "MOBILE BANKING PAYMENT TO CREDIT CARD 9996", // US Bank 9996 Card Payment
+            "ELECTRONIC DEPOSIT APPLE INC."               // Apple Paycheck
         ]
         guard !ignored.contains(title) else {
             print("Skipping transaction row for waived maintenance fee")
@@ -165,7 +170,7 @@ struct ImportProcessor {
         var kind: TransactionKind = .expense(.other)
 
         if let (newTitle, newKind) = usBankKnownNames[title] {
-            title = newTitle
+            title = newTitle ?? title
             kind = newKind
         }
 
