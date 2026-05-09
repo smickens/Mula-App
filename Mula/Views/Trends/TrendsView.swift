@@ -12,37 +12,33 @@ struct TrendsView: View {
     
     @State private var selectedDate: Date = Date()
     @State private var isShowingMonthYearPicker = false
-    
+
+    let kGridSpacing: CGFloat = 24
+    let kCornerRadius: CGFloat = 12
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 24) {
+        VStack(alignment: .leading, spacing: kGridSpacing) {
             // MARK: - Header
-            VStack(alignment: .leading) {
-                monthSelector()
-            }
-            .padding(.horizontal)
-            
+            monthSelector()
+
             // MARK: - Main Content
-            HStack(alignment: .top, spacing: 24) {
-                DonutChartView(spendingByCategory: viewData.spendingByCategory, totalSpending: viewData.totalSpending)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(12)
+            HStack(alignment: .top, spacing: kGridSpacing) {
+                VStack(spacing: kGridSpacing) {
+                    DonutChartView(spendingByCategory: viewData.spendingByCategory, totalSpending: viewData.totalSpending)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(Color(NSColor.controlBackgroundColor))
+                        .cornerRadius(kCornerRadius)
+
+                    summaryGrid()
+                }
 
                 CategoryListView(spendingByCategory: viewData.spendingByCategory, totalSpending: viewData.totalSpending)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(12)
+                    .cornerRadius(kCornerRadius)
             }
-            .padding(.horizontal)
-            
-            // MARK: - Bottom Summary
-            summaryGrid()
-                .padding(.horizontal)
-            
-            Spacer()
         }
-        .padding(.vertical)
-        .background(Color(NSColor.windowBackgroundColor))
+        .padding()
     }
 
     private var viewData: ViewData {
@@ -60,7 +56,7 @@ struct TrendsView: View {
         filteredTransactions = filteredTransactions.filter { $0.kind.isExpense }
 
         let totalSpending = filteredTransactions.reduce(0) { $0 + $1.amount }
-        let spendingByCategory = dataManager.groupSpendingByCategory(transactions: filteredTransactions)
+        let spendingByCategory = dataManager.groupSpendingByCategory(transactions: filteredTransactions, maxCategories: 10)
 
         // TODO: should take into account selectedMonth
         let avgMonthlySpending = dataManager.calculateAverageMonthlySpending(forLastMonths: 12)
@@ -130,7 +126,7 @@ struct TrendsView: View {
     // TODO: rearrange to have 4 tiles under the pie chart and give the category breakdown more vertical
     // space to show more things
     private func summaryGrid() -> some View {
-        Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 24) {
+        Grid(alignment: .leading, horizontalSpacing: kGridSpacing, verticalSpacing: kGridSpacing) {
             GridRow {
                 SummaryCardView(title: "Average Monthly Spending") {
                     Text(viewData.avgMonthlySpending.toCurrency())
