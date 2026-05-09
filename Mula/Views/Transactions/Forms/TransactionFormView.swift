@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-private enum TransactionFieldRowLayout {
-    static let labelWidth: CGFloat = 92
-}
-
 struct TransactionFormView: View {
     @Environment(DataManager.self) private var dataManager
 
@@ -25,6 +21,7 @@ struct TransactionFormView: View {
         static let actionSpacing: CGFloat = 12
         static let actionTopPadding: CGFloat = 4
         static let datePickerWidth: CGFloat = 280
+        static let calendarIconSize: CGFloat = 14
     }
 
     private static let dateFormatter: DateFormatter = {
@@ -72,7 +69,12 @@ struct TransactionFormView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: Layout.outerSpacing) {
-            header
+            if let title {
+                Text(title)
+                    .font(.title2)
+                    .fontWeight(.semibold)
+            }
+
             formCard
 
             if let errorMessage {
@@ -86,72 +88,45 @@ struct TransactionFormView: View {
 }
 
 private extension TransactionFormView {
-    var header: some View {
-        HStack {
-            if let title {
-                Text(title)
-                    .font(.title2)
-                    .fontWeight(.semibold)
-            }
-
-            Spacer()
-        }
-    }
 
     var formCard: some View {
         VStack(alignment: .leading, spacing: Layout.cardSpacing) {
             TransactionTypeSelector(selectedType: $state.type)
             Divider()
 
-            Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: Layout.gridSpacing) {
-                GridRow {
-                    TransactionFieldRow(label: "Title") {
-                        TransactionFieldSurface {
-                            TextField("Coffee, paycheck, rent...", text: $state.title)
-                                .textFieldStyle(.plain)
-                        }
+            Grid(alignment: .leading, horizontalSpacing: Layout.gridSpacing, verticalSpacing: Layout.gridSpacing) {
+                TransactionFieldRow(label: "Title") {
+                    TextField("Coffee, paycheck, rent...", text: $state.title)
+                        .textFieldStyle(.plain)
+                }
+
+                TransactionFieldRow(label: "Amount") {
+                    HStack(spacing: 8) {
+                        Text("$")
+                            .foregroundColor(.secondary)
+                            .frame(width: 18, alignment: .leading)
+
+                        TextField("0.00", text: $state.amountString)
+                            .textFieldStyle(.plain)
                     }
                 }
 
-                GridRow {
-                    TransactionFieldRow(label: "Amount") {
-                        TransactionFieldSurface {
-                            HStack(spacing: 8) {
-                                Text("$")
-                                    .foregroundColor(.secondary)
-                                    .frame(width: 18, alignment: .leading)
-
-                                TextField("0.00", text: $state.amountString)
-                                    .textFieldStyle(.plain)
-                            }
-                        }
-                    }
+                TransactionFieldRow(label: state.type == .transfer ? "From" : "Account") {
+                    sourceAccountField
                 }
 
-                GridRow {
-                    TransactionFieldRow(label: state.type == .transfer ? "From" : "Account") {
-                        sourceAccountField
-                    }
-                }
-
-                GridRow {
-                    TransactionFieldRow(label: "Category") {
-                        categoryField
-                    }
+                TransactionFieldRow(label: "Category") {
+                    categoryField
                 }
 
                 if state.type == .transfer {
-                    GridRow {
-                        TransactionFieldRow(label: "To") {
-                            destinationAccountField
-                        }
+                    TransactionFieldRow(label: "To") {
+                        destinationAccountField
                     }
                 }
 
-                GridRow {
-                    TransactionFieldRow(label: "Date") {
-                        dateField
-                    }
+                TransactionFieldRow(label: "Date") {
+                    dateField
                 }
             }
         }
@@ -223,10 +198,15 @@ private extension TransactionFormView {
         Button {
             isShowingDatePicker.toggle()
         } label: {
-            TransactionFieldButtonLabel(
-                title: formattedDate,
-                systemImage: "calendar"
-            )
+            Text(formattedDate)
+                .foregroundColor(.primary)
+                .lineLimit(1)
+
+            Spacer()
+
+            Image(systemName: "calendar")
+                .font(.system(size: Layout.calendarIconSize, weight: .semibold))
+                .foregroundColor(.secondary)
         }
         .buttonStyle(.plain)
         .popover(isPresented: $isShowingDatePicker, arrowEdge: .bottom) {
@@ -240,14 +220,14 @@ private extension TransactionFormView {
 
     var actionRow: some View {
         HStack(spacing: Layout.actionSpacing) {
+            Spacer()
+
             if let onCancel {
                 Button("Cancel", role: .cancel) {
                     onCancel()
                 }
                 .buttonStyle(TransactionActionButtonStyle(kind: .secondary))
             }
-
-            Spacer()
 
             Button("Save") {
                 do {
@@ -258,6 +238,8 @@ private extension TransactionFormView {
                 }
             }
             .buttonStyle(TransactionActionButtonStyle(kind: .primary))
+
+            Spacer()
         }
         .padding(.top, Layout.actionTopPadding)
     }
@@ -275,17 +257,26 @@ private extension TransactionFormView {
     }
 }
 
+private enum TransactionFieldRowLayout {
+    static let labelWidth: CGFloat = 92
+}
+
 private struct TransactionFieldRow<Content: View>: View {
     let label: String
     @ViewBuilder let content: Content
 
     var body: some View {
-        Text(label)
-            .font(.subheadline)
-            .fontWeight(.semibold)
-            .foregroundColor(.secondary)
-            .frame(width: TransactionFieldRowLayout.labelWidth, alignment: .leading)
-        content
+        GridRow {
+            Text(label)
+                .font(.subheadline)
+                .fontWeight(.semibold)
+                .foregroundColor(.secondary)
+                .frame(width: TransactionFieldRowLayout.labelWidth, alignment: .leading)
+
+            TransactionFieldSurface {
+                content
+            }
+        }
     }
 }
 
@@ -314,31 +305,6 @@ private struct TransactionFieldSurface<Content: View>: View {
     }
 }
 
-private struct TransactionFieldButtonLabel: View {
-    private enum Layout {
-        static let iconSize: CGFloat = 14
-    }
-
-    let title: String
-    let systemImage: String
-
-    var body: some View {
-        TransactionFieldSurface {
-            HStack(spacing: 10) {
-                Text(title)
-                    .foregroundColor(.primary)
-                    .lineLimit(1)
-
-                Spacer()
-
-                Image(systemName: systemImage)
-                    .font(.system(size: Layout.iconSize, weight: .semibold))
-                    .foregroundColor(.secondary)
-            }
-        }
-    }
-}
-
 private struct TransactionMenuField<MenuContent: View>: View {
     let title: String
     @ViewBuilder let menuContent: MenuContent
@@ -347,10 +313,9 @@ private struct TransactionMenuField<MenuContent: View>: View {
         Menu {
             menuContent
         } label: {
-            TransactionFieldButtonLabel(
-                title: title,
-                systemImage: "chevron.up.chevron.down"
-            )
+            Text(title)
+                .foregroundColor(.primary)
+                .lineLimit(1)
         }
         .menuStyle(.borderlessButton)
         .buttonStyle(.plain)
