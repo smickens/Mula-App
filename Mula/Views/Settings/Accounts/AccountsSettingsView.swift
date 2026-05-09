@@ -35,7 +35,7 @@ struct AccountsSettingsView: View {
                         VStack(alignment: .leading) {
                             Text(account.name)
                                 .font(.headline)
-                            Text(account.type.rawValue)
+                            Text(account.type.displayName)
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                         }
