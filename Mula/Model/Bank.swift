@@ -10,7 +10,7 @@ import Foundation
 enum Bank: String, CaseIterable, Codable, Identifiable {
     case apple
     case usBank
-    case bilt
+    case wellsFargo
 
     var id: String { rawValue }
 
@@ -23,8 +23,19 @@ enum Bank: String, CaseIterable, Codable, Identifiable {
 //            return UUID(uuidString: "43CEECD4-3361-405E-85E8-B9D2EE85285A")!
         case .usBank:
             return UUID(uuidString: "781259EA-A78D-431A-B697-3EC87A9183D2")!
-        case .bilt:
+        case .wellsFargo:
             return UUID(uuidString: "D0CE5713-B50B-47FD-9F90-B8C0E31091F6")!
+        }
+    }
+
+    var displayName: String {
+        switch self {
+        case .apple:
+            return "Apple Card"
+        case .usBank:
+            return "US Bank"
+        case .wellsFargo:
+            return "Wells Fargo"
         }
     }
 }

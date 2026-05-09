@@ -55,12 +55,12 @@ struct ImportsView: View {
            let data = try? Data(contentsOf: fileURL),
            let content = String(data: data, encoding: .utf8) {
             fileContent = content
-            fileName = fileURL.lastPathComponent // <-- Capture the file name
+            fileName = fileURL.lastPathComponent
             print("✅ Imported transactions from file (\(fileName)) for processing")
 
             showingImportTransactionsForm.toggle()
         } else {
-            print("❌ Failed to import transactions from file to process")
+            print("❌ Failed to get contents of file to import transactions from")
         }
     }
 

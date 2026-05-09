@@ -9,6 +9,8 @@ import SwiftUI
 
 // TODO: add deleting whole import batch and associated expenses (with confirmation)
 
+// TODO: fix bug - deletea transaction in import popup view and it loses most of its height
+
 struct ImportTransactionsView: View {
     @Environment(DataManager.self) private var dataManager
     @Environment(\.dismiss) private var dismiss
@@ -17,6 +19,7 @@ struct ImportTransactionsView: View {
     @Binding var fileContent: String
     @State private var newTransactions: [Transaction] = []
     @State private var selectedTransactionID: UUID?
+    @State private var importErrorMessage: String?
 
     var body: some View {
         VStack {
@@ -40,23 +43,27 @@ struct ImportTransactionsView: View {
 
             Divider()
 
-            HStack {
-                newTransactionsList
+            if let importErrorMessage {
+                importErrorView(message: importErrorMessage)
+            } else {
+                HStack {
+                    newTransactionsList
 
-                Divider()
+                    Divider()
 
-                if let selectedTransactionID,
-                   let index = newTransactions.firstIndex(where: { $0.id == selectedTransactionID }) {
-                    TransactionFormView(
-                        transaction: newTransactions[index],
-                        title: "",
-                        onSave: { updatedTransaction in
-                            newTransactions[index] = updatedTransaction
-                        }
-                    )
-                    .id(selectedTransactionID)
-                } else {
-                    emptyDetailView
+                    if let selectedTransactionID,
+                       let index = newTransactions.firstIndex(where: { $0.id == selectedTransactionID }) {
+                        TransactionFormView(
+                            transaction: newTransactions[index],
+                            title: "",
+                            onSave: { updatedTransaction in
+                                newTransactions[index] = updatedTransaction
+                            }
+                        )
+                        .id(selectedTransactionID)
+                    } else {
+                        emptyDetailView
+                    }
                 }
             }
         }
@@ -81,10 +88,7 @@ struct ImportTransactionsView: View {
                 .disabled(newTransactions.isEmpty || importName.trimmingCharacters(in: .whitespaces).isEmpty)
             }
         }
-        .onAppear {
-            newTransactions = ImportProcessor.processFileContentIntoTransactions(fileContent)
-            selectedTransactionID = newTransactions.first?.id
-        }
+        .onAppear(perform: processImportFile)
     }
 
     private var newTransactionsList: some View {
@@ -108,6 +112,38 @@ struct ImportTransactionsView: View {
                 .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    private func importErrorView(message: String) -> some View {
+        VStack(spacing: 12) {
+            Image(systemName: "exclamationmark.triangle")
+                .font(.system(size: 44))
+                .foregroundColor(.orange)
+
+            Text("Import failed")
+                .font(.title2)
+                .fontWeight(.semibold)
+
+            Text(message)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: 420)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding()
+    }
+
+    private func processImportFile() {
+        do {
+            let result = try ImportProcessor.processFileContent(fileContent)
+            newTransactions = result.transactions
+            selectedTransactionID = newTransactions.first?.id
+            importErrorMessage = nil
+        } catch {
+            newTransactions = []
+            selectedTransactionID = nil
+            importErrorMessage = error.localizedDescription
+        }
     }
 
     private func saveNewExpenses() {
