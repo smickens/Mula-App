@@ -8,56 +8,28 @@
 import SwiftUI
 
 struct DonutChartView: View {
+    private enum Layout {
+        static let size: CGFloat = 300
+        static let segmentGapDegrees: Double = 1.5
+        static let segmentThickness: CGFloat = 40
+        static let titleSpacing: CGFloat = 6
+        static let valueFontSize: CGFloat = 28
+        static let startAngle: Double = -90
+    }
+
     let spendingByCategory: [DataManager.CategorySpending]
     let totalSpending: Decimal
 
     var body: some View {
         ZStack {
-            let sortedSpending = spendingByCategory.sorted { $0.total > $1.total }
-
-            // Precompute start/end angles
-            let gapDegrees: Double = 1.5
-
-            let segments: [(start: Double, end: Double, color: Color)] = {
-                var result: [(Double, Double, Color)] = []
-                var currentStart: Double = -90
-
-                for item in sortedSpending {
-                    let percentage = (totalSpending != 0)
-                        ? (item.total as NSDecimalNumber).doubleValue /
-                          (totalSpending as NSDecimalNumber).doubleValue
-                        : 0
-
-                    let degrees = percentage * 360
-                    let adjustedEnd = currentStart + degrees - gapDegrees
-
-                    if degrees > 0 {
-                        result.append((
-                            start: currentStart,
-                            end: adjustedEnd,
-                            color: item.category.baseColor
-                        ))
-                    }
-
-                    currentStart += degrees
-                }
-
-                return result
-            }()
-
-
-            // Render segments
-            ForEach(0..<segments.count, id: \.self) { index in
-                let segment = segments[index]
-                DonutSegment(
-                    startAngle: .degrees(segment.start),
-                    endAngle: .degrees(segment.end),
-                    color: segment.color
+            ForEach(segments) { segment in
+                DonutSegmentView(
+                    segment: segment,
+                    thickness: Layout.segmentThickness
                 )
             }
 
-            // Center text
-            VStack(spacing: 6) {
+            VStack(spacing: Layout.titleSpacing) {
                 Text("Total Spending")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
@@ -65,40 +37,79 @@ struct DonutChartView: View {
                     .tracking(1)
 
                 Text(totalSpending.toCurrency())
-                    .font(.system(size: 28, weight: .semibold))
+                    .font(.system(size: Layout.valueFontSize, weight: .semibold))
             }
         }
-        .frame(width: 300, height: 300)
+        .frame(width: Layout.size, height: Layout.size)
+    }
+
+    private var segments: [DonutSegment] {
+        guard totalSpending != 0 else { return [] }
+
+        let totalValue = decimalValue(totalSpending)
+        var currentStartAngle = Layout.startAngle
+
+        return spendingByCategory
+            .sorted { $0.total > $1.total }
+            .compactMap { item in
+                let segmentDegrees = degrees(for: item.total, totalValue: totalValue)
+                defer { currentStartAngle += segmentDegrees }
+
+                guard segmentDegrees > Layout.segmentGapDegrees else {
+                    return nil
+                }
+
+                return DonutSegment(
+                    id: segmentID(for: item),
+                    startAngle: currentStartAngle,
+                    endAngle: currentStartAngle + segmentDegrees - Layout.segmentGapDegrees,
+                    color: item.category.baseColor
+                )
+            }
+    }
+
+    private func degrees(for amount: Decimal, totalValue: Double) -> Double {
+        guard totalValue > 0 else {
+            return 0
+        }
+        return (decimalValue(amount) / totalValue) * 360
+    }
+
+    private func decimalValue(_ value: Decimal) -> Double {
+        NSDecimalNumber(decimal: value).doubleValue
+    }
+
+    private func segmentID(for item: DataManager.CategorySpending) -> String {
+        "\(item.category.id)-\(decimalValue(item.total))"
     }
 }
 
-struct DonutSegment: View {
-    let startAngle: Angle
-    let endAngle: Angle
+private struct DonutSegment: Identifiable {
+    let id: String
+    let startAngle: Double
+    let endAngle: Double
     let color: Color
+}
+
+private struct DonutSegmentView: View {
+    let segment: DonutSegment
+    let thickness: CGFloat
 
     var body: some View {
-        DonutSegmentShape(
-            startAngle: startAngle,
-            endAngle: endAngle,
-            thickness: 40
-        )
-        .fill(color)
+        GeometryReader { geometry in
+            segmentPath(in: geometry.frame(in: .local))
+                .fill(segment.color)
+        }
     }
-}
 
-struct DonutSegmentShape: Shape {
-    var startAngle: Angle
-    var endAngle: Angle
-    var thickness: CGFloat
-
-    func path(in rect: CGRect) -> Path {
+    private func segmentPath(in rect: CGRect) -> Path {
         let center = CGPoint(x: rect.midX, y: rect.midY)
         let outerRadius = rect.width / 2
         let innerRadius = outerRadius - thickness
+        let startAngle = Angle.degrees(segment.startAngle)
+        let endAngle = Angle.degrees(segment.endAngle)
 
         var path = Path()
-
         path.addArc(
             center: center,
             radius: outerRadius,
@@ -114,9 +125,7 @@ struct DonutSegmentShape: Shape {
             endAngle: startAngle,
             clockwise: true
         )
-
         path.closeSubpath()
-
         return path
     }
 }
