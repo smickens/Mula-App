@@ -45,9 +45,6 @@ struct ImportTransactionsView: View {
 
                 Divider()
 
-                // TODO: [next step] sometimes seeing that when updating the category of a transaction that it
-                // ends up with the same transaction in the list twice (multiple of same ID)
-
                 if let selectedTransactionID,
                    let index = newTransactions.firstIndex(where: { $0.id == selectedTransactionID }) {
                     TransactionFormView(
@@ -63,7 +60,7 @@ struct ImportTransactionsView: View {
                 }
             }
         }
-        .frame(width: 650, height: 450)
+        .frame(width: 800)
         .padding()
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
