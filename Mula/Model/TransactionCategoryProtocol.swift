@@ -15,6 +15,10 @@ protocol TransactionCategoryProtocol: CaseIterable, Identifiable, Codable, Hasha
     var baseColor: Color { get }
 }
 
+// TODO: might add a travel category (for all expenses related to going places - flight, hotel, eating, etc.)
+// or maybe its hotel that mainly feels odd, to put in "housing"
+// could add an "apt." similar to car
+
 enum ExpenseCategory: String, CaseIterable, TransactionCategoryProtocol {
     case housing, eatingOut, groceries, shopping, car, transit, entertainment, other
 

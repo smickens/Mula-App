@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// TODO: fix bug - if transaction has $1,000 or more and you edit something and save it, it turns into $1
+
 struct TransactionFormView: View {
     @Environment(DataManager.self) private var dataManager
 
