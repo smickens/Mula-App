@@ -55,6 +55,7 @@ struct DonutChartView: View {
                 let segmentDegrees = degrees(for: item.total, totalValue: totalValue)
                 defer { currentStartAngle += segmentDegrees }
 
+                // Prevents very small segments from displaying around the whole ring
                 guard segmentDegrees > Layout.segmentGapDegrees else {
                     return nil
                 }
