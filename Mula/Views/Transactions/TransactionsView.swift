@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// TODO: might remove this view entirely, and update AccountsView / TrendsView to consolidate
+
 struct TransactionsView: View {
     @Environment(DataManager.self) private var dataManager
 
