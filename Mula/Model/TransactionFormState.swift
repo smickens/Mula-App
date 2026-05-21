@@ -17,6 +17,7 @@ struct TransactionFormState {
 
     var expenseCategory: ExpenseCategory = .other
     var incomeCategory: IncomeCategory = .other
+    var savingCategory: SavingCategory = .contribution
     var transferCategory: TransferCategory = .savings
     
     var sourceAccountId: UUID = Account.default
@@ -28,6 +29,7 @@ struct TransactionFormState {
         switch type {
         case .expense: return expenseCategory
         case .income: return incomeCategory
+        case .saving: return savingCategory
         case .transfer: return transferCategory
         }
     }
@@ -36,15 +38,30 @@ struct TransactionFormState {
 enum TransactionKindType: CaseIterable, Hashable, Identifiable {
     case expense
     case income
+    case saving
     case transfer
 
     var id: Self { self }
+
+    static var formSelectableCases: [TransactionKindType] {
+        [.expense, .income, .saving]
+    }
 
     var displayName: String {
         switch self {
         case .expense: return "Expense"
         case .income: return "Income"
+        case .saving: return "Saving"
         case .transfer: return "Transfer"
+        }
+    }
+
+    var showsTitleField: Bool {
+        switch self {
+        case .expense, .income, .transfer:
+            return true
+        case .saving:
+            return false
         }
     }
 }
@@ -69,6 +86,9 @@ extension TransactionFormState {
             try validateTitle()
             kind = .income(incomeCategory)
 
+        case .saving:
+            kind = .saving(savingCategory)
+
         case .transfer:
             try validateTitle()
             guard sourceAccountId != destinationAccountId else {
@@ -80,7 +100,7 @@ extension TransactionFormState {
 
         return Transaction(
             id: id ?? UUID(),
-            title: title,
+            title: title(for: kind),
             date: date,
             kind: kind,
             amount: amount,
@@ -92,6 +112,15 @@ extension TransactionFormState {
     private func validateTitle() throws {
         guard !title.trimmingCharacters(in: .whitespaces).isEmpty else {
             throw TransactionValidationError.emptyTitle
+        }
+    }
+
+    private func title(for kind: TransactionKind) -> String {
+        switch kind {
+        case .saving:
+            return ""
+        case .expense, .income, .transfer:
+            return title
         }
     }
 }
@@ -116,6 +145,10 @@ extension TransactionFormState {
         case .income(let category):
             self.type = .income
             self.incomeCategory = category
+
+        case .saving(let category):
+            self.type = .saving
+            self.savingCategory = category
 
         case .transfer(let category, let destinationAccountId):
             self.type = .transfer
@@ -150,4 +183,3 @@ enum TransactionValidationError: LocalizedError {
         }
     }
 }
-

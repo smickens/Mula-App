@@ -103,12 +103,33 @@ enum IncomeCategory: String, CaseIterable, TransactionCategoryProtocol {
     }
 }
 
-// TODO: add an savings/investing category enum
-// it should allow me to break down when i put money into some kind of savings/investing account
-// these accounts will then at times earn interest, dividends, or i may save a checkpoint of what they are valued at (if it's a stock), that may be done with the AccountStatement. still have to figure that out
-// savings, stocks, retirement ? (can mostly all be derived from account?)
+enum SavingCategory: String, CaseIterable, TransactionCategoryProtocol {
+    case contribution
+    case withdrawal
 
+    var id: String { rawValue }
 
+    var displayName: String {
+        switch self {
+        case .contribution: return "Add"
+        case .withdrawal: return "Take Out"
+        }
+    }
+
+    var iconName: String {
+        switch self {
+        case .contribution: return "plus.circle.fill"
+        case .withdrawal: return "minus.circle.fill"
+        }
+    }
+
+    var baseColor: Color {
+        switch self {
+        case .contribution: return .blue
+        case .withdrawal: return .orange
+        }
+    }
+}
 
 // TODO: later consider removing this category type
 enum TransferCategory: String, CaseIterable, TransactionCategoryProtocol {

@@ -99,6 +99,10 @@ struct TransactionsView: View {
                 let key = category.id
                 let currentTotal = totalsById[key]?.1 ?? 0
                 totalsById[key] = (category, currentTotal + transaction.amount)
+            case .saving(let category):
+                let key = category.id
+                let currentTotal = totalsById[key]?.1 ?? 0
+                totalsById[key] = (category, currentTotal + transaction.amount)
             case .transfer(let category, _):
                 let key = category.id
                 let currentTotal = totalsById[key]?.1 ?? 0

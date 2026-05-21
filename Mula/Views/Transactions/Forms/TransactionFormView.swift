@@ -97,9 +97,11 @@ private extension TransactionFormView {
             Divider()
 
             Grid(alignment: .leading, horizontalSpacing: Layout.gridSpacing, verticalSpacing: Layout.gridSpacing) {
-                TransactionFieldRow(label: "Title") {
-                    TextField("Coffee, paycheck, rent...", text: $state.title)
-                        .textFieldStyle(.plain)
+                if state.type.showsTitleField {
+                    TransactionFieldRow(label: "Title") {
+                        TextField("Coffee, paycheck, rent...", text: $state.title)
+                            .textFieldStyle(.plain)
+                    }
                 }
 
                 TransactionFieldRow(label: "Amount") {
@@ -117,7 +119,7 @@ private extension TransactionFormView {
                     sourceAccountField
                 }
 
-                TransactionFieldRow(label: "Category") {
+                TransactionFieldRow(label: state.type == .saving ? "Action" : "Category") {
                     categoryField
                 }
 
@@ -179,6 +181,16 @@ private extension TransactionFormView {
                     ForEach(IncomeCategory.allCases, id: \.self) { category in
                         Button(category.displayName) {
                             state.incomeCategory = category
+                        }
+                    }
+                }
+            )
+        case .saving:
+            return AnyView(
+                TransactionMenuField(title: state.savingCategory.displayName) {
+                    ForEach(SavingCategory.allCases, id: \.self) { category in
+                        Button(category.displayName) {
+                            state.savingCategory = category
                         }
                     }
                 }
@@ -336,7 +348,7 @@ private struct TransactionTypeSelector: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(TransactionKindType.allCases) { type in
+            ForEach(TransactionKindType.formSelectableCases) { type in
                 Button {
                     selectedType = type
                 } label: {

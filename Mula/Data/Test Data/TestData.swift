@@ -52,8 +52,8 @@ struct TestData {
         transaction(16, title: "Netflix", date: date(daysAgo: 60), kind: .expense(.entertainment), amount: amount("22.99"), sourceAccountId: ID.creditCard, importBatchId: ID.olderImport),
         transaction(17, title: "Bus Pass", date: date(daysAgo: 64), kind: .expense(.transit), amount: amount("42.00"), sourceAccountId: ID.checking, importBatchId: ID.olderImport),
         transaction(18, title: "Tax Refund", date: date(daysAgo: 68), kind: .income(.refund), amount: amount("486.22"), sourceAccountId: ID.checking),
-        transaction(19, title: "Retirement Contribution", date: date(daysAgo: 73), kind: .transfer(.retirement, destinationAccountId: ID.retirement), amount: amount("300.00"), sourceAccountId: ID.checking),
-        transaction(20, title: "Brokerage Transfer", date: date(daysAgo: 80), kind: .transfer(.investment, destinationAccountId: ID.investment), amount: amount("250.00"), sourceAccountId: ID.checking)
+        transaction(19, title: "", date: date(daysAgo: 73), kind: .saving(.contribution), amount: amount("300.00"), sourceAccountId: ID.retirement),
+        transaction(20, title: "", date: date(daysAgo: 80), kind: .saving(.contribution), amount: amount("250.00"), sourceAccountId: ID.investment)
     ]
 
     private static func date(daysAgo: Int) -> Date {

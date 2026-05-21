@@ -62,7 +62,7 @@ struct TrendsView: View {
         }
 
         var filteredTransactions = dataManager.transactions(from: dateInterval.start, to: dateInterval.end)
-        filteredTransactions = filteredTransactions.filter { $0.kind.isExpense }
+        filteredTransactions = filteredTransactions.filter { $0.kind.isSpendingAnalyticsEligible }
 
         let totalSpending = filteredTransactions.reduce(0) { $0 + $1.amount }
         let spendingByCategory = dataManager.groupSpendingByCategory(transactions: filteredTransactions, maxCategories: 10)

@@ -35,6 +35,10 @@ struct Transaction: Identifiable, Codable, Hashable {
             return -amount
         case .income:
             return amount
+        case .saving(.contribution):
+            return -amount
+        case .saving(.withdrawal):
+            return amount
         case .transfer:
             guard let displayingAccountId else { return amount }
             let isTransferOut = displayingAccountId == sourceAccountId
@@ -48,6 +52,10 @@ struct Transaction: Identifiable, Codable, Hashable {
             return .red
         case .income:
             return .green
+        case .saving(.contribution):
+            return .red
+        case .saving(.withdrawal):
+            return .green
         case .transfer(_, let destinationAccountId):
             guard let displayingAccountId else { return .gray }
             let isTransferOut = displayingAccountId == sourceAccountId
@@ -60,6 +68,7 @@ struct Transaction: Identifiable, Codable, Hashable {
 enum TransactionKind: Codable, Hashable {
     case expense(ExpenseCategory)
     case income(IncomeCategory)
+    case saving(SavingCategory)
     case transfer(_ category: TransferCategory, destinationAccountId: UUID = Account.default)
 
     struct ExpenseDetails {
@@ -73,11 +82,12 @@ enum TransactionKind: Codable, Hashable {
         let destinationAccountId: UUID = Account.default
     }
 
-    // TODO: rename categoryDisplayName or don't have the convenience accessor here ?
-    var displayName: String {
+    var defaultTitle: String {
         switch self {
-        case .expense(let category): return category.displayName
+        case .expense(let category): return "\(category.displayName) Expense"
         case .income(let category): return category.displayName
+        case .saving(.contribution): return "Add to Saving"
+        case .saving(.withdrawal): return "Take Out of Saving"
         case .transfer(let category, _): return category.displayName
         }
     }
@@ -91,6 +101,25 @@ enum TransactionKind: Codable, Hashable {
         if case .income = self { return true }
         return false
     }
+
+    var isSaving: Bool {
+        if case .saving = self { return true }
+        return false
+    }
+
+    var isSavingContribution: Bool {
+        if case .saving(.contribution) = self { return true }
+        return false
+    }
+
+    var isSavingWithdrawal: Bool {
+        if case .saving(.withdrawal) = self { return true }
+        return false
+    }
+
+    var isSpendingAnalyticsEligible: Bool {
+        isExpense
+    }
 }
 
 extension Transaction {
@@ -101,6 +130,7 @@ extension Transaction {
             switch kind {
             case .expense(let c): return c
             case .income(let c): return c
+            case .saving(let c): return c
             case .transfer(let c, _): return c
             }
         }

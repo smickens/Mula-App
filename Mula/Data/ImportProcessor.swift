@@ -349,7 +349,7 @@ private extension ImportRule.KindScope {
         switch (self, kind) {
         case (.any, _), (.expense, .expense), (.income, .income):
             return true
-        default:
+        case (.expense, _), (.income, _):
             return false
         }
     }
