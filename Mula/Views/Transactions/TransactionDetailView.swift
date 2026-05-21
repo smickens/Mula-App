@@ -28,7 +28,7 @@ struct TransactionDetailView: View {
                             }
 
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(transaction.title)
+                            Text(transaction.displayTitle)
                                 .font(.title2)
                                 .fontWeight(.semibold)
 

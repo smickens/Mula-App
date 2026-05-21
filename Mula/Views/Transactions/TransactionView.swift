@@ -31,7 +31,7 @@ struct TransactionView: View {
 
             // Title + Date
             VStack(alignment: .leading) {
-                Text(transaction.title)
+                Text(transaction.displayTitle)
                     .font(.headline)
                     .lineLimit(1)
 
@@ -114,7 +114,7 @@ struct TransactionView: View {
     }
 
     private func deleteTransaction() {
-        print("Deleting transaction: \(transaction.id) \(transaction.title)")
+        print("Deleting transaction: \(transaction.id) \(transaction.displayTitle)")
         dataManager.deleteTransaction(transaction)
     }
 }

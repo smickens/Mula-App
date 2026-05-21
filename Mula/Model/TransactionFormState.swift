@@ -53,10 +53,6 @@ extension TransactionFormState {
 
     // Performs validation on form values throws errors if a check fails
     func toTransaction() throws -> Transaction {
-        guard !title.trimmingCharacters(in: .whitespaces).isEmpty else {
-            throw TransactionValidationError.emptyTitle
-        }
-
         guard let amount = Decimal(string: amountString),
               amount != 0 else {
             throw TransactionValidationError.invalidAmount
@@ -66,12 +62,15 @@ extension TransactionFormState {
 
         switch type {
         case .expense:
+            try validateTitle()
             kind = .expense(expenseCategory)
 
         case .income:
+            try validateTitle()
             kind = .income(incomeCategory)
 
         case .transfer:
+            try validateTitle()
             guard sourceAccountId != destinationAccountId else {
                 throw TransactionValidationError.invalidTransfer
             }
@@ -88,6 +87,12 @@ extension TransactionFormState {
             sourceAccountId: sourceAccountId,
             importBatchId: importBatchId
         )
+    }
+
+    private func validateTitle() throws {
+        guard !title.trimmingCharacters(in: .whitespaces).isEmpty else {
+            throw TransactionValidationError.emptyTitle
+        }
     }
 }
 

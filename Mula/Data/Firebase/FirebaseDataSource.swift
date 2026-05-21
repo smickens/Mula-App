@@ -107,7 +107,7 @@ final class FirebaseDataSource: DataSource {
     func addTransaction(_ transaction: Transaction) async throws {
         let transactionData = try transaction.asDictionary()
         try await setValue(transactionData, at: transactionRef.child(transaction.firebaseKey))
-        print("✅ Added new transaction \"\(transaction.title)\"")
+        print("✅ Added new transaction \"\(transaction.displayTitle)\"")
     }
 
     func updateTransaction(_ transaction: Transaction) async throws {
@@ -118,7 +118,7 @@ final class FirebaseDataSource: DataSource {
 
     func deleteTransaction(_ transaction: Transaction) async throws {
         try await removeValue(at: transactionRef.child(transaction.firebaseKey))
-        print("✅ Deleted transaction with id \(transaction.id) name \(transaction.title)")
+        print("✅ Deleted transaction with id \(transaction.id) name \(transaction.displayTitle)")
     }
 
     // MARK: Import Batches

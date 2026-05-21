@@ -24,6 +24,11 @@ struct Transaction: Identifiable, Codable, Hashable {
     var sourceAccountId: UUID
     var importBatchId: UUID?
 
+    var displayTitle: String {
+        let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmedTitle.isEmpty ? kind.defaultTitle : trimmedTitle
+    }
+
     func amountSigned(displayingAccountId: UUID? = nil) -> Decimal {
         switch kind {
         case .expense:

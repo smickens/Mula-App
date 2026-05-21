@@ -170,7 +170,7 @@ struct TrendsView: View {
                 
                 SummaryCardView(title: "Largest Outflow") {
                     if let largest = viewData.largestOutflow {
-                        Text(largest.title)
+                        Text(largest.displayTitle)
                             .font(.title2)
                             .fontWeight(.bold)
                         Text(largest.amount.toCurrency())

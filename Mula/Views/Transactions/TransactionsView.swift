@@ -82,7 +82,7 @@ struct TransactionsView: View {
                 return $0.category.id == selectedCategory.id
             }
             .filter {
-                searchText.isEmpty || $0.title.localizedStandardContains(searchText)
+                searchText.isEmpty || $0.displayTitle.localizedStandardContains(searchText)
             }
     }
 
