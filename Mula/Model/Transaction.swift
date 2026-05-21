@@ -52,6 +52,7 @@ struct Transaction: Identifiable, Codable, Hashable {
             return .red
         case .income:
             return .green
+        // TODO: alter these color
         case .saving(.contribution):
             return .red
         case .saving(.withdrawal):

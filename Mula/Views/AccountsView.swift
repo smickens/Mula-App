@@ -16,8 +16,12 @@ struct AccountsView: View {
     // Special UUID to represent "All Accounts"
     private let allAccountsId = UUID(uuidString: "00000000-0000-0000-0000-000000000000")!
 
+    // TODO: add a way to  add an accoutn statement / snapshot / currnet balance
+
     var body: some View {
         HStack(spacing: 0) {
+            // TODO: move this into the sidebar either under accoutns or transactions tab
+            // TODO: may also move a monthSelector into the menu bar at the top to stay consistent between pages
             // Left: Accounts List
             accountsList
 
@@ -28,6 +32,7 @@ struct AccountsView: View {
 
             Divider()
 
+            // TODO: could add an edit button in this and have it be its own form when in that state ? vs. presenting the edit form ?
             // Right: Transaction Detail
             if let selectedTransactionID,
                let selectedTransaction = filteredTransactions.first(where: { $0.id == selectedTransactionID }) {

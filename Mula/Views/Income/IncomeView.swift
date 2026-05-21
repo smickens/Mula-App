@@ -1,0 +1,260 @@
+//
+//  IncomeView.swift
+//  Mula
+//
+//  Created by Codex on 5/21/26.
+//
+
+import Charts
+import SwiftUI
+
+// TODO: add a similar Saving View with a line chart showing my net worth grow over time
+// one line of balance snapshots from specific account or totaling them, maybe with some bucketing applied
+// another line of contributions - withdrawals
+// maybe some options to switch to show: money-in, total, or just show gains
+
+struct IncomeView: View {
+    @Environment(DataManager.self) private var dataManager
+
+    private enum Layout {
+        static let spacing: CGFloat = 24
+        static let cornerRadius: CGFloat = 12
+        static let chartHeight: CGFloat = 360
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Layout.spacing) {
+            Text("Income")
+                .font(.title2)
+                .fontWeight(.semibold)
+
+            incomeChart
+
+            // TODO: can more of this styling be shared with the TrendsView summaryGrid. could something be factored out for that base shape maybe?
+            summaryGrid
+
+            Spacer()
+        }
+        .padding()
+    }
+}
+
+private extension IncomeView {
+    var incomeChart: some View {
+        // TODO: refeactor to have this style of stacked bar chart be reusable and configurable
+        Chart(viewData.chartSegments) { segment in
+            BarMark(
+                x: .value("Month", segment.monthStart, unit: .month),
+                y: .value("Income", segment.total)
+            )
+            .foregroundStyle(by: .value("Category", segment.category.displayName))
+        }
+        .chartForegroundStyleScale(incomeCategoryColors)
+        .chartXAxis {
+            AxisMarks(values: .stride(by: .month)) { value in
+                AxisGridLine()
+                AxisTick()
+                AxisValueLabel(format: .dateTime.month(.abbreviated))
+            }
+        }
+        .chartYAxis {
+            AxisMarks { value in
+                AxisGridLine()
+                AxisTick()
+                AxisValueLabel {
+                    if let amount = value.as(Double.self) {
+                        Text(Decimal(amount).toCurrency())
+                    }
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, minHeight: Layout.chartHeight)
+        .padding()
+        .background(Color(NSColor.controlBackgroundColor))
+        .cornerRadius(Layout.cornerRadius)
+    }
+
+    var summaryGrid: some View {
+        Grid(alignment: .leading, horizontalSpacing: Layout.spacing, verticalSpacing: Layout.spacing) {
+            GridRow {
+                SummaryCardView(title: "Average Monthly Income") {
+                    Text(viewData.averageMonthlyIncome.toCurrency())
+                        .font(.title2)
+                        .fontWeight(.bold)
+                }
+
+                SummaryCardView(title: "Total Income") {
+                    Text(viewData.totalIncome.toCurrency())
+                        .font(.title2)
+                        .fontWeight(.bold)
+                }
+            }
+
+            GridRow {
+                SummaryCardView(title: "Highest Month") {
+                    Text(viewData.highestMonth?.monthLabel ?? "N/A")
+                        .font(.title2)
+                        .fontWeight(.bold)
+
+                    Text((viewData.highestMonth?.total ?? 0).toCurrency())
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+
+                SummaryCardView(title: "Top Category") {
+                    if let topCategory = viewData.topCategory {
+                        HStack {
+                            Image(systemName: topCategory.category.iconName)
+                            Text(topCategory.category.displayName)
+                        }
+                        .font(.title2)
+                        .fontWeight(.bold)
+
+                        Text(topCategory.total.toCurrency())
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    } else {
+                        Text("N/A")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                    }
+                }
+            }
+        }
+    }
+
+    var viewData: ViewData {
+        let months = trailingMonths(count: 12)
+        let incomeTransactions = dataManager.transactions.filter { $0.kind.isIncome }
+        let chartSegments = chartSegments(for: incomeTransactions, months: months)
+        let monthlySummaries = monthlySummaries(for: chartSegments, months: months)
+        let totalIncome = chartSegments.reduce(0) { $0 + Decimal($1.total) }
+        let topCategory = topCategory(in: chartSegments)
+
+        return ViewData(
+            chartSegments: chartSegments,
+            monthlySummaries: monthlySummaries,
+            totalIncome: totalIncome,
+            averageMonthlyIncome: totalIncome / Decimal(months.count),
+            highestMonth: monthlySummaries.max { $0.total < $1.total },
+            topCategory: topCategory
+        )
+    }
+
+    var incomeCategoryColors: KeyValuePairs<String, Color> {
+        [
+            IncomeCategory.job.displayName: IncomeCategory.job.baseColor,
+            IncomeCategory.refund.displayName: IncomeCategory.refund.baseColor,
+            IncomeCategory.dividend.displayName: IncomeCategory.dividend.baseColor,
+            IncomeCategory.interest.displayName: IncomeCategory.interest.baseColor,
+            IncomeCategory.other.displayName: IncomeCategory.other.baseColor
+        ]
+    }
+
+    func trailingMonths(count: Int) -> [Date] {
+        let calendar = Calendar.current
+        let currentMonth = calendar.dateInterval(of: .month, for: Date())?.start ?? Date()
+
+        return (0..<count).compactMap { offset in
+            calendar.date(byAdding: .month, value: offset - (count - 1), to: currentMonth)
+        }
+    }
+
+    func chartSegments(for transactions: [Transaction], months: [Date]) -> [ChartSegment] {
+        let calendar = Calendar.current
+        let monthStarts = Set(months)
+        var totals: [SegmentKey: Decimal] = [:]
+
+        for transaction in transactions {
+            guard let monthStart = calendar.dateInterval(of: .month, for: transaction.date)?.start,
+                  monthStarts.contains(monthStart),
+                  case .income(let category) = transaction.kind else {
+                continue
+            }
+
+            let key = SegmentKey(monthStart: monthStart, category: category)
+            totals[key, default: 0] += transaction.amount
+        }
+
+        return totals.map { key, total in
+            ChartSegment(
+                monthStart: key.monthStart,
+                category: key.category,
+                total: (total as NSDecimalNumber).doubleValue
+            )
+        }
+        .sorted {
+            if $0.monthStart == $1.monthStart {
+                return $0.category.displayName < $1.category.displayName
+            }
+            return $0.monthStart < $1.monthStart
+        }
+    }
+
+    func monthlySummaries(for chartSegments: [ChartSegment], months: [Date]) -> [MonthlySummary] {
+        months.map { monthStart in
+            let total = chartSegments
+                .filter { $0.monthStart == monthStart }
+                .reduce(0) { $0 + Decimal($1.total) }
+
+            return MonthlySummary(
+                monthStart: monthStart,
+                monthLabel: monthLabel(for: monthStart),
+                total: total
+            )
+        }
+    }
+
+    func topCategory(in chartSegments: [ChartSegment]) -> CategorySummary? {
+        let totals = chartSegments.reduce(into: [IncomeCategory: Decimal]()) { result, segment in
+            result[segment.category, default: 0] += Decimal(segment.total)
+        }
+
+        guard let top = totals.max(by: { $0.value < $1.value }) else {
+            return nil
+        }
+
+        return CategorySummary(category: top.key, total: top.value)
+    }
+
+    func monthLabel(for date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM yyyy"
+        return formatter.string(from: date)
+    }
+}
+
+private struct SegmentKey: Hashable {
+    let monthStart: Date
+    let category: IncomeCategory
+}
+
+private struct ChartSegment: Identifiable {
+    let monthStart: Date
+    let category: IncomeCategory
+    let total: Double
+
+    var id: String {
+        "\(monthStart.timeIntervalSince1970)-\(category.id)"
+    }
+}
+
+private struct MonthlySummary {
+    let monthStart: Date
+    let monthLabel: String
+    let total: Decimal
+}
+
+private struct CategorySummary {
+    let category: IncomeCategory
+    let total: Decimal
+}
+
+private struct ViewData {
+    let chartSegments: [ChartSegment]
+    let monthlySummaries: [MonthlySummary]
+    let totalIncome: Decimal
+    let averageMonthlyIncome: Decimal
+    let highestMonth: MonthlySummary?
+    let topCategory: CategorySummary?
+}

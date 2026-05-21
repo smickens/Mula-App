@@ -11,6 +11,7 @@ import FirebaseAuth
 
 enum TabName: String, CaseIterable {
     case trends = "Trends"
+    case income = "Income"
     case accounts = "Accounts"
     case transactions = "Transactions"
     case imports = "Imports"
@@ -38,6 +39,8 @@ struct ContentView: View {
                 TransactionsView()
             case .trends:
                 TrendsView()
+            case .income:
+                IncomeView()
             case .imports:
                 ImportsView()
             case .settings:
@@ -54,6 +57,8 @@ struct ContentView: View {
             return "list.bullet.rectangle"
         case .trends:
             return "chart.bar.xaxis"
+        case .income:
+            return "chart.bar.fill"
         case .imports:
             return "tray.and.arrow.down"
         case .settings:

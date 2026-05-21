@@ -25,6 +25,8 @@ struct TrendsView: View {
     let kGridSpacing: CGFloat = 24
     let kCornerRadius: CGFloat = 12
 
+    // TODO: add some kind of total vs. my spending toggle
+    // where my spending could filter down based on a personalShare concept on expense
     var body: some View {
         VStack(alignment: .leading, spacing: kGridSpacing) {
             // MARK: - Header
@@ -84,6 +86,8 @@ struct TrendsView: View {
                         largestOutflow: largestOutflow)
     }
 
+    // TODO: pull this out to its own view that is reusable
+    // i want IncomeView to use this too, but in its case only have year granularity not month by month for now at least
     private func monthSelector() -> some View {
         HStack(spacing: 8) {
             Button(action: {
