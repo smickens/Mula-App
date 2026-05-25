@@ -157,6 +157,7 @@ extension TransactionFormState {
         }
     }
 
+    // TODO: move to be an extension on Decimal itself with unit tests !
     static func decimalToString(_ decimal: Decimal) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal

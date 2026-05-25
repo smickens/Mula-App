@@ -16,8 +16,6 @@ struct AccountsView: View {
     // Special UUID to represent "All Accounts"
     private let allAccountsId = UUID(uuidString: "00000000-0000-0000-0000-000000000000")!
 
-    // TODO: add a way to  add an accoutn statement / snapshot / currnet balance
-
     var body: some View {
         HStack(spacing: 0) {
             // TODO: move this into the sidebar either under accoutns or transactions tab

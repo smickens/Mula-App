@@ -64,9 +64,6 @@ enum ExpenseCategory: String, CaseIterable, TransactionCategoryProtocol {
     }
 }
 
-// TODO: add a page similar to TrendsView that breaks down transactions with income categories
-// breaks down the money i have coming in
-// while TrendsView breaks down the spending that went out
 enum IncomeCategory: String, CaseIterable, TransactionCategoryProtocol {
     case job, refund, dividend, interest, other
 

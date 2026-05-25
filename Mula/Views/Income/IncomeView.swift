@@ -8,13 +8,10 @@
 import Charts
 import SwiftUI
 
-// TODO: add a similar Saving View with a line chart showing my net worth grow over time
-// one line of balance snapshots from specific account or totaling them, maybe with some bucketing applied
-// another line of contributions - withdrawals
-// maybe some options to switch to show: money-in, total, or just show gains
-
 struct IncomeView: View {
     @Environment(DataManager.self) private var dataManager
+    
+    @State private var selectedDate: Date = Date()
 
     private enum Layout {
         static let spacing: CGFloat = 24
@@ -24,9 +21,15 @@ struct IncomeView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: Layout.spacing) {
-            Text("Income")
-                .font(.title2)
-                .fontWeight(.semibold)
+            HStack {
+                Text("Income")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                
+                Spacer()
+                
+                DatePeriodSelector(selectedDate: $selectedDate, granularity: .year)
+            }
 
             incomeChart
 
@@ -124,7 +127,7 @@ private extension IncomeView {
     }
 
     var viewData: ViewData {
-        let months = trailingMonths(count: 12)
+        let months = monthsInSelectedYear()
         let incomeTransactions = dataManager.transactions.filter { $0.kind.isIncome }
         let chartSegments = chartSegments(for: incomeTransactions, months: months)
         let monthlySummaries = monthlySummaries(for: chartSegments, months: months)
@@ -151,12 +154,12 @@ private extension IncomeView {
         ]
     }
 
-    func trailingMonths(count: Int) -> [Date] {
+    func monthsInSelectedYear() -> [Date] {
         let calendar = Calendar.current
-        let currentMonth = calendar.dateInterval(of: .month, for: Date())?.start ?? Date()
+        let selectedYear = calendar.component(.year, from: selectedDate)
 
-        return (0..<count).compactMap { offset in
-            calendar.date(byAdding: .month, value: offset - (count - 1), to: currentMonth)
+        return (1...12).compactMap { month in
+            calendar.date(from: DateComponents(year: selectedYear, month: month, day: 1))
         }
     }
 
