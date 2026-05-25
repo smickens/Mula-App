@@ -216,8 +216,6 @@ private extension BankImportFormat {
         }
     )
 
-    // TODO: processing the header values should really be case-insensitive
-
     static let wellsFargo = BankImportFormat(
         bank: .wellsFargo,
         matches: { headers in
@@ -431,6 +429,8 @@ private extension TransactionKind {
 
 private extension Array where Element == String {
     func containsAll(_ values: [String]) -> Bool {
-        values.allSatisfy { contains($0) }
+        values.allSatisfy { value in
+            contains { $0.caseInsensitiveCompare(value) == .orderedSame }
+        }
     }
 }

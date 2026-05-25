@@ -65,7 +65,7 @@ struct CSVRow {
     let values: [String]
 
     func value(for header: String) -> String {
-        guard let index = headers.firstIndex(of: header),
+        guard let index = headers.firstIndex(where: { $0.caseInsensitiveCompare(header) == .orderedSame }),
               values.indices.contains(index) else {
             return ""
         }
