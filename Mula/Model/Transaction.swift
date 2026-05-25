@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-// TODO: may add some kind of willBePaidBack / willBeReimbursed
+// TODO: may add some kind of willBePaidBack / willBeReimbursed / personalShare
 // often i may order something knowing someone is going to pay me back fully for it, or even partially
 // it'd be good to capture that and allow the TrendsView to take that into account
 // then maybe trends can have a toggle for "My Spending" vs. "All Spending" (Profit vs. Revenue in reverse)

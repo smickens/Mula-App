@@ -154,4 +154,19 @@ extension DataManager {
             }
         }
     }
+
+    func deleteImportBatch(_ batch: ImportBatch) {
+        let batchTransactions = transactions.filter { $0.importBatchId == batch.id }
+
+        Task {
+            do {
+                try await dataSource.deleteImportBatch(batch, transactions: batchTransactions)
+                transactions.removeAll { $0.importBatchId == batch.id }
+                importBatches.removeAll { $0.id == batch.id }
+                
+            } catch {
+                print("❌ Error deleting import batch: \(error.localizedDescription)")
+            }
+        }
+    }
 }

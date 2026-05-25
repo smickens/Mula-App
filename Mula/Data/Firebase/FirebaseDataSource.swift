@@ -9,12 +9,14 @@ import Foundation
 import FirebaseDatabase
 
 final class FirebaseDataSource: DataSource {
+    private let databaseReference: DatabaseReference
     private let accountRef: DatabaseReference
     private let accountStatementRef: DatabaseReference
     private let importBatchRef: DatabaseReference
     private let transactionRef: DatabaseReference
 
     init(databaseReference: DatabaseReference = Database.database().reference()) {
+        self.databaseReference = databaseReference
         accountRef = databaseReference.child("account")
         accountStatementRef = databaseReference.child("accountStatement")
         importBatchRef = databaseReference.child("importBatch")
@@ -222,6 +224,19 @@ final class FirebaseDataSource: DataSource {
 
         try await setValue(importBatchDictionary, at: importBatchRef.child(batch.firebaseKey))
         print("✅ Added new import batch: \(String(describing: batch.name))")
+    }
+
+    func deleteImportBatch(_ batch: ImportBatch, transactions: [Transaction]) async throws {
+        var values: [String: Any] = [
+            "importBatch/\(batch.firebaseKey)": NSNull()
+        ]
+
+        for transaction in transactions {
+            values["transaction/\(transaction.firebaseKey)"] = NSNull()
+        }
+
+        try await updateChildValues(values, at: databaseReference)
+        print("✅ Deleted import batch \(batch.firebaseKey) with \(transactions.count) transactions")
     }
 
     // MARK: Helper Methods

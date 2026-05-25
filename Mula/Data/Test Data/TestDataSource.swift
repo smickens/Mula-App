@@ -81,4 +81,11 @@ final class TestDataSource: DataSource {
     func addImportBatch(_ batch: ImportBatch) async throws {
         importBatches.append(batch)
     }
+
+    func deleteImportBatch(_ batch: ImportBatch, transactions: [Transaction]) async throws {
+        importBatches.removeAll { $0.id == batch.id }
+        self.transactions.removeAll { transaction in
+            transactions.contains { $0.id == transaction.id }
+        }
+    }
 }

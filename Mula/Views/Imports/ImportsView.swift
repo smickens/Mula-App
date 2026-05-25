@@ -14,6 +14,8 @@ struct ImportsView: View {
     @State private var selectedTransactionID: UUID?
 
     @State private var showingImportTransactionsForm: Bool = false
+    @State private var isShowingDeleteConfirmation: Bool = false
+    @State private var importBatchPendingDeletion: ImportBatch?
     @State private var fileContent: String = ""
     @State private var fileName: String = ""
 
@@ -38,6 +40,23 @@ struct ImportsView: View {
                     Label("Import", systemImage: "square.and.arrow.down")
                 }
             }
+        }
+        .confirmationDialog(
+            "Delete Import?",
+            isPresented: $isShowingDeleteConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("Delete Import and Transactions", role: .destructive) {
+                if let importBatchPendingDeletion {
+                    deleteImportBatch(importBatchPendingDeletion)
+                }
+            }
+
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            let transactionsCount = importBatchPendingDeletion.map { transactions(for: $0).count } ?? 0
+            let importName = importBatchPendingDeletion?.name ?? "this import"
+            Text("This will permanently delete \(importName) and \(transactionsCount) associated transaction\(transactionsCount == 1 ? "" : "s").")
         }
         .sheet(isPresented: $showingImportTransactionsForm) {
             ImportTransactionsView(importName: $fileName, fileContent: $fileContent)
@@ -71,6 +90,14 @@ struct ImportsView: View {
             ForEach(dataManager.importBatches) { batch in
                 ImportBatchRow(batch: batch)
                     .tag(batch)
+                    .swipeActions {
+                        Button(role: .destructive) {
+                            importBatchPendingDeletion = batch
+                            isShowingDeleteConfirmation = true
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
             }
         }
         .frame(minWidth: 200, idealWidth: 250, maxWidth: 300)
@@ -79,9 +106,7 @@ struct ImportsView: View {
     // MARK: - Transactions and Detail View
 
     private func transactionsAndDetailView(for batch: ImportBatch) -> some View {
-        let transactions = dataManager.transactions
-            .filter { $0.importBatchId == batch.id }
-            .sorted { $0.date < $1.date }
+        let transactions = transactions(for: batch)
 
         return HStack(spacing: 0) {
             // Middle: Transactions List
@@ -169,6 +194,22 @@ struct ImportsView: View {
             return "Unknown"
         }
         return account.name
+    }
+
+    private func transactions(for batch: ImportBatch) -> [Transaction] {
+        dataManager.transactions
+            .filter { $0.importBatchId == batch.id }
+            .sorted { $0.date < $1.date }
+    }
+
+    private func deleteImportBatch(_ batch: ImportBatch) {
+        dataManager.deleteImportBatch(batch)
+
+        if selectedImportBatch?.id == batch.id {
+            selectedImportBatch = nil
+        }
+
+        selectedTransactionID = nil
     }
 }
 

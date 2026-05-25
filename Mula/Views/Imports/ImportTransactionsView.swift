@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-// TODO: add deleting whole import batch and associated expenses (with confirmation)
-
 // TODO: fix bug - deletea transaction in import popup view and it loses most of its height
 
 struct ImportTransactionsView: View {
