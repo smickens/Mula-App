@@ -12,8 +12,6 @@ import SwiftUI
 
 // TODO: add a category menu that is multi-select to choose which categories are included in the breakdown
 
-// TODO: update avg. monthly spending to take into account the current month (and the previous 3-6 or something, if those past months have a min. amount of data)
-
 struct TrendsView: View {
     @Environment(DataManager.self) private var dataManager
     
@@ -54,7 +52,7 @@ struct TrendsView: View {
         guard let dateInterval = calendar.dateInterval(of: .month, for: selectedDate) else {
             return ViewData(totalSpending: 0,
                             spendingByCategory: [],
-                            avgMonthlySpending: 0,
+                            avgMonthlySpending: nil,
                             avgDailySpending: 0,
                             mostFrequentCategory: nil,
                             largestOutflow: nil)
@@ -66,8 +64,10 @@ struct TrendsView: View {
         let totalSpending = filteredTransactions.reduce(0) { $0 + $1.amount }
         let spendingByCategory = dataManager.groupSpendingByCategory(transactions: filteredTransactions, maxCategories: 10)
 
-        // TODO: should take into account selectedMonth
-        let avgMonthlySpending = dataManager.calculateAverageMonthlySpending(forLastMonths: 12)
+        let avgMonthlySpending = dataManager.calculateAverageMonthlySpending(
+            forLastMonths: 6,
+            endingAt: selectedDate
+        )
 
         let daysInMonth = calendar.range(of: .day, in: .month, for: selectedDate)?.count ?? 30
         let avgDailySpending = totalSpending / Decimal(daysInMonth)
@@ -87,7 +87,7 @@ struct TrendsView: View {
         [
             SummaryMetric(
                 title: "Average Monthly Spending",
-                primaryText: viewData.avgMonthlySpending.toCurrency()
+                primaryText: viewData.avgMonthlySpending?.toCurrency() ?? "--"
             ),
             SummaryMetric(
                 title: "Average Daily Spending",
@@ -110,7 +110,7 @@ struct TrendsView: View {
     struct ViewData {
         let totalSpending: Decimal
         let spendingByCategory: [DataManager.CategorySpending]
-        let avgMonthlySpending: Decimal
+        let avgMonthlySpending: Decimal?
         let avgDailySpending: Decimal
         let mostFrequentCategory: (category: any TransactionCategoryProtocol, count: Int)?
         let largestOutflow: Transaction?

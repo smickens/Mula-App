@@ -158,26 +158,37 @@ final class DataManager {
     }
 
 
-    func calculateAverageMonthlySpending(forLastMonths months: Int) -> Decimal {
+    func calculateAverageMonthlySpending(
+        forLastMonths months: Int,
+        endingAt date: Date = Date(),
+        minimumMonthlySpending: Decimal = 1000,
+        minimumValidMonths: Int = 2
+    ) -> Decimal? {
         let calendar = Calendar.current
-        let today = Date()
         var totalSpending: Decimal = 0.0
-        var monthsWithExpenses = 0
+        var validMonths = 0
 
         for i in 0..<months {
-            guard let startDate = calendar.date(byAdding: .month, value: -(i + 1), to: today),
-                  let endDate = calendar.date(byAdding: .month, value: -i, to: today) else {
+            guard let monthDate = calendar.date(byAdding: .month, value: -i, to: date),
+                  let monthInterval = calendar.dateInterval(of: .month, for: monthDate) else {
                 continue
             }
-            
-            let monthTransactions = transactions(from: startDate, to: endDate)
-            if !monthTransactions.isEmpty {
-                totalSpending += monthTransactions.reduce(0) { $0 + $1.amount }
-                monthsWithExpenses += 1
+
+            let monthSpending = transactions(from: monthInterval.start, to: monthInterval.end)
+                .filter { $0.kind.isSpendingAnalyticsEligible }
+                .reduce(0) { $0 + $1.amount }
+
+            if monthSpending >= minimumMonthlySpending {
+                totalSpending += monthSpending
+                validMonths += 1
             }
         }
 
-        return monthsWithExpenses > 0 ? totalSpending / Decimal(monthsWithExpenses) : 0.0
+        guard validMonths >= minimumValidMonths else {
+            return nil
+        }
+
+        return totalSpending / Decimal(validMonths)
     }
 
     func mostFrequentCategory(in transactions: [Transaction]) -> (category: any TransactionCategoryProtocol, count: Int)? {
