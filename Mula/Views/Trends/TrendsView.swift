@@ -39,7 +39,7 @@ struct TrendsView: View {
                         .background(Color(NSColor.controlBackgroundColor))
                         .cornerRadius(kCornerRadius)
 
-                    summaryGrid()
+                    SummaryMetricsGrid(metrics: summaryMetrics, spacing: kGridSpacing)
                 }
 
                 CategoryListView(spendingByCategory: viewData.spendingByCategory, totalSpending: viewData.totalSpending)
@@ -85,56 +85,28 @@ struct TrendsView: View {
                         largestOutflow: largestOutflow)
     }
 
-    private func summaryGrid() -> some View {
-        Grid(alignment: .leading, horizontalSpacing: kGridSpacing, verticalSpacing: kGridSpacing) {
-            GridRow {
-                SummaryCardView(title: "Average Monthly Spending") {
-                    Text(viewData.avgMonthlySpending.toCurrency())
-                        .font(.title2)
-                        .fontWeight(.bold)
-                }
-                
-                SummaryCardView(title: "Average Daily Spending") {
-                    Text(viewData.avgDailySpending.toCurrency())
-                        .font(.title2)
-                        .fontWeight(.bold)
-                }
-            }
-            GridRow {
-                SummaryCardView(title: "Most Frequent Category") {
-                    if let mostFrequent = viewData.mostFrequentCategory {
-                        HStack {
-                            Image(systemName: mostFrequent.category.iconName)
-                            Text(mostFrequent.category.displayName)
-                        }
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        Text("\(mostFrequent.count) transactions")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    } else {
-                        Text("N/A")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                    }
-                }
-                
-                SummaryCardView(title: "Largest Outflow") {
-                    if let largest = viewData.largestOutflow {
-                        Text(largest.displayTitle)
-                            .font(.title2)
-                            .fontWeight(.bold)
-                        Text(largest.amount.toCurrency())
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    } else {
-                        Text("N/A")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                    }
-                }
-            }
-        }
+    private var summaryMetrics: [SummaryMetric] {
+        [
+            SummaryMetric(
+                title: "Average Monthly Spending",
+                primaryText: viewData.avgMonthlySpending.toCurrency()
+            ),
+            SummaryMetric(
+                title: "Average Daily Spending",
+                primaryText: viewData.avgDailySpending.toCurrency()
+            ),
+            SummaryMetric(
+                title: "Most Frequent Category",
+                primaryText: viewData.mostFrequentCategory?.category.displayName ?? "N/A",
+                secondaryText: viewData.mostFrequentCategory.map { "\($0.count) transactions" },
+                iconName: viewData.mostFrequentCategory?.category.iconName
+            ),
+            SummaryMetric(
+                title: "Largest Outflow",
+                primaryText: viewData.largestOutflow?.displayTitle ?? "N/A",
+                secondaryText: viewData.largestOutflow?.amount.toCurrency()
+            )
+        ]
     }
     
     struct ViewData {

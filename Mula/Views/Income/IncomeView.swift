@@ -32,8 +32,7 @@ struct IncomeView: View {
 
             incomeChart
 
-            // TODO: can more of this styling be shared with the TrendsView summaryGrid. could something be factored out for that base shape maybe?
-            summaryGrid
+            SummaryMetricsGrid(metrics: summaryMetrics, spacing: Layout.spacing)
 
             Spacer()
         }
@@ -59,53 +58,28 @@ private extension IncomeView {
         .cornerRadius(Layout.cornerRadius)
     }
 
-    var summaryGrid: some View {
-        Grid(alignment: .leading, horizontalSpacing: Layout.spacing, verticalSpacing: Layout.spacing) {
-            GridRow {
-                SummaryCardView(title: "Average Monthly Income") {
-                    Text(viewData.averageMonthlyIncome.toCurrency())
-                        .font(.title2)
-                        .fontWeight(.bold)
-                }
-
-                SummaryCardView(title: "Total Income") {
-                    Text(viewData.totalIncome.toCurrency())
-                        .font(.title2)
-                        .fontWeight(.bold)
-                }
-            }
-
-            GridRow {
-                SummaryCardView(title: "Highest Month") {
-                    Text(viewData.highestMonth?.monthLabel ?? "N/A")
-                        .font(.title2)
-                        .fontWeight(.bold)
-
-                    Text((viewData.highestMonth?.total ?? 0).toCurrency())
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }
-
-                SummaryCardView(title: "Top Category") {
-                    if let topCategory = viewData.topCategory {
-                        HStack {
-                            Image(systemName: topCategory.category.iconName)
-                            Text(topCategory.category.displayName)
-                        }
-                        .font(.title2)
-                        .fontWeight(.bold)
-
-                        Text(topCategory.total.toCurrency())
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    } else {
-                        Text("N/A")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                    }
-                }
-            }
-        }
+    var summaryMetrics: [SummaryMetric] {
+        [
+            SummaryMetric(
+                title: "Average Monthly Income",
+                primaryText: viewData.averageMonthlyIncome.toCurrency()
+            ),
+            SummaryMetric(
+                title: "Total Income",
+                primaryText: viewData.totalIncome.toCurrency()
+            ),
+            SummaryMetric(
+                title: "Highest Month",
+                primaryText: viewData.highestMonth?.monthLabel ?? "N/A",
+                secondaryText: viewData.highestMonth?.total.toCurrency()
+            ),
+            SummaryMetric(
+                title: "Top Category",
+                primaryText: viewData.topCategory?.category.displayName ?? "N/A",
+                secondaryText: viewData.topCategory?.total.toCurrency(),
+                iconName: viewData.topCategory?.category.iconName
+            )
+        ]
     }
 
     var viewData: ViewData {
