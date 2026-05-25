@@ -19,7 +19,10 @@ final class DataManager {
     private var loadTask: Task<Void, Never>?
 
     private init() {
-        dataSource = firebaseDataSource
+        let savedUseTestData = AppDefaults.Debug.useTestData
+
+        useTestData = savedUseTestData
+        dataSource = savedUseTestData ? testDataSource : firebaseDataSource
 
         loadData()
     }
@@ -31,12 +34,19 @@ final class DataManager {
 
     var useTestData: Bool = false {
         didSet {
-            print("🔄 Switching to \(useTestData ? "TEST" : "FIREBASE") mode")
-            dataSource = useTestData ? testDataSource : firebaseDataSource
-
-            print("Force reloading data...")
-            loadData()
+            guard oldValue != useTestData else { return }
+            applyDataSourceSelection(useTestData: useTestData)
         }
+    }
+
+    private func applyDataSourceSelection(useTestData: Bool) {
+        AppDefaults.Debug.useTestData = useTestData
+        dataSource = useTestData ? testDataSource : firebaseDataSource
+
+        print("🔄 Switching to \(useTestData ? "TEST" : "FIREBASE") mode")
+        print("Force reloading data...")
+
+        loadData()
     }
 
     func loadData() {
