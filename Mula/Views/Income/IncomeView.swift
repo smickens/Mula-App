@@ -5,7 +5,6 @@
 //  Created by Codex on 5/21/26.
 //
 
-import Charts
 import SwiftUI
 
 struct IncomeView: View {
@@ -44,33 +43,16 @@ struct IncomeView: View {
 
 private extension IncomeView {
     var incomeChart: some View {
-        // TODO: refeactor to have this style of stacked bar chart be reusable and configurable
-        Chart(viewData.chartSegments) { segment in
-            BarMark(
-                x: .value("Month", segment.monthStart, unit: .month),
-                y: .value("Income", segment.total)
-            )
-            .foregroundStyle(by: .value("Category", segment.category.displayName))
-        }
-        .chartForegroundStyleScale(incomeCategoryColors)
-        .chartXAxis {
-            AxisMarks(values: .stride(by: .month)) { value in
-                AxisGridLine()
-                AxisTick()
-                AxisValueLabel(format: .dateTime.month(.abbreviated))
-            }
-        }
-        .chartYAxis {
-            AxisMarks { value in
-                AxisGridLine()
-                AxisTick()
-                AxisValueLabel {
-                    if let amount = value.as(Double.self) {
-                        Text(Decimal(amount).toCurrency())
-                    }
-                }
-            }
-        }
+        StackedBarChart(
+            data: viewData.chartSegments,
+            xAxisLabel: "Month",
+            yAxisLabel: "Income",
+            categoryLabel: "Category",
+            colorScale: incomeCategoryColors,
+            date: \.monthStart,
+            value: \.total,
+            category: \.category.displayName
+        )
         .frame(maxWidth: .infinity, minHeight: Layout.chartHeight)
         .padding()
         .background(Color(NSColor.controlBackgroundColor))
