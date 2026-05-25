@@ -18,7 +18,7 @@ struct MulaApp: App {
 
     var body: some Scene {
         WindowGroup {
-            SignInView()
+            FirebaseSignInView()
                 .fontDesign(.monospaced)
                 .frame(minWidth: 900, idealWidth: 900, minHeight: 650, idealHeight: 650)
         }

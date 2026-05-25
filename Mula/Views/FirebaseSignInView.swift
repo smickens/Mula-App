@@ -9,8 +9,7 @@ import FirebaseAuth
 import FirebaseCore
 import SwiftUI
 
-// TODO: rename to something related to Firebase more so since this also injects the data manager into the environment
-struct SignInView: View {
+struct FirebaseSignInView: View {
     @State private var dataManager = DataManager.shared
     @State private var authViewModel = AuthViewModel()
     @State private var email: String = ""
