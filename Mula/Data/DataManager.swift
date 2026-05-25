@@ -25,6 +25,7 @@ final class DataManager {
     }
 
     var accounts: [Account] = []
+    var accountStatements: [AccountStatement] = []
     var importBatches: [ImportBatch] = []
     var transactions: [Transaction] = []
 
@@ -42,6 +43,7 @@ final class DataManager {
         loadTask?.cancel()
 
         accounts.removeAll()
+        accountStatements.removeAll()
         importBatches.removeAll()
         transactions.removeAll()
 
@@ -55,11 +57,13 @@ final class DataManager {
     private func reloadData(from dataSource: any DataSource) async {
         do {
             async let loadedAccounts = dataSource.loadAccounts()
+            async let loadedAccountStatements = dataSource.loadAccountStatements()
             async let loadedImportBatches = dataSource.loadImportBatches()
             async let loadedTransactions = dataSource.loadTransactions()
 
-            let (accounts, importBatches, transactions) = try await (
+            let (accounts, accountStatements, importBatches, transactions) = try await (
                 loadedAccounts,
+                loadedAccountStatements,
                 loadedImportBatches,
                 loadedTransactions
             )
@@ -67,10 +71,11 @@ final class DataManager {
             try Task.checkCancellation()
 
             self.accounts = accounts
+            self.accountStatements = accountStatements
             self.importBatches = importBatches
             self.transactions = transactions
 
-            print("✅ Loaded \(useTestData ? "test" : "Firebase") data: \(accounts.count) accounts, \(importBatches.count) batches, \(transactions.count) transactions")
+            print("✅ Loaded \(useTestData ? "test" : "Firebase") data: \(accounts.count) accounts, \(accountStatements.count) statements, \(importBatches.count) batches, \(transactions.count) transactions")
         } catch is CancellationError {
             print("ℹ️ Load cancelled.")
         } catch {
@@ -79,6 +84,17 @@ final class DataManager {
     }
 
     // MARK: - Transactions Queries
+
+    func addAccountStatement(_ statement: AccountStatement) {
+        Task {
+            do {
+                try await dataSource.addAccountStatement(statement)
+                accountStatements.append(statement)
+            } catch {
+                print("❌ Failed to add account statement: \(error.localizedDescription)")
+            }
+        }
+    }
 
     func transactionsSortedByDate(with year: String, and month: String) -> [Transaction] {
         transactions(with: year, and: month).sorted { $0.date > $1.date }

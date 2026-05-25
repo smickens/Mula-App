@@ -7,8 +7,21 @@
 
 import Foundation
 
-struct AccountStatement {
+struct AccountStatement: Identifiable, Codable, Hashable {
     let id: UUID
-    let date: String
-    let balance: Double
+    let accountId: UUID
+    let date: Date
+    let balance: Decimal
+
+    init(
+        id: UUID = UUID(),
+        accountId: UUID,
+        date: Date,
+        balance: Decimal
+    ) {
+        self.id = id
+        self.accountId = accountId
+        self.date = date
+        self.balance = balance
+    }
 }

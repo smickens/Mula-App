@@ -10,11 +10,13 @@ import FirebaseDatabase
 
 final class FirebaseDataSource: DataSource {
     private let accountRef: DatabaseReference
+    private let accountStatementRef: DatabaseReference
     private let importBatchRef: DatabaseReference
     private let transactionRef: DatabaseReference
 
     init(databaseReference: DatabaseReference = Database.database().reference()) {
         accountRef = databaseReference.child("account")
+        accountStatementRef = databaseReference.child("accountStatement")
         importBatchRef = databaseReference.child("importBatch")
         transactionRef = databaseReference.child("transaction")
     }
@@ -121,6 +123,53 @@ final class FirebaseDataSource: DataSource {
         print("✅ Deleted transaction with id \(transaction.id) name \(transaction.displayTitle)")
     }
 
+    // MARK: Account Statements
+
+    func loadAccountStatements() async throws -> [AccountStatement] {
+        let snapshot = try await getData(from: accountStatementRef)
+
+        guard let value = snapshot.value as? [String: [String: Any]] else {
+            print("ℹ️ No account statement data found.")
+            return []
+        }
+
+        var statements: [AccountStatement] = []
+
+        for (firebaseKey, data) in value {
+            guard let id = UUID(uuidString: firebaseKey),
+                  let accountIdString = data["accountId"] as? String,
+                  let accountId = UUID(uuidString: accountIdString),
+                  let timestamp = data["date"] as? TimeInterval,
+                  let balance = decimalValue(from: data["balance"]) else {
+                print("⚠️ Skipping malformed account statement: \(data)")
+                continue
+            }
+
+            statements.append(
+                AccountStatement(
+                    id: id,
+                    accountId: accountId,
+                    date: Date(timeIntervalSince1970: timestamp),
+                    balance: balance
+                )
+            )
+        }
+
+        print("✅ Loaded \(statements.count) account statements from Firebase.")
+        return statements
+    }
+
+    func addAccountStatement(_ statement: AccountStatement) async throws {
+//        let statementDictionary: [String: Any] = [
+//            "accountId": statement.accountId.uuidString,
+//            "date": statement.date.timeIntervalSince1970,
+//            "balance": "\(statement.balance)"
+//        ]
+//
+//        try await setValue(statementDictionary, at: accountStatementRef.child(statement.id.uuidString))
+//        print("✅ Added account statement \(statement.id)")
+    }
+
     // MARK: Import Batches
 
     func loadImportBatches() async throws -> [ImportBatch] {
@@ -220,5 +269,17 @@ final class FirebaseDataSource: DataSource {
                 }
             }
         }
+    }
+
+    private func decimalValue(from value: Any?) -> Decimal? {
+        if let string = value as? String {
+            return Decimal(string: string)
+        }
+
+        if let number = value as? NSNumber {
+            return number.decimalValue
+        }
+
+        return nil
     }
 }

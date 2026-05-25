@@ -20,6 +20,10 @@ protocol DataSource: AnyObject {
     func updateTransaction(_ transaction: Transaction) async throws
     func deleteTransaction(_ transaction: Transaction) async throws
 
+    // Account Statements
+    func loadAccountStatements() async throws -> [AccountStatement]
+    func addAccountStatement(_ statement: AccountStatement) async throws
+
     // Import Batches
     func loadImportBatches() async throws -> [ImportBatch]
     func addImportBatch(_ batch: ImportBatch) async throws

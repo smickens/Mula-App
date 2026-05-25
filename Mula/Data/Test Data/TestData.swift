@@ -32,6 +32,17 @@ struct TestData {
         ImportBatch(id: ID.recentImport, date: date(daysAgo: 32), name: "Amex Statement")
     ]
 
+    static let accountStatements: [AccountStatement] = [
+        statement(1, accountId: ID.savings, date: date(daysAgo: 90), balance: amount("1300.00")),
+        statement(2, accountId: ID.savings, date: date(daysAgo: 60), balance: amount("1685.00")),
+        statement(3, accountId: ID.savings, date: date(daysAgo: 30), balance: amount("2112.00")),
+        statement(4, accountId: ID.retirement, date: date(daysAgo: 90), balance: amount("10250.00")),
+        statement(5, accountId: ID.retirement, date: date(daysAgo: 45), balance: amount("10980.00")),
+        statement(6, accountId: ID.retirement, date: date(daysAgo: 8), balance: amount("11640.00")),
+        statement(7, accountId: ID.investment, date: date(daysAgo: 80), balance: amount("525.00")),
+        statement(8, accountId: ID.investment, date: date(daysAgo: 20), balance: amount("842.00"))
+    ]
+
     static let transactions: [Transaction] = [
         transaction(1, title: "Paycheck", date: date(daysAgo: 3), kind: .income(.job), amount: amount("3200.00"), sourceAccountId: ID.checking),
         transaction(2, title: "CapEd Mortgage", date: date(daysAgo: 6), kind: .expense(.housing), amount: amount("1550.00"), sourceAccountId: ID.checking),
@@ -86,5 +97,19 @@ struct TestData {
 
     private static func transactionID(_ id: Int) -> UUID {
         UUID(uuidString: String(format: "30000000-0000-0000-0000-%012d", id))!
+    }
+
+    private static func statement(
+        _ id: Int,
+        accountId: UUID,
+        date: Date,
+        balance: Decimal
+    ) -> AccountStatement {
+        AccountStatement(
+            id: UUID(uuidString: String(format: "40000000-0000-0000-0000-%012d", id))!,
+            accountId: accountId,
+            date: date,
+            balance: balance
+        )
     }
 }

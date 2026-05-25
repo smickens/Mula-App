@@ -9,11 +9,13 @@ import Foundation
 
 final class TestDataSource: DataSource {
     private var accounts: [Account]
+    private var accountStatements: [AccountStatement]
     private var importBatches: [ImportBatch]
     private var transactions: [Transaction]
 
     init(testData: TestData.Type = TestData.self) {
         accounts = testData.accounts
+        accountStatements = testData.accountStatements
         importBatches = testData.importBatches
         transactions = testData.transactions
     }
@@ -54,6 +56,16 @@ final class TestDataSource: DataSource {
 
     func deleteTransaction(_ transaction: Transaction) async throws {
         transactions.removeAll { $0.id == transaction.id }
+    }
+
+    // MARK: Account Statements
+
+    func loadAccountStatements() async throws -> [AccountStatement] {
+        accountStatements
+    }
+
+    func addAccountStatement(_ statement: AccountStatement) async throws {
+        accountStatements.append(statement)
     }
 
     // MARK: Import Batches
