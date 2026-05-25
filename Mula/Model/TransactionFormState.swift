@@ -70,7 +70,7 @@ extension TransactionFormState {
 
     // Performs validation on form values throws errors if a check fails
     func toTransaction() throws -> Transaction {
-        guard let amount = Decimal(string: amountString),
+        guard let amount = Decimal.formattedDecimal(from: amountString),
               amount != 0 else {
             throw TransactionValidationError.invalidAmount
         }
@@ -131,8 +131,7 @@ extension TransactionFormState {
         self.id = transaction.id
         self.title = transaction.title
         self.date = transaction.date
-        // TODO: add unit tests for this!! and the conversion back, seen errors when the value is over >= 1000 (2980 -> 2)
-        self.amountString = Self.decimalToString(transaction.amount)
+        self.amountString = transaction.amount.toDecimalString()
         self.sourceAccountId = transaction.sourceAccountId
         self.importBatchId = transaction.importBatchId
 
@@ -157,14 +156,6 @@ extension TransactionFormState {
         }
     }
 
-    // TODO: move to be an extension on Decimal itself with unit tests !
-    static func decimalToString(_ decimal: Decimal) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
-        return formatter.string(from: decimal as NSDecimalNumber) ?? ""
-    }
 }
 
 
