@@ -14,12 +14,10 @@ import SwiftUI
 
 // TODO: update avg. monthly spending to take into account the current month (and the previous 3-6 or something, if those past months have a min. amount of data)
 
-// TODO: start the month selection on launch at the previous month (more likely to have data inputed since i use statements from the end of the month)
-
 struct TrendsView: View {
     @Environment(DataManager.self) private var dataManager
     
-    @State private var selectedDate: Date = Date()
+    @State private var selectedDate: Date = Calendar.current.date(byAdding: .month, value: -1, to: Date()) ?? Date()
 
     let kGridSpacing: CGFloat = 24
     let kCornerRadius: CGFloat = 12
