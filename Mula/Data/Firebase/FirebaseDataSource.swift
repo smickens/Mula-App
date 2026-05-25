@@ -112,6 +112,15 @@ final class FirebaseDataSource: DataSource {
         print("✅ Added new transaction \"\(transaction.displayTitle)\"")
     }
 
+    func addTransactions(_ transactions: [Transaction]) async throws {
+        let transactionData = try transactions.reduce(into: [String: Any]()) { values, transaction in
+            values[transaction.firebaseKey] = try transaction.asDictionary()
+        }
+
+        try await updateChildValues(transactionData, at: transactionRef)
+        print("✅ Added \(transactions.count) transactions")
+    }
+
     func updateTransaction(_ transaction: Transaction) async throws {
         let transactionData = try transaction.asDictionary()
         try await updateChildValues(transactionData, at: transactionRef.child(transaction.firebaseKey))

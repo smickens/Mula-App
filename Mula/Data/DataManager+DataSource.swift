@@ -85,8 +85,6 @@ extension DataManager {
         }
     }
 
-    // TODO: create a bulk operation add
-
     /// Updates an existing transaction in the active data source.
     func updateTransaction(_ transaction: Transaction) {
         Task {
@@ -117,17 +115,11 @@ extension DataManager {
 
     func importTransactions(_ transactions: [Transaction], fileName: String? = nil) {
         let batch = ImportBatch(name: fileName)
+        let importedTransactions = transactions.map { $0.withImportBatchId(batch.id) }
 
         Task {
             do {
-                var importedTransactions: [Transaction] = []
-
-                for var transaction in transactions {
-                    transaction.importBatchId = batch.id
-                    try await dataSource.addTransaction(transaction)
-                    importedTransactions.append(transaction)
-                }
-
+                try await dataSource.addTransactions(importedTransactions)
                 try await dataSource.addImportBatch(batch)
 
                 self.transactions.append(contentsOf: importedTransactions)

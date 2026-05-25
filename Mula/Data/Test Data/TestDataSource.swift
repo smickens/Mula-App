@@ -49,6 +49,10 @@ final class TestDataSource: DataSource {
         transactions.append(transaction)
     }
 
+    func addTransactions(_ transactions: [Transaction]) async throws {
+        self.transactions.append(contentsOf: transactions)
+    }
+
     func updateTransaction(_ transaction: Transaction) async throws {
         guard let index = transactions.firstIndex(where: { $0.id == transaction.id }) else { return }
         transactions[index] = transaction

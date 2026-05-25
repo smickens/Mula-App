@@ -17,6 +17,7 @@ protocol DataSource: AnyObject {
     // Transactions
     func loadTransactions() async throws -> [Transaction]
     func addTransaction(_ transaction: Transaction) async throws
+    func addTransactions(_ transactions: [Transaction]) async throws
     func updateTransaction(_ transaction: Transaction) async throws
     func deleteTransaction(_ transaction: Transaction) async throws
 

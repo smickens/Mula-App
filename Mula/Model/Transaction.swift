@@ -15,14 +15,30 @@ import SwiftUI
 
 struct Transaction: Identifiable, Codable, Hashable {
     let id: UUID
+    let title: String
+    let date: Date
+    let kind: TransactionKind
+    let amount: Decimal
+    let sourceAccountId: UUID
+    let importBatchId: UUID?
 
-    // TODO: later try to change to let
-    var title: String
-    var date: Date
-    var kind: TransactionKind
-    var amount: Decimal
-    var sourceAccountId: UUID
-    var importBatchId: UUID?
+    init(
+        id: UUID,
+        title: String,
+        date: Date,
+        kind: TransactionKind,
+        amount: Decimal,
+        sourceAccountId: UUID,
+        importBatchId: UUID? = nil
+    ) {
+        self.id = id
+        self.title = title
+        self.date = date
+        self.kind = kind
+        self.amount = amount
+        self.sourceAccountId = sourceAccountId
+        self.importBatchId = importBatchId
+    }
 
     var displayTitle: String {
         let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -63,6 +79,18 @@ struct Transaction: Identifiable, Codable, Hashable {
             let isTransferIn = displayingAccountId == destinationAccountId
             return isTransferOut ? .red : (isTransferIn ? .green : .gray)
         }
+    }
+
+    func withImportBatchId(_ importBatchId: UUID) -> Transaction {
+        Transaction(
+            id: id,
+            title: title,
+            date: date,
+            kind: kind,
+            amount: amount,
+            sourceAccountId: sourceAccountId,
+            importBatchId: importBatchId
+        )
     }
 }
 
