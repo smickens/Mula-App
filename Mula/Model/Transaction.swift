@@ -52,7 +52,7 @@ struct Transaction: Identifiable, Codable, Hashable {
         case .income:
             return amount
         case .saving(.contribution):
-            return -amount
+            return amount
         case .saving(.withdrawal):
             return amount
         case .transfer:
@@ -68,11 +68,10 @@ struct Transaction: Identifiable, Codable, Hashable {
             return .red
         case .income:
             return .green
-        // TODO: alter these color
         case .saving(.contribution):
-            return .red
+            return .gray
         case .saving(.withdrawal):
-            return .green
+            return .purple
         case .transfer(_, let destinationAccountId):
             guard let displayingAccountId else { return .gray }
             let isTransferOut = displayingAccountId == sourceAccountId
