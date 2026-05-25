@@ -8,6 +8,10 @@
 import Foundation
 
 extension Date {
+    static var lastMonth: Date {
+        Calendar.current.date(byAdding: .month, value: -1, to: Date()) ?? Date()
+    }
+
     var year: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "YYYY"

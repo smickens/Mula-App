@@ -21,6 +21,8 @@ enum TabName: String, CaseIterable {
 
 struct ContentView: View {
     @State private var selectedTab: TabName = .trends
+    @State private var selectedTrendsDate: Date = .lastMonth
+    @State private var selectedIncomeDate: Date = Date()
 
     var body: some View {
         NavigationSplitView {
@@ -39,9 +41,9 @@ struct ContentView: View {
             case .transactions:
                 TransactionsView()
             case .trends:
-                TrendsView()
+                TrendsView(selectedDate: $selectedTrendsDate)
             case .income:
-                IncomeView()
+                IncomeView(selectedDate: $selectedIncomeDate)
             case .savings:
                 SavingsView()
             case .imports:

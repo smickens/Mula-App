@@ -10,7 +10,7 @@ import SwiftUI
 struct IncomeView: View {
     @Environment(DataManager.self) private var dataManager
     
-    @State private var selectedDate: Date = Date()
+    @Binding var selectedDate: Date
 
     private enum Layout {
         static let spacing: CGFloat = 24

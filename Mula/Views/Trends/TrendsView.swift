@@ -15,7 +15,7 @@ import SwiftUI
 struct TrendsView: View {
     @Environment(DataManager.self) private var dataManager
     
-    @State private var selectedDate: Date = Calendar.current.date(byAdding: .month, value: -1, to: Date()) ?? Date()
+    @Binding var selectedDate: Date
 
     let kGridSpacing: CGFloat = 24
     let kCornerRadius: CGFloat = 12

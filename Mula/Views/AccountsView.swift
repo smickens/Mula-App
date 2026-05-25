@@ -19,7 +19,6 @@ struct AccountsView: View {
     var body: some View {
         HStack(spacing: 0) {
             // TODO: move this into the sidebar either under accoutns or transactions tab
-            // TODO: may also move a monthSelector into the menu bar at the top to stay consistent between pages
             // Left: Accounts List
             accountsList
 
