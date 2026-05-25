@@ -23,9 +23,24 @@ struct SavingsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Layout.spacing) {
             header
-            summaryGrid
-            savingsChart
-            recentActivity
+
+            GeometryReader { geometry in
+                HStack(alignment: .top, spacing: Layout.spacing) {
+                    VStack(spacing: Layout.spacing) {
+                        savingsChart
+                        SummaryMetricsGrid(metrics: summaryMetrics, spacing: Layout.spacing)
+                    }
+                    .frame(width: contentWidth(in: geometry.size.width, share: 2))
+                    .frame(maxHeight: .infinity)
+
+                    recentActivity
+                        .frame(width: contentWidth(in: geometry.size.width, share: 1))
+                        .frame(maxHeight: .infinity)
+                        .background(Color(NSColor.controlBackgroundColor))
+                        .cornerRadius(Layout.cardCornerRadius)
+                }
+            }
+
             Spacer()
         }
         .padding()
@@ -42,6 +57,11 @@ struct SavingsView: View {
                 }
             )
         }
+    }
+
+    func contentWidth(in totalWidth: CGFloat, share: CGFloat) -> CGFloat {
+        let availableWidth = totalWidth - Layout.spacing
+        return max(0, availableWidth * share / 3)
     }
 }
 
@@ -71,51 +91,60 @@ private extension SavingsView {
         }
     }
 
-    var summaryGrid: some View {
-        Grid(alignment: .leading, horizontalSpacing: Layout.spacing, verticalSpacing: Layout.spacing) {
-            GridRow {
-                SummaryCardView(title: "Current Value") {
-                    Text(viewData.currentValue.toCurrency())
-                        .font(.title2)
-                        .fontWeight(.bold)
-                }
+    var summaryMetrics: [SummaryMetric] {
+        let growthColor: Color = viewData.growth >= 0 ? .green : .red
 
-                SummaryCardView(title: "Net Contributions") {
-                    Text(viewData.netContributions.toCurrency())
-                        .font(.title2)
-                        .fontWeight(.bold)
-                }
-            }
-
-            GridRow {
-                SummaryCardView(title: "Growth") {
-                    Text(viewData.growth.toCurrency())
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .foregroundColor(viewData.growth >= 0 ? .green : .red)
-                }
-
-                SummaryCardView(title: "Growth %") {
-                    Text(viewData.growthPercent)
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .foregroundColor(viewData.growth >= 0 ? .green : .red)
-                }
-            }
-        }
+        return [
+            SummaryMetric(
+                title: "Current Value",
+                primaryText: viewData.currentValue.toCurrency()
+            ),
+            SummaryMetric(
+                title: "Net Contributions",
+                primaryText: viewData.netContributions.toCurrency()
+            ),
+            SummaryMetric(
+                title: "Growth",
+                primaryText: viewData.growth.toCurrency(),
+                primaryColor: growthColor
+            ),
+            SummaryMetric(
+                title: "Growth %",
+                primaryText: viewData.growthPercent,
+                primaryColor: growthColor
+            )
+        ]
     }
 
     var savingsChart: some View {
         Chart {
             ForEach(viewData.chartPoints) { point in
+                AreaMark(
+                    x: .value("Date", point.date),
+                    yStart: .value("Baseline", 0),
+                    yEnd: .value("Net Contributions", point.netContributionsDouble)
+                )
+                .foregroundStyle(by: .value("Series", "Net Contributions (shading)"))
+                .interpolationMethod(.linear)
+
                 LineMark(
                     x: .value("Date", point.date),
                     y: .value("Amount", point.netContributionsDouble)
                 )
                 .foregroundStyle(by: .value("Series", "Net Contributions"))
                 .interpolationMethod(.linear)
+            }
 
+            ForEach(viewData.chartPoints) { point in
                 if let accountValue = point.accountValueDouble {
+                    AreaMark(
+                        x: .value("Date", point.date),
+                        yStart: .value("Net Contributions", point.netContributionsDouble),
+                        yEnd: .value("Account Value", accountValue)
+                    )
+                    .foregroundStyle(by: .value("Series", "Account Value (shading)"))
+                    .interpolationMethod(.linear)
+
                     LineMark(
                         x: .value("Date", point.date),
                         y: .value("Amount", accountValue)
@@ -127,7 +156,9 @@ private extension SavingsView {
         }
         .chartForegroundStyleScale([
             "Net Contributions": Color.blue,
-            "Account Value": Color.green
+            "Net Contributions (shading)": Color.blue.opacity(0.10),
+            "Account Value": Color.green,
+            "Account Value (shading)": Color.green.opacity(0.10),
         ])
         .chartXAxis {
             AxisMarks { _ in
@@ -157,53 +188,54 @@ private extension SavingsView {
         VStack(alignment: .leading, spacing: 12) {
             Text("Recent Activity")
                 .font(.headline)
+                .padding([.horizontal, .top])
 
-            VStack(spacing: 0) {
-                ForEach(viewData.recentActivity) { item in
-                    HStack(spacing: 12) {
-                        Text(Self.activityDateFormatter.string(from: item.date))
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .frame(width: 64, alignment: .leading)
+            ScrollView {
+                VStack(spacing: 0) {
+                    ForEach(viewData.recentActivity) { item in
+                        HStack(spacing: 12) {
+                            Text(Self.activityDateFormatter.string(from: item.date))
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .frame(width: 64, alignment: .leading)
 
-                        Image(systemName: item.iconName)
-                            .foregroundColor(item.color)
-                            .frame(width: 24)
+                            Image(systemName: item.iconName)
+                                .foregroundColor(item.color)
+                                .frame(width: 24)
 
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(item.title)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(item.title)
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+
+                                Text(item.accountName)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+
+                            Spacer()
+
+                            Text(item.amount.toCurrency())
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
-
-                            Text(item.accountName)
-                                .font(.caption)
-                                .foregroundColor(.secondary)
                         }
-
-                        Spacer()
-
-                        Text(item.amount.toCurrency())
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                    }
-                    .padding(.vertical, 10)
-
-                    if item.id != viewData.recentActivity.last?.id {
-                        Divider()
-                    }
-                }
-
-                if viewData.recentActivity.isEmpty {
-                    Text("No recent savings activity")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.vertical, 10)
+
+                        if item.id != viewData.recentActivity.last?.id {
+                            Divider()
+                        }
+                    }
+
+                    if viewData.recentActivity.isEmpty {
+                        Text("No recent savings activity")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.vertical, 10)
+                    }
                 }
+                .padding(.horizontal)
             }
-            .padding(.horizontal)
-            .background(Color(NSColor.controlBackgroundColor))
-            .cornerRadius(Layout.cardCornerRadius)
         }
     }
 }

@@ -13,17 +13,20 @@ struct SummaryMetric: Identifiable {
     let primaryText: String
     let secondaryText: String?
     let iconName: String?
+    let primaryColor: Color
 
     init(
         title: String,
         primaryText: String,
         secondaryText: String? = nil,
-        iconName: String? = nil
+        iconName: String? = nil,
+        primaryColor: Color = .primary
     ) {
         self.title = title
         self.primaryText = primaryText
         self.secondaryText = secondaryText
         self.iconName = iconName
+        self.primaryColor = primaryColor
     }
 }
 
@@ -61,6 +64,7 @@ private struct SummaryMetricCard: View {
             }
             .font(.title2)
             .fontWeight(.bold)
+            .foregroundColor(metric.primaryColor)
 
             if let secondaryText = metric.secondaryText {
                 Text(secondaryText)
