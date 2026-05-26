@@ -10,12 +10,12 @@ import SwiftUI
 // TODO: add a way to click on a category from the Donut Chart or the Category List and pull up a view of
 // the transactions in that category for the given month and year
 
-// TODO: add a category menu that is multi-select to choose which categories are included in the breakdown
-
 struct TrendsView: View {
     @Environment(DataManager.self) private var dataManager
     
     @Binding var selectedDate: Date
+    @State private var selectedTransactionID: UUID?
+    @State private var selectedCategoryId: String?
 
     let kGridSpacing: CGFloat = 24
     let kCornerRadius: CGFloat = 12
@@ -38,10 +38,18 @@ struct TrendsView: View {
                     SummaryMetricsGrid(metrics: summaryMetrics, spacing: kGridSpacing)
                 }
 
-                CategoryListView(spendingByCategory: viewData.spendingByCategory, totalSpending: viewData.totalSpending)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(kCornerRadius)
+                VStack(spacing: kGridSpacing) {
+                    CategoryListView(
+                        spendingByCategory: viewData.spendingByCategory,
+                        totalSpending: viewData.totalSpending,
+                        selectedCategoryId: $selectedCategoryId
+                    )
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(Color(NSColor.controlBackgroundColor))
+                        .cornerRadius(kCornerRadius)
+
+                    transactionsList
+                }
             }
         }
         .padding()
@@ -55,7 +63,8 @@ struct TrendsView: View {
                             avgMonthlySpending: nil,
                             avgDailySpending: 0,
                             mostFrequentCategory: nil,
-                            largestOutflow: nil)
+                            largestOutflow: nil,
+                            transactions: [])
         }
 
         var filteredTransactions = dataManager.transactions(from: dateInterval.start, to: dateInterval.end)
@@ -80,7 +89,8 @@ struct TrendsView: View {
                         avgMonthlySpending: avgMonthlySpending,
                         avgDailySpending: avgDailySpending,
                         mostFrequentCategory: mostFrequentCategory,
-                        largestOutflow: largestOutflow)
+                        largestOutflow: largestOutflow,
+                        transactions: filteredTransactions.sorted { $0.date > $1.date })
     }
 
     private var summaryMetrics: [SummaryMetric] {
@@ -106,6 +116,104 @@ struct TrendsView: View {
             )
         ]
     }
+
+    private var transactionsList: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Transactions")
+                    .font(.headline)
+
+                Spacer()
+
+                categoryFilterMenu
+            }
+            .padding([.horizontal, .top])
+
+            ScrollView {
+                LazyVStack(spacing: 0) {
+                    ForEach(filteredTransactionsForSelectedCategory) { transaction in
+                        TransactionView(
+                            selectedTransactionID: $selectedTransactionID,
+                            swipeActionsEnabled: true,
+                            transaction: transaction,
+                            displayingAccountId: nil
+                        )
+
+                        if transaction.id != filteredTransactionsForSelectedCategory.last?.id {
+                            Divider()
+                        }
+                    }
+
+                    if filteredTransactionsForSelectedCategory.isEmpty {
+                        Text(emptyTransactionsMessage)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding()
+                    }
+                }
+                .padding(.horizontal)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(NSColor.controlBackgroundColor))
+        .cornerRadius(kCornerRadius)
+    }
+
+    private var filteredTransactionsForSelectedCategory: [Transaction] {
+        guard let selectedCategoryId else {
+            return viewData.transactions
+        }
+
+        return viewData.transactions.filter { $0.category.id == selectedCategoryId }
+    }
+
+    private var categoryFilterMenu: some View {
+        Menu {
+            Button("All Categories") {
+                selectedCategoryId = nil
+            }
+
+            Divider()
+
+            ForEach(viewData.spendingByCategory) { categorySpending in
+                Button(categorySpending.category.displayName) {
+                    selectedCategoryId = categorySpending.category.id
+                }
+            }
+        } label: {
+            HStack(spacing: 6) {
+                Text(selectedCategoryName)
+                    .lineLimit(1)
+
+                Image(systemName: "chevron.down")
+                    .font(.system(size: 10, weight: .semibold))
+            }
+            .font(.caption)
+            .fontWeight(.semibold)
+            .foregroundColor(.secondary)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(Color.primary.opacity(0.06))
+            .clipShape(Capsule())
+            .frame(maxWidth: 180)
+        }
+        .menuIndicator(.hidden)
+        .buttonStyle(.plain)
+    }
+
+    private var selectedCategoryName: String {
+        guard let selectedCategoryId,
+              let category = viewData.spendingByCategory.first(where: { $0.category.id == selectedCategoryId })?.category else {
+            return "All Categories"
+        }
+
+        return category.displayName
+    }
+
+    private var emptyTransactionsMessage: String {
+        selectedCategoryId == nil ? "No spending transactions" : "No transactions for this category"
+    }
     
     struct ViewData {
         let totalSpending: Decimal
@@ -114,5 +222,6 @@ struct TrendsView: View {
         let avgDailySpending: Decimal
         let mostFrequentCategory: (category: any TransactionCategoryProtocol, count: Int)?
         let largestOutflow: Transaction?
+        let transactions: [Transaction]
     }
 }

@@ -10,6 +10,7 @@ import SwiftUI
 struct CategoryListView: View {
     let spendingByCategory: [DataManager.CategorySpending]
     let totalSpending: Decimal
+    @Binding var selectedCategoryId: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
@@ -24,8 +25,13 @@ struct CategoryListView: View {
             ForEach(spendingByCategory) { categorySpending in
                 CategoryListRow(
                     categorySpending: categorySpending,
-                    totalSpending: totalSpending
+                    totalSpending: totalSpending,
+                    isSelected: selectedCategoryId == categorySpending.category.id
                 )
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    selectedCategoryId = categorySpending.category.id
+                }
             }
 
             Spacer()

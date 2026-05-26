@@ -10,6 +10,7 @@ import SwiftUI
 struct CategoryListRow: View {
     let categorySpending: DataManager.CategorySpending
     let totalSpending: Decimal
+    let isSelected: Bool
 
     @State private var isHovering = false
 
@@ -42,6 +43,13 @@ struct CategoryListRow: View {
                 color: categorySpending.category.baseColor,
                 height: 15
             )
+        }
+        .background {
+            if isSelected {
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(categorySpending.category.baseColor.opacity(0.12))
+                    .padding(-8)
+            }
         }
         .scaleEffect(isHovering ? 1.01 : 1.0)
         .animation(.easeInOut(duration: 0.2), value: isHovering)
