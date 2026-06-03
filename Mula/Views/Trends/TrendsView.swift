@@ -7,9 +7,6 @@
 
 import SwiftUI
 
-// TODO: add a way to click on a category from the Donut Chart or the Category List and pull up a view of
-// the transactions in that category for the given month and year
-
 struct TrendsView: View {
     @Environment(DataManager.self) private var dataManager
     
@@ -30,7 +27,11 @@ struct TrendsView: View {
             // MARK: - Main Content
             HStack(alignment: .top, spacing: kGridSpacing) {
                 VStack(spacing: kGridSpacing) {
-                    DonutChartView(spendingByCategory: viewData.spendingByCategory, totalSpending: viewData.totalSpending)
+                    DonutChartView(
+                        spendingByCategory: viewData.spendingByCategory,
+                        totalSpending: viewData.totalSpending,
+                        selectedCategoryId: $selectedCategoryId
+                    )
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .background(Color(NSColor.controlBackgroundColor))
                         .cornerRadius(kCornerRadius)
