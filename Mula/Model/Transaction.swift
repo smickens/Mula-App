@@ -99,17 +99,6 @@ enum TransactionKind: Codable, Hashable {
     case saving(SavingCategory)
     case transfer(_ category: TransferCategory, destinationAccountId: UUID = Account.default)
 
-    struct ExpenseDetails {
-        let category: ExpenseCategory
-    }
-    struct IncomeDetails {
-        let category: ExpenseCategory
-    }
-    struct TransferDetails {
-        let category: TransferCategory
-        let destinationAccountId: UUID = Account.default
-    }
-
     var defaultTitle: String {
         switch self {
         case .expense(let category): return "\(category.displayName) Expense"

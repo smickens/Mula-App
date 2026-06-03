@@ -77,19 +77,4 @@ struct CSVRow {
         return values[index]
     }
 
-    func preferredValue(for headers: [String], fallbackIndex: Int) -> String {
-        for header in headers {
-            let value = value(for: header)
-
-            if !value.isEmpty {
-                return value
-            }
-        }
-
-        guard values.indices.contains(fallbackIndex) else {
-            return ""
-        }
-
-        return values[fallbackIndex]
-    }
 }

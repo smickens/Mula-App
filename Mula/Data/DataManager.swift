@@ -114,16 +114,6 @@ final class DataManager {
         transactions.filter { $0.date.year == year && $0.date.month == month }
     }
 
-    func transactions(with year: String, and month: String, in category: any TransactionCategoryProtocol) -> [Transaction] {
-        let filtered = transactions(with: year, and: month)
-        return filtered.filter { $0.category.id == category.id }
-    }
-
-    func totalTransactions(with year: String, and month: String, in category: any TransactionCategoryProtocol) -> Decimal {
-        let filtered = transactions(with: year, and: month, in: category)
-        return filtered.reduce(0) { $0 + $1.amount }
-    }
-
     // MARK: - Breakdown
 
     func transactions(from startDate: Date, to endDate: Date) -> [Transaction] {
@@ -226,13 +216,4 @@ final class DataManager {
     func largestTransaction(in transactions: [Transaction]) -> Transaction? {
         return transactions.max(by: { $0.amount < $1.amount })
     }
-
-    // MARK: Helper functions
-
-    private var numberFormatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 2
-        return formatter
-    }()
 }

@@ -186,16 +186,6 @@ struct ImportsView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
-    // MARK: - Helpers
-
-    private func accountName(for accountId: UUID?) -> String {
-        guard let accountId = accountId,
-              let account = dataManager.accounts.first(where: { $0.id == accountId }) else {
-            return "Unknown"
-        }
-        return account.name
-    }
-
     private func transactions(for batch: ImportBatch) -> [Transaction] {
         dataManager.transactions
             .filter { $0.importBatchId == batch.id }

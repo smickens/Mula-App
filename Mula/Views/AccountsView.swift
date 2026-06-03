@@ -200,16 +200,6 @@ struct AccountsView: View {
         return "Transactions"
     }
 
-    // MARK: - Helpers
-
-    private func accountName(for accountId: UUID?) -> String {
-        guard let accountId = accountId,
-              let account = dataManager.accounts.first(where: { $0.id == accountId }) else {
-            return "Unknown"
-        }
-        return account.name
-    }
-
     private func iconForAccountType(_ type: AccountType) -> String {
         switch type {
         case .certificateOfDeposit:
