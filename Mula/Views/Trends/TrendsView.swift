@@ -129,8 +129,14 @@ struct TrendsView: View {
             }
             .padding([.horizontal, .top])
 
-            ScrollView {
-                LazyVStack(spacing: 0) {
+            if filteredTransactionsForSelectedCategory.isEmpty {
+                Text(emptyTransactionsMessage)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+            } else {
+                List(selection: $selectedTransactionID) {
                     ForEach(filteredTransactionsForSelectedCategory) { transaction in
                         TransactionView(
                             selectedTransactionID: $selectedTransactionID,
@@ -138,21 +144,10 @@ struct TrendsView: View {
                             transaction: transaction,
                             displayingAccountId: nil
                         )
-
-                        if transaction.id != filteredTransactionsForSelectedCategory.last?.id {
-                            Divider()
-                        }
-                    }
-
-                    if filteredTransactionsForSelectedCategory.isEmpty {
-                        Text(emptyTransactionsMessage)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding()
+                        .tag(transaction.id)
                     }
                 }
-                .padding(.horizontal)
+                .listStyle(.plain)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
