@@ -30,7 +30,11 @@ struct CategoryListView: View {
                 )
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    selectedCategoryId = categorySpending.category.id
+                    if selectedCategoryId == categorySpending.category.id {
+                        selectedCategoryId = nil
+                    } else {
+                        selectedCategoryId = categorySpending.category.id
+                    }
                 }
             }
 
