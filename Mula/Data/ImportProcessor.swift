@@ -125,6 +125,7 @@ private struct BankImportFormat {
 
     private static let allFormats: [BankImportFormat] = [
         .apple,
+        .fidelity401k,
         .usBank,
         .wellsFargo
     ]
@@ -213,6 +214,45 @@ private extension BankImportFormat {
             }
 
             return .success(candidate.applyingBankRules(BankImportRules.usBank).transaction)
+        }
+    )
+
+    static let fidelity401k = BankImportFormat(
+        bank: .fidelity401k,
+        matches: { headers in
+            headers.containsAll(["Run Date", "Action", "Description", "Amount ($)"])
+        },
+        transaction: { row in
+            let action = row.value(for: "Action")
+
+            guard action.caseInsensitiveCompare("Contributions") == .orderedSame else {
+                return .skip(.ignoredTransaction(action))
+            }
+
+            let dateString = row.value(for: "Run Date")
+            let description = row.value(for: "Description")
+            let amountString = row.value(for: "Amount ($)")
+
+            guard let date = DateImportParser.date(from: dateString, format: "MM/dd/yyyy") else {
+                return .skip(.invalidDate(dateString))
+            }
+
+            guard let signedAmount = Decimal(string: amountString) else {
+                return .skip(.invalidAmount(amountString))
+            }
+
+            let descriptionText = description.isEmpty ? "(No Desc)" : description
+
+            let transaction = ImportedTransactionCandidate(
+                title: "Contributions - \(descriptionText)",
+                date: date,
+                signedAmount: signedAmount,
+                kind: .saving(.contribution),
+                sourceAccountId: Bank.fidelity401k.accountId
+            )
+            .transaction
+
+            return .success(transaction)
         }
     )
 

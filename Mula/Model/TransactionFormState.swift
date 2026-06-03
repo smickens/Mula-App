@@ -118,7 +118,7 @@ extension TransactionFormState {
     private func title(for kind: TransactionKind) -> String {
         switch kind {
         case .saving:
-            return ""
+            return title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "" : title
         case .expense, .income, .transfer:
             return title
         }

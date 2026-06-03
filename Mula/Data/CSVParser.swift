@@ -14,7 +14,11 @@ struct CSVParser {
             .enumerated()
             .compactMap { index, line -> CSVRow? in
                 let values = parseLine(line)
-                let isEmpty = values.allSatisfy { $0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+                let isEmpty = values.allSatisfy {
+                    $0.removingByteOrderMark()
+                        .trimmingCharacters(in: .whitespacesAndNewlines)
+                        .isEmpty
+                }
 
                 guard !isEmpty else { return nil }
 
@@ -25,7 +29,7 @@ struct CSVParser {
             return CSVTable(headers: [], dataRows: [])
         }
 
-        let headers = headerRow.values
+        let headers = headerRow.values.map { $0.removingByteOrderMark() }
         let dataRows = parsedRows.dropFirst().map {
             CSVRow(rowNumber: $0.rowNumber, headers: headers, values: $0.values)
         }
