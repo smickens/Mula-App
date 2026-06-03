@@ -58,6 +58,11 @@ struct CategoryProgressBar: View {
                 animatedValue = percentage
             }
         }
+        .onChange(of: percentage) {
+            withAnimation(.easeOut(duration: 0.35)) {
+                animatedValue = percentage
+            }
+        }
     }
 
     private var percentageText: Int {

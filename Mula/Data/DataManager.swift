@@ -131,9 +131,12 @@ final class DataManager {
     }
 
     struct CategorySpending: Identifiable {
-        var id = UUID()
         let category: any TransactionCategoryProtocol
         let total: Decimal
+
+        var id: String {
+            category.id
+        }
     }
 
     func groupSpendingByCategory(transactions: [Transaction], maxCategories: Int = 6) -> [CategorySpending] {
