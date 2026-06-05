@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MulaCore
 
 // TODO: fix bug - deletea transaction in import popup view and it loses most of its height
 

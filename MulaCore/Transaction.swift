@@ -8,17 +8,17 @@
 import Foundation
 import SwiftUI
 
-struct Transaction: Identifiable, Codable, Hashable {
-    let id: UUID
-    let title: String
-    let date: Date
-    let kind: TransactionKind
-    let amount: Decimal
-    let myShareAmount: Decimal?
-    let sourceAccountId: UUID
-    let importBatchId: UUID?
+public struct Transaction: Identifiable, Codable, Hashable {
+    public let id: UUID
+    public let title: String
+    public let date: Date
+    public let kind: TransactionKind
+    public let amount: Decimal
+    public let myShareAmount: Decimal?
+    public let sourceAccountId: UUID
+    public let importBatchId: UUID?
 
-    init(
+    public init(
         id: UUID,
         title: String,
         date: Date,
@@ -38,12 +38,12 @@ struct Transaction: Identifiable, Codable, Hashable {
         self.importBatchId = importBatchId
     }
 
-    var displayTitle: String {
+    public var displayTitle: String {
         let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
         return trimmedTitle.isEmpty ? kind.defaultTitle : trimmedTitle
     }
 
-    func amountSigned(displayingAccountId: UUID? = nil) -> Decimal {
+    public func amountSigned(displayingAccountId: UUID? = nil) -> Decimal {
         switch kind {
         case .expense:
             return -amount
@@ -60,7 +60,7 @@ struct Transaction: Identifiable, Codable, Hashable {
         }
     }
 
-    func amountColor(displayingAccountId: UUID? = nil) -> Color {
+    public func amountColor(displayingAccountId: UUID? = nil) -> Color {
         switch kind {
         case .expense:
             return .red
@@ -78,12 +78,12 @@ struct Transaction: Identifiable, Codable, Hashable {
         }
     }
 
-    var mySpendingAmount: Decimal {
+    public var mySpendingAmount: Decimal {
         guard kind.isSpendingAnalyticsEligible else { return amount }
         return myShareAmount ?? amount
     }
 
-    var hasCustomMyShare: Bool {
+    public var hasCustomMyShare: Bool {
         guard kind.isSpendingAnalyticsEligible,
               let myShareAmount else {
             return false
@@ -92,7 +92,7 @@ struct Transaction: Identifiable, Codable, Hashable {
         return myShareAmount != amount
     }
 
-    func withImportBatchId(_ importBatchId: UUID) -> Transaction {
+    public func withImportBatchId(_ importBatchId: UUID) -> Transaction {
         Transaction(
             id: id,
             title: title,
@@ -106,13 +106,13 @@ struct Transaction: Identifiable, Codable, Hashable {
     }
 }
 
-enum TransactionKind: Codable, Hashable {
+public enum TransactionKind: Codable, Hashable {
     case expense(ExpenseCategory)
     case income(IncomeCategory)
     case saving(SavingCategory)
     case transfer(_ category: TransferCategory, destinationAccountId: UUID = Account.default)
 
-    var defaultTitle: String {
+    public var defaultTitle: String {
         switch self {
         case .expense(let category): return "\(category.displayName) Expense"
         case .income(let category): return category.displayName
@@ -122,32 +122,32 @@ enum TransactionKind: Codable, Hashable {
         }
     }
 
-    var isExpense: Bool {
+    public var isExpense: Bool {
         if case .expense = self { return true }
         return false
     }
 
-    var isIncome: Bool {
+    public var isIncome: Bool {
         if case .income = self { return true }
         return false
     }
 
-    var isSaving: Bool {
+    public var isSaving: Bool {
         if case .saving = self { return true }
         return false
     }
 
-    var isSavingContribution: Bool {
+    public var isSavingContribution: Bool {
         if case .saving(.contribution) = self { return true }
         return false
     }
 
-    var isSavingWithdrawal: Bool {
+    public var isSavingWithdrawal: Bool {
         if case .saving(.withdrawal) = self { return true }
         return false
     }
 
-    var isSpendingAnalyticsEligible: Bool {
+    public var isSpendingAnalyticsEligible: Bool {
         isExpense
     }
 }
@@ -155,7 +155,7 @@ enum TransactionKind: Codable, Hashable {
 extension Transaction {
 
     /// Computed property to get/set the category for the current transaction kind
-    var category: any TransactionCategoryProtocol {
+    public var category: any TransactionCategoryProtocol {
         get {
             switch kind {
             case .expense(let c): return c

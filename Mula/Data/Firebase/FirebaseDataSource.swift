@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseDatabase
+import MulaCore
 
 final class FirebaseDataSource: DataSource {
     private let databaseReference: DatabaseReference

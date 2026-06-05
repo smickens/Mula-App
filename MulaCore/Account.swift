@@ -7,15 +7,15 @@
 
 import Foundation
 
-struct Account: Identifiable, Codable, Hashable {
-    let id: UUID
-    var name: String
-    var type: AccountType
+public struct Account: Identifiable, Codable, Hashable {
+    public let id: UUID
+    public var name: String
+    public var type: AccountType
 
     // TODO: default should read from DataManager instead ?
-    static let `default`: UUID = UUID(uuidString: "781259EA-A78D-431A-B697-3EC87A9183D2")!
+    public static let `default`: UUID = UUID(uuidString: "781259EA-A78D-431A-B697-3EC87A9183D2")!
 
-    init(id: UUID = UUID(), name: String, type: AccountType) {
+    public init(id: UUID = UUID(), name: String, type: AccountType) {
         self.id = id
         self.name = name
         self.type = type
@@ -28,8 +28,8 @@ struct Account: Identifiable, Codable, Hashable {
     }
 }
 
-enum AccountType: String, CaseIterable, Codable, Identifiable {
-    var id: String { rawValue }
+public enum AccountType: String, CaseIterable, Codable, Identifiable {
+    public var id: String { rawValue }
 
     case certificateOfDeposit
     case checking
@@ -38,11 +38,11 @@ enum AccountType: String, CaseIterable, Codable, Identifiable {
     case retirement
     case saving
 
-    static func get(from string: String) -> AccountType? {
+    public static func get(from string: String) -> AccountType? {
         return AccountType(rawValue: string)
     }
 
-    var displayName: String {
+    public var displayName: String {
         switch self {
         case .certificateOfDeposit: return "Certificate of Deposit"
         case .checking: return "Checking"

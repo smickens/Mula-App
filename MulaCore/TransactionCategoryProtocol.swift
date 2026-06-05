@@ -8,7 +8,7 @@
 import SwiftUI
 
 // since protocol cannot conform to things, is there any point in writing these other ones by it ?
-protocol TransactionCategoryProtocol: CaseIterable, Identifiable, Codable, Hashable {
+public protocol TransactionCategoryProtocol: CaseIterable, Identifiable, Codable, Hashable {
     var id: String { get }
     var displayName: String { get }
     var iconName: String { get }
@@ -19,12 +19,12 @@ protocol TransactionCategoryProtocol: CaseIterable, Identifiable, Codable, Hasha
 // or maybe its hotel that mainly feels odd, to put in "housing"
 // could add an "apt." similar to car
 
-enum ExpenseCategory: String, CaseIterable, TransactionCategoryProtocol {
+public enum ExpenseCategory: String, CaseIterable, TransactionCategoryProtocol {
     case housing, eatingOut, groceries, shopping, car, transit, entertainment, other
 
-    var id: String { rawValue }
+    public var id: String { rawValue }
 
-    var displayName: String {
+    public var displayName: String {
         switch self {
         case .housing: return "Housing"
         case .eatingOut: return "Eating Out"
@@ -37,7 +37,7 @@ enum ExpenseCategory: String, CaseIterable, TransactionCategoryProtocol {
         }
     }
 
-    var iconName: String {
+    public var iconName: String {
         switch self {
         case .housing: return "house.fill"
         case .eatingOut: return "fork.knife"
@@ -50,7 +50,7 @@ enum ExpenseCategory: String, CaseIterable, TransactionCategoryProtocol {
         }
     }
 
-    var baseColor: Color {
+    public var baseColor: Color {
         switch self {
         case .housing: return .blue
         case .eatingOut: return .orange
@@ -64,12 +64,12 @@ enum ExpenseCategory: String, CaseIterable, TransactionCategoryProtocol {
     }
 }
 
-enum IncomeCategory: String, CaseIterable, TransactionCategoryProtocol {
+public enum IncomeCategory: String, CaseIterable, TransactionCategoryProtocol {
     case job, refund, dividend, interest, other
 
-    var id: String { rawValue }
+    public var id: String { rawValue }
 
-    var displayName: String {
+    public var displayName: String {
         switch self {
         case .job: return "Job"
         case .refund: return "Refund"
@@ -79,7 +79,7 @@ enum IncomeCategory: String, CaseIterable, TransactionCategoryProtocol {
         }
     }
 
-    var iconName: String {
+    public var iconName: String {
         switch self {
         case .job: return "briefcase.fill"
         case .refund: return "arrow.uturn.backward.circle.fill"
@@ -89,7 +89,7 @@ enum IncomeCategory: String, CaseIterable, TransactionCategoryProtocol {
         }
     }
 
-    var baseColor: Color {
+    public var baseColor: Color {
         switch self {
         case .job: return .green
         case .refund: return .mint
@@ -100,27 +100,27 @@ enum IncomeCategory: String, CaseIterable, TransactionCategoryProtocol {
     }
 }
 
-enum SavingCategory: String, CaseIterable, TransactionCategoryProtocol {
+public enum SavingCategory: String, CaseIterable, TransactionCategoryProtocol {
     case contribution
     case withdrawal
 
-    var id: String { rawValue }
+    public var id: String { rawValue }
 
-    var displayName: String {
+    public var displayName: String {
         switch self {
         case .contribution: return "Add"
         case .withdrawal: return "Take Out"
         }
     }
 
-    var iconName: String {
+    public var iconName: String {
         switch self {
         case .contribution: return "plus.circle.fill"
         case .withdrawal: return "minus.circle.fill"
         }
     }
 
-    var baseColor: Color {
+    public var baseColor: Color {
         switch self {
         case .contribution: return .blue
         case .withdrawal: return .orange
@@ -129,16 +129,16 @@ enum SavingCategory: String, CaseIterable, TransactionCategoryProtocol {
 }
 
 // TODO: later consider removing this category type
-enum TransferCategory: String, CaseIterable, TransactionCategoryProtocol {
+public enum TransferCategory: String, CaseIterable, TransactionCategoryProtocol {
     case savings
     case investment
     case retirement
     case creditCardPayment
     case other
 
-    var id: String { rawValue }
+    public var id: String { rawValue }
 
-    var displayName: String {
+    public var displayName: String {
         switch self {
         case .savings: return "Savings"
         case .investment: return "Investment"
@@ -148,7 +148,7 @@ enum TransferCategory: String, CaseIterable, TransactionCategoryProtocol {
         }
     }
 
-    var iconName: String {
+    public var iconName: String {
         switch self {
         case .savings: return "banknote"
         case .investment: return "chart.line.uptrend.xyaxis"
@@ -158,7 +158,7 @@ enum TransferCategory: String, CaseIterable, TransactionCategoryProtocol {
         }
     }
 
-    var baseColor: Color {
+    public var baseColor: Color {
         switch self {
         case .savings: return .blue
         case .investment: return .purple

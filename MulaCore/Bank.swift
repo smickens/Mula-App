@@ -7,16 +7,16 @@
 
 import Foundation
 
-enum Bank: String, CaseIterable, Codable, Identifiable {
+public enum Bank: String, CaseIterable, Codable, Identifiable {
     case apple
     case fidelity401k
     case usBank
     case wellsFargo
 
-    var id: String { rawValue }
+    public var id: String { rawValue }
 
     // credit card accounts only
-    var accountId: UUID {
+    public var accountId: UUID {
         switch self {
         case .apple:
             return UUID(uuidString: "349FC2EA-B354-4171-9FA2-661591A278C0")!
@@ -31,7 +31,7 @@ enum Bank: String, CaseIterable, Codable, Identifiable {
         }
     }
 
-    var displayName: String {
+    public var displayName: String {
         switch self {
         case .apple:
             return "Apple Card"

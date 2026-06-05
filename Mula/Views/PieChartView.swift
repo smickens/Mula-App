@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Charts
+import MulaCore
 
 struct CategoryCount {
     var category: any TransactionCategoryProtocol

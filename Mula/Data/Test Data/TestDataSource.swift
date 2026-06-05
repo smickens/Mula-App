@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MulaCore
 
 final class TestDataSource: DataSource {
     private var accounts: [Account]

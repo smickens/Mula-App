@@ -7,6 +7,7 @@
 
 
 import SwiftUI
+import MulaCore
 
 struct AccountFormView: View {
     @Binding var account: Account

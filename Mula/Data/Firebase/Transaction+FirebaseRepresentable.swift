@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MulaCore
 
 extension Transaction: FirebaseRepresentable {
 

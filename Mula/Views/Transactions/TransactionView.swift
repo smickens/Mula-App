@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MulaCore
 
 struct TransactionViewConfiguration: Hashable {
     var amountDisplayMode: TransactionAmountDisplayMode

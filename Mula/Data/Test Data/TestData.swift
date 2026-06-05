@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MulaCore
 
 struct TestData {
     private enum ID {

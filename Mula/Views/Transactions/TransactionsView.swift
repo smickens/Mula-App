@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MulaCore
 
 // TODO: might remove this view entirely, and update AccountsView / TrendsView to consolidate
 

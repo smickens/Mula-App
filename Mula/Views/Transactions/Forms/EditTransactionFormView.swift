@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MulaCore
 
 struct EditTransactionFormView: View {
     @Environment(DataManager.self) private var dataManager

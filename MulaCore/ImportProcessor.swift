@@ -6,10 +6,9 @@
 //
 
 import Foundation
-import MulaCore
 
-struct ImportProcessor {
-    static func processFileContent(_ content: String) throws -> TransactionImportResult {
+public struct ImportProcessor {
+    public static func processFileContent(_ content: String) throws -> TransactionImportResult {
         let table = CSVParser.parse(content)
 
         guard !table.headers.isEmpty else {
@@ -50,12 +49,12 @@ struct ImportProcessor {
     }
 }
 
-enum ImportProcessingError: LocalizedError {
+public enum ImportProcessingError: LocalizedError {
     case missingHeaders
     case unsupportedFormat(headers: [String])
     case noImportableTransactions(detectedBank: Bank, skippedRows: [SkippedImportRow])
 
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case .missingHeaders:
             return "This file does not appear to contain CSV headers."
@@ -75,19 +74,19 @@ enum ImportProcessingError: LocalizedError {
     }
 }
 
-struct TransactionImportResult {
-    let detectedBank: Bank?
-    let transactions: [Transaction]
-    let skippedRows: [SkippedImportRow]
+public struct TransactionImportResult {
+    public let detectedBank: Bank?
+    public let transactions: [Transaction]
+    public let skippedRows: [SkippedImportRow]
 }
 
-struct SkippedImportRow: Identifiable {
-    let id = UUID()
-    let rowNumber: Int
-    let reason: ImportSkipReason
+public struct SkippedImportRow: Identifiable {
+    public let id = UUID()
+    public let rowNumber: Int
+    public let reason: ImportSkipReason
 }
 
-enum ImportSkipReason: Equatable {
+public enum ImportSkipReason: Equatable {
     case unsupportedFormat
     case emptyRow
     case missingRequiredValue(String)

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MulaCore
 
 struct SummaryView: View {
     @Binding var selectedCategory: (any TransactionCategoryProtocol)?

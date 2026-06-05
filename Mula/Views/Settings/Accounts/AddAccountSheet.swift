@@ -7,6 +7,7 @@
 
 
 import SwiftUI
+import MulaCore
 
 struct AddAccountSheet: View {
     @Environment(DataManager.self) private var dataManager

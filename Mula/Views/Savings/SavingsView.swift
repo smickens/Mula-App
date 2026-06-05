@@ -7,6 +7,7 @@
 
 import Charts
 import SwiftUI
+import MulaCore
 
 struct SavingsView: View {
     @Environment(DataManager.self) private var dataManager

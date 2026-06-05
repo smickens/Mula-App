@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Charts
+import MulaCore
 
 struct ChartData: Identifiable {
     let id = UUID()

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MulaCore
 
 protocol FirebaseRepresentable {
     var firebaseKey: String { get }
