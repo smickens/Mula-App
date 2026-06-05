@@ -325,9 +325,10 @@ private struct ImportedTransactionCandidate {
     }
 
     private func applyingRules(_ rules: [ImportRule]) -> ImportedTransactionCandidate {
+        let originalCandidate = self
         var candidate = self
 
-        for rule in rules where rule.matches(candidate) {
+        for rule in rules where rule.matches(originalCandidate) {
             candidate.title = rule.newTitle ?? candidate.title
             candidate.kind = rule.kind ?? candidate.kind
         }
@@ -395,8 +396,8 @@ private extension ImportRule.KindScope {
 
 private enum ImportRules {
     static let global: [ImportRule] = [
-        ImportRule(match: "Uber Eats", matchType: .contains, newTitle: "Uber Eats", kind: .expense(.eatingOut), appliesTo: .expense),
         ImportRule(match: "Uber", matchType: .contains, newTitle: "Uber", kind: .expense(.transit), appliesTo: .expense),
+        ImportRule(match: "Uber Eats", matchType: .contains, newTitle: "Uber Eats", kind: .expense(.eatingOut), appliesTo: .expense),
         ImportRule(match: "Lyft", matchType: .contains, newTitle: "Lyft", kind: .expense(.transit), appliesTo: .expense),
         ImportRule(match: "Safeway", matchType: .contains, newTitle: "Safeway", kind: .expense(.groceries), appliesTo: .expense),
         ImportRule(match: "Target", matchType: .contains, newTitle: "Target", kind: .expense(.groceries), appliesTo: .expense),
