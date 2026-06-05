@@ -10,16 +10,31 @@
 		DEF3CAE62B61BB9300C926ED /* MulaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF3CAE52B61BB9300C926ED /* MulaApp.swift */; };
 		DEF3CAEA2B61BB9500C926ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEF3CAE92B61BB9500C926ED /* Assets.xcassets */; };
 		DEF3CAED2B61BB9500C926ED /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEF3CAEC2B61BB9500C926ED /* Preview Assets.xcassets */; };
+		E3A100072FAF000100A10001 /* CSVParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A100022FAF000100A10001 /* CSVParserTests.swift */; };
+		E3A1000E2FAF000100A10001 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E284D4C32C44F49A00F72684 /* FirebaseAuth */; };
+		E3A1000F2FAF000100A10001 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E284D4C52C44F49A00F72684 /* FirebaseDatabaseSwift */; };
 		E284D4C42C44F49A00F72684 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E284D4C32C44F49A00F72684 /* FirebaseAuth */; };
 		E284D4C62C44F49A00F72684 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E284D4C52C44F49A00F72684 /* FirebaseDatabaseSwift */; };
 		E2992F832E91DDFE00E86606 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E2992F822E91DDFE00E86606 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E3A100052FAF000100A10001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DEF3CADA2B61BB9200C926ED /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DEF3CAE12B61BB9200C926ED;
+			remoteInfo = Mula;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		DEF3CAE22B61BB9300C926ED /* Mula.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mula.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEF3CAE52B61BB9300C926ED /* MulaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MulaApp.swift; sourceTree = "<group>"; };
 		DEF3CAE92B61BB9500C926ED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DEF3CAEC2B61BB9500C926ED /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		E3A100012FAF000100A10001 /* MulaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MulaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E3A100022FAF000100A10001 /* CSVParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVParserTests.swift; sourceTree = "<group>"; };
 		E2992F812E91DC4400E86606 /* Mula.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mula.entitlements; sourceTree = "<group>"; };
 		E2992F822E91DDFE00E86606 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -41,6 +56,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E3A100102FAF000100A10001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E3A1000F2FAF000100A10001 /* FirebaseDatabaseSwift in Frameworks */,
+				E3A1000E2FAF000100A10001 /* FirebaseAuth in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -48,6 +72,7 @@
 			isa = PBXGroup;
 			children = (
 				DEF3CAE42B61BB9300C926ED /* Mula */,
+				E3A100032FAF000100A10001 /* MulaTests */,
 				DEF3CAE32B61BB9300C926ED /* Products */,
 				E2F955962C462E60007D2E8E /* Frameworks */,
 			);
@@ -57,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				DEF3CAE22B61BB9300C926ED /* Mula.app */,
+				E3A100012FAF000100A10001 /* MulaTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -83,6 +109,14 @@
 				DEF3CAEC2B61BB9500C926ED /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		E3A100032FAF000100A10001 /* MulaTests */ = {
+			isa = PBXGroup;
+			children = (
+				E3A100022FAF000100A10001 /* CSVParserTests.swift */,
+			);
+			path = MulaTests;
 			sourceTree = "<group>";
 		};
 		E2F955962C462E60007D2E8E /* Frameworks */ = {
@@ -122,6 +156,27 @@
 			productReference = DEF3CAE22B61BB9300C926ED /* Mula.app */;
 			productType = "com.apple.product-type.application";
 		};
+		E3A100082FAF000100A10001 /* MulaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E3A1000D2FAF000100A10001 /* Build configuration list for PBXNativeTarget "MulaTests" */;
+			buildPhases = (
+				E3A100102FAF000100A10001 /* Frameworks */,
+				E3A100042FAF000100A10001 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E3A100062FAF000100A10001 /* PBXTargetDependency */,
+			);
+			name = MulaTests;
+			packageProductDependencies = (
+				E284D4C32C44F49A00F72684 /* FirebaseAuth */,
+				E284D4C52C44F49A00F72684 /* FirebaseDatabaseSwift */,
+			);
+			productName = MulaTests;
+			productReference = E3A100012FAF000100A10001 /* MulaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -134,6 +189,10 @@
 				TargetAttributes = {
 					DEF3CAE12B61BB9200C926ED = {
 						CreatedOnToolsVersion = 15.2;
+					};
+					E3A100082FAF000100A10001 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = DEF3CAE12B61BB9200C926ED;
 					};
 				};
 			};
@@ -154,6 +213,7 @@
 			projectRoot = "";
 			targets = (
 				DEF3CAE12B61BB9200C926ED /* Mula */,
+				E3A100082FAF000100A10001 /* MulaTests */,
 			);
 		};
 /* End PBXProject section */
@@ -180,7 +240,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E3A100042FAF000100A10001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E3A100072FAF000100A10001 /* CSVParserTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E3A100062FAF000100A10001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DEF3CAE12B61BB9200C926ED /* Mula */;
+			targetProxy = E3A100052FAF000100A10001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		DEF3CAEF2B61BB9500C926ED /* Debug */ = {
@@ -367,6 +443,48 @@
 			};
 			name = Release;
 		};
+		E3A100092FAF000100A10001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = S85ULMGGX9;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kayapps.MulaTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		E3A1000A2FAF000100A10001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = S85ULMGGX9;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kayapps.MulaTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -384,6 +502,15 @@
 			buildConfigurations = (
 				DEF3CAF22B61BB9500C926ED /* Debug */,
 				DEF3CAF32B61BB9500C926ED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E3A1000D2FAF000100A10001 /* Build configuration list for PBXNativeTarget "MulaTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E3A100092FAF000100A10001 /* Debug */,
+				E3A1000A2FAF000100A10001 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
