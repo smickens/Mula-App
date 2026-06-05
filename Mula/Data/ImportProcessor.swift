@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MulaCore
 
 struct ImportProcessor {
     static func processFileContent(_ content: String) throws -> TransactionImportResult {

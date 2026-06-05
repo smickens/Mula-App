@@ -10,33 +10,60 @@
 		DEF3CAE62B61BB9300C926ED /* MulaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF3CAE52B61BB9300C926ED /* MulaApp.swift */; };
 		DEF3CAEA2B61BB9500C926ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEF3CAE92B61BB9500C926ED /* Assets.xcassets */; };
 		DEF3CAED2B61BB9500C926ED /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEF3CAEC2B61BB9500C926ED /* Preview Assets.xcassets */; };
-		E3A100072FAF000100A10001 /* CSVParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A100022FAF000100A10001 /* CSVParserTests.swift */; };
-		E3A1000E2FAF000100A10001 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E284D4C32C44F49A00F72684 /* FirebaseAuth */; };
-		E3A1000F2FAF000100A10001 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E284D4C52C44F49A00F72684 /* FirebaseDatabaseSwift */; };
 		E284D4C42C44F49A00F72684 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = E284D4C32C44F49A00F72684 /* FirebaseAuth */; };
 		E284D4C62C44F49A00F72684 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E284D4C52C44F49A00F72684 /* FirebaseDatabaseSwift */; };
 		E2992F832E91DDFE00E86606 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E2992F822E91DDFE00E86606 /* GoogleService-Info.plist */; };
+		E3A100072FAF000100A10001 /* CSVParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A100022FAF000100A10001 /* CSVParserTests.swift */; };
+		E3A1000B2FAF000100A10001 /* MulaCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3A100152FAF000100A10001 /* MulaCore.framework */; };
+		E3A1000C2FAF000100A10001 /* MulaCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3A100152FAF000100A10001 /* MulaCore.framework */; };
+		E3A100112FAF000100A10001 /* CSVParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A100132FAF000100A10001 /* CSVParser.swift */; };
+		E3A100122FAF000100A10001 /* String+CSVParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A100142FAF000100A10001 /* String+CSVParsing.swift */; };
+		E3A100162FAF000100A10001 /* MulaCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E3A100152FAF000100A10001 /* MulaCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		E3A100232FAF000100A10001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DEF3CADA2B61BB9200C926ED /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E3A100182FAF000100A10001;
+			remoteInfo = MulaCore;
+		};
 		E3A100052FAF000100A10001 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DEF3CADA2B61BB9200C926ED /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = DEF3CAE12B61BB9200C926ED;
-			remoteInfo = Mula;
+			remoteGlobalIDString = E3A100182FAF000100A10001;
+			remoteInfo = MulaCore;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E3A100172FAF000100A10001 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E3A100162FAF000100A10001 /* MulaCore.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		DEF3CAE22B61BB9300C926ED /* Mula.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mula.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEF3CAE52B61BB9300C926ED /* MulaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MulaApp.swift; sourceTree = "<group>"; };
 		DEF3CAE92B61BB9500C926ED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DEF3CAEC2B61BB9500C926ED /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		E3A100012FAF000100A10001 /* MulaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MulaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E3A100022FAF000100A10001 /* CSVParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVParserTests.swift; sourceTree = "<group>"; };
+		E3A100152FAF000100A10001 /* MulaCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MulaCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2992F812E91DC4400E86606 /* Mula.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mula.entitlements; sourceTree = "<group>"; };
 		E2992F822E91DDFE00E86606 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E3A100012FAF000100A10001 /* MulaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MulaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E3A100022FAF000100A10001 /* CSVParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVParserTests.swift; sourceTree = "<group>"; };
+		E3A100132FAF000100A10001 /* CSVParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVParser.swift; sourceTree = "<group>"; };
+		E3A100142FAF000100A10001 /* String+CSVParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+CSVParsing.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -51,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E3A1000B2FAF000100A10001 /* MulaCore.framework in Frameworks */,
 				E284D4C62C44F49A00F72684 /* FirebaseDatabaseSwift in Frameworks */,
 				E284D4C42C44F49A00F72684 /* FirebaseAuth in Frameworks */,
 			);
@@ -60,8 +88,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E3A1000F2FAF000100A10001 /* FirebaseDatabaseSwift in Frameworks */,
-				E3A1000E2FAF000100A10001 /* FirebaseAuth in Frameworks */,
+				E3A1000C2FAF000100A10001 /* MulaCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E3A1001A2FAF000100A10001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				DEF3CAE42B61BB9300C926ED /* Mula */,
+				E3A1001B2FAF000100A10001 /* MulaCore */,
 				E3A100032FAF000100A10001 /* MulaTests */,
 				DEF3CAE32B61BB9300C926ED /* Products */,
 				E2F955962C462E60007D2E8E /* Frameworks */,
@@ -82,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				DEF3CAE22B61BB9300C926ED /* Mula.app */,
+				E3A100152FAF000100A10001 /* MulaCore.framework */,
 				E3A100012FAF000100A10001 /* MulaTests.xctest */,
 			);
 			name = Products;
@@ -111,6 +147,13 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		E2F955962C462E60007D2E8E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		E3A100032FAF000100A10001 /* MulaTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -119,11 +162,13 @@
 			path = MulaTests;
 			sourceTree = "<group>";
 		};
-		E2F955962C462E60007D2E8E /* Frameworks */ = {
+		E3A1001B2FAF000100A10001 /* MulaCore */ = {
 			isa = PBXGroup;
 			children = (
+				E3A100132FAF000100A10001 /* CSVParser.swift */,
+				E3A100142FAF000100A10001 /* String+CSVParsing.swift */,
 			);
-			name = Frameworks;
+			path = MulaCore;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -135,11 +180,13 @@
 			buildPhases = (
 				DEF3CADE2B61BB9200C926ED /* Sources */,
 				DEF3CADF2B61BB9200C926ED /* Frameworks */,
+				E3A100172FAF000100A10001 /* Embed Frameworks */,
 				DEF3CAE02B61BB9200C926ED /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E3A1001C2FAF000100A10001 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				E252B5282FA1C5F30064A197 /* Data */,
@@ -166,16 +213,32 @@
 			buildRules = (
 			);
 			dependencies = (
-				E3A100062FAF000100A10001 /* PBXTargetDependency */,
+				E3A1001D2FAF000100A10001 /* PBXTargetDependency */,
 			);
 			name = MulaTests;
 			packageProductDependencies = (
-				E284D4C32C44F49A00F72684 /* FirebaseAuth */,
-				E284D4C52C44F49A00F72684 /* FirebaseDatabaseSwift */,
 			);
 			productName = MulaTests;
 			productReference = E3A100012FAF000100A10001 /* MulaTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		E3A100182FAF000100A10001 /* MulaCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E3A1001E2FAF000100A10001 /* Build configuration list for PBXNativeTarget "MulaCore" */;
+			buildPhases = (
+				E3A1001F2FAF000100A10001 /* Sources */,
+				E3A1001A2FAF000100A10001 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MulaCore;
+			packageProductDependencies = (
+			);
+			productName = MulaCore;
+			productReference = E3A100152FAF000100A10001 /* MulaCore.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
@@ -190,9 +253,12 @@
 					DEF3CAE12B61BB9200C926ED = {
 						CreatedOnToolsVersion = 15.2;
 					};
+					E3A100182FAF000100A10001 = {
+						CreatedOnToolsVersion = 16.0;
+					};
 					E3A100082FAF000100A10001 = {
 						CreatedOnToolsVersion = 16.0;
-						TestTargetID = DEF3CAE12B61BB9200C926ED;
+						TestTargetID = E3A100182FAF000100A10001;
 					};
 				};
 			};
@@ -213,6 +279,7 @@
 			projectRoot = "";
 			targets = (
 				DEF3CAE12B61BB9200C926ED /* Mula */,
+				E3A100182FAF000100A10001 /* MulaCore */,
 				E3A100082FAF000100A10001 /* MulaTests */,
 			);
 		};
@@ -248,12 +315,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E3A1001F2FAF000100A10001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E3A100122FAF000100A10001 /* String+CSVParsing.swift in Sources */,
+				E3A100112FAF000100A10001 /* CSVParser.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		E3A100062FAF000100A10001 /* PBXTargetDependency */ = {
+		E3A1001C2FAF000100A10001 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = DEF3CAE12B61BB9200C926ED /* Mula */;
+			target = E3A100182FAF000100A10001 /* MulaCore */;
+			targetProxy = E3A100232FAF000100A10001 /* PBXContainerItemProxy */;
+		};
+		E3A1001D2FAF000100A10001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E3A100182FAF000100A10001 /* MulaCore */;
 			targetProxy = E3A100052FAF000100A10001 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -443,6 +524,58 @@
 			};
 			name = Release;
 		};
+		E3A100202FAF000100A10001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kayapps.MulaCore;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		E3A100212FAF000100A10001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kayapps.MulaCore;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
 		E3A100092FAF000100A10001 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -502,6 +635,15 @@
 			buildConfigurations = (
 				DEF3CAF22B61BB9500C926ED /* Debug */,
 				DEF3CAF32B61BB9500C926ED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E3A1001E2FAF000100A10001 /* Build configuration list for PBXNativeTarget "MulaCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E3A100202FAF000100A10001 /* Debug */,
+				E3A100212FAF000100A10001 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

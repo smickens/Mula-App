@@ -25,16 +25,6 @@ extension Date {
     }
 }
 
-extension String {
-    func removingQuotes() -> String {
-        self.trimmingCharacters(in: CharacterSet(charactersIn: "\"'"))
-    }
-
-    func removingByteOrderMark() -> String {
-        trimmingCharacters(in: CharacterSet(charactersIn: "\u{FEFF}"))
-    }
-}
-
 extension Decimal {
     func toCurrency() -> String {
         Self.currencyFormatter.string(from: self as NSDecimalNumber) ?? "$0.00"

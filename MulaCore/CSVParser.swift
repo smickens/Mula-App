@@ -1,14 +1,14 @@
 //
 //  CSVParser.swift
-//  Mula
+//  MulaCore
 //
 //  Created by Shanti Mickens on 5/9/26.
 //
 
 import Foundation
 
-struct CSVParser {
-    static func parse(_ content: String) -> CSVTable {
+public struct CSVParser {
+    public static func parse(_ content: String) -> CSVTable {
         let parsedRows = content
             .components(separatedBy: .newlines)
             .enumerated()
@@ -56,19 +56,32 @@ struct CSVParser {
         values.append(currentValue.trimmingCharacters(in: .whitespaces).removingQuotes())
         return values
     }
+
+    public init() {}
 }
 
-struct CSVTable {
-    let headers: [String]
-    let dataRows: [CSVRow]
+public struct CSVTable {
+    public let headers: [String]
+    public let dataRows: [CSVRow]
+
+    public init(headers: [String], dataRows: [CSVRow]) {
+        self.headers = headers
+        self.dataRows = dataRows
+    }
 }
 
-struct CSVRow {
-    let rowNumber: Int
-    let headers: [String]
-    let values: [String]
+public struct CSVRow {
+    public let rowNumber: Int
+    public let headers: [String]
+    public let values: [String]
 
-    func value(for header: String) -> String {
+    public init(rowNumber: Int, headers: [String], values: [String]) {
+        self.rowNumber = rowNumber
+        self.headers = headers
+        self.values = values
+    }
+
+    public func value(for header: String) -> String {
         guard let index = headers.firstIndex(where: { $0.caseInsensitiveCompare(header) == .orderedSame }),
               values.indices.contains(index) else {
             return ""
@@ -76,5 +89,4 @@ struct CSVRow {
 
         return values[index]
     }
-
 }
