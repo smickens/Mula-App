@@ -142,11 +142,17 @@ final class DataManager {
                 let category = transaction.category
                 let key = category.id
                 let currentTotal = dict[key]?.1 ?? 0
-                dict[key] = (category, currentTotal + transaction.amount)
+                dict[key] = (category, currentTotal + amount(transaction))
             }
 
-        // 2️⃣ Sort descending by total
-        let sortedSpending = spendingById.values.sorted { $0.1 > $1.1 }
+        // 2️⃣ Sort descending by total, with category order as a stable tie-breaker
+        let sortedSpending = spendingById.values.sorted { lhs, rhs in
+            if lhs.1 != rhs.1 {
+                return lhs.1 > rhs.1
+            }
+
+            return isCategoryOrderedBefore(lhs.0, rhs.0)
+        }
 
         // 3️⃣ Handle maxCategories & "Other"
         if sortedSpending.count > maxCategories {
@@ -215,10 +221,57 @@ final class DataManager {
             }
         }
 
-        return counts.values.max(by: { $0.1 < $1.1 })
+        return counts.values.max { lhs, rhs in
+            if lhs.1 != rhs.1 {
+                return lhs.1 < rhs.1
+            }
+
+            return isCategoryOrderedAfter(lhs.0, rhs.0)
+        }
     }
 
-    func largestTransaction(in transactions: [Transaction]) -> Transaction? {
-        return transactions.max(by: { $0.amount < $1.amount })
+    func largestTransaction(
+        in transactions: [Transaction],
+        amount: (Transaction) -> Decimal = { $0.amount }
+    ) -> Transaction? {
+        return transactions.max(by: { amount($0) < amount($1) })
+    }
+
+    private func isCategoryOrderedBefore(
+        _ lhs: any TransactionCategoryProtocol,
+        _ rhs: any TransactionCategoryProtocol
+    ) -> Bool {
+        categorySortKey(for: lhs) < categorySortKey(for: rhs)
+    }
+
+    private func isCategoryOrderedAfter(
+        _ lhs: any TransactionCategoryProtocol,
+        _ rhs: any TransactionCategoryProtocol
+    ) -> Bool {
+        categorySortKey(for: lhs) > categorySortKey(for: rhs)
+    }
+
+    private func categorySortKey(for category: any TransactionCategoryProtocol) -> String {
+        if let expenseCategory = category as? ExpenseCategory,
+           let index = ExpenseCategory.allCases.firstIndex(of: expenseCategory) {
+            return "expense-\(String(format: "%02d", index))"
+        }
+
+        if let incomeCategory = category as? IncomeCategory,
+           let index = IncomeCategory.allCases.firstIndex(of: incomeCategory) {
+            return "income-\(String(format: "%02d", index))"
+        }
+
+        if let savingCategory = category as? SavingCategory,
+           let index = SavingCategory.allCases.firstIndex(of: savingCategory) {
+            return "saving-\(String(format: "%02d", index))"
+        }
+
+        if let transferCategory = category as? TransferCategory,
+           let index = TransferCategory.allCases.firstIndex(of: transferCategory) {
+            return "transfer-\(String(format: "%02d", index))"
+        }
+
+        return "unknown-\(category.id)"
     }
 }
