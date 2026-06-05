@@ -134,7 +134,7 @@ struct AccountsView: View {
                             selectedTransactionID: $selectedTransactionID,
                             swipeActionsEnabled: true,
                             transaction: transaction,
-                            displayingAccountId: selectedAccountId
+                            configuration: .standard(displayingAccountId: selectedAccountId)
                         )
                         .tag(transaction.id)
                     }

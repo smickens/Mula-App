@@ -129,7 +129,11 @@ final class DataManager {
         }
     }
 
-    func groupSpendingByCategory(transactions: [Transaction], maxCategories: Int = 6) -> [CategorySpending] {
+    func groupSpendingByCategory(
+        transactions: [Transaction],
+        maxCategories: Int = 6,
+        amount: (Transaction) -> Decimal = { $0.amount }
+    ) -> [CategorySpending] {
         guard !transactions.isEmpty else { return [] }
 
         // 1️⃣ Count spending by category id
@@ -165,7 +169,8 @@ final class DataManager {
         forLastMonths months: Int,
         endingAt date: Date = Date(),
         minimumMonthlySpending: Decimal = 1000,
-        minimumValidMonths: Int = 2
+        minimumValidMonths: Int = 2,
+        amount: (Transaction) -> Decimal = { $0.amount }
     ) -> Decimal? {
         let calendar = Calendar.current
         var totalSpending: Decimal = 0.0
@@ -179,7 +184,7 @@ final class DataManager {
 
             let monthSpending = transactions(from: monthInterval.start, to: monthInterval.end)
                 .filter { $0.kind.isSpendingAnalyticsEligible }
-                .reduce(0) { $0 + $1.amount }
+                .reduce(0) { $0 + amount($1) }
 
             if monthSpending >= minimumMonthlySpending {
                 totalSpending += monthSpending

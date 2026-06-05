@@ -92,7 +92,12 @@ struct ImportTransactionsView: View {
     private var newTransactionsList: some View {
         List(selection: $selectedTransactionID) {
             ForEach(newTransactions) { transaction in
-                TransactionView(selectedTransactionID: $selectedTransactionID, swipeActionsEnabled: false, transaction: transaction, displayingAccountId: nil)
+                TransactionView(
+                    selectedTransactionID: $selectedTransactionID,
+                    swipeActionsEnabled: false,
+                    transaction: transaction,
+                    configuration: .standard
+                )
                     .tag(transaction.id)
             }
             .onDelete { indexSet in

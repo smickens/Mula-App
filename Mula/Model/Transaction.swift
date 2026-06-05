@@ -8,17 +8,13 @@
 import Foundation
 import SwiftUI
 
-// TODO: may add some kind of willBePaidBack / willBeReimbursed / personalShare
-// often i may order something knowing someone is going to pay me back fully for it, or even partially
-// it'd be good to capture that and allow the TrendsView to take that into account
-// then maybe trends can have a toggle for "My Spending" vs. "All Spending" (Profit vs. Revenue in reverse)
-
 struct Transaction: Identifiable, Codable, Hashable {
     let id: UUID
     let title: String
     let date: Date
     let kind: TransactionKind
     let amount: Decimal
+    let myShareAmount: Decimal?
     let sourceAccountId: UUID
     let importBatchId: UUID?
 
@@ -28,6 +24,7 @@ struct Transaction: Identifiable, Codable, Hashable {
         date: Date,
         kind: TransactionKind,
         amount: Decimal,
+        myShareAmount: Decimal? = nil,
         sourceAccountId: UUID,
         importBatchId: UUID? = nil
     ) {
@@ -36,6 +33,7 @@ struct Transaction: Identifiable, Codable, Hashable {
         self.date = date
         self.kind = kind
         self.amount = amount
+        self.myShareAmount = myShareAmount
         self.sourceAccountId = sourceAccountId
         self.importBatchId = importBatchId
     }
@@ -80,6 +78,20 @@ struct Transaction: Identifiable, Codable, Hashable {
         }
     }
 
+    var mySpendingAmount: Decimal {
+        guard kind.isSpendingAnalyticsEligible else { return amount }
+        return myShareAmount ?? amount
+    }
+
+    var hasCustomMyShare: Bool {
+        guard kind.isSpendingAnalyticsEligible,
+              let myShareAmount else {
+            return false
+        }
+
+        return myShareAmount != amount
+    }
+
     func withImportBatchId(_ importBatchId: UUID) -> Transaction {
         Transaction(
             id: id,
@@ -87,6 +99,7 @@ struct Transaction: Identifiable, Codable, Hashable {
             date: date,
             kind: kind,
             amount: amount,
+            myShareAmount: myShareAmount,
             sourceAccountId: sourceAccountId,
             importBatchId: importBatchId
         )

@@ -136,7 +136,7 @@ struct ImportsView: View {
                             selectedTransactionID: $selectedTransactionID,
                             swipeActionsEnabled: true,
                             transaction: transaction,
-                            displayingAccountId: nil
+                            configuration: .standard
                         )
                         .tag(transaction.id)
                     }

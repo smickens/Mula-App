@@ -113,6 +113,19 @@ private extension TransactionFormView {
                     }
                 }
 
+                if state.type == .expense {
+                    TransactionFieldRow(label: "My Share") {
+                        HStack(spacing: 8) {
+                            Text("$")
+                                .foregroundColor(.secondary)
+                                .frame(width: 18, alignment: .leading)
+
+                            TextField("Full amount", text: $state.myShareAmountString)
+                                .textFieldStyle(.plain)
+                        }
+                    }
+                }
+
                 TransactionFieldRow(label: state.type == .transfer ? "From" : "Account") {
                     sourceAccountField
                 }

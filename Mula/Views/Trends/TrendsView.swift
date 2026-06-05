@@ -13,16 +13,28 @@ struct TrendsView: View {
     @Binding var selectedDate: Date
     @State private var selectedTransactionID: UUID?
     @State private var selectedCategoryId: String?
+    @State private var spendingMode: SpendingMode = .personal
 
     let kGridSpacing: CGFloat = 24
     let kCornerRadius: CGFloat = 12
 
-    // TODO: add some kind of total vs. my spending toggle
-    // where my spending could filter down based on a personalShare concept on expense
     var body: some View {
         VStack(alignment: .leading, spacing: kGridSpacing) {
             // MARK: - Header
-            DatePeriodSelector(selectedDate: $selectedDate, granularity: .month)
+            HStack {
+                DatePeriodSelector(selectedDate: $selectedDate, granularity: .month)
+
+                Spacer()
+
+                Picker("Spending Mode", selection: $spendingMode) {
+                    ForEach(SpendingMode.allCases) { mode in
+                        Text(mode.displayName).tag(mode)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .frame(width: 240)
+                .labelsHidden()
+            }
 
             // MARK: - Main Content
             HStack(alignment: .top, spacing: kGridSpacing) {
@@ -30,6 +42,7 @@ struct TrendsView: View {
                     DonutChartView(
                         spendingByCategory: viewData.spendingByCategory,
                         totalSpending: viewData.totalSpending,
+                        spendingTitle: spendingMode.displayName,
                         selectedCategoryId: $selectedCategoryId
                     )
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -43,6 +56,7 @@ struct TrendsView: View {
                     CategoryListView(
                         spendingByCategory: viewData.spendingByCategory,
                         totalSpending: viewData.totalSpending,
+                        spendingTitle: spendingMode.displayName,
                         selectedCategoryId: $selectedCategoryId
                     )
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -65,25 +79,41 @@ struct TrendsView: View {
                             avgDailySpending: 0,
                             mostFrequentCategory: nil,
                             largestOutflow: nil,
+                            largestOutflowAmount: nil,
                             transactions: [])
         }
 
         var filteredTransactions = dataManager.transactions(from: dateInterval.start, to: dateInterval.end)
         filteredTransactions = filteredTransactions.filter { $0.kind.isSpendingAnalyticsEligible }
 
-        let totalSpending = filteredTransactions.reduce(0) { $0 + $1.amount }
-        let spendingByCategory = dataManager.groupSpendingByCategory(transactions: filteredTransactions, maxCategories: 10)
+        let amount = spendingMode.amount
+        let totalSpending = filteredTransactions.reduce(0) { $0 + amount($1) }
+        let spendingByCategory = dataManager.groupSpendingByCategory(
+            transactions: filteredTransactions,
+            maxCategories: 10,
+            amount: amount
+        )
 
         let avgMonthlySpending = dataManager.calculateAverageMonthlySpending(
             forLastMonths: 6,
-            endingAt: selectedDate
+            endingAt: selectedDate,
+            amount: amount
         )
 
         let daysInMonth = calendar.range(of: .day, in: .month, for: selectedDate)?.count ?? 30
         let avgDailySpending = totalSpending / Decimal(daysInMonth)
 
-        let mostFrequentCategory = dataManager.mostFrequentCategory(in: filteredTransactions)
-        let largestOutflow = dataManager.largestTransaction(in: filteredTransactions)
+        let transactionsForMostFrequentCategory: [Transaction]
+        switch spendingMode {
+        case .personal:
+            transactionsForMostFrequentCategory = filteredTransactions.filter { $0.mySpendingAmount > 0 }
+        case .total:
+            transactionsForMostFrequentCategory = filteredTransactions
+        }
+
+        let mostFrequentCategory = dataManager.mostFrequentCategory(in: transactionsForMostFrequentCategory)
+        let largestOutflow = dataManager.largestTransaction(in: filteredTransactions, amount: amount)
+        let largestOutflowAmount = largestOutflow.map(amount)
 
         return ViewData(totalSpending: totalSpending,
                         spendingByCategory: spendingByCategory,
@@ -91,6 +121,7 @@ struct TrendsView: View {
                         avgDailySpending: avgDailySpending,
                         mostFrequentCategory: mostFrequentCategory,
                         largestOutflow: largestOutflow,
+                        largestOutflowAmount: largestOutflowAmount,
                         transactions: filteredTransactions.sorted { $0.date > $1.date })
     }
 
@@ -113,7 +144,7 @@ struct TrendsView: View {
             SummaryMetric(
                 title: "Largest Outflow",
                 primaryText: viewData.largestOutflow?.displayTitle ?? "N/A",
-                secondaryText: viewData.largestOutflow?.amount.toCurrency()
+                secondaryText: viewData.largestOutflowAmount?.toCurrency()
             )
         ]
     }
@@ -143,7 +174,7 @@ struct TrendsView: View {
                             selectedTransactionID: $selectedTransactionID,
                             swipeActionsEnabled: true,
                             transaction: transaction,
-                            displayingAccountId: nil
+                            configuration: spendingMode.transactionViewConfiguration
                         )
                         .tag(transaction.id)
                     }
@@ -208,7 +239,7 @@ struct TrendsView: View {
     }
 
     private var emptyTransactionsMessage: String {
-        selectedCategoryId == nil ? "No spending transactions" : "No transactions for this category"
+        return selectedCategoryId == nil ? "No spending transactions" : "No transactions for this category"
     }
     
     struct ViewData {
@@ -218,6 +249,41 @@ struct TrendsView: View {
         let avgDailySpending: Decimal
         let mostFrequentCategory: (category: any TransactionCategoryProtocol, count: Int)?
         let largestOutflow: Transaction?
+        let largestOutflowAmount: Decimal?
         let transactions: [Transaction]
+    }
+}
+
+private enum SpendingMode: CaseIterable, Identifiable {
+    case personal
+    case total
+
+    var id: Self { self }
+
+    var displayName: String {
+        switch self {
+        case .personal:
+            return "My Spending"
+        case .total:
+            return "All Spending"
+        }
+    }
+
+    var amount: (Transaction) -> Decimal {
+        switch self {
+        case .personal:
+            return { $0.mySpendingAmount }
+        case .total:
+            return { $0.amount }
+        }
+    }
+
+    var transactionViewConfiguration: TransactionViewConfiguration {
+        switch self {
+        case .personal:
+            return .mySpending
+        case .total:
+            return .allSpending
+        }
     }
 }

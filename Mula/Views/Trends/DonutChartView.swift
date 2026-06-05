@@ -20,6 +20,7 @@ struct DonutChartView: View {
 
     let spendingByCategory: [DataManager.CategorySpending]
     let totalSpending: Decimal
+    let spendingTitle: String
     @Binding var selectedCategoryId: String?
 
     var body: some View {
@@ -34,7 +35,7 @@ struct DonutChartView: View {
             }
 
             VStack(spacing: Layout.titleSpacing) {
-                Text("Total Spending")
+                Text(spendingTitle)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .textCase(.uppercase)

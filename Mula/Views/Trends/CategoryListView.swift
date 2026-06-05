@@ -10,6 +10,7 @@ import SwiftUI
 struct CategoryListView: View {
     let spendingByCategory: [DataManager.CategorySpending]
     let totalSpending: Decimal
+    let spendingTitle: String
     @Binding var selectedCategoryId: String?
 
     var body: some View {
@@ -18,7 +19,7 @@ struct CategoryListView: View {
                 Text("Categories")
                     .font(.headline)
                 Spacer()
-                Text("Total Spending")
+                Text(spendingTitle)
                     .font(.headline)
             }
 

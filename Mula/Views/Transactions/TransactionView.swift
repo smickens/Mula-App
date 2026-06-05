@@ -7,6 +7,50 @@
 
 import SwiftUI
 
+struct TransactionViewConfiguration: Hashable {
+    var amountDisplayMode: TransactionAmountDisplayMode
+    var amountDetailMode: TransactionAmountDetailMode
+
+    static let standard = TransactionViewConfiguration(
+        amountDisplayMode: .standard(displayingAccountId: nil),
+        amountDetailMode: .automatic
+    )
+
+    static func standard(displayingAccountId: UUID?) -> TransactionViewConfiguration {
+        TransactionViewConfiguration(
+            amountDisplayMode: .standard(displayingAccountId: displayingAccountId),
+            amountDetailMode: .automatic
+        )
+    }
+
+    static let mySpending = TransactionViewConfiguration(
+        amountDisplayMode: .mySpending,
+        amountDetailMode: .automatic
+    )
+
+    static let allSpending = TransactionViewConfiguration(
+        amountDisplayMode: .allSpending,
+        amountDetailMode: .automatic
+    )
+
+    func hidingAmountDetails() -> TransactionViewConfiguration {
+        var copy = self
+        copy.amountDetailMode = .hidden
+        return copy
+    }
+}
+
+enum TransactionAmountDisplayMode: Hashable {
+    case standard(displayingAccountId: UUID?)
+    case mySpending
+    case allSpending
+}
+
+enum TransactionAmountDetailMode: Hashable {
+    case automatic
+    case hidden
+}
+
 struct TransactionView: View {
     @Environment(DataManager.self) private var dataManager
 
@@ -15,7 +59,19 @@ struct TransactionView: View {
 
     let swipeActionsEnabled: Bool
     let transaction: Transaction
-    let displayingAccountId: UUID?
+    let configuration: TransactionViewConfiguration
+
+    init(
+        selectedTransactionID: Binding<UUID?>,
+        swipeActionsEnabled: Bool,
+        transaction: Transaction,
+        configuration: TransactionViewConfiguration = .standard
+    ) {
+        self._selectedTransactionID = selectedTransactionID
+        self.swipeActionsEnabled = swipeActionsEnabled
+        self.transaction = transaction
+        self.configuration = configuration
+    }
 
     var body: some View {
         HStack {
@@ -35,8 +91,21 @@ struct TransactionView: View {
                     .font(.headline)
                     .lineLimit(1)
 
-                Text(formatDate(transaction.date))
-                    .font(.caption)
+                HStack(spacing: 6) {
+                    Text(formatDate(transaction.date))
+
+                    if transaction.hasCustomMyShare {
+                        Label("My Share", systemImage: "person.2.fill")
+                            .labelStyle(.titleAndIcon)
+                    }
+                }
+                .font(.caption)
+
+                if let amountDetailText {
+                    Text(amountDetailText)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
             }
 
             Spacer()
@@ -82,11 +151,42 @@ struct TransactionView: View {
     }
 
     private var amountSigned: Decimal {
-        transaction.amountSigned(displayingAccountId: displayingAccountId)
+        switch configuration.amountDisplayMode {
+        case .standard(let displayingAccountId):
+            return transaction.amountSigned(displayingAccountId: displayingAccountId)
+        case .mySpending:
+            return -transaction.mySpendingAmount
+        case .allSpending:
+            return transaction.amountSigned(displayingAccountId: nil)
+        }
     }
 
     private var amountColor: Color {
-        transaction.amountColor(displayingAccountId: displayingAccountId)
+        switch configuration.amountDisplayMode {
+        case .standard(let displayingAccountId):
+            return transaction.amountColor(displayingAccountId: displayingAccountId)
+        case .mySpending:
+            return transaction.mySpendingAmount == 0 ? .secondary : .red
+        case .allSpending:
+            return transaction.amountColor(displayingAccountId: nil)
+        }
+    }
+
+    private var amountDetailText: String? {
+        guard configuration.amountDetailMode == .automatic,
+              transaction.hasCustomMyShare,
+              let myShareAmount = transaction.myShareAmount else {
+            return nil
+        }
+
+        switch configuration.amountDisplayMode {
+        case .standard:
+            return nil
+        case .mySpending:
+            return "Full amount: \(transaction.amount.toCurrency())"
+        case .allSpending:
+            return "My Share: \(myShareAmount.toCurrency())"
+        }
     }
 
     // MARK: - Gestures

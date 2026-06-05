@@ -52,7 +52,12 @@ struct TransactionsView: View {
             .padding()
 
             List(filteredTransactions) { transaction in
-                TransactionView(selectedTransactionID: $selectedTransactionID, swipeActionsEnabled: true, transaction: transaction, displayingAccountId: nil)
+                TransactionView(
+                    selectedTransactionID: $selectedTransactionID,
+                    swipeActionsEnabled: true,
+                    transaction: transaction,
+                    configuration: .standard
+                )
             }
             .searchable(text: $searchText)
         }

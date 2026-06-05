@@ -43,8 +43,15 @@ struct TransactionDetailView: View {
 
                 // Transaction Details
                 VStack(alignment: .leading, spacing: 16) {
-                    // TODO: fix rounding issue
-                    DetailRow(label: "Amount", value: "\(transaction.amountSigned(displayingAccountId: displayingAccountId))")
+                    DetailRow(
+                        label: "Amount",
+                        value: transaction.amountSigned(displayingAccountId: displayingAccountId).toCurrency()
+                    )
+
+                    if transaction.hasCustomMyShare,
+                       let myShareAmount = transaction.myShareAmount {
+                        DetailRow(label: "My Share", value: myShareAmount.toCurrency())
+                    }
 
                     DetailRow(label: "Category", value: transaction.category.displayName)
 

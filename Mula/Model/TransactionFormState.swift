@@ -12,6 +12,7 @@ struct TransactionFormState {
     var title: String = ""
     var date: Date = Date()
     var amountString: String = ""
+    var myShareAmountString: String = ""
 
     var type: TransactionKindType = .expense
 
@@ -98,12 +99,15 @@ extension TransactionFormState {
             kind = .transfer(transferCategory, destinationAccountId: destinationAccountId)
         }
 
+        let myShareAmount = try myShareAmount(for: kind, amount: amount)
+
         return Transaction(
             id: id ?? UUID(),
             title: title(for: kind),
             date: date,
             kind: kind,
             amount: amount,
+            myShareAmount: myShareAmount,
             sourceAccountId: sourceAccountId,
             importBatchId: importBatchId
         )
@@ -123,6 +127,20 @@ extension TransactionFormState {
             return title
         }
     }
+
+    private func myShareAmount(for kind: TransactionKind, amount: Decimal) throws -> Decimal? {
+        guard kind.isExpense else { return nil }
+
+        let trimmedMyShareAmount = myShareAmountString.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedMyShareAmount.isEmpty else { return nil }
+        guard let myShareAmount = Decimal.formattedDecimal(from: trimmedMyShareAmount),
+              myShareAmount >= 0,
+              myShareAmount <= amount else {
+            throw TransactionValidationError.invalidMyShareAmount
+        }
+
+        return myShareAmount
+    }
 }
 
 extension TransactionFormState {
@@ -132,6 +150,7 @@ extension TransactionFormState {
         self.title = transaction.title
         self.date = transaction.date
         self.amountString = transaction.amount.toDecimalString()
+        self.myShareAmountString = transaction.myShareAmount?.toDecimalString() ?? ""
         self.sourceAccountId = transaction.sourceAccountId
         self.importBatchId = transaction.importBatchId
 
@@ -161,6 +180,7 @@ extension TransactionFormState {
 
 enum TransactionValidationError: LocalizedError {
     case invalidAmount
+    case invalidMyShareAmount
     case emptyTitle
     case invalidTransfer
 
@@ -168,6 +188,8 @@ enum TransactionValidationError: LocalizedError {
         switch self {
         case .invalidAmount:
             return "Please enter a valid amount."
+        case .invalidMyShareAmount:
+            return "My Share must be between $0 and the full amount."
         case .emptyTitle:
             return "Title cannot be empty."
         case .invalidTransfer:
