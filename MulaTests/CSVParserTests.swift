@@ -11,11 +11,13 @@ import Testing
 struct CSVParserTests {
 
     @Test func parseReturnsHeadersAndDataRows() {
-        let content = """
-        Date,Name,Amount
-        2026-06-01,Coffee,4.50
-        2026-06-02,Groceries,12.34
-        """
+        let content = csvContent(
+            headers: ["Date", "Name", "Amount"],
+            rows: [
+                ["2026-06-01", "Coffee", "4.50"],
+                ["2026-06-02", "Groceries", "12.34"]
+            ]
+        )
 
         let table = CSVParser.parse(content)
 
@@ -44,10 +46,10 @@ struct CSVParserTests {
     }
 
     @Test func valueForHeaderIsCaseInsensitive() {
-        let content = """
-        Date,Name,Amount
-        2026-06-01,Coffee,4.50
-        """
+        let content = csvContent(
+            headers: ["Date", "Name", "Amount"],
+            rows: [["2026-06-01", "Coffee", "4.50"]]
+        )
 
         let row = CSVParser.parse(content).dataRows[0]
 
@@ -69,10 +71,10 @@ struct CSVParserTests {
     }
 
     @Test func parseSupportsQuotedFieldsContainingCommas() {
-        let content = """
-        Date,Name,Amount
-        2026-06-01,"Coffee, Bakery",4.50
-        """
+        let content = csvContent(
+            headers: ["Date", "Name", "Amount"],
+            rows: [["2026-06-01", "\"Coffee, Bakery\"", "4.50"]]
+        )
 
         let table = CSVParser.parse(content)
 

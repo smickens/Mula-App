@@ -25,6 +25,7 @@
 		E3A1002A2FAF000100A10001 /* TransactionCategoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A1002B2FAF000100A10001 /* TransactionCategoryProtocol.swift */; };
 		E3A1002C2FAF000100A10001 /* ImportProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A1002D2FAF000100A10001 /* ImportProcessor.swift */; };
 		E3A1002E2FAF000100A10001 /* ImportProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A1002F2FAF000100A10001 /* ImportProcessorTests.swift */; };
+		E3A100302FAF000100A10001 /* TestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A100312FAF000100A10001 /* TestSupport.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +77,7 @@
 		E3A1002B2FAF000100A10001 /* TransactionCategoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategoryProtocol.swift; sourceTree = "<group>"; };
 		E3A1002D2FAF000100A10001 /* ImportProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportProcessor.swift; sourceTree = "<group>"; };
 		E3A1002F2FAF000100A10001 /* ImportProcessorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportProcessorTests.swift; sourceTree = "<group>"; };
+		E3A100312FAF000100A10001 /* TestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSupport.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -171,6 +173,7 @@
 			children = (
 				E3A100022FAF000100A10001 /* CSVParserTests.swift */,
 				E3A1002F2FAF000100A10001 /* ImportProcessorTests.swift */,
+				E3A100312FAF000100A10001 /* TestSupport.swift */,
 			);
 			path = MulaTests;
 			sourceTree = "<group>";
@@ -331,6 +334,7 @@
 			files = (
 				E3A100072FAF000100A10001 /* CSVParserTests.swift in Sources */,
 				E3A1002E2FAF000100A10001 /* ImportProcessorTests.swift in Sources */,
+				E3A100302FAF000100A10001 /* TestSupport.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
