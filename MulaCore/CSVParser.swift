@@ -8,33 +8,23 @@
 import Foundation
 
 public struct CSVParser {
-    public static func parse(_ content: String) -> CSVTable {
-        let parsedRows = content
+    public static func parse(_ content: String) -> CSVDocument {
+        let rows = content
             .components(separatedBy: .newlines)
             .enumerated()
             .compactMap { index, line -> CSVRow? in
-                let values = parseLine(line)
+                let parsedValues = parseLine(line)
+                let values = normalizedValues(parsedValues, rowIndex: index)
                 let isEmpty = values.allSatisfy {
-                    $0.removingByteOrderMark()
-                        .trimmingCharacters(in: .whitespacesAndNewlines)
-                        .isEmpty
+                    $0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                 }
 
                 guard !isEmpty else { return nil }
 
-                return CSVRow(rowNumber: index + 1, headers: [], values: values)
+                return CSVRow(rowNumber: index + 1, values: values)
             }
 
-        guard let headerRow = parsedRows.first else {
-            return CSVTable(headers: [], dataRows: [])
-        }
-
-        let headers = headerRow.values.map { $0.removingByteOrderMark() }
-        let dataRows = parsedRows.dropFirst().map {
-            CSVRow(rowNumber: $0.rowNumber, headers: headers, values: $0.values)
-        }
-
-        return CSVTable(headers: headers, dataRows: Array(dataRows))
+        return CSVDocument(rows: rows)
     }
 
     private static func parseLine(_ line: String) -> [String] {
@@ -57,36 +47,74 @@ public struct CSVParser {
         return values
     }
 
+    private static func normalizedValues(_ values: [String], rowIndex: Int) -> [String] {
+        guard rowIndex == 0, let firstValue = values.first else {
+            return values
+        }
+
+        var normalizedValues = values
+        normalizedValues[0] = firstValue.removingByteOrderMark()
+        return normalizedValues
+    }
+
     public init() {}
 }
 
+public struct CSVDocument {
+    public let rows: [CSVRow]
+
+    public init(rows: [CSVRow]) {
+        self.rows = rows
+    }
+
+    public func table(headerRowIndex: Int) -> CSVTable? {
+        guard rows.indices.contains(headerRowIndex) else {
+            return nil
+        }
+
+        return CSVTable(
+            header: rows[headerRowIndex],
+            dataRows: Array(rows.dropFirst(headerRowIndex + 1))
+        )
+    }
+}
+
 public struct CSVTable {
-    public let headers: [String]
+    public let header: CSVRow
     public let dataRows: [CSVRow]
 
-    public init(headers: [String], dataRows: [CSVRow]) {
-        self.headers = headers
+    private let headerIndexByName: [String: Int]
+
+    public init(header: CSVRow, dataRows: [CSVRow]) {
+        self.header = header
         self.dataRows = dataRows
+        self.headerIndexByName = Dictionary(
+            uniqueKeysWithValues: header.values.enumerated().map { index, headerName in
+                (headerName.lowercased(), index)
+            }
+        )
+    }
+
+    public var headers: [String] {
+        header.values
+    }
+
+    public func value(in row: CSVRow, for headerName: String) -> String {
+        guard let index = headerIndexByName[headerName.lowercased()],
+              row.values.indices.contains(index) else {
+            return ""
+        }
+
+        return row.values[index]
     }
 }
 
 public struct CSVRow {
     public let rowNumber: Int
-    public let headers: [String]
     public let values: [String]
 
-    public init(rowNumber: Int, headers: [String], values: [String]) {
+    public init(rowNumber: Int, values: [String]) {
         self.rowNumber = rowNumber
-        self.headers = headers
         self.values = values
-    }
-
-    public func value(for header: String) -> String {
-        guard let index = headers.firstIndex(where: { $0.caseInsensitiveCompare(header) == .orderedSame }),
-              values.indices.contains(index) else {
-            return ""
-        }
-
-        return values[index]
     }
 }
