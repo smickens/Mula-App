@@ -10,6 +10,7 @@ import MulaCore
 
 struct AccountsView: View {
     @Environment(DataManager.self) private var dataManager
+    @AppStorage(AppDefaults.Debug.showDebugInfoKey) private var showDebugInfo = false
     @State private var selectedAccountId: UUID?
     @State private var selectedTransactionID: UUID?
     @State private var expandedSections: Set<AccountType> = Set(AccountType.allCases)
@@ -40,6 +41,15 @@ struct AccountsView: View {
             }
         }
         .navigationTitle("Accounts")
+        .onAppear {
+            logAccountDebugInfoIfNeeded()
+        }
+        .onChange(of: showDebugInfo) { _, _ in
+            logAccountDebugInfoIfNeeded()
+        }
+        .onChange(of: dataManager.accounts) { _, _ in
+            logAccountDebugInfoIfNeeded()
+        }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
@@ -77,7 +87,7 @@ struct AccountsView: View {
                         )
                     ) {
                         ForEach(accountsOfType) { account in
-                            AccountRow(account: account)
+                            AccountRow(account: account, showDebugInfo: showDebugInfo)
                                 .tag(account.id)
                         }
                     } label: {
@@ -217,21 +227,40 @@ struct AccountsView: View {
             return "dollarsign.circle"
         }
     }
+
+    private func logAccountDebugInfoIfNeeded() {
+        guard showDebugInfo else { return }
+
+        for account in dataManager.accounts.sorted(by: { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }) {
+            print("🐛 Account UUID [\(account.name)]: \(account.id.uuidString)")
+        }
+    }
 }
 
 // MARK: - Supporting Views
 
 struct AccountRow: View {
     let account: Account
+    let showDebugInfo: Bool
 
     var body: some View {
-        HStack {
-            Image(systemName: "circle.fill")
-                .font(.system(size: 6))
-                .foregroundColor(.secondary)
+        VStack(alignment: .leading, spacing: 2) {
+            HStack {
+                Image(systemName: "circle.fill")
+                    .font(.system(size: 6))
+                    .foregroundColor(.secondary)
 
-            Text(account.name)
-                .font(.body)
+                Text(account.name)
+                    .font(.body)
+            }
+
+            if showDebugInfo {
+                Text(account.id.uuidString)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .textSelection(.enabled)
+                    .padding(.leading, 14)
+            }
         }
         .padding(.leading, 8)
         .padding(.vertical, 2)

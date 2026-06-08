@@ -10,6 +10,7 @@ import MulaCore
 
 struct AccountsSettingsView: View {
     @Environment(DataManager.self) private var dataManager
+    @AppStorage(AppDefaults.Debug.showDebugInfoKey) private var showDebugInfo = false
     @State private var showingAddSheet = false
     @State private var selectedAccount: Account?
     @State private var selectedAccountForEdit: Account? = nil
@@ -39,6 +40,13 @@ struct AccountsSettingsView: View {
                             Text(account.type.displayName)
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
+
+                            if showDebugInfo {
+                                Text(account.id.uuidString)
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                                    .textSelection(.enabled)
+                            }
                         }
                         Spacer()
                     }
