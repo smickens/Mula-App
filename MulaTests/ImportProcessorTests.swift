@@ -25,7 +25,7 @@ enum ImportProcessorTests {
 
             let result = try ImportProcessor.processFileContent(content)
 
-            #expect(result.detectedBank == .apple)
+            #expect(result.detectedSource == .apple)
             #expect(result.transactions.count == 2)
             #expect(result.skippedRows.isEmpty)
 
@@ -34,14 +34,14 @@ enum ImportProcessorTests {
             #expect(formattedDate(coffee.date) == "2026-03-02")
             #expect(coffee.kind == .expense(.eatingOut))
             #expect(coffee.amount == decimal("12.34"))
-            #expect(coffee.sourceAccountId == Bank.apple.accountId)
+            #expect(coffee.sourceAccountId == ImportSource.apple.accountId)
 
             let refund = result.transactions[1]
             #expect(refund.title == "Target return")
             #expect(formattedDate(refund.date) == "2026-03-03")
             #expect(refund.kind == .income(.refund))
             #expect(refund.amount == decimal("8.50"))
-            #expect(refund.sourceAccountId == Bank.apple.accountId)
+            #expect(refund.sourceAccountId == ImportSource.apple.accountId)
         }
 
         @Test func skipsRowsWithMissingMerchant() throws {
@@ -55,7 +55,7 @@ enum ImportProcessorTests {
 
             let result = try ImportProcessor.processFileContent(content)
 
-            #expect(result.detectedBank == .apple)
+            #expect(result.detectedSource == .apple)
             #expect(result.transactions.count == 1)
             #expect(result.skippedRows.count == 1)
             #expect(result.skippedRows[0].rowNumber == 2)
@@ -78,7 +78,7 @@ enum ImportProcessorTests {
 
             let result = try ImportProcessor.processFileContent(content)
 
-            #expect(result.detectedBank == .usBank)
+            #expect(result.detectedSource == .usBank)
             #expect(result.transactions.count == 2)
             #expect(result.skippedRows.isEmpty)
 
@@ -87,14 +87,14 @@ enum ImportProcessorTests {
             #expect(formattedDate(ride.date) == "2026-03-04")
             #expect(ride.kind == .expense(.transit))
             #expect(ride.amount == decimal("17.89"))
-            #expect(ride.sourceAccountId == Bank.usBank.accountId)
+            #expect(ride.sourceAccountId == ImportSource.usBank.accountId)
 
             let deposit = result.transactions[1]
             #expect(deposit.title == "Venmo (in)")
             #expect(formattedDate(deposit.date) == "2026-03-05")
             #expect(deposit.kind == .income(.other))
             #expect(deposit.amount == decimal("25.00"))
-            #expect(deposit.sourceAccountId == Bank.usBank.accountId)
+            #expect(deposit.sourceAccountId == ImportSource.usBank.accountId)
         }
 
         @Test func skipsRowsWithInvalidDate() throws {
@@ -108,7 +108,7 @@ enum ImportProcessorTests {
 
             let result = try ImportProcessor.processFileContent(content)
 
-            #expect(result.detectedBank == .usBank)
+            #expect(result.detectedSource == .usBank)
             #expect(result.transactions.count == 1)
             #expect(result.skippedRows.count == 1)
             #expect(result.skippedRows[0].rowNumber == 2)
@@ -131,7 +131,7 @@ enum ImportProcessorTests {
 
             let result = try ImportProcessor.processFileContent(content)
 
-            #expect(result.detectedBank == .fidelity401k)
+            #expect(result.detectedSource == .fidelity401k)
             #expect(result.transactions.count == 2)
             #expect(result.skippedRows.isEmpty)
 
@@ -140,14 +140,14 @@ enum ImportProcessorTests {
             #expect(formattedDate(employerMatch.date) == "2026-03-06")
             #expect(employerMatch.kind == .saving(.contribution))
             #expect(employerMatch.amount == decimal("120.50"))
-            #expect(employerMatch.sourceAccountId == Bank.fidelity401k.accountId)
+            #expect(employerMatch.sourceAccountId == ImportSource.fidelity401k.accountId)
 
             let noDescription = result.transactions[1]
             #expect(noDescription.title == "Contributions - (No Desc)")
             #expect(formattedDate(noDescription.date) == "2026-03-07")
             #expect(noDescription.kind == .saving(.contribution))
             #expect(noDescription.amount == decimal("80.00"))
-            #expect(noDescription.sourceAccountId == Bank.fidelity401k.accountId)
+            #expect(noDescription.sourceAccountId == ImportSource.fidelity401k.accountId)
         }
     }
 
@@ -167,7 +167,7 @@ enum ImportProcessorTests {
 
             let result = try ImportProcessor.processFileContent(content)
 
-            #expect(result.detectedBank == .fidelityInvestments)
+            #expect(result.detectedSource == .fidelityInvestments)
             #expect(result.transactions.count == 7)
             #expect(result.accountStatements.count == 2)
             #expect(result.skippedRows.isEmpty)
@@ -175,7 +175,7 @@ enum ImportProcessorTests {
             let firstStatement = result.accountStatements[0]
             #expect(formattedDate(firstStatement.date) == "2026-05-31")
             #expect(firstStatement.balance == decimal("34050.34"))
-            #expect(firstStatement.accountId == Bank.fidelityInvestments.accountId)
+            #expect(firstStatement.accountId == ImportSource.fidelityInvestments.accountId)
 
             let dividend = try #require(result.transactions.first(where: { $0.title == "Dividend Income" && formattedDate($0.date) == "2026-05-31" }))
             #expect(dividend.kind == .income(.dividend))
@@ -203,7 +203,7 @@ enum ImportProcessorTests {
 
             let result = try ImportProcessor.processFileContent(content)
 
-            #expect(result.detectedBank == .fidelityInvestments)
+            #expect(result.detectedSource == .fidelityInvestments)
             #expect(result.transactions.isEmpty)
             #expect(result.accountStatements.count == 1)
             #expect(formattedDate(result.accountStatements[0].date) == "2026-05-31")
@@ -221,7 +221,7 @@ enum ImportProcessorTests {
 
             let result = try ImportProcessor.processFileContent(content)
 
-            #expect(result.detectedBank == .fidelityInvestments)
+            #expect(result.detectedSource == .fidelityInvestments)
             #expect(result.transactions.count == 2)
             #expect(result.accountStatements.count == 1)
             #expect(result.skippedRows.count == 1)
@@ -244,7 +244,7 @@ enum ImportProcessorTests {
 
             let result = try ImportProcessor.processFileContent(content)
 
-            #expect(result.detectedBank == .wellsFargo)
+            #expect(result.detectedSource == .wellsFargo)
             #expect(result.transactions.count == 2)
             #expect(result.skippedRows.count == 1)
             #expect(result.skippedRows[0].rowNumber == 3)
@@ -255,14 +255,14 @@ enum ImportProcessorTests {
             #expect(formattedDate(empanadas.date) == "2026-03-08")
             #expect(empanadas.kind == .expense(.eatingOut))
             #expect(empanadas.amount == decimal("19.75"))
-            #expect(empanadas.sourceAccountId == Bank.wellsFargo.accountId)
+            #expect(empanadas.sourceAccountId == ImportSource.wellsFargo.accountId)
 
             let groceries = result.transactions[1]
             #expect(groceries.title == "Grocery Outlet")
             #expect(formattedDate(groceries.date) == "2026-03-10")
             #expect(groceries.kind == .expense(.groceries))
             #expect(groceries.amount == decimal("43.21"))
-            #expect(groceries.sourceAccountId == Bank.wellsFargo.accountId)
+            #expect(groceries.sourceAccountId == ImportSource.wellsFargo.accountId)
         }
 
         @Test func skipsRowsWithInvalidAmount() throws {
@@ -276,7 +276,7 @@ enum ImportProcessorTests {
 
             let result = try ImportProcessor.processFileContent(content)
 
-            #expect(result.detectedBank == .wellsFargo)
+            #expect(result.detectedSource == .wellsFargo)
             #expect(result.transactions.count == 1)
             #expect(result.skippedRows.count == 1)
             #expect(result.skippedRows[0].rowNumber == 2)
@@ -323,11 +323,11 @@ enum ImportProcessorTests {
             )
 
             expectImportProcessingError(for: try ImportProcessor.processFileContent(content)) { error in
-                guard case .noImportableContent(let detectedBank, let skippedRows) = error else {
+                guard case .noImportableContent(let detectedSource, let skippedRows) = error else {
                     return false
                 }
 
-                return detectedBank == .fidelity401k
+                return detectedSource == .fidelity401k
                     && skippedRows.count == 2
                     && skippedRows[0].rowNumber == 2
                     && skippedRows[0].reason == .ignoredTransaction("Dividend")

@@ -1,5 +1,5 @@
 //
-//  Bank.swift
+//  ImportSource.swift
 //  Mula
 //
 //  Created by Shanti Mickens on 10/22/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum Bank: String, CaseIterable, Codable, Identifiable {
+public enum ImportSource: String, CaseIterable, Codable, Identifiable {
     case apple
     case fidelity401k
     case fidelityInvestments
@@ -16,13 +16,10 @@ public enum Bank: String, CaseIterable, Codable, Identifiable {
 
     public var id: String { rawValue }
 
-    // credit card accounts only
     public var accountId: UUID {
         switch self {
         case .apple:
             return UUID(uuidString: "349FC2EA-B354-4171-9FA2-661591A278C0")!
-//        case .appleSavings:
-//            return UUID(uuidString: "43CEECD4-3361-405E-85E8-B9D2EE85285A")!
         case .fidelity401k:
             return UUID(uuidString: "7C186F0E-A35C-4F7E-B3E3-6BE52FB7A07A")!
         case .fidelityInvestments:

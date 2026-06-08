@@ -15,7 +15,7 @@ public struct ImportProcessor {
             throw ImportProcessingError.missingHeaders
         }
 
-        guard let detectedFormat = BankImportFormat.detect(in: document) else {
+        guard let detectedFormat = ImportFormat.detect(in: document) else {
             let headers = document.rows.first?.values ?? []
             throw ImportProcessingError.unsupportedFormat(headers: headers)
         }
@@ -44,13 +44,13 @@ public struct ImportProcessor {
 
         guard !transactions.isEmpty || !accountStatements.isEmpty else {
             throw ImportProcessingError.noImportableContent(
-                detectedBank: detectedFormat.format.bank,
+                detectedSource: detectedFormat.format.source,
                 skippedRows: skippedRows
             )
         }
 
         return TransactionImportResult(
-            detectedBank: detectedFormat.format.bank,
+            detectedSource: detectedFormat.format.source,
             transactions: transactions,
             accountStatements: accountStatements,
             skippedRows: skippedRows
@@ -61,7 +61,7 @@ public struct ImportProcessor {
 public enum ImportProcessingError: LocalizedError {
     case missingHeaders
     case unsupportedFormat(headers: [String])
-    case noImportableContent(detectedBank: Bank, skippedRows: [SkippedImportRow])
+    case noImportableContent(detectedSource: ImportSource, skippedRows: [SkippedImportRow])
 
     public var errorDescription: String? {
         switch self {
@@ -71,20 +71,20 @@ public enum ImportProcessingError: LocalizedError {
         case .unsupportedFormat(let headers):
             return "This CSV format is not supported yet. Found headers: \(headers)."
 
-        case .noImportableContent(let detectedBank, let skippedRows):
-            let bankName = detectedBank.displayName
+        case .noImportableContent(let detectedSource, let skippedRows):
+            let sourceName = detectedSource.displayName
 
             if skippedRows.isEmpty {
-                return "No importable data was found for \(bankName)."
+                return "No importable data was found for \(sourceName)."
             }
 
-            return "No importable data was found for \(bankName). \(skippedRows.count) rows were skipped."
+            return "No importable data was found for \(sourceName). \(skippedRows.count) rows were skipped."
         }
     }
 }
 
 public struct TransactionImportResult {
-    public let detectedBank: Bank?
+    public let detectedSource: ImportSource?
     public let transactions: [Transaction]
     public let accountStatements: [AccountStatement]
     public let skippedRows: [SkippedImportRow]
@@ -161,8 +161,8 @@ private enum AmountSignConvention {
     }
 }
 
-private struct BankImportFormat {
-    let bank: Bank
+private struct ImportFormat {
+    let source: ImportSource
     let matches: ([String]) -> Bool
     let rowResult: (CSVTable, CSVRow) -> ImportRowResult
 
@@ -177,7 +177,7 @@ private struct BankImportFormat {
         return nil
     }
 
-    private static let allFormats: [BankImportFormat] = [
+    private static let allFormats: [ImportFormat] = [
         .apple,
         .fidelityInvestments,
         .fidelity401k,
@@ -186,9 +186,9 @@ private struct BankImportFormat {
     ]
 }
 
-private extension BankImportFormat {
-    static let fidelityInvestments = BankImportFormat(
-        bank: .fidelityInvestments,
+private extension ImportFormat {
+    static let fidelityInvestments = ImportFormat(
+        source: .fidelityInvestments,
         matches: { headers in
             headers.containsAll([
                 "Monthly",
@@ -250,13 +250,13 @@ private extension BankImportFormat {
                         date: monthEndDate,
                         kind: definition.kind,
                         amount: amount.magnitude,
-                        sourceAccountId: Bank.fidelityInvestments.accountId
+                        sourceAccountId: ImportSource.fidelityInvestments.accountId
                     )
                 )
             }
 
             let statement = AccountStatement(
-                accountId: Bank.fidelityInvestments.accountId,
+                accountId: ImportSource.fidelityInvestments.accountId,
                 date: monthEndDate,
                 balance: endingBalance
             )
@@ -265,8 +265,8 @@ private extension BankImportFormat {
         }
     )
 
-    static let apple = BankImportFormat(
-        bank: .apple,
+    static let apple = ImportFormat(
+        source: .apple,
         matches: { headers in
             headers.containsAll(["Transaction Date", "Merchant", "Category", "Amount (USD)"])
         },
@@ -301,7 +301,7 @@ private extension BankImportFormat {
                 date: date,
                 signedAmount: signedAmount,
                 kind: baseKind,
-                sourceAccountId: Bank.apple.accountId
+                sourceAccountId: ImportSource.apple.accountId
             )
             .applyingGlobalRules()
             .applyingBankRules(BankImportRules.apple)
@@ -311,8 +311,8 @@ private extension BankImportFormat {
         }
     )
 
-    static let usBank = BankImportFormat(
-        bank: .usBank,
+    static let usBank = ImportFormat(
+        source: .usBank,
         matches: { headers in
             headers.containsAll(["Date", "Transaction", "Name", "Memo", "Amount"])
         },
@@ -338,7 +338,7 @@ private extension BankImportFormat {
                 date: date,
                 signedAmount: signedAmount,
                 kind: AmountSignConvention.negativeIsExpense.defaultKind(for: signedAmount, expenseKind: .expense(.other)),
-                sourceAccountId: Bank.usBank.accountId
+                sourceAccountId: ImportSource.usBank.accountId
             )
             .applyingGlobalRules()
 
@@ -353,8 +353,8 @@ private extension BankImportFormat {
         }
     )
 
-    static let fidelity401k = BankImportFormat(
-        bank: .fidelity401k,
+    static let fidelity401k = ImportFormat(
+        source: .fidelity401k,
         matches: { headers in
             headers.containsAll(["Run Date", "Action", "Description", "Amount ($)"])
         },
@@ -384,7 +384,7 @@ private extension BankImportFormat {
                 date: date,
                 signedAmount: signedAmount,
                 kind: .saving(.contribution),
-                sourceAccountId: Bank.fidelity401k.accountId
+                sourceAccountId: ImportSource.fidelity401k.accountId
             )
             .transaction
 
@@ -392,8 +392,8 @@ private extension BankImportFormat {
         }
     )
 
-    static let wellsFargo = BankImportFormat(
-        bank: .wellsFargo,
+    static let wellsFargo = ImportFormat(
+        source: .wellsFargo,
         matches: { headers in
             headers.containsAll(["DATE", "DESCRIPTION", "AMOUNT"])
         },
@@ -423,7 +423,7 @@ private extension BankImportFormat {
                 date: date,
                 signedAmount: signedAmount,
                 kind: AmountSignConvention.negativeIsExpense.defaultKind(for: signedAmount, expenseKind: .expense(.eatingOut)),
-                sourceAccountId: Bank.wellsFargo.accountId
+                sourceAccountId: ImportSource.wellsFargo.accountId
             )
             .applyingGlobalRules()
             .applyingBankRules(BankImportRules.wellsFargo)
@@ -435,11 +435,11 @@ private extension BankImportFormat {
 }
 
 private struct ImportFormatMatch {
-    let format: BankImportFormat
+    let format: ImportFormat
     let headerRowIndex: Int
 }
 
-private extension BankImportFormat {
+private extension ImportFormat {
     static func monthEndDate(from label: String) -> Date? {
         let monthYear = label
             .components(separatedBy: "(")
