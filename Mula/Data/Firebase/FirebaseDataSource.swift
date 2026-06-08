@@ -162,7 +162,8 @@ final class FirebaseDataSource: DataSource {
                     id: id,
                     accountId: accountId,
                     date: Date(timeIntervalSince1970: timestamp),
-                    balance: balance
+                    balance: balance,
+                    importBatchId: (data["importBatchId"] as? String).flatMap(UUID.init(uuidString:))
                 )
             )
         }
@@ -172,14 +173,15 @@ final class FirebaseDataSource: DataSource {
     }
 
     func addAccountStatement(_ statement: AccountStatement) async throws {
-//        let statementDictionary: [String: Any] = [
-//            "accountId": statement.accountId.uuidString,
-//            "date": statement.date.timeIntervalSince1970,
-//            "balance": "\(statement.balance)"
-//        ]
-//
-//        try await setValue(statementDictionary, at: accountStatementRef.child(statement.id.uuidString))
-//        print("✅ Added account statement \(statement.id)")
+        let statementDictionary: [String: Any] = [
+            "accountId": statement.accountId.uuidString,
+            "date": statement.date.timeIntervalSince1970,
+            "balance": "\(statement.balance)",
+            "importBatchId": statement.importBatchId?.uuidString as Any
+        ]
+
+        try await setValue(statementDictionary, at: accountStatementRef.child(statement.id.uuidString))
+        print("✅ Added account statement \(statement.id)")
     }
 
     // MARK: Import Batches
@@ -227,7 +229,7 @@ final class FirebaseDataSource: DataSource {
         print("✅ Added new import batch: \(String(describing: batch.name))")
     }
 
-    func deleteImportBatch(_ batch: ImportBatch, transactions: [Transaction]) async throws {
+    func deleteImportBatch(_ batch: ImportBatch, transactions: [Transaction], accountStatements: [AccountStatement]) async throws {
         var values: [String: Any] = [
             "importBatch/\(batch.firebaseKey)": NSNull()
         ]
@@ -236,8 +238,12 @@ final class FirebaseDataSource: DataSource {
             values["transaction/\(transaction.firebaseKey)"] = NSNull()
         }
 
+        for statement in accountStatements {
+            values["accountStatement/\(statement.id.uuidString)"] = NSNull()
+        }
+
         try await updateChildValues(values, at: databaseReference)
-        print("✅ Deleted import batch \(batch.firebaseKey) with \(transactions.count) transactions")
+        print("✅ Deleted import batch \(batch.firebaseKey) with \(transactions.count) transactions and \(accountStatements.count) statements")
     }
 
     // MARK: Helper Methods

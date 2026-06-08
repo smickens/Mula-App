@@ -104,13 +104,15 @@ struct TestData {
         _ id: Int,
         accountId: UUID,
         date: Date,
-        balance: Decimal
+        balance: Decimal,
+        importBatchId: UUID? = nil
     ) -> AccountStatement {
         AccountStatement(
             id: UUID(uuidString: String(format: "40000000-0000-0000-0000-%012d", id))!,
             accountId: accountId,
             date: date,
-            balance: balance
+            balance: balance,
+            importBatchId: importBatchId
         )
     }
 }

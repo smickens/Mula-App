@@ -28,5 +28,5 @@ protocol DataSource: AnyObject {
     // Import Batches
     func loadImportBatches() async throws -> [ImportBatch]
     func addImportBatch(_ batch: ImportBatch) async throws
-    func deleteImportBatch(_ batch: ImportBatch, transactions: [Transaction]) async throws
+    func deleteImportBatch(_ batch: ImportBatch, transactions: [Transaction], accountStatements: [AccountStatement]) async throws
 }

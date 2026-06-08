@@ -115,20 +115,61 @@ extension DataManager {
     // MARK: Import Batches
 
     func importTransactions(_ transactions: [Transaction], fileName: String? = nil) {
-        let batch = ImportBatch(name: fileName)
-        let importedTransactions = transactions.map { $0.withImportBatchId(batch.id) }
-
         Task {
             do {
-                try await dataSource.addTransactions(importedTransactions)
-                try await dataSource.addImportBatch(batch)
+                let batch = makeImportBatch(named: fileName)
+                try await importTransactions(transactions, batch: batch)
 
-                self.transactions.append(contentsOf: importedTransactions)
-                importBatches.insert(batch, at: 0)
+                if let batch {
+                    try await dataSource.addImportBatch(batch)
+                    importBatches.insert(batch, at: 0)
+                }
 
-                print("✅ Imported \(transactions.count) transactions in batch \(batch.id) (\(fileName ?? "unnamed file"))")
+                print("✅ Imported \(transactions.count) transactions\(batch.map { " in batch \($0.id)" } ?? "") (\(fileName ?? "unnamed file"))")
             } catch {
                 print("❌ Failed to import transactions: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    func importAccountStatements(_ accountStatements: [AccountStatement], fileName: String? = nil) {
+        Task {
+            do {
+                let batch = makeImportBatch(named: fileName)
+                try await importAccountStatements(accountStatements, batch: batch)
+
+                if let batch {
+                    try await dataSource.addImportBatch(batch)
+                    importBatches.insert(batch, at: 0)
+                }
+
+                print("✅ Imported \(accountStatements.count) account statements\(batch.map { " in batch \($0.id)" } ?? "") (\(fileName ?? "unnamed file"))")
+            } catch {
+                print("❌ Failed to import account statements: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    func importParsedFileContents(
+        transactions: [Transaction],
+        accountStatements: [AccountStatement],
+        fileName: String? = nil
+    ) {
+        Task {
+            do {
+                let batch = makeImportBatch(named: fileName)
+
+                try await importTransactions(transactions, batch: batch)
+                try await importAccountStatements(accountStatements, batch: batch)
+
+                if let batch {
+                    try await dataSource.addImportBatch(batch)
+                    importBatches.insert(batch, at: 0)
+                }
+
+                print("✅ Imported \(transactions.count) transactions and \(accountStatements.count) account statements\(batch.map { " in batch \($0.id)" } ?? "") (\(fileName ?? "unnamed file"))")
+            } catch {
+                print("❌ Failed to import parsed file contents: \(error.localizedDescription)")
             }
         }
     }
@@ -158,16 +199,51 @@ extension DataManager {
 
     func deleteImportBatch(_ batch: ImportBatch) {
         let batchTransactions = transactions.filter { $0.importBatchId == batch.id }
+        let batchStatements = accountStatements.filter { $0.importBatchId == batch.id }
 
         Task {
             do {
-                try await dataSource.deleteImportBatch(batch, transactions: batchTransactions)
+                try await dataSource.deleteImportBatch(batch, transactions: batchTransactions, accountStatements: batchStatements)
                 transactions.removeAll { $0.importBatchId == batch.id }
+                accountStatements.removeAll { $0.importBatchId == batch.id }
                 importBatches.removeAll { $0.id == batch.id }
                 
             } catch {
                 print("❌ Error deleting import batch: \(error.localizedDescription)")
             }
         }
+    }
+
+    private func makeImportBatch(named fileName: String?) -> ImportBatch? {
+        let trimmedName = fileName?.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard let trimmedName, !trimmedName.isEmpty else {
+            return nil
+        }
+
+        return ImportBatch(name: trimmedName)
+    }
+
+    private func importTransactions(_ transactions: [Transaction], batch: ImportBatch?) async throws {
+        let importedTransactions = transactions.map { transaction in
+            guard let batch else { return transaction }
+            return transaction.withImportBatchId(batch.id)
+        }
+
+        try await dataSource.addTransactions(importedTransactions)
+        self.transactions.append(contentsOf: importedTransactions)
+    }
+
+    private func importAccountStatements(_ accountStatements: [AccountStatement], batch: ImportBatch?) async throws {
+        let importedStatements = accountStatements.map { statement in
+            guard let batch else { return statement }
+            return statement.withImportBatchId(batch.id)
+        }
+
+        for statement in importedStatements {
+            try await dataSource.addAccountStatement(statement)
+        }
+
+        self.accountStatements.append(contentsOf: importedStatements)
     }
 }
