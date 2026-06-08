@@ -151,6 +151,84 @@ enum ImportProcessorTests {
         }
     }
 
+    @Suite("Fidelity Investments")
+    struct FidelityInvestments {
+
+        @Test func parsesMonthlySummaryRowsIntoTransactionsAndStatements() throws {
+            let content = """
+            Investment income Export
+            "Income For: Investment"
+            Investment income - (Feb-01-2025 - Jun-05-2026)
+            "Monthly","Beginning balance","Market change","Dividends","Interest","Deposits","Withdrawals","Net advisory fees","Ending balance"
+            "May 2026","$30,784.83","$1,253.29","$10.07","$0.00","$2,000.00","$0.00","$0.00","$34,050.34","Ending balance: $34,048.19"
+            "Apr 2026","$26,501.74","$2,262.96","$17.80","$1.25","$2,000.00","$40.00","$3.50","$30,784.83","Ending balance: $30,782.50"
+            "Total"," "," ","$27.87","$1.25","$4,000.00","$40.00","$3.50"
+            """
+
+            let result = try ImportProcessor.processFileContent(content)
+
+            #expect(result.detectedBank == .fidelityInvestments)
+            #expect(result.transactions.count == 7)
+            #expect(result.accountStatements.count == 2)
+            #expect(result.skippedRows.isEmpty)
+
+            let firstStatement = result.accountStatements[0]
+            #expect(formattedDate(firstStatement.date) == "2026-05-31")
+            #expect(firstStatement.balance == decimal("34050.34"))
+            #expect(firstStatement.accountId == Bank.fidelityInvestments.accountId)
+
+            let dividend = try #require(result.transactions.first(where: { $0.title == "Dividend Income" && formattedDate($0.date) == "2026-05-31" }))
+            #expect(dividend.kind == .income(.dividend))
+            #expect(dividend.amount == decimal("10.07"))
+
+            let contribution = try #require(result.transactions.first(where: { $0.title == "Investment Deposit" && formattedDate($0.date) == "2026-05-31" }))
+            #expect(contribution.kind == .saving(.contribution))
+            #expect(contribution.amount == decimal("2000.00"))
+
+            let fee = try #require(result.transactions.first(where: { $0.title == "Advisory Fee" }))
+            #expect(formattedDate(fee.date) == "2026-04-30")
+            #expect(fee.kind == .expense(.other))
+            #expect(fee.amount == decimal("3.50"))
+
+            #expect(result.transactions.allSatisfy { $0.title != "Market Change" })
+        }
+
+        @Test func treatsStatementsOnlyRowsAsImportable() throws {
+            let content = """
+            Investment income Export
+            "Monthly","Beginning balance","Market change","Dividends","Interest","Deposits","Withdrawals","Net advisory fees","Ending balance"
+            "May 2026","$30,784.83","$1,253.29","$0.00","$0.00","$0.00","$0.00","$0.00","$34,050.34","Ending balance: $34,048.19"
+            "Total"," "," ","$0.00","$0.00","$0.00","$0.00","$0.00"
+            """
+
+            let result = try ImportProcessor.processFileContent(content)
+
+            #expect(result.detectedBank == .fidelityInvestments)
+            #expect(result.transactions.isEmpty)
+            #expect(result.accountStatements.count == 1)
+            #expect(formattedDate(result.accountStatements[0].date) == "2026-05-31")
+            #expect(result.accountStatements[0].balance == decimal("34050.34"))
+        }
+
+        @Test func skipsMalformedMonthlyRows() throws {
+            let content = """
+            Investment income Export
+            "Monthly","Beginning balance","Market change","Dividends","Interest","Deposits","Withdrawals","Net advisory fees","Ending balance"
+            "Bad Month","$30,784.83","$1,253.29","$10.07","$0.00","$2,000.00","$0.00","$0.00","$34,050.34","Ending balance: $34,048.19"
+            "May 2026","$30,784.83","$1,253.29","$10.07","$0.00","$2,000.00","$0.00","$0.00","$34,050.34","Ending balance: $34,048.19"
+            "Total"," "," ","$10.07","$0.00","$2,000.00","$0.00","$0.00"
+            """
+
+            let result = try ImportProcessor.processFileContent(content)
+
+            #expect(result.detectedBank == .fidelityInvestments)
+            #expect(result.transactions.count == 2)
+            #expect(result.accountStatements.count == 1)
+            #expect(result.skippedRows.count == 1)
+            #expect(result.skippedRows[0].reason == .invalidDate("Bad Month"))
+        }
+    }
+
     @Suite("Wells Fargo")
     struct WellsFargo {
 
@@ -245,7 +323,7 @@ enum ImportProcessorTests {
             )
 
             expectImportProcessingError(for: try ImportProcessor.processFileContent(content)) { error in
-                guard case .noImportableTransactions(let detectedBank, let skippedRows) = error else {
+                guard case .noImportableContent(let detectedBank, let skippedRows) = error else {
                     return false
                 }
 
