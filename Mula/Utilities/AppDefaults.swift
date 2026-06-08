@@ -9,6 +9,7 @@ import Foundation
 
 enum AppDefaults {
     enum Debug {
+        static let showDebugInfoKey = "debug.showDebugInfo"
         private static let useTestDataKey = "debug.useTestData"
 
         static var useTestData: Bool {

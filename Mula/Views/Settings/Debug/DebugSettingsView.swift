@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DebugSettingsView: View {
     @Environment(DataManager.self) private var dataManager
+    @AppStorage(AppDefaults.Debug.showDebugInfoKey) private var showDebugInfo = false
 
     // Force Reload
     @State private var isReloading = false
@@ -46,6 +47,7 @@ struct DebugSettingsView: View {
                         .padding(.top, 6)
                 }
 
+                Toggle("Show Debug Info", isOn: $showDebugInfo)
                 Toggle("Use Test Data", isOn: $dataManager.useTestData)
             }
 
