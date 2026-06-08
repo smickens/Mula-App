@@ -9,41 +9,50 @@ import Foundation
 
 public struct ImportProcessor {
     public static func processFileContent(_ content: String) throws -> TransactionImportResult {
-        let table = CSVParser.parse(content)
+        let document = CSVParser.parse(content)
 
-        guard !table.headers.isEmpty else {
+        guard !document.rows.isEmpty else {
             throw ImportProcessingError.missingHeaders
         }
 
-        guard let format = BankImportFormat.detect(from: table.headers) else {
-            throw ImportProcessingError.unsupportedFormat(headers: table.headers)
+        guard let detectedFormat = BankImportFormat.detect(in: document) else {
+            let headers = document.rows.first?.values ?? []
+            throw ImportProcessingError.unsupportedFormat(headers: headers)
         }
 
+        guard let table = document.table(headerRowIndex: detectedFormat.headerRowIndex) else {
+            throw ImportProcessingError.missingHeaders
+        }
         var transactions: [Transaction] = []
+        var accountStatements: [AccountStatement] = []
         var skippedRows: [SkippedImportRow] = []
 
         for row in table.dataRows {
-            let rowResult = format.transaction(row)
+            let rowResult = detectedFormat.format.rowResult(table, row)
 
-            switch rowResult {
-            case .success(let transaction):
-                transactions.append(transaction)
+            transactions.append(contentsOf: rowResult.transactions)
+            accountStatements.append(contentsOf: rowResult.accountStatements)
 
-            case .skip(let reason):
+            if let reason = rowResult.skippedRowReason {
                 skippedRows.append(SkippedImportRow(rowNumber: row.rowNumber, reason: reason))
+            }
+
+            if rowResult.shouldStopProcessing {
+                break
             }
         }
 
-        guard !transactions.isEmpty else {
-            throw ImportProcessingError.noImportableTransactions(
-                detectedBank: format.bank,
+        guard !transactions.isEmpty || !accountStatements.isEmpty else {
+            throw ImportProcessingError.noImportableContent(
+                detectedBank: detectedFormat.format.bank,
                 skippedRows: skippedRows
             )
         }
 
         return TransactionImportResult(
-            detectedBank: format.bank,
+            detectedBank: detectedFormat.format.bank,
             transactions: transactions,
+            accountStatements: accountStatements,
             skippedRows: skippedRows
         )
     }
@@ -52,7 +61,7 @@ public struct ImportProcessor {
 public enum ImportProcessingError: LocalizedError {
     case missingHeaders
     case unsupportedFormat(headers: [String])
-    case noImportableTransactions(detectedBank: Bank, skippedRows: [SkippedImportRow])
+    case noImportableContent(detectedBank: Bank, skippedRows: [SkippedImportRow])
 
     public var errorDescription: String? {
         switch self {
@@ -62,14 +71,14 @@ public enum ImportProcessingError: LocalizedError {
         case .unsupportedFormat(let headers):
             return "This CSV format is not supported yet. Found headers: \(headers)."
 
-        case .noImportableTransactions(let detectedBank, let skippedRows):
+        case .noImportableContent(let detectedBank, let skippedRows):
             let bankName = detectedBank.displayName
 
             if skippedRows.isEmpty {
-                return "No importable transactions were found for \(bankName)."
+                return "No importable data was found for \(bankName)."
             }
 
-            return "No importable transactions were found for \(bankName). \(skippedRows.count) rows were skipped."
+            return "No importable data was found for \(bankName). \(skippedRows.count) rows were skipped."
         }
     }
 }
@@ -77,6 +86,7 @@ public enum ImportProcessingError: LocalizedError {
 public struct TransactionImportResult {
     public let detectedBank: Bank?
     public let transactions: [Transaction]
+    public let accountStatements: [AccountStatement]
     public let skippedRows: [SkippedImportRow]
 }
 
@@ -96,8 +106,45 @@ public enum ImportSkipReason: Equatable {
 }
 
 private enum ImportRowResult {
-    case success(Transaction)
+    case parsed(transactions: [Transaction], accountStatements: [AccountStatement])
     case skip(ImportSkipReason)
+    case stop
+
+    var transactions: [Transaction] {
+        switch self {
+        case .parsed(let transactions, _):
+            return transactions
+        case .skip, .stop:
+            return []
+        }
+    }
+
+    var accountStatements: [AccountStatement] {
+        switch self {
+        case .parsed(_, let accountStatements):
+            return accountStatements
+        case .skip, .stop:
+            return []
+        }
+    }
+
+    var skippedRowReason: ImportSkipReason? {
+        switch self {
+        case .skip(let reason):
+            return reason
+        case .parsed, .stop:
+            return nil
+        }
+    }
+
+    var shouldStopProcessing: Bool {
+        switch self {
+        case .stop:
+            return true
+        case .parsed, .skip:
+            return false
+        }
+    }
 }
 
 private enum AmountSignConvention {
@@ -117,10 +164,17 @@ private enum AmountSignConvention {
 private struct BankImportFormat {
     let bank: Bank
     let matches: ([String]) -> Bool
-    let transaction: (CSVRow) -> ImportRowResult
+    let rowResult: (CSVTable, CSVRow) -> ImportRowResult
 
-    static func detect(from headers: [String]) -> BankImportFormat? {
-        allFormats.first { $0.matches(headers) }
+    static func detect(in document: CSVDocument) -> ImportFormatMatch? {
+        for (index, row) in document.rows.enumerated() {
+            let headers = row.values
+            if let format = allFormats.first(where: { $0.matches(headers) }) {
+                return ImportFormatMatch(format: format, headerRowIndex: index)
+            }
+        }
+
+        return nil
     }
 
     private static let allFormats: [BankImportFormat] = [
@@ -137,11 +191,11 @@ private extension BankImportFormat {
         matches: { headers in
             headers.containsAll(["Transaction Date", "Merchant", "Category", "Amount (USD)"])
         },
-        transaction: { row in
-            let dateString = row.value(for: "Transaction Date")
-            let merchant = row.value(for: "Merchant")
-            let category = row.value(for: "Category")
-            let amountString = row.value(for: "Amount (USD)")
+        rowResult: { table, row in
+            let dateString = table.value(in: row, for: "Transaction Date")
+            let merchant = table.value(in: row, for: "Merchant")
+            let category = table.value(in: row, for: "Category")
+            let amountString = table.value(in: row, for: "Amount (USD)")
 
             guard !merchant.isEmpty else {
                 return .skip(.missingRequiredValue("Merchant"))
@@ -174,7 +228,7 @@ private extension BankImportFormat {
             .applyingBankRules(BankImportRules.apple)
             .transaction
 
-            return .success(transaction)
+            return .parsed(transactions: [transaction], accountStatements: [])
         }
     )
 
@@ -183,10 +237,10 @@ private extension BankImportFormat {
         matches: { headers in
             headers.containsAll(["Date", "Transaction", "Name", "Memo", "Amount"])
         },
-        transaction: { row in
-            let dateString = row.value(for: "Date")
-            let title = row.value(for: "Name")
-            let amountString = row.value(for: "Amount")
+        rowResult: { table, row in
+            let dateString = table.value(in: row, for: "Date")
+            let title = table.value(in: row, for: "Name")
+            let amountString = table.value(in: row, for: "Amount")
 
             guard !title.isEmpty else {
                 return .skip(.missingRequiredValue("Name"))
@@ -213,7 +267,10 @@ private extension BankImportFormat {
                 return .skip(.ignoredTransaction(candidate.title))
             }
 
-            return .success(candidate.applyingBankRules(BankImportRules.usBank).transaction)
+            return .parsed(
+                transactions: [candidate.applyingBankRules(BankImportRules.usBank).transaction],
+                accountStatements: []
+            )
         }
     )
 
@@ -222,16 +279,16 @@ private extension BankImportFormat {
         matches: { headers in
             headers.containsAll(["Run Date", "Action", "Description", "Amount ($)"])
         },
-        transaction: { row in
-            let action = row.value(for: "Action")
+        rowResult: { table, row in
+            let action = table.value(in: row, for: "Action")
 
             guard action.caseInsensitiveCompare("Contributions") == .orderedSame else {
                 return .skip(.ignoredTransaction(action))
             }
 
-            let dateString = row.value(for: "Run Date")
-            let description = row.value(for: "Description")
-            let amountString = row.value(for: "Amount ($)")
+            let dateString = table.value(in: row, for: "Run Date")
+            let description = table.value(in: row, for: "Description")
+            let amountString = table.value(in: row, for: "Amount ($)")
 
             guard let date = DateImportParser.date(from: dateString, format: "MM/dd/yyyy") else {
                 return .skip(.invalidDate(dateString))
@@ -252,7 +309,7 @@ private extension BankImportFormat {
             )
             .transaction
 
-            return .success(transaction)
+            return .parsed(transactions: [transaction], accountStatements: [])
         }
     )
 
@@ -261,10 +318,10 @@ private extension BankImportFormat {
         matches: { headers in
             headers.containsAll(["DATE", "DESCRIPTION", "AMOUNT"])
         },
-        transaction: { row in
-            let dateString = row.value(for: "DATE")
-            let title = row.value(for: "DESCRIPTION")
-            let amountString = row.value(for: "AMOUNT")
+        rowResult: { table, row in
+            let dateString = table.value(in: row, for: "DATE")
+            let title = table.value(in: row, for: "DESCRIPTION")
+            let amountString = table.value(in: row, for: "AMOUNT")
 
             guard !title.isEmpty else {
                 return .skip(.missingRequiredValue("DESCRIPTION"))
@@ -293,9 +350,52 @@ private extension BankImportFormat {
             .applyingBankRules(BankImportRules.wellsFargo)
             .transaction
 
-            return .success(transaction)
+            return .parsed(transactions: [transaction], accountStatements: [])
         }
     )
+}
+
+private struct ImportFormatMatch {
+    let format: BankImportFormat
+    let headerRowIndex: Int
+}
+
+private extension BankImportFormat {
+    static func monthEndDate(from label: String) -> Date? {
+        let monthYear = label
+            .components(separatedBy: "(")
+            .first?
+            .trimmingCharacters(in: .whitespacesAndNewlines) ?? label
+
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = .current
+        formatter.dateFormat = "MMM yyyy"
+
+        let calendar = Calendar(identifier: .gregorian)
+
+        guard let monthStart = formatter.date(from: monthYear),
+              let monthInterval = calendar.dateInterval(of: .month, for: monthStart),
+              let monthEnd = calendar.date(byAdding: .day, value: -1, to: monthInterval.end) else {
+            return nil
+        }
+
+        return monthEnd
+    }
+
+    static func parseCurrency(_ string: String) -> Decimal? {
+        let trimmed = string.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+
+        let normalized = trimmed
+            .replacingOccurrences(of: "$", with: "")
+            .replacingOccurrences(of: ",", with: "")
+            .replacingOccurrences(of: "(", with: "-")
+            .replacingOccurrences(of: ")", with: "")
+
+        return Decimal(string: normalized)
+    }
 }
 
 private struct ImportedTransactionCandidate {
@@ -468,7 +568,7 @@ private extension TransactionKind {
     }
 }
 
-private extension Array where Element == String {
+extension Array where Element == String {
     func containsAll(_ values: [String]) -> Bool {
         values.allSatisfy { value in
             contains { $0.caseInsensitiveCompare(value) == .orderedSame }
