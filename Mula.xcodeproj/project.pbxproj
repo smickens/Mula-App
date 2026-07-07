@@ -16,15 +16,7 @@
 		E3A100072FAF000100A10001 /* CSVParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A100022FAF000100A10001 /* CSVParserTests.swift */; };
 		E3A1000B2FAF000100A10001 /* MulaCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3A100152FAF000100A10001 /* MulaCore.framework */; };
 		E3A1000C2FAF000100A10001 /* MulaCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3A100152FAF000100A10001 /* MulaCore.framework */; };
-		E3A100112FAF000100A10001 /* CSVParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A100132FAF000100A10001 /* CSVParser.swift */; };
-		E3A100122FAF000100A10001 /* String+CSVParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A100142FAF000100A10001 /* String+CSVParsing.swift */; };
 		E3A100162FAF000100A10001 /* MulaCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E3A100152FAF000100A10001 /* MulaCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E3A100242FAF000100A10001 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A100252FAF000100A10001 /* Account.swift */; };
-		E3A100322FAF000100A10001 /* AccountStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A100252FAF000100A10002 /* AccountStatement.swift */; };
-		E3A100262FAF000100A10001 /* ImportSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A100272FAF000100A10001 /* ImportSource.swift */; };
-		E3A100282FAF000100A10001 /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A100292FAF000100A10001 /* Transaction.swift */; };
-		E3A1002A2FAF000100A10001 /* TransactionCategoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A1002B2FAF000100A10001 /* TransactionCategoryProtocol.swift */; };
-		E3A1002C2FAF000100A10001 /* ImportProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A1002D2FAF000100A10001 /* ImportProcessor.swift */; };
 		E3A1002E2FAF000100A10001 /* ImportProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A1002F2FAF000100A10001 /* ImportProcessorTests.swift */; };
 		E3A100302FAF000100A10001 /* TestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A100312FAF000100A10001 /* TestSupport.swift */; };
 /* End PBXBuildFile section */
@@ -69,20 +61,15 @@
 		E2992F822E91DDFE00E86606 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E3A100012FAF000100A10001 /* MulaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MulaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3A100022FAF000100A10001 /* CSVParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVParserTests.swift; sourceTree = "<group>"; };
-		E3A100132FAF000100A10001 /* CSVParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVParser.swift; sourceTree = "<group>"; };
-		E3A100142FAF000100A10001 /* String+CSVParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+CSVParsing.swift"; sourceTree = "<group>"; };
 		E3A100152FAF000100A10001 /* MulaCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MulaCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E3A100252FAF000100A10001 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
-		E3A100252FAF000100A10002 /* AccountStatement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountStatement.swift; sourceTree = "<group>"; };
-		E3A100272FAF000100A10001 /* ImportSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportSource.swift; sourceTree = "<group>"; };
-		E3A100292FAF000100A10001 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
-		E3A1002B2FAF000100A10001 /* TransactionCategoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategoryProtocol.swift; sourceTree = "<group>"; };
-		E3A1002D2FAF000100A10001 /* ImportProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportProcessor.swift; sourceTree = "<group>"; };
 		E3A1002F2FAF000100A10001 /* ImportProcessorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportProcessorTests.swift; sourceTree = "<group>"; };
 		E3A100312FAF000100A10001 /* TestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSupport.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		E21082EF2FD6792C0016FACE /* Import Processing */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Import Processing"; sourceTree = "<group>"; };
+		E21082F02FD679370016FACE /* CSV Parsing */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "CSV Parsing"; sourceTree = "<group>"; };
+		E21082F22FD6795D0016FACE /* Models */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Models; sourceTree = "<group>"; };
 		E252B5282FA1C5F30064A197 /* Data */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Data; sourceTree = "<group>"; };
 		E252B5342FA1C5FE0064A197 /* Utilities */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Utilities; sourceTree = "<group>"; };
 		E252B56D2FA1C6090064A197 /* Views */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Views; sourceTree = "<group>"; };
@@ -183,14 +170,9 @@
 		E3A1001B2FAF000100A10001 /* MulaCore */ = {
 			isa = PBXGroup;
 			children = (
-				E3A100252FAF000100A10001 /* Account.swift */,
-				E3A100252FAF000100A10002 /* AccountStatement.swift */,
-				E3A100272FAF000100A10001 /* ImportSource.swift */,
-				E3A100132FAF000100A10001 /* CSVParser.swift */,
-				E3A1002D2FAF000100A10001 /* ImportProcessor.swift */,
-				E3A100142FAF000100A10001 /* String+CSVParsing.swift */,
-				E3A100292FAF000100A10001 /* Transaction.swift */,
-				E3A1002B2FAF000100A10001 /* TransactionCategoryProtocol.swift */,
+				E21082F22FD6795D0016FACE /* Models */,
+				E21082F02FD679370016FACE /* CSV Parsing */,
+				E21082EF2FD6792C0016FACE /* Import Processing */,
 			);
 			path = MulaCore;
 			sourceTree = "<group>";
@@ -256,6 +238,11 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				E21082EF2FD6792C0016FACE /* Import Processing */,
+				E21082F02FD679370016FACE /* CSV Parsing */,
+				E21082F22FD6795D0016FACE /* Models */,
 			);
 			name = MulaCore;
 			packageProductDependencies = (
@@ -345,14 +332,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E3A100242FAF000100A10001 /* Account.swift in Sources */,
-				E3A100322FAF000100A10001 /* AccountStatement.swift in Sources */,
-				E3A100262FAF000100A10001 /* ImportSource.swift in Sources */,
-				E3A100122FAF000100A10001 /* String+CSVParsing.swift in Sources */,
-				E3A100112FAF000100A10001 /* CSVParser.swift in Sources */,
-				E3A1002C2FAF000100A10001 /* ImportProcessor.swift in Sources */,
-				E3A100282FAF000100A10001 /* Transaction.swift in Sources */,
-				E3A1002A2FAF000100A10001 /* TransactionCategoryProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

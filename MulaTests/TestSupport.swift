@@ -29,7 +29,7 @@ func decimal(_ string: String) -> Decimal {
 }
 
 func expectImportProcessingError(
-    for operation: @autoclosure () throws -> TransactionImportResult,
+    for operation: @autoclosure () throws -> ImportResult,
     matching predicate: (ImportProcessingError) -> Bool
 ) {
     do {
