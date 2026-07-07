@@ -280,6 +280,7 @@ enum BankImportRules {
         ImportRule(match: "APPLE CAFFE AP01:1 CUPERTINO CA", matchType: .exact, newTitle: "Apple Caffe", kind: .expense(.eatingOut), appliesTo: .expense),
         ImportRule(match: "CVS/PHARMACY #09856 SUNNYVALE CA", matchType: .exact, newTitle: "CVS", kind: .expense(.groceries), appliesTo: .expense),
         ImportRule(match: "APPLE ESPR BAR AP01 S5 CUPERTINO CA", matchType: .exact, newTitle: "Apple Caffe", kind: .expense(.eatingOut), appliesTo: .expense),
+        ImportRule(match: "COSTCO GAS", matchType: .contains, newTitle: nil, kind: .expense(.car), appliesTo: .expense),
         ImportRule(match: "WEST SAN JOSE GROCER SAN JOSE CA", matchType: .exact, newTitle: "Grocery Outlet", kind: .expense(.groceries), appliesTo: .expense)
     ]
 }

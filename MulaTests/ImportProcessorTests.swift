@@ -283,6 +283,43 @@ enum ImportProcessorTests {
             #expect(result.skippedRows[0].reason == .invalidAmount("not-a-number"))
             #expect(result.transactions[0].title == "Grocery Outlet")
         }
+
+        @Test func ignoresOnlinePaymentThankYouTransactions() throws {
+            let content = csvContent(
+                headers: ["DATE", "DESCRIPTION", "AMOUNT"],
+                rows: [
+                    ["03/08/2026", "ONLINE PAYMENT THANK YOU", "250.00"],
+                    ["03/10/2026", "WEST SAN JOSE GROCER SAN JOSE CA", "-43.21"]
+                ]
+            )
+
+            let result = try ImportProcessor.processFileContent(content)
+
+            #expect(result.detectedSource == .wellsFargo)
+            #expect(result.transactions.count == 1)
+            #expect(result.skippedRows.count == 1)
+            #expect(result.skippedRows[0].rowNumber == 2)
+            #expect(result.skippedRows[0].reason == .ignoredTransaction("Credit card payment"))
+            #expect(result.transactions[0].title == "Grocery Outlet")
+        }
+
+        @Test func categorizesCostcoGasAsCar() throws {
+            let content = csvContent(
+                headers: ["DATE", "DESCRIPTION", "AMOUNT"],
+                rows: [
+                    ["03/08/2026", "COSTCO GAS #123 SAN JOSE CA", "-58.22"]
+                ]
+            )
+
+            let result = try ImportProcessor.processFileContent(content)
+
+            #expect(result.detectedSource == .wellsFargo)
+            #expect(result.transactions.count == 1)
+            #expect(result.skippedRows.isEmpty)
+            #expect(result.transactions[0].title == "COSTCO GAS #123 SAN JOSE CA")
+            #expect(result.transactions[0].kind == .expense(.car))
+            #expect(result.transactions[0].amount == decimal("58.22"))
+        }
     }
 
     @Suite("Errors And Skips")

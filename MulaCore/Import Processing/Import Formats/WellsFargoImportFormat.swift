@@ -22,7 +22,8 @@ extension ImportFormat {
                 return .skip(.missingRequiredValue("DESCRIPTION"))
             }
 
-            guard title != "ONLINE ACH PAYMENT THANK YOU" else {
+            guard title != "ONLINE ACH PAYMENT THANK YOU",
+                  title != "ONLINE PAYMENT THANK YOU" else {
                 return .skip(.ignoredTransaction("Credit card payment"))
             }
 
