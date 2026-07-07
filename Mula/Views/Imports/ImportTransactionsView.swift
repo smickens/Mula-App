@@ -17,6 +17,7 @@ struct ImportTransactionsView: View {
     @Binding var importName: String
     @Binding var fileContent: String
     @State private var newTransactions: [Transaction] = []
+    @State private var newAccountStatements: [AccountStatement] = []
     @State private var selectedTransactionID: UUID?
     @State private var importErrorMessage: String?
 
@@ -50,18 +51,24 @@ struct ImportTransactionsView: View {
 
                     Divider()
 
-                    if let selectedTransactionID,
-                       let index = newTransactions.firstIndex(where: { $0.id == selectedTransactionID }) {
-                        TransactionFormView(
-                            transaction: newTransactions[index],
-                            title: "",
-                            onSave: { updatedTransaction in
-                                newTransactions[index] = updatedTransaction
-                            }
-                        )
-                        .id(selectedTransactionID)
-                    } else {
-                        emptyDetailView
+                    VStack(alignment: .leading, spacing: 16) {
+                        accountStatementPreview
+
+                        Divider()
+
+                        if let selectedTransactionID,
+                           let index = newTransactions.firstIndex(where: { $0.id == selectedTransactionID }) {
+                            TransactionFormView(
+                                transaction: newTransactions[index],
+                                title: "",
+                                onSave: { updatedTransaction in
+                                    newTransactions[index] = updatedTransaction
+                                }
+                            )
+                            .id(selectedTransactionID)
+                        } else {
+                            emptyDetailView
+                        }
                     }
                 }
             }
@@ -84,7 +91,7 @@ struct ImportTransactionsView: View {
                 } label: {
                     Text("Import")
                 }
-                .disabled(newTransactions.isEmpty || importName.trimmingCharacters(in: .whitespaces).isEmpty)
+                .disabled((newTransactions.isEmpty && newAccountStatements.isEmpty) || importName.trimmingCharacters(in: .whitespaces).isEmpty)
             }
         }
         .onAppear(perform: processImportFile)
@@ -92,6 +99,12 @@ struct ImportTransactionsView: View {
 
     private var newTransactionsList: some View {
         List(selection: $selectedTransactionID) {
+            if newTransactions.isEmpty {
+                Text("No transactions extracted")
+                    .foregroundColor(.secondary)
+                    .tag(UUID?.none)
+            }
+
             ForEach(newTransactions) { transaction in
                 TransactionView(
                     selectedTransactionID: $selectedTransactionID,
@@ -103,6 +116,40 @@ struct ImportTransactionsView: View {
             }
             .onDelete { indexSet in
                 newTransactions.remove(atOffsets: indexSet)
+            }
+        }
+    }
+
+    private var accountStatementPreview: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Balance Checkpoints")
+                .font(.headline)
+
+            Text("\(newAccountStatements.count) statement\(newAccountStatements.count == 1 ? "" : "s") will be imported")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+
+            if newAccountStatements.isEmpty {
+                Text("No balances extracted")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            } else {
+                ScrollView {
+                    LazyVStack(alignment: .leading, spacing: 8) {
+                        ForEach(newAccountStatements) { statement in
+                            HStack {
+                                Text(Self.statementDateFormatter.string(from: statement.date))
+                                    .foregroundColor(.primary)
+                                Spacer()
+                                Text(statement.balance.toCurrency())
+                                    .fontWeight(.semibold)
+                            }
+                            .font(.subheadline)
+                            .padding(.vertical, 4)
+                        }
+                    }
+                }
+                .frame(maxHeight: 180)
             }
         }
     }
@@ -141,19 +188,25 @@ struct ImportTransactionsView: View {
         do {
             let result = try ImportProcessor.processFileContent(fileContent)
             newTransactions = result.transactions
+            newAccountStatements = result.accountStatements.sorted { $0.date > $1.date }
             selectedTransactionID = newTransactions.first?.id
             importErrorMessage = nil
         } catch {
             newTransactions = []
+            newAccountStatements = []
             selectedTransactionID = nil
             importErrorMessage = error.localizedDescription
         }
     }
 
     private func saveNewExpenses() {
-        if !newTransactions.isEmpty {
+        if !newTransactions.isEmpty || !newAccountStatements.isEmpty {
             let trimmedName = importName.trimmingCharacters(in: .whitespaces)
-            dataManager.importTransactions(newTransactions, fileName: trimmedName)
+            dataManager.importParsedFileContents(
+                transactions: newTransactions,
+                accountStatements: newAccountStatements,
+                fileName: trimmedName
+            )
         }
 
         dismiss()
@@ -161,7 +214,14 @@ struct ImportTransactionsView: View {
 
     private func clearAllNewExpenses() {
         newTransactions = []
+        newAccountStatements = []
 
         dismiss()
     }
+
+    private static let statementDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d, yyyy"
+        return formatter
+    }()
 }
