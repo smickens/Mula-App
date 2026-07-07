@@ -115,6 +115,24 @@ enum ImportProcessorTests {
             #expect(result.skippedRows[0].reason == .invalidDate("not-a-date"))
             #expect(result.transactions[0].title == "Venmo (in)")
         }
+
+        @Test func categorizesBiltWithdrawalAsRent() throws {
+            let content = csvContent(
+                headers: ["Date", "Transaction", "Name", "Memo", "Amount"],
+                rows: [
+                    ["2026-03-08", "ACH", "ELECTRONIC WITHDRAWAL BILT CARD", "", "-1450.00"]
+                ]
+            )
+
+            let result = try ImportProcessor.processFileContent(content)
+
+            #expect(result.detectedSource == .usBank)
+            #expect(result.transactions.count == 1)
+            #expect(result.skippedRows.isEmpty)
+            #expect(result.transactions[0].title == "Rent")
+            #expect(result.transactions[0].kind == .expense(.housing))
+            #expect(result.transactions[0].amount == decimal("1450.00"))
+        }
     }
 
     @Suite("Fidelity 401k")

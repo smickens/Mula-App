@@ -268,6 +268,7 @@ enum BankImportRules {
         ImportRule(match: "WEB AUTHORIZED PMT VENMO", matchType: .exact, newTitle: "Venmo (out)", kind: .expense(.entertainment)),
         ImportRule(match: "ELECTRONIC DEPOSIT VENMO", matchType: .exact, newTitle: "Venmo (in)", kind: .income(.other)),
         ImportRule(match: "ELECTRONIC WITHDRAWAL ATT", matchType: .exact, newTitle: "Internet Bill", kind: .expense(.housing)),
+        ImportRule(match: "ELECTRONIC WITHDRAWAL BILT CARD", matchType: .exact, newTitle: "Rent", kind: .expense(.housing)),
         ImportRule(match: "MOBILE CHECK DEPOSIT", matchType: .exact, newTitle: "Mobile Check Deposit", kind: .income(.other)),
         ImportRule(match: "ZELLE INSTANT PMT FROM", matchType: .exact, newTitle: nil, kind: .income(.other)),
         ImportRule(match: "ZELLE INSTANT PMT TO", matchType: .exact, newTitle: nil, kind: .expense(.entertainment))
