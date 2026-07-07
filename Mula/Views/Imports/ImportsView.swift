@@ -69,6 +69,7 @@ struct ImportsView: View {
         openPanel.allowedContentTypes = [.commaSeparatedText]
         openPanel.canChooseFiles = true
         openPanel.canChooseDirectories = false
+        openPanel.directoryURL = URL(fileURLWithPath: "/Users/shantimickens/Library/Mobile Documents/com~apple~CloudDocs/docs/expenses : transactions")
 
         if openPanel.runModal() == .OK,
            let fileURL = openPanel.url,
