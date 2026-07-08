@@ -15,6 +15,9 @@ struct AccountsView: View {
     @State private var selectedTransactionID: UUID?
     @State private var expandedSections: Set<AccountType> = Set(AccountType.allCases)
 
+    private let cornerRadius: CGFloat = 12
+    private let panePadding: CGFloat = 16
+
     // Special UUID to represent "All Accounts"
     private let allAccountsId = UUID(uuidString: "00000000-0000-0000-0000-000000000000")!
 
@@ -53,7 +56,7 @@ struct AccountsView: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
-                    // TODO: Action to add new account
+                    // TODO: Replace with actions menu in a later pass
                 } label: {
                     Label("Add Account", systemImage: "plus")
                 }
@@ -64,45 +67,91 @@ struct AccountsView: View {
     // MARK: - Accounts List
 
     private var accountsList: some View {
-        List(selection: $selectedAccountId) {
-            // All Accounts option
-            Label("All Accounts", systemImage: "list.bullet")
-                .tag(allAccountsId)
+        VStack(alignment: .leading, spacing: 14) {
+            AccountSelectionRow(
+                title: "All Accounts",
+                systemImage: "list.bullet.rectangle",
+                isSelected: selectedAccountId == allAccountsId
+            ) {
+                selectedAccountId = allAccountsId
+            }
 
-            // Accounts grouped by type with disclosure groups
-            ForEach(AccountType.allCases) { accountType in
-                let accountsOfType = dataManager.accounts.filter { $0.type == accountType }
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 12) {
+                    ForEach(AccountType.allCases) { accountType in
+                        let accountsOfType = accounts(for: accountType)
 
-                if !accountsOfType.isEmpty {
-                    DisclosureGroup(
-                        isExpanded: Binding(
-                            get: { expandedSections.contains(accountType) },
-                            set: { isExpanded in
-                                if isExpanded {
-                                    expandedSections.insert(accountType)
-                                } else {
-                                    expandedSections.remove(accountType)
+                        if !accountsOfType.isEmpty {
+                            VStack(alignment: .leading, spacing: 8) {
+                                accountTypeHeader(accountType, count: accountsOfType.count)
+
+                                if expandedSections.contains(accountType) {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        ForEach(accountsOfType) { account in
+                                            AccountRow(
+                                                account: account,
+                                                isSelected: selectedAccountId == account.id,
+                                                showDebugInfo: showDebugInfo
+                                            ) {
+                                                selectedAccountId = account.id
+                                            }
+                                        }
+                                    }
+                                    .padding(.leading, 10)
                                 }
                             }
-                        )
-                    ) {
-                        ForEach(accountsOfType) { account in
-                            AccountRow(account: account, showDebugInfo: showDebugInfo)
-                                .tag(account.id)
                         }
-                    } label: {
-                        Label(accountType.displayName, systemImage: iconForAccountType(accountType))
                     }
                 }
             }
         }
-        .frame(minWidth: 200, idealWidth: 250, maxWidth: 300)
+        .padding(panePadding)
+        .background(Color(NSColor.controlBackgroundColor))
+        .cornerRadius(cornerRadius)
+        .frame(minWidth: 220, idealWidth: 280, maxWidth: 320)
+        .padding(panePadding)
         .onAppear {
             // Select "All Accounts" by default
             if selectedAccountId == nil {
                 selectedAccountId = allAccountsId
             }
         }
+    }
+
+    @ViewBuilder
+    private func accountTypeHeader(_ type: AccountType, count: Int) -> some View {
+        Button {
+            toggleSection(type)
+        } label: {
+            HStack(spacing: 10) {
+                Image(systemName: expandedSections.contains(type) ? "chevron.down" : "chevron.right")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundColor(.secondary)
+                    .frame(width: 12)
+
+                Image(systemName: iconForAccountType(type))
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(.accentColor)
+                    .frame(width: 18)
+
+                Text(type.displayName)
+                    .font(.headline)
+                    .foregroundColor(.primary)
+
+                Spacer()
+
+                Text("\(count)")
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Color.primary.opacity(0.06))
+                    .clipShape(Capsule())
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Transactions List
@@ -211,6 +260,10 @@ struct AccountsView: View {
         return "Transactions"
     }
 
+    private func accounts(for type: AccountType) -> [Account] {
+        dataManager.accounts.filter { $0.type == type }
+    }
+
     private func iconForAccountType(_ type: AccountType) -> String {
         switch type {
         case .certificateOfDeposit:
@@ -228,6 +281,14 @@ struct AccountsView: View {
         }
     }
 
+    private func toggleSection(_ type: AccountType) {
+        if expandedSections.contains(type) {
+            expandedSections.remove(type)
+        } else {
+            expandedSections.insert(type)
+        }
+    }
+
     private func logAccountDebugInfoIfNeeded() {
         guard showDebugInfo else { return }
 
@@ -241,28 +302,76 @@ struct AccountsView: View {
 
 struct AccountRow: View {
     let account: Account
+    let isSelected: Bool
     let showDebugInfo: Bool
+    let onSelect: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            HStack {
-                Image(systemName: "circle.fill")
-                    .font(.system(size: 6))
-                    .foregroundColor(.secondary)
+        Button(action: onSelect) {
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: 10) {
+                    Circle()
+                        .fill(isSelected ? Color.accentColor : Color.secondary.opacity(0.55))
+                        .frame(width: 6, height: 6)
 
-                Text(account.name)
-                    .font(.body)
-            }
+                    Text(account.name)
+                        .font(.body)
+                        .foregroundColor(.primary)
 
-            if showDebugInfo {
-                Text(account.id.uuidString)
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                    .textSelection(.enabled)
-                    .padding(.leading, 14)
+                    Spacer(minLength: 0)
+                }
+
+                if showDebugInfo {
+                    Text(account.id.uuidString)
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                        .textSelection(.enabled)
+                        .padding(.leading, 16)
+                }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .background(isSelected ? Color.accentColor.opacity(0.12) : Color.clear)
+            .overlay {
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(isSelected ? Color.accentColor.opacity(0.25) : Color.clear, lineWidth: 1)
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 10))
         }
-        .padding(.leading, 8)
-        .padding(.vertical, 2)
+        .buttonStyle(.plain)
+        .contentShape(RoundedRectangle(cornerRadius: 10))
+    }
+}
+
+private struct AccountSelectionRow: View {
+    let title: String
+    let systemImage: String
+    let isSelected: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 10) {
+                Image(systemName: systemImage)
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundColor(isSelected ? .accentColor : .secondary)
+
+                Text(title)
+                    .font(.headline)
+                    .foregroundColor(.primary)
+
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 12)
+            .background(isSelected ? Color.accentColor.opacity(0.14) : Color.primary.opacity(0.04))
+            .overlay {
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(isSelected ? Color.accentColor.opacity(0.28) : Color.primary.opacity(0.05), lineWidth: 1)
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+        }
+        .buttonStyle(.plain)
     }
 }
