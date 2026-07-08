@@ -14,7 +14,6 @@ enum TabName: String, CaseIterable {
     case income = "Income"
     case savings = "Savings"
     case accounts = "Accounts"
-    case transactions = "Transactions"
     case imports = "Imports"
     case settings = "Settings"
 }
@@ -38,8 +37,6 @@ struct ContentView: View {
             switch selectedTab {
             case .accounts:
                 AccountsView()
-            case .transactions:
-                TransactionsView()
             case .trends:
                 TrendsView(selectedDate: $selectedTrendsDate)
             case .income:
@@ -58,8 +55,6 @@ struct ContentView: View {
         switch tab {
         case .accounts:
             return "person.crop.circle"
-        case .transactions:
-            return "list.bullet.rectangle"
         case .trends:
             return "chart.bar.xaxis"
         case .income:

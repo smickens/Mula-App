@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// TODO: decide if this should be exposed on accounts page?
+
 struct NewTransactionFormView: View {
     @Environment(DataManager.self) private var dataManager
     @Environment(\.dismiss) private var dismiss
