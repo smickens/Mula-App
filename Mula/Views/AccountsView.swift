@@ -72,28 +72,33 @@ struct AccountsView: View {
         HStack {
             Spacer()
 
-            Menu {
+            HStack(spacing: 10) {
                 Button {
                     showingAddAccountSheet = true
                 } label: {
                     Label("Add Account", systemImage: "plus.circle")
+                        .labelStyle(.titleAndIcon)
+                        .font(.subheadline.weight(.semibold))
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                        .background(Color(NSColor.controlBackgroundColor))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
+                .buttonStyle(.plain)
 
                 Button {
                     showingNewTransactionForm = true
                 } label: {
                     Label("New Transaction", systemImage: "plus.square")
+                        .labelStyle(.titleAndIcon)
+                        .font(.subheadline.weight(.semibold))
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                        .background(Color(NSColor.controlBackgroundColor))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
-            } label: {
-                Image(systemName: "ellipsis")
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.primary)
-                    .frame(width: 34, height: 34)
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                .buttonStyle(.plain)
             }
-            .menuStyle(.borderlessButton)
-            .fixedSize()
         }
     }
 
