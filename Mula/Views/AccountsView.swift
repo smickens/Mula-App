@@ -29,22 +29,19 @@ struct AccountsView: View {
         VStack(alignment: .leading, spacing: gridSpacing) {
             pageHeader
 
-            HStack(spacing: 0) {
+            HStack(alignment: .top, spacing: gridSpacing) {
                 accountsList
+                    .frame(maxWidth: .infinity)
 
-                Divider()
+                VStack(spacing: gridSpacing) {
+                    transactionsListView
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-                transactionsListView
-
-                Divider()
-
-                if let selectedTransactionID,
-                   let selectedTransaction = filteredTransactions.first(where: { $0.id == selectedTransactionID }) {
-                    TransactionDetailView(transaction: selectedTransaction, displayingAccountId: selectedAccountId)
-                } else {
-                    emptyTransactionView
+                    SummaryMetricsGrid(metrics: summaryMetrics, spacing: gridSpacing)
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .padding()
         .navigationTitle("Accounts")
@@ -60,6 +57,9 @@ struct AccountsView: View {
         .onChange(of: selectedTimeframe) { _, _ in
             selectedTransactionID = nil
         }
+        .onChange(of: selectedAccountId) { _, _ in
+            selectedTransactionID = nil
+        }
         .sheet(isPresented: $showingAddAccountSheet) {
             AddAccountSheet()
         }
@@ -69,7 +69,7 @@ struct AccountsView: View {
     }
 
     private var pageHeader: some View {
-        HStack(alignment: .center) {
+        HStack {
             Spacer()
 
             Menu {
@@ -141,7 +141,7 @@ struct AccountsView: View {
         .padding(panePadding)
         .background(Color(NSColor.controlBackgroundColor))
         .cornerRadius(cornerRadius)
-        .frame(minWidth: 220, idealWidth: 280, maxWidth: 320)
+        .frame(minWidth: 320, maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .onAppear {
             if selectedAccountId == nil {
                 selectedAccountId = allAccountsId
@@ -238,7 +238,8 @@ struct AccountsView: View {
                 }
             }
         }
-        .frame(minWidth: 300, idealWidth: 400, maxWidth: 500)
+        .background(Color(NSColor.controlBackgroundColor))
+        .cornerRadius(cornerRadius)
     }
 
     // MARK: - Empty States
@@ -255,33 +256,17 @@ struct AccountsView: View {
                 .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-
-    private var emptyTransactionView: some View {
-        VStack(spacing: 12) {
-            Image(systemName: "doc.text.magnifyingglass")
-                .font(.system(size: 48))
-                .foregroundColor(.secondary)
-            Text("No Transaction Selected")
-                .font(.title2)
-                .fontWeight(.semibold)
-            Text("Select a transaction to view its details")
-                .foregroundColor(.secondary)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding()
     }
 
     // MARK: - Computed Properties
 
     private var filteredTransactions: [Transaction] {
         transactionsInSelectedTimeframe
-            .filter {
+            .filter { transaction in
                 let isAllAccountsSelected = selectedAccountId == allAccountsId
-                let isFromAccount = $0.sourceAccountId == selectedAccountId
-                var isToAccount = false
-                if case .transfer(_, let destinationAccountId) = $0.kind {
-                    isToAccount = destinationAccountId == selectedAccountId
-                }
+                let isFromAccount = transaction.sourceAccountId == selectedAccountId
+                let isToAccount = destinationAccountId(for: transaction) == selectedAccountId
                 return isAllAccountsSelected || isFromAccount || isToAccount
             }
             .sorted { $0.date < $1.date }
@@ -289,6 +274,127 @@ struct AccountsView: View {
 
     private var transactionsInSelectedTimeframe: [Transaction] {
         dataManager.transactions.filter { selectedTimeframe.contains($0.date) }
+    }
+
+    private var summaryMetrics: [SummaryMetric] {
+        let scope = selectedScope
+        let transactions = filteredTransactions
+
+        switch scope {
+        case .allAccounts:
+            return [
+                SummaryMetric(
+                    title: "Money In",
+                    primaryText: sumMoneyIn(for: transactions).toCurrency(),
+                    primaryColor: .green
+                ),
+                SummaryMetric(
+                    title: "Money Out",
+                    primaryText: sumMoneyOut(for: transactions).toCurrency(),
+                    primaryColor: .red
+                )
+            ]
+
+        case .accountType(.creditCard), .accountType(.checking):
+            let largestExpense = largestExpense(in: transactions)
+            return [
+                SummaryMetric(
+                    title: "Total Spent",
+                    primaryText: totalSpent(for: transactions).toCurrency(),
+                    primaryColor: .red
+                ),
+                SummaryMetric(
+                    title: "Largest Expense",
+                    primaryText: largestExpense?.amount.toCurrency() ?? "--",
+                    secondaryText: largestExpense?.displayTitle,
+                    primaryColor: .red
+                )
+            ]
+
+        case .accountType(.saving), .accountType(.certificateOfDeposit):
+            return [
+                SummaryMetric(
+                    title: "Total Contributions",
+                    primaryText: totalContributions(for: transactions).toCurrency()
+                ),
+                SummaryMetric(
+                    title: "Interest Earned",
+                    primaryText: interestEarned(for: transactions).toCurrency(),
+                    primaryColor: .green
+                )
+            ]
+
+        case .accountType(.investment):
+            return [
+                SummaryMetric(
+                    title: "Total Contributions",
+                    primaryText: totalContributions(for: transactions).toCurrency()
+                ),
+                SummaryMetric(
+                    title: "Passive Income",
+                    primaryText: passiveIncome(for: transactions).toCurrency(),
+                    primaryColor: .green
+                )
+            ]
+
+        case .accountType(.retirement):
+            return [
+                SummaryMetric(
+                    title: "Total Contributions",
+                    primaryText: totalContributions(for: transactions).toCurrency()
+                ),
+                SummaryMetric(
+                    title: "Growth",
+                    primaryText: retirementGrowth.toCurrencyOrPlaceholder,
+                    secondaryText: retirementGrowth == nil ? "Need balance checkpoints" : nil,
+                    primaryColor: (retirementGrowth ?? 0) < 0 ? .red : .green
+                )
+            ]
+        }
+    }
+
+    private var selectedScope: AccountStatsScope {
+        if selectedAccountId == allAccountsId || selectedAccountId == nil {
+            return .allAccounts
+        }
+
+        if let selectedAccountId,
+           let account = dataManager.accounts.first(where: { $0.id == selectedAccountId }) {
+            return .accountType(account.type)
+        }
+
+        return .allAccounts
+    }
+
+    private var retirementGrowth: Decimal? {
+        guard case .accountType(.retirement) = selectedScope else {
+            return nil
+        }
+
+        let accountIds = selectedAccountIDs
+        let relevantStatements = dataManager.accountStatements
+            .filter { accountIds.contains($0.accountId) }
+            .filter { selectedTimeframe.contains($0.date) }
+            .sorted { $0.date < $1.date }
+
+        guard let firstBalance = relevantStatements.first?.balance,
+              let lastBalance = relevantStatements.last?.balance else {
+            return nil
+        }
+
+        return (lastBalance - firstBalance) - totalContributions(for: filteredTransactions)
+    }
+
+    private var selectedAccountIDs: Set<UUID> {
+        if selectedAccountId == allAccountsId || selectedAccountId == nil {
+            return Set(dataManager.accounts.map(\.id))
+        }
+
+        if let selectedAccountId {
+            return [selectedAccountId]
+        }
+
+        return []
     }
 
     private var headerTitle: String {
@@ -366,6 +472,86 @@ struct AccountsView: View {
         }
     }
 
+    private func destinationAccountId(for transaction: Transaction) -> UUID? {
+        guard case .transfer(_, let destinationAccountId) = transaction.kind else {
+            return nil
+        }
+
+        return destinationAccountId
+    }
+
+    private func sumMoneyIn(for transactions: [Transaction]) -> Decimal {
+        transactions.reduce(0) { partialResult, transaction in
+            switch transaction.kind {
+            case .income:
+                return partialResult + transaction.amount
+            default:
+                return partialResult
+            }
+        }
+    }
+
+    private func sumMoneyOut(for transactions: [Transaction]) -> Decimal {
+        transactions.reduce(0) { partialResult, transaction in
+            switch transaction.kind {
+            case .expense:
+                return partialResult + transaction.amount
+            default:
+                return partialResult
+            }
+        }
+    }
+
+    private func totalSpent(for transactions: [Transaction]) -> Decimal {
+        transactions.reduce(0) { partialResult, transaction in
+            guard case .expense = transaction.kind else {
+                return partialResult
+            }
+
+            return partialResult + transaction.amount
+        }
+    }
+
+    private func largestExpense(in transactions: [Transaction]) -> Transaction? {
+        transactions
+            .filter {
+                if case .expense = $0.kind { return true }
+                return false
+            }
+            .max { $0.amount < $1.amount }
+    }
+
+    private func totalContributions(for transactions: [Transaction]) -> Decimal {
+        transactions.reduce(0) { partialResult, transaction in
+            guard case .saving(.contribution) = transaction.kind else {
+                return partialResult
+            }
+
+            return partialResult + transaction.amount
+        }
+    }
+
+    private func interestEarned(for transactions: [Transaction]) -> Decimal {
+        transactions.reduce(0) { partialResult, transaction in
+            guard case .income(.interest) = transaction.kind else {
+                return partialResult
+            }
+
+            return partialResult + transaction.amount
+        }
+    }
+
+    private func passiveIncome(for transactions: [Transaction]) -> Decimal {
+        transactions.reduce(0) { partialResult, transaction in
+            switch transaction.kind {
+            case .income(.interest), .income(.dividend):
+                return partialResult + transaction.amount
+            default:
+                return partialResult
+            }
+        }
+    }
+
     private func logAccountDebugInfoIfNeeded() {
         guard showDebugInfo else { return }
 
@@ -428,6 +614,17 @@ private enum AccountsTimeframe: String, CaseIterable, Identifiable {
 
             return date >= interval.start && date <= endDate
         }
+    }
+}
+
+private enum AccountStatsScope {
+    case allAccounts
+    case accountType(AccountType)
+}
+
+private extension Optional where Wrapped == Decimal {
+    var toCurrencyOrPlaceholder: String {
+        self?.toCurrency() ?? "--"
     }
 }
 
