@@ -14,35 +14,39 @@ struct AccountsView: View {
     @State private var selectedAccountId: UUID?
     @State private var selectedTransactionID: UUID?
     @State private var expandedSections: Set<AccountType> = Set(AccountType.allCases)
+    @State private var selectedTimeframe: AccountsTimeframe = .lastMonth
+    @State private var showingAddAccountSheet = false
+    @State private var showingNewTransactionForm = false
 
     private let cornerRadius: CGFloat = 12
     private let panePadding: CGFloat = 16
+    private let gridSpacing: CGFloat = 16
 
     // Special UUID to represent "All Accounts"
     private let allAccountsId = UUID(uuidString: "00000000-0000-0000-0000-000000000000")!
 
     var body: some View {
-        HStack(spacing: 0) {
-            // TODO: move this into the sidebar either under accoutns or transactions tab
-            // Left: Accounts List
-            accountsList
+        VStack(alignment: .leading, spacing: gridSpacing) {
+            pageHeader
 
-            Divider()
+            HStack(spacing: 0) {
+                accountsList
 
-            // Middle: Transactions List
-            transactionsListView
+                Divider()
 
-            Divider()
+                transactionsListView
 
-            // TODO: could add an edit button in this and have it be its own form when in that state ? vs. presenting the edit form ?
-            // Right: Transaction Detail
-            if let selectedTransactionID,
-               let selectedTransaction = filteredTransactions.first(where: { $0.id == selectedTransactionID }) {
-                TransactionDetailView(transaction: selectedTransaction, displayingAccountId: selectedAccountId)
-            } else {
-                emptyTransactionView
+                Divider()
+
+                if let selectedTransactionID,
+                   let selectedTransaction = filteredTransactions.first(where: { $0.id == selectedTransactionID }) {
+                    TransactionDetailView(transaction: selectedTransaction, displayingAccountId: selectedAccountId)
+                } else {
+                    emptyTransactionView
+                }
             }
         }
+        .padding()
         .navigationTitle("Accounts")
         .onAppear {
             logAccountDebugInfoIfNeeded()
@@ -53,14 +57,43 @@ struct AccountsView: View {
         .onChange(of: dataManager.accounts) { _, _ in
             logAccountDebugInfoIfNeeded()
         }
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
+        .onChange(of: selectedTimeframe) { _, _ in
+            selectedTransactionID = nil
+        }
+        .sheet(isPresented: $showingAddAccountSheet) {
+            AddAccountSheet()
+        }
+        .sheet(isPresented: $showingNewTransactionForm) {
+            NewTransactionFormView()
+        }
+    }
+
+    private var pageHeader: some View {
+        HStack(alignment: .center) {
+            Spacer()
+
+            Menu {
                 Button {
-                    // TODO: Replace with actions menu in a later pass
+                    showingAddAccountSheet = true
                 } label: {
-                    Label("Add Account", systemImage: "plus")
+                    Label("Add Account", systemImage: "plus.circle")
                 }
+
+                Button {
+                    showingNewTransactionForm = true
+                } label: {
+                    Label("New Transaction", systemImage: "plus.square")
+                }
+            } label: {
+                Image(systemName: "ellipsis")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.primary)
+                    .frame(width: 34, height: 34)
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
             }
+            .menuStyle(.borderlessButton)
+            .fixedSize()
         }
     }
 
@@ -109,9 +142,7 @@ struct AccountsView: View {
         .background(Color(NSColor.controlBackgroundColor))
         .cornerRadius(cornerRadius)
         .frame(minWidth: 220, idealWidth: 280, maxWidth: 320)
-        .padding(panePadding)
         .onAppear {
-            // Select "All Accounts" by default
             if selectedAccountId == nil {
                 selectedAccountId = allAccountsId
             }
@@ -160,22 +191,29 @@ struct AccountsView: View {
         let transactions = filteredTransactions
 
         return VStack(spacing: 0) {
-            // Header
-            VStack(alignment: .leading, spacing: 4) {
-                Text(headerTitle)
-                    .font(.title2)
-                    .fontWeight(.semibold)
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(alignment: .top) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(headerTitle)
+                            .font(.title2)
+                            .fontWeight(.semibold)
 
-                Text("\(transactions.count) transaction\(transactions.count == 1 ? "" : "s")")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                        Text(headerSubtitle(for: transactions.count))
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
 
-                if selectedAccountId != allAccountsId,
-                   let selectedAccountId = selectedAccountId,
-                   let account = dataManager.accounts.first(where: { $0.id == selectedAccountId }) {
-                    Text(account.type.displayName)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                        if selectedAccountId != allAccountsId,
+                           let selectedAccountId = selectedAccountId,
+                           let account = dataManager.accounts.first(where: { $0.id == selectedAccountId }) {
+                            Text(account.type.displayName)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+
+                    Spacer()
+
+                    timeframeMenu
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -184,7 +222,6 @@ struct AccountsView: View {
 
             Divider()
 
-            // Transactions List
             if transactions.isEmpty {
                 emptyTransactionsListView
             } else {
@@ -214,7 +251,7 @@ struct AccountsView: View {
             Text("No Transactions")
                 .font(.title2)
                 .fontWeight(.semibold)
-            Text("This account has no transactions")
+            Text(emptyTransactionsMessage)
                 .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -237,7 +274,7 @@ struct AccountsView: View {
     // MARK: - Computed Properties
 
     private var filteredTransactions: [Transaction] {
-        dataManager.transactions
+        transactionsInSelectedTimeframe
             .filter {
                 let isAllAccountsSelected = selectedAccountId == allAccountsId
                 let isFromAccount = $0.sourceAccountId == selectedAccountId
@@ -250,6 +287,10 @@ struct AccountsView: View {
             .sorted { $0.date < $1.date }
     }
 
+    private var transactionsInSelectedTimeframe: [Transaction] {
+        dataManager.transactions.filter { selectedTimeframe.contains($0.date) }
+    }
+
     private var headerTitle: String {
         if selectedAccountId == allAccountsId {
             return "All Accounts"
@@ -258,6 +299,42 @@ struct AccountsView: View {
             return account.name
         }
         return "Transactions"
+    }
+
+    private var emptyTransactionsMessage: String {
+        selectedAccountId == allAccountsId ? "No transactions in this period" : "This selection has no transactions in this period"
+    }
+
+    private func headerSubtitle(for transactionCount: Int) -> String {
+        "\(transactionCount) transaction\(transactionCount == 1 ? "" : "s")"
+    }
+
+    private var timeframeMenu: some View {
+        Menu {
+            ForEach(AccountsTimeframe.allCases) { timeframe in
+                Button(timeframe.displayName) {
+                    selectedTimeframe = timeframe
+                }
+            }
+        } label: {
+            HStack(spacing: 6) {
+                Text(selectedTimeframe.displayName)
+                    .lineLimit(1)
+
+                Image(systemName: "chevron.down")
+                    .font(.system(size: 10, weight: .semibold))
+            }
+            .font(.caption)
+            .fontWeight(.semibold)
+            .foregroundColor(.secondary)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(Color.primary.opacity(0.06))
+            .clipShape(Capsule())
+            .frame(maxWidth: 180)
+        }
+        .menuIndicator(.hidden)
+        .buttonStyle(.plain)
     }
 
     private func accounts(for type: AccountType) -> [Account] {
@@ -294,6 +371,62 @@ struct AccountsView: View {
 
         for account in dataManager.accounts.sorted(by: { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }) {
             print("🐛 Account UUID [\(account.name)]: \(account.id.uuidString)")
+        }
+    }
+}
+
+private enum AccountsTimeframe: String, CaseIterable, Identifiable {
+    case lastMonth
+    case last3Months
+    case last6Months
+    case yearToDate
+
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .lastMonth:
+            return "Last Month"
+        case .last3Months:
+            return "Last 3 Months"
+        case .last6Months:
+            return "Last 6 Months"
+        case .yearToDate:
+            return "Year to Date"
+        }
+    }
+
+    func contains(_ date: Date, relativeTo referenceDate: Date = Date()) -> Bool {
+        let calendar = Calendar.current
+        let endDate = referenceDate
+        let startOfToday = calendar.startOfDay(for: referenceDate)
+
+        switch self {
+        case .lastMonth:
+            guard let lastMonth = calendar.date(byAdding: .month, value: -1, to: referenceDate),
+                  let interval = calendar.dateInterval(of: .month, for: lastMonth) else {
+                return false
+            }
+
+            return date >= interval.start && date < interval.end
+        case .last3Months:
+            guard let startDate = calendar.date(byAdding: .month, value: -3, to: startOfToday) else {
+                return false
+            }
+
+            return date >= startDate && date <= endDate
+        case .last6Months:
+            guard let startDate = calendar.date(byAdding: .month, value: -6, to: startOfToday) else {
+                return false
+            }
+
+            return date >= startDate && date <= endDate
+        case .yearToDate:
+            guard let interval = calendar.dateInterval(of: .year, for: referenceDate) else {
+                return false
+            }
+
+            return date >= interval.start && date <= endDate
         }
     }
 }
