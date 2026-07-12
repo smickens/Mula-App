@@ -11,10 +11,12 @@ import MulaCore
 struct AccountsView: View {
     @Environment(DataManager.self) private var dataManager
     @AppStorage(AppDefaults.Debug.showDebugInfoKey) private var showDebugInfo = false
+    @SceneStorage("accounts.expandedSectionIDs") private var storedExpandedSectionData: Data?
+    @SceneStorage("accounts.selection") private var storedAccountSelectionData: Data?
+    @SceneStorage("accounts.selectedTimeframe") private var storedSelectedTimeframe: AccountsTimeframe = .lastMonth
     @State private var accountSelection: AccountSelection?
     @State private var selectedTransactionID: UUID?
-    @State private var expandedSections: Set<AccountType> = Set(AccountType.allCases)
-    @State private var selectedTimeframe: AccountsTimeframe = .lastMonth
+    @State private var expandedSections: Set<AccountType> = []
     @State private var showingAddAccountSheet = false
     @State private var showingNewTransactionForm = false
 
@@ -51,11 +53,15 @@ struct AccountsView: View {
         .onChange(of: dataManager.accounts) { _, _ in
             logAccountDebugInfoIfNeeded()
         }
-        .onChange(of: selectedTimeframe) { _, _ in
+        .onChange(of: storedSelectedTimeframe) { _, _ in
             selectedTransactionID = nil
         }
         .onChange(of: accountSelection) { _, _ in
             selectedTransactionID = nil
+            storedAccountSelectionData = try? JSONEncoder().encode(accountSelection)
+        }
+        .onChange(of: expandedSections) { _, newValue in
+            storedExpandedSectionData = try? JSONEncoder().encode(Array(newValue))
         }
         .sheet(isPresented: $showingAddAccountSheet) {
             AddAccountSheet()
@@ -145,8 +151,19 @@ struct AccountsView: View {
         .cornerRadius(cornerRadius)
         .frame(minWidth: 320, maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .onAppear {
-            if accountSelection == nil {
+            if let storedAccountSelectionData,
+               let decodedSelection = try? JSONDecoder().decode(AccountSelection.self, from: storedAccountSelectionData),
+               isValid(selection: decodedSelection) {
+                accountSelection = decodedSelection
+            } else if accountSelection == nil {
                 accountSelection = .allAccounts
+            }
+
+            if let storedExpandedSectionData,
+               let storedTypes = try? JSONDecoder().decode([AccountType].self, from: storedExpandedSectionData) {
+                expandedSections = Set(storedTypes)
+            } else {
+                expandedSections = []
             }
         }
     }
@@ -265,7 +282,7 @@ struct AccountsView: View {
     }
 
     private var transactionsInSelectedTimeframe: [Transaction] {
-        dataManager.transactions.filter { selectedTimeframe.contains($0.date) }
+        dataManager.transactions.filter { storedSelectedTimeframe.contains($0.date) }
     }
 
     private var summaryMetrics: [SummaryMetric] {
@@ -367,7 +384,7 @@ struct AccountsView: View {
         let accountIds = selectedAccountIDs
         let relevantStatements = dataManager.accountStatements
             .filter { accountIds.contains($0.accountId) }
-            .filter { selectedTimeframe.contains($0.date) }
+            .filter { storedSelectedTimeframe.contains($0.date) }
             .sorted { $0.date < $1.date }
 
         guard let firstBalance = relevantStatements.first?.balance,
@@ -415,12 +432,12 @@ struct AccountsView: View {
         Menu {
             ForEach(AccountsTimeframe.allCases) { timeframe in
                 Button(timeframe.displayName) {
-                    selectedTimeframe = timeframe
+                    storedSelectedTimeframe = timeframe
                 }
             }
         } label: {
             HStack(spacing: 6) {
-                Text(selectedTimeframe.displayName)
+                Text(storedSelectedTimeframe.displayName)
                     .lineLimit(1)
 
                 Image(systemName: "chevron.down")
@@ -445,6 +462,15 @@ struct AccountsView: View {
 
     private func accountType(for accountId: UUID) -> AccountType? {
         dataManager.accounts.first(where: { $0.id == accountId })?.type
+    }
+
+    private func isValid(selection: AccountSelection) -> Bool {
+        switch selection {
+        case .allAccounts, .accountType:
+            return true
+        case .account(let accountId):
+            return dataManager.accounts.contains(where: { $0.id == accountId })
+        }
     }
 
     private func iconForAccountType(_ type: AccountType) -> String {
@@ -634,7 +660,7 @@ private enum AccountsTimeframe: String, CaseIterable, Identifiable {
     }
 }
 
-private enum AccountSelection: Hashable {
+private enum AccountSelection: Hashable, Codable {
     case allAccounts
     case accountType(AccountType)
     case account(UUID)
