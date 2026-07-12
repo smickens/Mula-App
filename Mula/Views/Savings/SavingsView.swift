@@ -11,6 +11,7 @@ import MulaCore
 
 struct SavingsView: View {
     @Environment(DataManager.self) private var dataManager
+    @SceneStorage("savings.selectedAccountID") private var storedSelectedAccountID: String?
 
     @State private var selectedAccountId: UUID?
     @State private var isShowingCheckpointSheet = false
@@ -45,6 +46,25 @@ struct SavingsView: View {
             Spacer()
         }
         .padding()
+        .onAppear {
+            if let storedSelectedAccountID,
+               let accountID = UUID(uuidString: storedSelectedAccountID),
+               savingsAccounts.contains(where: { $0.id == accountID }) {
+                selectedAccountId = accountID
+            }
+        }
+        .onChange(of: selectedAccountId) { _, newValue in
+            storedSelectedAccountID = newValue?.uuidString
+        }
+        .onChange(of: dataManager.accounts) { _, _ in
+            guard let selectedAccountId,
+                  !savingsAccounts.contains(where: { $0.id == selectedAccountId }) else {
+                return
+            }
+
+            self.selectedAccountId = nil
+            storedSelectedAccountID = nil
+        }
         .sheet(isPresented: $isShowingCheckpointSheet) {
             BalanceCheckpointForm(
                 accounts: savingsAccounts,
