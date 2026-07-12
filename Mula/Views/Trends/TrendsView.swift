@@ -12,9 +12,9 @@ struct TrendsView: View {
     @Environment(DataManager.self) private var dataManager
     
     @Binding var selectedDate: Date
+    @SceneStorage("trends.spendingMode") private var storedSpendingMode: SpendingMode = .personal
     @State private var selectedTransactionID: UUID?
     @State private var selectedCategoryId: String?
-    @State private var spendingMode: SpendingMode = .personal
 
     let kGridSpacing: CGFloat = 24
     let kCornerRadius: CGFloat = 12
@@ -27,7 +27,7 @@ struct TrendsView: View {
 
                 Spacer()
 
-                Picker("Spending Mode", selection: $spendingMode) {
+                Picker("Spending Mode", selection: $storedSpendingMode) {
                     ForEach(SpendingMode.allCases) { mode in
                         Text(mode.displayName).tag(mode)
                     }
@@ -43,7 +43,7 @@ struct TrendsView: View {
                     DonutChartView(
                         spendingByCategory: viewData.spendingByCategory,
                         totalSpending: viewData.totalSpending,
-                        spendingTitle: spendingMode.displayName,
+                        spendingTitle: storedSpendingMode.displayName,
                         selectedCategoryId: $selectedCategoryId
                     )
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -57,7 +57,7 @@ struct TrendsView: View {
                     CategoryListView(
                         spendingByCategory: viewData.spendingByCategory,
                         totalSpending: viewData.totalSpending,
-                        spendingTitle: spendingMode.displayName,
+                        spendingTitle: storedSpendingMode.displayName,
                         selectedCategoryId: $selectedCategoryId
                     )
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -87,7 +87,7 @@ struct TrendsView: View {
         var filteredTransactions = dataManager.transactions(from: dateInterval.start, to: dateInterval.end)
         filteredTransactions = filteredTransactions.filter { $0.kind.isSpendingAnalyticsEligible }
 
-        let amount = spendingMode.amount
+        let amount = storedSpendingMode.amount
         let totalSpending = filteredTransactions.reduce(0) { $0 + amount($1) }
         let spendingByCategory = dataManager.groupSpendingByCategory(
             transactions: filteredTransactions,
@@ -105,7 +105,7 @@ struct TrendsView: View {
         let avgDailySpending = totalSpending / Decimal(daysInMonth)
 
         let transactionsForMostFrequentCategory: [Transaction]
-        switch spendingMode {
+        switch storedSpendingMode {
         case .personal:
             transactionsForMostFrequentCategory = filteredTransactions.filter { $0.mySpendingAmount > 0 }
         case .total:
@@ -175,7 +175,7 @@ struct TrendsView: View {
                             selectedTransactionID: $selectedTransactionID,
                             swipeActionsEnabled: true,
                             transaction: transaction,
-                            configuration: spendingMode.transactionViewConfiguration
+                            configuration: storedSpendingMode.transactionViewConfiguration
                         )
                         .tag(transaction.id)
                     }
@@ -255,7 +255,7 @@ struct TrendsView: View {
     }
 }
 
-private enum SpendingMode: CaseIterable, Identifiable {
+private enum SpendingMode: String, CaseIterable, Identifiable {
     case personal
     case total
 
